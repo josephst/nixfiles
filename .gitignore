@@ -1,0 +1,5 @@
+result*
+.devenv/
+.direnv/
+.pre-commit-config.yaml
+nixos.qcow2

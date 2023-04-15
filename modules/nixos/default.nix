@@ -1,0 +1,3 @@
+{
+  dashy = import ./dashy.nix;
+}
