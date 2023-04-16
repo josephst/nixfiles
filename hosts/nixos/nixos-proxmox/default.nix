@@ -18,6 +18,7 @@
     ## Services
     ./services/acme.nix
     ./services/caddy.nix
+    ./services/coredns
     ./services/tailscale.nix
     ## Media
     ./services/sabnzbd

@@ -1,0 +1,12 @@
+$ORIGIN nixos.josephstahl.com.  ; designates the start of this zone file in the namespace
+$TTL 1h               ; default expiration time of all resource records without their own TTL value
+@                 IN  SOA     ns.nixos.josephstahl.com. hello.josephstahl.com. (
+                                  2020010510     ; Serial
+                                  1d             ; Refresh
+                                  2h             ; Retry
+                                  4w             ; Expire
+                                  1h)            ; Minimum TTL
+@                 IN  A       192.168.1.24       ; Local IPv4 address for nixos.josephstahl.com.
+@                 IN  NS      ns.nixos.josephstahl.com.    ; Name server for josephstahl.com.
+ns                IN  CNAME   @                  ; Alias for name server (points to nixos.josephstahl.com.)
+*                 IN  A       192.168.1.24       ; Wildcard for all domains

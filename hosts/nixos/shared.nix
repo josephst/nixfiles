@@ -74,5 +74,8 @@ in {
         permitRootLogin = "without-password";
       };
     };
+    resolved = {
+      enable = true;
+    };
   };
 }
