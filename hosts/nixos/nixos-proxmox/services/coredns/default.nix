@@ -13,7 +13,6 @@ in {
       log
       cache
       loadbalance
-      dnssec
       local
       forward . tls://1.1.1.1 tls://1.0.0.1 {
         tls_servername cloudflare-dns.com
