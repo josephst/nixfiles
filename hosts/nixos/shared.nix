@@ -74,8 +74,12 @@ in {
         permitRootLogin = "without-password";
       };
     };
+    resolved = {
+      enable = lib.mkDefault true; # mkDefault lets it be overridden
+    };
   };
 
-  systemd.network.enable = true;
-  networking.useNetworkd = true;
+  systemd.network.enable = lib.mkDefault true;
+  networking.useNetworkd = lib.mkDefault true;
+  networking.useDHCP = lib.mkDefault true;
 }
