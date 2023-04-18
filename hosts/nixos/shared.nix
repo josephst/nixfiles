@@ -74,9 +74,6 @@ in {
         permitRootLogin = "without-password";
       };
     };
-    resolved = {
-      enable = true;
-    };
   };
 
   systemd.network.enable = true;
