@@ -35,7 +35,7 @@
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = true;
+  networking.useDHCP = lib.mkDefault true;
   networking.interfaces.enp6s18.useDHCP = true;
   systemd.network.wait-online.extraArgs = [
     "--interface=enp6s18"
