@@ -75,9 +75,8 @@
     qemuGuest.enable = true;
   };
 
-
   services.resolved.extraConfig = ''
-  DNSStubListener=no
+    DNSStubListener=no
   ''; # disable stub listener since coreDNS is already listening on :53
   services.resolved.dnssec = "false";
 

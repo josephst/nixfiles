@@ -23,38 +23,40 @@ in {
   ];
 
   home = {
-    packages = lib.attrValues {
-      inherit
-        (pkgs)
-        # useful rust CLI tools
-
-        fd
-        ripgrep
-        # misc
-
-        age
-        alejandra
-        bash
-        exiftool
-        hugo
-        just
-        jq
-        python311
-        rclone
-        restic
-        cachix
-        recyclarr
-        # languages
-
-        nodejs
-        cargo
-        rustc
-        rnix-lsp
-        ;
-    } ++ [
-      pkgs.python311Packages.poetry-core
-      pkgs.zigpkgs.master
-    ];
+    packages =
+      lib.attrValues {
+        inherit
+          (pkgs)
+          # useful rust CLI tools
+          
+          fd
+          ripgrep
+          # misc
+          
+          age
+          alejandra
+          bash
+          exiftool
+          hugo
+          just
+          jq
+          python311
+          rclone
+          restic
+          cachix
+          recyclarr
+          # languages
+          
+          nodejs
+          cargo
+          rustc
+          rnix-lsp
+          ;
+      }
+      ++ [
+        pkgs.python311Packages.poetry-core
+        pkgs.zigpkgs.master
+      ];
     stateVersion = "22.11";
   };
 
