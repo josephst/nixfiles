@@ -18,6 +18,7 @@
     ## Services
     ./services/acme.nix
     ./services/caddy.nix
+    ./services/coredns
     ./services/tailscale.nix
     ## Media
     ./services/sabnzbd
@@ -73,6 +74,11 @@
   services = {
     qemuGuest.enable = true;
   };
+
+  services.resolved.extraConfig = ''
+    DNSStubListener=no
+  ''; # disable stub listener since coreDNS is already listening on :53
+  services.resolved.dnssec = "false";
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
