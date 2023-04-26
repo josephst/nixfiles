@@ -44,10 +44,11 @@
   networking = {
     hostName = "nixos"; # Define your hostname.
     domain = "josephstahl.com";
+    search = [ "nixos.josephstahl.com" "taildbd4c.ts.net" ];
     firewall.enable = false;
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
   };
-  systemd.services.NetworkManager-wait-online.enable = false; # causes problems with tailscale
+  # systemd.services.NetworkManager-wait-online.enable = false; # causes problems with tailscale
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -76,6 +77,7 @@
   };
 
   services.resolved.extraConfig = ''
+    DNS=127.0.0.1
     DNSStubListener=no
   ''; # disable stub listener since coreDNS is already listening on :53
   services.resolved.dnssec = "false";

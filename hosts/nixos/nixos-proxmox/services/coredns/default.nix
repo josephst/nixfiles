@@ -19,6 +19,16 @@ in {
         }
       }
 
+      ts.net {
+        forward . 100.100.100.100
+        errors
+      }
+
+      taildbd4c.ts.net {
+        forward . 100.100.100.100
+        errors
+      }
+
       nixos.josephstahl.com {
         file ${./nixos.josephstahl.com.zone}
         # template IN A  {
