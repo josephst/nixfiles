@@ -28,11 +28,11 @@ in {
         inherit
           (pkgs)
           # useful rust CLI tools
-          
+
           fd
           ripgrep
           # misc
-          
+
           age
           alejandra
           bash
@@ -45,8 +45,9 @@ in {
           restic
           cachix
           recyclarr
+          spoof-mac
           # languages
-          
+
           nodejs
           cargo
           rustc
