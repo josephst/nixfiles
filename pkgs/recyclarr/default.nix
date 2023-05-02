@@ -1,6 +1,5 @@
 {
   lib,
-  nixosTests,
   stdenv,
   fetchurl,
   pkgs,
@@ -21,16 +20,16 @@
     or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash =
     {
-      x64-linux_hash = "sha256-96j29Su983CaCVOBHoGduY/0BCWY6cONwub7yCFFIgM=";
-      arm64-linux_hash = "sha256-/Xqa2IbTafbYytKG/8jLvNjKAnNcgValDa15nvbzSR8=";
-      x64-osx_hash = "sha256-FbDeQd7z5KCIPRBbB/mnnATnSYMaoehBlUljSw87L7M=";
-      arm64-osx_hash = "sha256-KTYYEbq2MZaHzxQHO01qeH6PQ7zHy/gW5HaTIDiO0Z8=";
+      x64-linux_hash = "sha256-EOTxLQrYumnb7khhC2H7Desw9YjpziWOkyBaToE06uw=";
+      arm64-linux_hash = "sha256-gcL8WrHkmpqyodluLFplRu7prSk81h+oas50cKOqCOI=";
+      x64-osx_hash = "sha256-tQKUsbaVKhP4hMK/byoJt0R7vrXq6fE9bPvZUyWfVVw=";
+      arm64-osx_hash = "sha256-bdpXdLAdHufJzWuv/c+pGNC3HsiXWOA1WIZam25UuQY=";
     }
     ."${arch}-${os}_hash";
 in
   stdenv.mkDerivation rec {
     pname = "recyclarr";
-    version = "v4.3.0";
+    version = "v4.4.1";
 
     src = fetchurl {
       url = "https://github.com/recyclarr/recyclarr/releases/download/${version}/recyclarr-${os}-${arch}.tar.xz";
