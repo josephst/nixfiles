@@ -4,6 +4,5 @@
   pkgs ? (import ../nixpkgs.nix) {},
   inputs,
 }: {
-  dashy = pkgs.callPackage ./dashy {};
   recyclarr = pkgs.callPackage ./recyclarr {};
 }
