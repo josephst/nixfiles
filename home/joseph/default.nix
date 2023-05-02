@@ -40,6 +40,7 @@ in {
           hugo
           just
           jq
+          nix-update
           python311
           rclone
           restic
