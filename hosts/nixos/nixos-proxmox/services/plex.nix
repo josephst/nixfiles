@@ -15,6 +15,7 @@ in {
   services.caddy.virtualHosts."plex.${fqdn}" = {
     extraConfig = ''
       reverse_proxy http://localhost:32400
+      encode gzip
     '';
     useACMEHost = fqdn;
   };
@@ -27,5 +28,8 @@ in {
       "network.target"
       "mnt-nas.automount"
     ];
+    serviceConfig = {
+      TimeoutStopSec = 5;
+    };
   };
 }
