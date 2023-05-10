@@ -40,6 +40,7 @@ in {
           hugo
           just
           jq
+          ncdu
           python311
           rclone
           restic
