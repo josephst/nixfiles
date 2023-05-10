@@ -63,7 +63,7 @@
   };
 
   fileSystems."/mnt/nas" = {
-    device = "//192.168.1.10/public";
+    device = "//192.168.1.12/public"; # NAS IP
     fsType = "cifs";
     options = let
       # prevent hanging on network changes
