@@ -18,7 +18,7 @@
     };
     appConfig = {
       theme = "colorful";
-      statusCheck = true;
+      statusCheck = false;
     };
     sections = [
       {
