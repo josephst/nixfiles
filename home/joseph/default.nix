@@ -28,16 +28,17 @@ in {
         inherit
           (pkgs)
           # useful rust CLI tools
-          
+
           fd
           ripgrep
           # misc
-          
+
           age
           alejandra
           bash
           exiftool
           hugo
+          httpie
           just
           jq
           ncdu
@@ -48,7 +49,7 @@ in {
           recyclarr
           spoof-mac
           # languages
-          
+
           nodejs
           cargo
           rustc
