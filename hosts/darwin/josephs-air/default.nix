@@ -17,5 +17,6 @@ in {
     computerName = "Joseph'\\''s MacBook Air";
     hostName = hostname;
     localHostName = hostname;
+    search = [ "lan" ];
   };
 }

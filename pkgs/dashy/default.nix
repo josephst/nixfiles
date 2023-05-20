@@ -3,6 +3,8 @@
   mkYarnPackage,
   fetchFromGitHub,
   fetchYarnDeps,
+  makeWrapper,
+  nodejs
 }:
 mkYarnPackage rec {
   name = "dashy";
@@ -10,31 +12,34 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "Lissy93";
     repo = name;
-    rev = version;
+    rev = "2ec404121a3b14fe4497996c8786fb5d4eda14e5";
     fetchSubmodules = false;
-    sha256 = "sha256-8+J0maC8M2m+raiIlAl0Bo4HOvuuapiBhoSb0fM8f9M=";
+    sha256 = "sha256-kW/4eAswWboLSwmHpkPOUoOFWxOyxkqb7QBKM/ZTJKw=";
   };
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    sha256 = "sha256-RxreSjhbWovPbqjK6L9GdIEhH4uVY+RvWyJYwIytn4g=";
+    sha256 = "sha256-fyHgMLAZBL0hifUguWe465X6qSX5pOwoX2dQPHEF6hU";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
     # Yarn writes cache directories etc to $HOME.
     export HOME=$(mktemp -d)
     ln -s $src/package.json package.json
 
-    yarn --offline build
-    ls -la deps/Dashy
-    mkdir -v $out
-    mv deps/Dashy/dist $out
+    yarn build --offline --mode production
+    mkdir $out
+    # mv deps/Dashy/dist/* $out
   '';
 
-  dontInstall = true;
-  distPhase = "true";
+  postInstall = ''
+    makeWrapper '${nodejs}/bin/node' "$out/bin/dashy" --add-flags "$out/libexec/Dashy/deps/Dashy/server.js"
+  '';
+
   dontFixup = true;
 
   meta = with lib; {

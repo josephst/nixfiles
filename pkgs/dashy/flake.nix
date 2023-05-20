@@ -14,6 +14,10 @@
           default = dashy;
         };
         overlays.default = import ./overlay.nix;
+
+        devShell = pkgs.mkShell {
+          packages = with pkgs; [ caddy nodejs yarn ];
+        };
       }
       );
 }
