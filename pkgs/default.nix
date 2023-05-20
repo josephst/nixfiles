@@ -5,4 +5,5 @@
   inputs,
 }: {
   recyclarr = pkgs.callPackage ./recyclarr {};
+  dashy = pkgs.callPackage ./dashy {};
 }
