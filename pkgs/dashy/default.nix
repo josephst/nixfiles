@@ -4,8 +4,12 @@
   fetchFromGitHub,
   fetchYarnDeps,
   makeWrapper,
-  nodejs
+  nodejs,
+  writeText
 }:
+let
+  appConfig = builtins.readFile ./conf.yml.default;
+in
 mkYarnPackage rec {
   name = "dashy";
   version = "2.1.1";
@@ -20,20 +24,38 @@ mkYarnPackage rec {
   NODE_OPTIONS = "--openssl-legacy-provider";
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
+    yarnLock = "${src}/yarn.lock";
     sha256 = "sha256-fyHgMLAZBL0hifUguWe465X6qSX5pOwoX2dQPHEF6hU";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
+  config = writeText "conf.yml" appConfig;
+
+  preConfigure = ''
+    rm public/conf.yml
+    ln -s $config public/conf.yml
+  '';
+
   buildPhase = ''
+    runHook preBuild
+
     # Yarn writes cache directories etc to $HOME.
     export HOME=$(mktemp -d)
-    ln -s $src/package.json package.json
 
-    yarn build --offline --mode production
+    ln -s $src/package.json package.json
+    yarn build --offline --non-interactive --mode production
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir $out
-    # mv deps/Dashy/dist/* $out
+    mv deps/Dashy/dist/* $out
+
+    runHook postInstall
   '';
 
   postInstall = ''
@@ -41,6 +63,7 @@ mkYarnPackage rec {
   '';
 
   dontFixup = true;
+  distPhase = "true";
 
   meta = with lib; {
     description = "A self-hostable personal dashboard built for you. Includes status-checking, widgets, themes, icon packs, a UI editor and tons more!";
