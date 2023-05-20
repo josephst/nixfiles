@@ -19,7 +19,8 @@ in {
       domain = "*.${fqdn}";
       extraDomainNames = [fqdn];
       dnsProvider = "googledomains";
-      group = config.services.caddy.group;
+      dnsResolver = "1.1.1.1:53"; # can't be local DNS since nixos.josephstahl.com resolves to local IP on LAN
+      # group = config.services.caddy.group;
       credentialsFile = config.age.secrets.googleDomainsApiToken.path;
       dnsPropagationCheck = true;
     };
