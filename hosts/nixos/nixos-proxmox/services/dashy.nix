@@ -54,11 +54,6 @@
       {
         name = "Networking";
         items = [
-          # {
-          #   title = "Pi-Hole (on Proxmox)";
-          #   url = "http://pihole.proxmox.${domain}/admin/login.php";
-          #   icon = "hl-pihole";
-          # }
           {
             title = "Unifi (on Proxmox)";
             url = "https://proxmox-unifi.taildbd4c.ts.net:8443";
@@ -88,15 +83,7 @@
     inherit configFile;
   });
 in {
-  # services.dashy = {
-  #   enable = true;
-  #   package = dashy;
-  # };
-
   services.caddy.virtualHosts."dashy.${fqdn}" = {
-    # extraConfig = ''
-    #   reverse_proxy http://localhost:4000
-    # '';
     extraConfig = ''
       encode gzip
       file_server
