@@ -8,7 +8,7 @@
   format = pkgs.formats.yaml {};
   dashyConfig = {
     pageInfo = {
-      title = "Dashy STATIC (Caddy)";
+      title = "Dashy (STATIC - Caddy)";
       navLinks = [
         {
           title = "GitHub";
@@ -28,7 +28,6 @@
             title = "Plex";
             url = "http://plex.${fqdn}";
             icon = "hl-plex";
-            statusCheck = false; # not working for plex
           }
           {
             title = "Sabznzbd";
@@ -55,15 +54,14 @@
       {
         name = "Networking";
         items = [
-          {
-            title = "Pi-Hole (on Proxmox)";
-            url = "http://pihole.proxmox.${domain}/admin/login.php";
-            icon = "hl-pihole";
-          }
+          # {
+          #   title = "Pi-Hole (on Proxmox)";
+          #   url = "http://pihole.proxmox.${domain}/admin/login.php";
+          #   icon = "hl-pihole";
+          # }
           {
             title = "Unifi (on Proxmox)";
             url = "https://proxmox-unifi.taildbd4c.ts.net:8443";
-            statusCheckAllowInsecure = true;
             icon = "hl-unifi";
           }
         ];
@@ -75,13 +73,11 @@
             title = "Synology DSM";
             url = "https://nas.${domain}:5001";
             icon = "hl-synology";
-            statusCheckAllowInsecure = true;
           }
           {
             title = "Proxmox";
             url = "https://proxmox.taildbd4c.ts.net:8006";
             icon = "hl-proxmox";
-            statusCheckAllowInsecure = true;
           }
         ];
       }
