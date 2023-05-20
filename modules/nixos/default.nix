@@ -1,3 +1,3 @@
 {
-  dashy = import ./dashy.nix;
+  # example = import ./example;
 }
