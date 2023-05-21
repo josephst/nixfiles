@@ -36,6 +36,7 @@
 
     ## Dashboard
     ./services/dashy.nix
+    ./services/uptime-kuma.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
