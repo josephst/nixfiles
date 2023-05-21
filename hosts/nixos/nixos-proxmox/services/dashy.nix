@@ -59,6 +59,11 @@
             url = "https://proxmox-unifi.taildbd4c.ts.net:8443";
             icon = "hl-unifi";
           }
+          {
+            title = "Uptime Kuma";
+            url = "https://uptime.${fqdn}";
+            icon = "hl-uptime-kuma";
+          }
         ];
       }
       {
