@@ -10,7 +10,9 @@ in {
     enable = true;
     config = ''
       . {
-        log
+        log . {
+          class denial error
+        }
         cache
         loadbalance
         local

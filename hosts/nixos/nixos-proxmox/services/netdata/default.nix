@@ -11,7 +11,7 @@ in {
     enable = true;
     configDir = {
       "go.d/httpcheck.conf" = pkgs.writeText "httpcheck.conf" ''
-          update_every        : 60
+          update_every        : 30
           autodetection_retry : 0
           priority            : 70000
 
@@ -19,7 +19,7 @@ in {
             - name: sabnzbd
               url: https://sabnzbd.${fqdn}
             - name: plex
-              url: https://plex.${fqdn}
+              url: https://plex.${fqdn}/web/index.html#!/
             - name: radarr
               url: https://radarr.${fqdn}
             - name: sonarr
@@ -33,9 +33,6 @@ in {
             - name: proxmox
               url: https://192.168.1.7:8006
               tls_skip_verify: yes
-
-            - name: restic
-              url: https://restic.${fqdn}
       '';
     };
   };
