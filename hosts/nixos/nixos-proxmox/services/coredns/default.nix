@@ -10,10 +10,13 @@ in {
     enable = true;
     config = ''
       . {
-        log
+        log . {
+          class denial error
+        }
         cache
         loadbalance
         local
+        prometheus
         forward . tls://1.1.1.1 tls://1.0.0.1 {
           tls_servername cloudflare-dns.com
         }

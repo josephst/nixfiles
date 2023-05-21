@@ -8,6 +8,11 @@
 in {
   services.caddy = {
     enable = true;
+    globalConfig = ''
+      servers {
+        metrics
+      }
+    '';
     virtualHosts = {
       "${hostName}.taildb4c.ts.net" = {
         extraConfig = ''
