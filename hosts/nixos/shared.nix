@@ -47,6 +47,7 @@ in {
         (pkgs)
         cifs-utils
         curl
+        openssh
         parted
         tailscale
         vim
@@ -72,7 +73,7 @@ in {
     openssh = {
       enable = true;
       settings = {
-        permitRootLogin = "without-password";
+        PermitRootLogin = "without-password";
       };
     };
     resolved = {

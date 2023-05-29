@@ -1,4 +1,4 @@
-{pkgs, ...}: let
+{pkgs, lib, ...}: let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
 in {
   programs.git = {
@@ -10,10 +10,7 @@ in {
     extraConfig = {
       credential.helper = "/usr/local/bin/git-credential-manager";
       gpg.format = "ssh";
-      gpg.ssh.program =
-        if isDarwin
-        then "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
-        else "";
+      gpg.ssh.program = lib.optionalString isDarwin ''/Applications/1Password.app/Contents/MacOS/op-ssh-sign'';
       init.defaultBranch = "main";
       pull.rebase = "true";
     };
