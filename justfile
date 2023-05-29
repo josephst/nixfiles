@@ -18,3 +18,7 @@ gc age='7':
 # deploy to proxmox nixos VM
 deploy:
   nix run github:serokell/deploy-rs .#nixos
+
+# update flakes
+update:
+  nix flake update --commit-lock-file
