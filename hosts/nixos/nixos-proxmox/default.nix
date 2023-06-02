@@ -36,6 +36,7 @@
 
     ## Dashboard
     ./services/dashy.nix
+    ./services/homepage
     ./services/uptime-kuma.nix
   ];
 
