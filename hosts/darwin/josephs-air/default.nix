@@ -18,5 +18,6 @@ in {
     hostName = hostname;
     localHostName = hostname;
     search = ["lan"];
+    knownNetworkServices = ["WiFi"];
   };
 }

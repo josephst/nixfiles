@@ -24,7 +24,7 @@
       "cyberduck"
       # "darktable"
       "digikam"
-      "docker"
+      # "docker"
       "git-credential-manager-core"
       "iterm2"
       # "raycast"
