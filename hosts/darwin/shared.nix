@@ -29,7 +29,7 @@ in {
       inherit
         (pkgs)
         colima
-        lima
+        # lima
         ;
     };
   };
