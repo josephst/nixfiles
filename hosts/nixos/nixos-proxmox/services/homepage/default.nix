@@ -10,12 +10,12 @@
     repo = "boltcss";
     rev = "de77c4bcb08e581e4b49d3e489382e8ee9b503b9";
     sha256 = "sha256-mTKPsXRWm74+l99cyy4AttRsnenOvMnl728A61Jv9SY=";
-  };
+  } + "/bolt.css";
   webRoot = pkgs.buildEnv {
     name = "webroot";
     paths = [
       (pkgs.writeTextDir "index.html" (builtins.readFile(./index.html)))
-      (pkgs.writeTextDir "bolt.css" (builtins.readFile("${bolt}/bolt.css")))
+      (pkgs.writeTextDir "bolt.css" (builtins.readFile(bolt)))
     ];
   };
 in {
