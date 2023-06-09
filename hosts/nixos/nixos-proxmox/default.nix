@@ -35,7 +35,6 @@
     ./services/restic/b2.nix
 
     ## Dashboard
-    ./services/dashy.nix
     ./services/homepage
     ./services/uptime-kuma.nix
   ];
