@@ -24,32 +24,21 @@ in {
       # Makes created files group-readable, but inaccessible by others
       UMask = 027;
 
-      # If your system doesn't support all of the features below (e.g. because of
-      # the use of an older version of systemd), you may wish to comment-out
-      # some of the lines below as appropriate.
-      # CapabilityBoundingSet = ;
-      LockPersonality = true;
-      MemoryDenyWriteExecute = true;
-      NoNewPrivileges = "yes";
-      PrivateTmp = "yes";
+      NoNewPrivileges = true;
+      PrivateTmp = true;
       PrivateDevices = true;
-      PrivateUsers = true;
+      DevicePolicy = "closed";
       ProtectSystem = "strict";
-      ProtectHome = "yes";
-      ProtectClock = true;
+      ProtectHome = "read-only";
       ProtectControlGroups = true;
-      ProtectKernelLogs = true;
       ProtectKernelModules = true;
       ProtectKernelTunables = true;
-      ProtectProc = "invisible";
-      ProtectHostname = true;
-      RemoveIPC = true;
+      RestrictAddressFamilies= [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
       RestrictNamespaces = true;
-      RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
-      RestrictSUIDSGID = true;
       RestrictRealtime = true;
-      SystemCallArchitectures = "native";
-      SystemCallFilter = "@system-service";
+      RestrictSUIDSGID = true;
+      MemoryDenyWriteExecute = true;
+      LockPersonality = true;
     };
   };
   services.caddy.virtualHosts."restic.${fqdn}" = {
