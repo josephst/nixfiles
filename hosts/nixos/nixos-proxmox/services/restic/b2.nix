@@ -37,6 +37,23 @@ in {
         "${pkgs.restic}/bin/restic -r rclone:\$\{RCLONE_REMOTE\} forget ${forgetOpts} --prune --cache-dir=%C/restic-b2"
         "${pkgs.restic}/bin/restic -r rclone:\$\{RCLONE_REMOTE\} check ${checkOpts} --cache-dir=%C/restic-b2"
       ];
+
+      # hardening
+      NoNewPrivileges = true;
+      PrivateTmp = true;
+      PrivateDevices = true;
+      DevicePolicy = "closed";
+      ProtectSystem = "strict";
+      ProtectHome = "read-only";
+      ProtectControlGroups = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      RestrictAddressFamilies= [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      MemoryDenyWriteExecute = true;
+      LockPersonality = true;
     };
   };
 

@@ -32,6 +32,23 @@ in {
         "${pkgs.restic}/bin/restic -r ${resticRepo} forget ${forgetOpts} --prune --cache-dir=%C/restic-local"
         "${pkgs.restic}/bin/restic -r ${resticRepo} check ${checkOpts} --cache-dir=%C/restic-local"
       ];
+
+      # hardening
+      NoNewPrivileges = true;
+      PrivateTmp = true;
+      PrivateDevices = true;
+      DevicePolicy = "closed";
+      ProtectSystem = "strict";
+      ProtectHome = "read-only";
+      ProtectControlGroups = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      RestrictAddressFamilies= [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      MemoryDenyWriteExecute = true;
+      LockPersonality = true;
     };
   };
 
