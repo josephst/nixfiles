@@ -17,7 +17,6 @@ buildDotnetModule rec {
     # sha256 = lib.fakeSha256;
     sha256 = "sha256-xpuVjkWrKUvE6OP/3b1ZA8+mHDcXrrp6+kiULkpCPuU=";
   };
-  # src = ./recyclarr-4.4.1;
 
   nativeBuildInputs = [ git xmlstarlet ];
 
@@ -36,7 +35,6 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   executables = ["recyclarr"]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
-  # executables = []; # Don't install any executables.
 
   # packNupkg = true; # This packs the project as "foo-0.1.nupkg" at `$out/share`.
 
