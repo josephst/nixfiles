@@ -3,7 +3,6 @@
   buildDotnetModule,
   dotnetCorePackages,
   icu,
-  git,
   fetchFromGitHub,
   xmlstarlet,
 }:
@@ -18,7 +17,7 @@ buildDotnetModule rec {
     sha256 = "sha256-xpuVjkWrKUvE6OP/3b1ZA8+mHDcXrrp6+kiULkpCPuU=";
   };
 
-  nativeBuildInputs = [ git xmlstarlet ];
+  nativeBuildInputs = [ xmlstarlet ];
 
   preConfigure = ''
     xmlstarlet ed --inplace --delete "configuration/packageSourceMapping" src/nuget.config
