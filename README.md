@@ -22,7 +22,7 @@ than exact instructions.
 
 Download and boot the minimal ISO from (unstable version).
 
-Run `sudo -i` to switch to root, then `mkpasswd` to set a root password.
+Run `sudo -i` to switch to root, then `passwd` to set a root password.
 This enables ssh login (get ip with `ip a`) to run the rest of the installer via ssh.
 
 Complete partitioning [per the NixOS instructions](https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning).

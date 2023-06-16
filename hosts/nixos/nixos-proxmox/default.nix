@@ -51,6 +51,7 @@
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
   };
   # systemd.services.NetworkManager-wait-online.enable = false; # causes problems with tailscale
+  systemd.network.wait-online.anyInterface = true;
 
   # Set your time zone.
   time.timeZone = "America/New_York";

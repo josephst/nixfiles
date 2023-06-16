@@ -1,60 +1,48 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  pkgs,
-}: let
-  # TODO: run on windows too?
-  os =
-    if stdenv.isDarwin
-    then "osx"
-    else "linux";
-  arch =
-    {
-      x86_64-linux = "x64";
-      aarch64-linux = "arm64";
-      x86_64-darwin = "x64";
-      aarch64-darwin = "arm64";
-    }
-    ."${stdenv.hostPlatform.system}"
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  hash =
-    {
-      x64-linux_hash = "sha256-EOTxLQrYumnb7khhC2H7Desw9YjpziWOkyBaToE06uw=";
-      arm64-linux_hash = "sha256-gcL8WrHkmpqyodluLFplRu7prSk81h+oas50cKOqCOI=";
-      x64-osx_hash = "sha256-tQKUsbaVKhP4hMK/byoJt0R7vrXq6fE9bPvZUyWfVVw=";
-      arm64-osx_hash = "sha256-bdpXdLAdHufJzWuv/c+pGNC3HsiXWOA1WIZam25UuQY=";
-    }
-    ."${arch}-${os}_hash";
-in
-  stdenv.mkDerivation rec {
-    pname = "recyclarr";
-    version = "v4.4.1";
+  buildDotnetModule,
+  dotnetCorePackages,
+  icu,
+  fetchFromGitHub,
+  xmlstarlet,
+}:
+buildDotnetModule rec {
+  pname = "recyclarr";
+  version = "4.4.1";
+  src = fetchFromGitHub {
+    owner = "recyclarr";
+    repo = pname;
+    rev = "b3cf0cd";
+    # sha256 = lib.fakeSha256;
+    sha256 = "sha256-xpuVjkWrKUvE6OP/3b1ZA8+mHDcXrrp6+kiULkpCPuU=";
+  };
 
-    src = fetchurl {
-      url = "https://github.com/recyclarr/recyclarr/releases/download/${version}/recyclarr-${os}-${arch}.tar.xz";
-      hash = hash;
-    };
+  nativeBuildInputs = [ xmlstarlet ];
 
-    # Work around the "unpacker appears to have produced no directories"
-    # case that happens when the archive doesn't have a subdirectory.
-    # setSourceRoot = "sourceRoot=`pwd`";
-    sourceRoot = ".";
+  preConfigure = ''
+    xmlstarlet ed --inplace --delete "configuration/packageSourceMapping" src/nuget.config
+    xmlstarlet ed --inplace --subnode "Project/PropertyGroup[GitVersionBaseDirectory]" -t elem -n DisableGitVersionTask -v true src/Directory.Build.props
+    substituteInPlace src/Recyclarr.Cli/Program.cs --replace "GitVersionInformation.InformationalVersion" "\"v${version}-nix\""
+  '';
 
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/bin
-      cp -r * $out/bin
+  projectFile = "src/Recyclarr.Cli/Recyclarr.Cli.csproj";
 
-      runHook postInstall
-    '';
+  # File generated with `nix build .#recyclarr.fetch-deps` from project root directory
+  nugetDeps = ./deps.nix;
 
-    dontFixup = true; # breaks self-contained .net apps
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
-    meta = with lib; {
-      description = "A command-line application that will automatically synchronize recommended settings from the TRaSH guides to your Sonarr/Radarr instances.";
-      homepage = "https://github.com/recyclarr/recyclarr";
-      license = licenses.mit;
-      platforms = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
-    };
-  }
+  executables = ["recyclarr"]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
+
+  # packNupkg = true; # This packs the project as "foo-0.1.nupkg" at `$out/share`.
+
+  runtimeDeps = [icu]; # This will wrap each library path into `LD_LIBRARY_PATH`.
+
+  meta = with lib; {
+    description = "Automatically sync TRaSH guides to your Sonarr and Radarr instances";
+    homepage = "https://recyclarr.dev";
+    license = licenses.mit;
+    platforms = platforms.unix;
+  };
+}

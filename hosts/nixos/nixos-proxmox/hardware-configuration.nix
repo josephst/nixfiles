@@ -18,17 +18,30 @@
   boot.extraModulePackages = [];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/a3b1fc65-edd7-4df6-ba76-2c43316ea975";
-    fsType = "ext4";
+    device = "/dev/disk/by-uuid/e3db03bc-b4b2-4b68-ab30-d32a1d49a1ec";
+    fsType = "btrfs";
+    options = ["subvol=root" "compress=zstd"];
+  };
+
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-uuid/e3db03bc-b4b2-4b68-ab30-d32a1d49a1ec";
+    fsType = "btrfs";
+    options = ["subvol=nix" "compress=zstd"];
+  };
+
+  fileSystems."/home" = {
+    device = "/dev/disk/by-uuid/e3db03bc-b4b2-4b68-ab30-d32a1d49a1ec";
+    fsType = "btrfs";
+    options = ["subvol=home" "compress=zstd"];
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/8CB9-E228";
+    device = "/dev/disk/by-uuid/FE82-0964";
     fsType = "vfat";
   };
 
   swapDevices = [
-    {device = "/dev/disk/by-uuid/bc53ee08-970e-41e8-ba0e-4844ef3e1f5f";}
+    {device = "/dev/disk/by-uuid/3cbc8ec2-fe4c-4a6a-bc38-dcfeba444f31";}
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -36,9 +49,8 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  networking.interfaces.enp6s18.useDHCP = true;
-  systemd.network.wait-online.anyInterface = true;
+  networking.interfaces.enp6s18.useDHCP = lib.mkDefault true;
+  networking.interfaces.tailscale0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

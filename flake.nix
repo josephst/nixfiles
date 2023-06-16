@@ -4,8 +4,8 @@
   inputs = {
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs.follows = "nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-unstable.follows = "nixpkgs";
 
     # home-manager
     home-manager = {
@@ -42,7 +42,6 @@
     self,
     nixpkgs,
     nixpkgs-stable,
-    nixpkgs-unstable,
     home-manager,
     darwin,
     agenix,
