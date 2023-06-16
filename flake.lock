@@ -214,6 +214,9 @@
         "home-manager": "home-manager_2",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
+        "nixpkgs-unstable": [
+          "nixpkgs"
+        ],
         "zig": "zig"
       }
     },

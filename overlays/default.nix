@@ -10,7 +10,8 @@
     };
   unstable = final: prev: {
     # this adds nixpkgs-unstable as an overlays, available as nixpkgs.unstable.foobar
-    unstable = import inputs.nixpkgs-unstable {
+    # doesn't do much now, since we're already following unstable
+    unstable = import inputs.nixpkgs {
       system = final.system;
       config.allowUnfree = true;
     };

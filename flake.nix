@@ -5,6 +5,7 @@
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-unstable.follows = "nixpkgs";
 
     # home-manager
     home-manager = {
