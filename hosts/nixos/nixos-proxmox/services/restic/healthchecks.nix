@@ -7,7 +7,7 @@
   fqdn = "${hostName}.${domain}";
   healthchecks = pkgs.writeShellApplication {
     name = "healthchecks-reporter";
-    runtimeInputs = [ pkgs.curl ];
+    runtimeInputs = [pkgs.curl];
     text = ''
       IFS=: read -r UUID ACTION INSTANCE <<< "$1"
       if [ "$ACTION" = "start" ]; then
@@ -40,7 +40,7 @@ in {
       ProtectControlGroups = true;
       ProtectKernelModules = true;
       ProtectKernelTunables = true;
-      RestrictAddressFamilies= [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+      RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
       RestrictNamespaces = true;
       RestrictRealtime = true;
       RestrictSUIDSGID = true;

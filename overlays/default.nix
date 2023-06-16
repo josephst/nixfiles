@@ -2,11 +2,14 @@
   agenix = inputs.agenix.overlays.default;
   zig = inputs.zig.overlays.default;
   additions = final: prev:
+  # this adds custom pkgs in the same namespace as all other packages
+  # (ie nixpkgs.recyclarr)
     import ../pkgs {
       pkgs = final;
       inherit inputs;
     };
   unstable = final: prev: {
+    # this adds nixpkgs-unstable as an overlays, available as nixpkgs.unstable.foobar
     unstable = import inputs.nixpkgs-unstable {
       system = final.system;
       config.allowUnfree = true;
