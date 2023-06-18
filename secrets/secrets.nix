@@ -10,6 +10,7 @@ in {
   "rcloneConf.age".publicKeys = allKeys;
   "resticLan.env.age".publicKeys = allKeys;
   "resticb2.env.age".publicKeys = allKeys;
+  "restic.pass.age".publicKeys = allKeys;
 }
 # `nix run github:ryantm/agenix -- --help` to run
 # to rekey: get ssh private key from 1password (export -> no password)
