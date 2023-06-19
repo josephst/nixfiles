@@ -36,57 +36,9 @@ in {
       ${pkgs.rclone}/bin/rclone sync -v $RCLONE_LOCAL $RCLONE_REMOTE --transfers=16
     '';
     backupCleanupCommand = ''
-      # TODO: try to send logs?
-      ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/${uuid}"
+      output=$(journalctl --unit restic-backups-b2.service --since=yesterday --boot --no-pager | \
+        ${pkgs.coreutils}/bin/tail --bytes 100000)
+      ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/${uuid}/$EXIT_STATUS" --data-raw "$output"
     '';
   };
-
-  # systemd.services.restic-b2-maintenance = {
-  #   description = "Restic remote-specific tasks (rclone & restic check) on B2";
-  #   wants = ["healthchecks@${uuid}:start:%n.service"];
-  #   onFailure = ["healthchecks@${uuid}:failure:%n.service"];
-  #   onSuccess = ["healthchecks@${uuid}:success:%n.service"];
-  #   environment = {
-  #     RCLONE_CONFIG = config.age.secrets.rcloneConf.path;
-  #   };
-  #   serviceConfig = {
-  #     # User = "restic";
-  #     # Group = "restic";
-  #     Type = "oneshot";
-  #     RuntimeDirectory = "restic-b2";
-  #     CacheDirectory = "restic-b2";
-  #     CacheDirectoryMode = "0700";
-  #     EnvironmentFile = config.age.secrets.resticb2env.path;
-  #     ExecStart = [
-  #       "${pkgs.rclone}/bin/rclone sync -v $RCLONE_LOCAL $RCLONE_REMOTE --transfers=16"
-  #       "${pkgs.restic}/bin/restic -r rclone:\$\{RCLONE_REMOTE\} forget ${forgetOpts} --prune --cache-dir=%C/restic-b2"
-  #       "${pkgs.restic}/bin/restic -r rclone:\$\{RCLONE_REMOTE\} check ${checkOpts} --cache-dir=%C/restic-b2"
-  #     ];
-
-  #     # hardening
-  #     NoNewPrivileges = true;
-  #     PrivateTmp = true;
-  #     PrivateDevices = true;
-  #     DevicePolicy = "closed";
-  #     ProtectSystem = "strict";
-  #     ProtectHome = "read-only";
-  #     ProtectControlGroups = true;
-  #     ProtectKernelModules = true;
-  #     ProtectKernelTunables = true;
-  #     RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
-  #     RestrictNamespaces = true;
-  #     RestrictRealtime = true;
-  #     RestrictSUIDSGID = true;
-  #     MemoryDenyWriteExecute = true;
-  #     LockPersonality = true;
-  #   };
-  # };
-
-  # systemd.timers.restic-b2-maintenance = {
-  #   description = "Run Restic local-specific maintenance (forget, prune, check) at 2:00 AM +/- 1hr";
-  #   timerConfig = {
-  #     OnCalendar = "*-*-* 2:00:00";
-  #   };
-  #   wantedBy = ["timers.target"];
-  # };
 }

@@ -38,8 +38,9 @@ in {
       ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/${uuid}/start"
     '';
     backupCleanupCommand = ''
-      # TODO: try to send logs?
-      ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/${uuid}"
+      output=$(journalctl --unit restic-backups-nas_maintenance.service --since=yesterday --boot --no-pager | \
+        ${pkgs.coreutils}/bin/tail --bytes 100000)
+      ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/${uuid}/$EXIT_STATUS" --data-raw "$output"
     '';
   };
 }
