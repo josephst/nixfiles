@@ -16,7 +16,7 @@ in {
     after = ["syslog.target" "network.target"];
     wantedBy = ["multi-user.target"];
     serviceConfig = {
-      # User = "restic";
+      User = "rclone";
       # Group = "restic";
       LoadCredential= ["RCLONE_CONF:${config.age.secrets.rcloneConf.path}"];
       ExecStart = "${pkgs.rclone}/bin/rclone --config \${CREDENTIALS_DIRECTORY}/RCLONE_CONF serve restic --addr :${port} nas:/scratch/Restic";
@@ -25,21 +25,25 @@ in {
       # Makes created files group-readable, but inaccessible by others
       UMask = 027;
 
-      NoNewPrivileges = true;
-      PrivateTmp = true;
+      DynamicUser = true;
+
+      # implied by DynamicUser = true
+      # NoNewPrivileges = true;
+      # PrivateTmp = true;
+      # DevicePolicy = "closed";
+      # ProtectSystem = "strict";
+      # ProtectHome = "read-only";
+      
       PrivateDevices = true;
-      DevicePolicy = "closed";
-      ProtectSystem = "strict";
-      ProtectHome = "read-only";
       ProtectControlGroups = true;
       ProtectKernelModules = true;
       ProtectKernelTunables = true;
-      RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
-      RestrictNamespaces = true;
-      RestrictRealtime = true;
-      RestrictSUIDSGID = true;
-      MemoryDenyWriteExecute = true;
-      LockPersonality = true;
+      # RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
+      # RestrictNamespaces = true;
+      # RestrictRealtime = true;
+      # RestrictSUIDSGID = true;
+      # MemoryDenyWriteExecute = true;
+      # LockPersonality = true;
     };
   };
   services.caddy.virtualHosts."restic.${fqdn}" = {
