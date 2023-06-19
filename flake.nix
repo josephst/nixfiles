@@ -109,10 +109,8 @@
         hostname = "nixos.josephstahl.com";
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.nixos;
-          sshUser = "joseph";
-          user = "root";
-          sshOpts = ["-t"];
-          magicRollback = false; # breaks remote sudo
+          sshUser = "root";
+          magicRollback = true;
           remoteBuild = true; # since it may be cross-platform
         };
       };

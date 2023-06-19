@@ -30,9 +30,9 @@
 
     ## Backup
     ./services/rclone.nix
-    ./services/restic/healthchecks.nix
-    ./services/restic/local.nix
+    # ./services/restic/healthchecks.nix
     ./services/restic/b2.nix
+    ./services/restic/nas_maintenance.nix
 
     ## Dashboard
     ./services/homepage
