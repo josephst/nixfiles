@@ -3,10 +3,6 @@
 in {
   programs.fish = {
     enable = true;
-    shellAliases = {
-      top = "${pkgs.bottom}/bin/btm";
-      cat = "${pkgs.bat}/bin/bat --paging=never";
-    };
     plugins = [
       # {
       #   name = "fzf.fish";

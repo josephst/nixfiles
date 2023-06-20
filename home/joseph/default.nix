@@ -61,6 +61,10 @@ in {
         pkgs.zigpkgs.master
       ];
     stateVersion = "22.11";
+    shellAliases = {
+      top = "${pkgs.bottom}/bin/btm";
+      cat = "${pkgs.bat}/bin/bat --paging=never --style=plain,header";
+    };
   };
 
   programs = {
