@@ -67,6 +67,9 @@ in {
     nix-ld = {
       enable = true;
     };
+    ssh = {
+      startAgent = true;
+    };
   };
 
   services = {
