@@ -5,7 +5,6 @@
   makeWrapper,
   git,
   icu,
-  #   nixosTests,
   zlib,
 }: let
   os =
@@ -67,7 +66,6 @@ in
 
     # passthru = {
     #   updateScript = ./update.sh;
-    #   tests.smoke-test = nixosTests.recyclarr;
     # };
 
     meta = with lib; {

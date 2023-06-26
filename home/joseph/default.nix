@@ -34,10 +34,15 @@ in {
           # custom packages
           
           recyclarr
+          # nix
+
+          alajandra
+          cachix
+          nixpkgs-fmt
+          rnix-lsp
           # misc
           
           age
-          alejandra
           bash
           exiftool
           hugo
@@ -48,7 +53,6 @@ in {
           python311
           rclone
           restic
-          cachix
           spoof-mac
           tldr
           # languages
@@ -56,7 +60,6 @@ in {
           nodejs
           cargo
           rustc
-          rnix-lsp
           ;
       }
       ++ [
