@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildDotnetModule,
   dotnetCorePackages,
-  icu,
   fetchFromGitHub,
+  icu,
+  zlib,
   xmlstarlet,
 }:
 buildDotnetModule rec {
@@ -13,7 +15,6 @@ buildDotnetModule rec {
     owner = "recyclarr";
     repo = pname;
     rev = "b3cf0cd";
-    # sha256 = lib.fakeSha256;
     sha256 = "sha256-xpuVjkWrKUvE6OP/3b1ZA8+mHDcXrrp6+kiULkpCPuU=";
   };
 
@@ -35,9 +36,7 @@ buildDotnetModule rec {
 
   executables = ["recyclarr"]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
 
-  # packNupkg = true; # This packs the project as "foo-0.1.nupkg" at `$out/share`.
-
-  runtimeDeps = [icu]; # This will wrap each library path into `LD_LIBRARY_PATH`.
+  runtimeDeps = [icu zlib stdenv.cc.cc.lib]; # This will wrap each library path into `LD_LIBRARY_PATH`.
 
   meta = with lib; {
     description = "Automatically sync TRaSH guides to your Sonarr and Radarr instances";
