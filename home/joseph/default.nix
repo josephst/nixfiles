@@ -48,6 +48,7 @@ in {
           cachix
           recyclarr
           spoof-mac
+          tldr
           # languages
           
           nodejs
