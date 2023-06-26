@@ -31,6 +31,9 @@ in {
           
           fd
           ripgrep
+          # custom packages
+          
+          recyclarr
           # misc
           
           age
@@ -46,7 +49,6 @@ in {
           rclone
           restic
           cachix
-          recyclarr
           spoof-mac
           tldr
           # languages

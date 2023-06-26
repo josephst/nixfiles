@@ -1,47 +1,81 @@
 {
   lib,
   stdenv,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
+  fetchurl,
+  makeWrapper,
+  git,
   icu,
+  #   nixosTests,
   zlib,
-  xmlstarlet,
-}:
-buildDotnetModule rec {
-  pname = "recyclarr";
-  version = "4.4.1";
-  src = fetchFromGitHub {
-    owner = "recyclarr";
-    repo = pname;
-    rev = "b3cf0cd";
-    sha256 = "sha256-xpuVjkWrKUvE6OP/3b1ZA8+mHDcXrrp6+kiULkpCPuU=";
-  };
+}: let
+  os =
+    if stdenv.isDarwin
+    then "osx"
+    else "linux";
+  arch =
+    {
+      x86_64-linux = "x64";
+      aarch64-linux = "arm64";
+      x86_64-darwin = "x64";
+      aarch64-darwin = "arm64";
+    }
+    ."${stdenv.hostPlatform.system}"
+    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [xmlstarlet];
+  hash =
+    {
+      x64-linux_hash = "sha256-EOTxLQrYumnb7khhC2H7Desw9YjpziWOkyBaToE06uw=";
+      arm64-linux_hash = "sha256-gcL8WrHkmpqyodluLFplRu7prSk81h+oas50cKOqCOI=";
+      x64-osx_hash = "sha256-tQKUsbaVKhP4hMK/byoJt0R7vrXq6fE9bPvZUyWfVVw=";
+      arm64-osx_hash = "sha256-bdpXdLAdHufJzWuv/c+pGNC3HsiXWOA1WIZam25UuQY=";
+    }
+    ."${arch}-${os}_hash";
+in
+  stdenv.mkDerivation rec {
+    pname = "recyclarr";
+    version = "4.4.1";
 
-  preConfigure = ''
-    xmlstarlet ed --inplace --delete "configuration/packageSourceMapping" src/nuget.config
-    xmlstarlet ed --inplace --subnode "Project/PropertyGroup[GitVersionBaseDirectory]" -t elem -n DisableGitVersionTask -v true src/Directory.Build.props
-    substituteInPlace src/Recyclarr.Cli/Program.cs --replace "GitVersionInformation.InformationalVersion" "\"v${version}-nix\""
-  '';
+    src = fetchurl {
+      url = "https://github.com/recyclarr/recyclarr/releases/download/v${version}/recyclarr-${os}-${arch}.tar.xz";
+      inherit hash;
+    };
 
-  projectFile = "src/Recyclarr.Cli/Recyclarr.Cli.csproj";
+    setSourceRoot = "sourceRoot=`pwd`"; # recyclarr extracts a single file, no folders
 
-  # File generated with `nix build .#recyclarr.fetch-deps` from project root directory
-  nugetDeps = ./deps.nix;
+    nativeBuildInputs = [makeWrapper];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+    installPhase = ''
+      runHook preInstall
 
-  executables = ["recyclarr"]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
+      mkdir -p $out/bin
+      cp recyclarr $out/bin
+      chmod +x $out/bin/recyclarr
 
-  runtimeDeps = [icu zlib stdenv.cc.cc.lib]; # This will wrap each library path into `LD_LIBRARY_PATH`.
+      runHook postInstall
+    '';
 
-  meta = with lib; {
-    description = "Automatically sync TRaSH guides to your Sonarr and Radarr instances";
-    homepage = "https://recyclarr.dev";
-    license = licenses.mit;
-    platforms = platforms.unix;
-  };
-}
+    postInstall = ''
+      wrapProgram $out/bin/recyclarr \
+          --prefix PATH : ${lib.makeBinPath [git]} \
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+        icu
+        zlib
+      ]}
+    '';
+
+    dontStrip = true; # stripping messes up dotnet single-file deployment
+
+    # passthru = {
+    #   updateScript = ./update.sh;
+    #   tests.smoke-test = nixosTests.recyclarr;
+    # };
+
+    meta = with lib; {
+      description = "Automatically sync TRaSH guides to your Sonarr and Radarr instances";
+      homepage = "https://recyclarr.dev/";
+      changelog = "https://github.com/recyclarr/recyclarr/releases/tag/v${version}";
+      license = licenses.mit;
+      maintainers = with maintainers; [josephst];
+      platforms = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+    };
+  }
