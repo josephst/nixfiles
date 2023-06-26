@@ -21,6 +21,7 @@ in {
       max-jobs = lib.mkDefault 4;
       trusted-users = ["root" user];
       allowed-users = ["root" user];
+      sandbox = true; # already defaults to true on Linux, make true for Darwin too
     };
     extraOptions = ''
       extra-substituters = https://nix-community.cachix.org

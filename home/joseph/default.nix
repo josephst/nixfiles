@@ -36,7 +36,7 @@ in {
           recyclarr
           # nix
 
-          alajandra
+          alejandra
           cachix
           nixpkgs-fmt
           rnix-lsp
