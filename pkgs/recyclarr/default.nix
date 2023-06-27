@@ -4,6 +4,7 @@
 , makeWrapper
 , autoPatchelfHook
 , fixDarwinDylibNames
+, darwin
 , recyclarr
 , git
 , icu
@@ -27,11 +28,17 @@ let
 
   hash =
     {
-      x64-linux_hash = "sha256-EOTxLQrYumnb7khhC2H7Desw9YjpziWOkyBaToE06uw=";
+      x64-linux_hash = "sha256-aEcinTJlO++rTeyqGJea0TWtleH6fyooA8RhT0Qj24c=";
       arm64-linux_hash = "sha256-gcL8WrHkmpqyodluLFplRu7prSk81h+oas50cKOqCOI=";
       x64-osx_hash = "sha256-tQKUsbaVKhP4hMK/byoJt0R7vrXq6fE9bPvZUyWfVVw=";
       arm64-osx_hash = "sha256-zSHgLXRDB6UA7V0LFgLq9ChqB40IHIJJxRqAYyVFlB8=";
     }."${arch}-${os}_hash";
+
+  libPath = {
+    osx = "DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [darwin.ICU zlib]}";
+    linux = "LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu zlib]}";
+  }."${os}";
+
 in
 stdenv.mkDerivation rec {
   pname = "recyclarr";
@@ -55,22 +62,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp recyclarr $out/bin
     chmod +x $out/bin/recyclarr
-  '' +
-  lib.optionalString stdenv.isLinux ''
-    patchelf \
-      --add-needed libicui18n.so \
-      --add-needed libicuuc.so \
-      $out/bin/recyclarr
-  '' +
-  ''
+
     runHook postInstall
   '';
 
   postInstall = ''
     wrapProgram $out/bin/recyclarr \
         --prefix PATH : ${lib.makeBinPath [git]} \
-        --set NATIVE_DLL_SEARCH_DIRECTORIES ${lib.makeLibraryPath [icu zlib]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu zlib]}
+        --prefix ${libPath}
   '';
 
   dontStrip = true; # stripping messes up dotnet single-file deployment
@@ -91,3 +90,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }
+
