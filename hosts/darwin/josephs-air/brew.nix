@@ -28,6 +28,7 @@
       "git-credential-manager-core"
       "iterm2"
       # "raycast"
+      "rectangle"
       "spotify"
       "steam"
       "utm"
