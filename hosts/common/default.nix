@@ -44,6 +44,7 @@ in {
         inherit
           (pkgs)
           agenix
+          bashInteractive
           binutils
           coreutils
           curl
@@ -84,4 +85,5 @@ in {
   # otherwise, nix won't be added to path in fish shell
   programs.fish.enable = true;
   programs.zsh.enable = true;
+  programs.bash.enableCompletion = true;
 }

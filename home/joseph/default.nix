@@ -28,11 +28,11 @@ in {
         inherit
           (pkgs)
           # useful rust CLI tools
-          
+
           fd
           ripgrep
           # custom packages
-          
+
           recyclarr
           # nix
 
@@ -41,9 +41,9 @@ in {
           nixpkgs-fmt
           rnix-lsp
           # misc
-          
+
           age
-          bash
+          bashInteractive
           exiftool
           hugo
           httpie
@@ -53,10 +53,11 @@ in {
           python311
           rclone
           restic
+          silver-searcher
           spoof-mac
           tldr
           # languages
-          
+
           nodejs
           cargo
           rustc
