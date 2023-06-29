@@ -4,6 +4,6 @@
     settings = {
       default_shell = "fish";
     };
-    enableFishIntegration = true;
+    # enableFishIntegration = true; # see settings in fish.nix
   };
 }

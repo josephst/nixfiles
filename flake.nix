@@ -118,6 +118,7 @@
 
     # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
 
+    # `nix develop`
     devShells = forAllSystems (
       system: let
         pkgs = legacyPackages.${system};
@@ -125,6 +126,7 @@
         import ./shell.nix {inherit pkgs;}
     );
 
+    # `nix fmt`
     formatter = forAllSystems (
       system:
         nixpkgs.legacyPackages.${system}.alejandra
