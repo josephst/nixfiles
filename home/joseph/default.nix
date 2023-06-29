@@ -50,6 +50,7 @@ in {
           just
           jq
           ncdu
+          nushell
           python311
           rclone
           restic
