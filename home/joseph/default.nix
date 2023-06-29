@@ -17,6 +17,7 @@ in {
     ./apps/fzf.nix
     ./apps/git.nix
     ./apps/neovim.nix
+    ./apps/nushell
     ./apps/ssh.nix
     ./apps/zellij.nix
     ./apps/zsh.nix
@@ -50,7 +51,6 @@ in {
           just
           jq
           ncdu
-          nushell
           python311
           rclone
           restic
