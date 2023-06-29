@@ -17,22 +17,21 @@ let
     if stdenv.isDarwin
     then "osx"
     else "linux";
-  arch =
-    {
-      x86_64-linux = "x64";
-      aarch64-linux = "arm64";
-      x86_64-darwin = "x64";
-      aarch64-darwin = "arm64";
-    }."${stdenv.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  hash =
-    {
-      x64-linux_hash = "sha256-aEcinTJlO++rTeyqGJea0TWtleH6fyooA8RhT0Qj24c=";
-      arm64-linux_hash = "sha256-gcL8WrHkmpqyodluLFplRu7prSk81h+oas50cKOqCOI=";
-      x64-osx_hash = "sha256-tQKUsbaVKhP4hMK/byoJt0R7vrXq6fE9bPvZUyWfVVw=";
-      arm64-osx_hash = "sha256-zSHgLXRDB6UA7V0LFgLq9ChqB40IHIJJxRqAYyVFlB8=";
-    }."${arch}-${os}_hash";
+  arch = {
+    x86_64-linux = "x64";
+    aarch64-linux = "arm64";
+    x86_64-darwin = "x64";
+    aarch64-darwin = "arm64";
+  }."${stdenv.hostPlatform.system}"
+    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  hash = {
+    x64-linux_hash = "sha256-aEcinTJlO++rTeyqGJea0TWtleH6fyooA8RhT0Qj24c=";
+    arm64-linux_hash = "sha256-9Gyk09zAGzahP8FCGxj037vaK8h++3M5R2Qqop99Gs4=";
+    x64-osx_hash = "sha256-c87eOZBz+RtbIi+dlXKKVMyPI8JqYDuiaL4xOkDRFn0=";
+    arm64-osx_hash = "sha256-zSHgLXRDB6UA7V0LFgLq9ChqB40IHIJJxRqAYyVFlB8=";
+  }."${arch}-${os}_hash";
 
   libPath = {
     osx = "DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [darwin.ICU zlib]}";
@@ -52,24 +51,22 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.isLinux autoPatchelfHook
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = [ icu zlib ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp recyclarr $out/bin
-    chmod +x $out/bin/recyclarr
+    install -Dm755 recyclarr -t $out/bin
 
     runHook postInstall
   '';
 
   postInstall = ''
     wrapProgram $out/bin/recyclarr \
-        --prefix PATH : ${lib.makeBinPath [git]} \
-        --prefix ${libPath}
+      --prefix PATH : ${lib.makeBinPath [git]} \
+      --prefix ${libPath}
   '';
 
   dontStrip = true; # stripping messes up dotnet single-file deployment
@@ -90,4 +87,3 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }
-
