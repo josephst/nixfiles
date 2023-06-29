@@ -4,5 +4,6 @@
     settings = {
       default_shell = "fish";
     };
+    enableFishIntegration = true;
   };
 }
