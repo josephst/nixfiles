@@ -31,7 +31,6 @@ in {
           # useful rust CLI tools
 
           fd
-          ripgrep
           # custom packages
 
           recyclarr
@@ -78,6 +77,7 @@ in {
   programs = {
     gitui.enable = true;
     home-manager.enable = true;
+    ripgrep.enable = true;
     starship.enable = true;
     zoxide.enable = true;
   };
