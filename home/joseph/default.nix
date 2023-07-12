@@ -76,6 +76,7 @@ in {
 
   programs = {
     gitui.enable = true;
+    lazygit.enable = true;
     home-manager.enable = true;
     ripgrep.enable = true;
     starship.enable = true;
