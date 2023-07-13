@@ -106,7 +106,8 @@
 
     deploy.nodes = {
       nixos = {
-        hostname = "nixos.josephstahl.com";
+        # use ip instead of hostname, in case coreDNS not yet set up
+        hostname = "192.168.1.10";
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.nixos;
           sshUser = "root";

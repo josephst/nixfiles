@@ -14,12 +14,9 @@ in {
           class denial error
         }
         cache
-        loadbalance
         local
         prometheus
-        forward . tls://1.1.1.1 tls://1.0.0.1 {
-          tls_servername cloudflare-dns.com
-        }
+        forward . 1.1.1.1 1.0.0.1
       }
 
       ts.net {
@@ -33,10 +30,10 @@ in {
       }
 
       nixos.josephstahl.com {
-        file ${./nixos.josephstahl.com.zone}
-        # template IN A  {
-        #     answer "{{ .Name }} 0 IN A 127.0.0.1"
-        # }
+        # file ${./nixos.josephstahl.com.zone}
+        template IN A  {
+            answer "{{ .Name }} 0 IN A 192.168.1.10"
+        }
       }
 
       proxmox.josephstahl.com {

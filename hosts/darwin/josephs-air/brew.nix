@@ -27,6 +27,7 @@
       # "docker"
       "git-credential-manager-core"
       "iterm2"
+      "orbstack"
       # "raycast"
       "rectangle"
       "spotify"
