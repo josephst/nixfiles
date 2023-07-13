@@ -12,7 +12,7 @@ in {
     signing.key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop";
     signing.signByDefault = isDarwin; # only sign on macOS for now (simplicity)
     extraConfig = {
-      credential.helper = "/usr/local/bin/git-credential-manager";
+      credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
       gpg.format = "ssh";
       gpg.ssh.program = lib.optionalString isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       init.defaultBranch = "main";
