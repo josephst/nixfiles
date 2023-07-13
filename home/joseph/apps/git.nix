@@ -17,9 +17,16 @@ in {
       gpg.ssh.program = lib.optionalString isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       init.defaultBranch = "main";
       pull.rebase = "true";
+      # delta options
+      delta.navigate = true;
+      merge.conflictstyle = "diff3";
+      diff.colorMoved = "default";
     };
     delta = {
       enable = true;
+      options = {
+
+      };
     };
     ignores = [
       # Compiled Python files
