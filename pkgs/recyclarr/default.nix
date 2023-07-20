@@ -54,11 +54,11 @@ in
 
     sourceRoot = ".";
 
-    nativeBuildInputs =
-      [makeWrapper]
-      ++ lib.optional stdenv.isLinux autoPatchelfHook
-      ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
-    buildInputs = [icu zlib];
+    # nativeBuildInputs =
+    #   [makeWrapper]
+    #   ++ lib.optional stdenv.isLinux autoPatchelfHook
+    #   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    # buildInputs = [icu zlib];
 
     installPhase = ''
       runHook preInstall

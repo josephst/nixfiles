@@ -4,6 +4,7 @@
   pkgs ? (import ../nixpkgs.nix) {},
   inputs,
 }: {
-  # recyclarr = pkgs.callPackage ./recyclarr {}; # now merged into nixpkgs
   dashy = pkgs.callPackage ./dashy {};
+  git-credential-manager = pkgs.callPackage ./git-credential-manager {};
+  # recyclarr = pkgs.callPackage ./recyclarr {}; # merged into nixpkgs upstream
 }
