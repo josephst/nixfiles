@@ -54,8 +54,8 @@ in
 
     sourceRoot = ".";
 
-    # nativeBuildInputs =
-    #   [makeWrapper]
+    nativeBuildInputs =
+      [makeWrapper];
     #   ++ lib.optional stdenv.isLinux autoPatchelfHook
     #   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
     # buildInputs = [icu zlib];
@@ -68,10 +68,15 @@ in
       runHook postInstall
     '';
 
+    # postInstall = ''
+    #   wrapProgram $out/bin/recyclarr \
+    #     --prefix PATH : ${lib.makeBinPath [git]} \
+    #     --prefix ${libPath}
+    # '';
+
     postInstall = ''
       wrapProgram $out/bin/recyclarr \
-        --prefix PATH : ${lib.makeBinPath [git]} \
-        --prefix ${libPath}
+        --prefix PATH : ${lib.makeBinPath [git]}
     '';
 
     dontStrip = true; # stripping messes up dotnet single-file deployment

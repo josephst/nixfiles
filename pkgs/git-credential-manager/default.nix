@@ -20,6 +20,9 @@ buildDotnetModule rec {
   pname = "git-credential-manager";
   version = "2.2.2";
 
+  # TODO: get this to run on Mac (currently, code signing of the binary not working,
+  # so macOS refuses to run it)
+
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
