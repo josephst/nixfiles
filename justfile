@@ -11,7 +11,7 @@ switch:
 switch:
   sudo nixos-rebuild switch --flake .
 boot:
-  sudo nixos-rebuilt boot --flake .
+  sudo nixos-rebuild boot --flake .
 
 # Garbage-collect the Nix store
 gc age='7':
