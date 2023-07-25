@@ -25,7 +25,6 @@ in {
     delta = {
       enable = true;
       options = {
-
       };
     };
     ignores = [

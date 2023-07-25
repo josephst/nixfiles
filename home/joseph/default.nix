@@ -24,45 +24,36 @@ in {
   ];
 
   home = {
-    packages =
-      lib.attrValues {
-        inherit
-          (pkgs)
-          # useful rust CLI tools
-
-          fd
-          # custom packages
-
-          recyclarr
-          # nix
-
-          alejandra
-          cachix
-          nixpkgs-fmt
-          rnix-lsp
-          # misc
-
-          age
-          bashInteractive
-          exiftool
-          hugo
-          httpie
-          just
-          jq
-          ncdu
-          python311
-          rclone
-          restic
-          silver-searcher
-          spoof-mac
-          tldr
-          # languages
-
-          nodejs
-          cargo
-          rustc
-          ;
-      }
+    packages = with pkgs;
+      [
+        # custom packages
+        recyclarr
+        # nix
+        alejandra
+        cachix
+        nixpkgs-fmt
+        rnix-lsp
+        # misc
+        age
+        bashInteractive
+        exiftool
+        fd
+        hugo
+        httpie
+        just
+        jq
+        ncdu
+        python311
+        rclone
+        restic
+        silver-searcher
+        spoof-mac
+        tldr
+        # languages
+        nodejs
+        cargo
+        rustc
+      ]
       ++ [
         pkgs.python311Packages.poetry-core
         pkgs.zigpkgs.master
