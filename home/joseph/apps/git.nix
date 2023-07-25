@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 in {
   programs.git = {
     enable = true;
@@ -13,6 +13,7 @@ in {
     signing.signByDefault = isDarwin; # only sign on macOS for now (simplicity)
     extraConfig = {
       credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
+      credential.credentialStore = lib.optionalString isLinux "cache"; # use in-memory cache on Linux
       gpg.format = "ssh";
       gpg.ssh.program = lib.optionalString isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       init.defaultBranch = "main";

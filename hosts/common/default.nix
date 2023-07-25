@@ -21,7 +21,9 @@ in {
       max-jobs = lib.mkDefault 4;
       trusted-users = ["root" user];
       allowed-users = ["root" user];
-      sandbox = true; # already defaults to true on Linux, make true for Darwin too
+      # enabling sandbox prevents .NET from accessing /usr/bin/codesign
+      # and stops binary signing from working
+      # sandbox = true; # already defaults to true on Linux, make true for Darwin too
     };
     extraOptions = ''
       extra-substituters = https://nix-community.cachix.org
