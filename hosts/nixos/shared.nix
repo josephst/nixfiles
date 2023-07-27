@@ -74,7 +74,7 @@ in {
 
   services = {
     openssh = {
-      enable = true;
+      enable = lib.mkDefault true;
       settings = {
         PermitRootLogin = "without-password";
       };

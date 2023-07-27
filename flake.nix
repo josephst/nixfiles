@@ -89,6 +89,19 @@
     };
 
     nixosConfigurations = {
+      nixos-orbstack = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        pkgs = legacyPackages.aarch64-linux;
+        modules =
+          [
+            home-manager.nixosModules.home-manager
+            agenix.nixosModules.default
+            ./hosts/nixos/nixos-orbstack
+          ]
+          ++ (builtins.attrValues nixosModules);
+        specialArgs = {inherit inputs;};
+      };
+
       nixos = nixpkgs.lib.nixosSystem {
         # nixos-rebuild switch --flake .
         system = "x86_64-linux";
