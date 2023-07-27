@@ -54,7 +54,7 @@ cd /mnt/etc/nixos
 git pull
 
 # once shell loaded, clone the repo to /mnt/etc/nixos
-git clone git@github.com:josephst/dotfiles4.git /mnt/etc/nixos
+git clone git@github.com:josephst/nixfiles.git /mnt/etc/nixos
 cd /mnt/etc/nixos
 
 # update flake
@@ -65,7 +65,7 @@ rm /mnt/etc/nixos/hosts/nixos/nixos-proxmox/hardware-configuration.nix
 
 # generate new config (ignore the generated configuration.nix)
 nixos-generate-config --root /mnt
-mv /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/hosts/nixos/nixos-proxmos/
+mv /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/hosts/nixos/nixos-proxmox/
 rm /mnt/etc/nixos/configuration.nix
 
 # make sure we're in the right directory
