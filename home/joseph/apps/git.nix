@@ -13,7 +13,6 @@ in {
     signing.signByDefault = isDarwin; # only sign on macOS for now (simplicity)
     extraConfig = {
       credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
-      credential.credentialStore = lib.optionalString isLinux "cache"; # use in-memory cache on Linux
       gpg.format = "ssh";
       gpg.ssh.program = lib.optionalString isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       init.defaultBranch = "main";
@@ -22,6 +21,8 @@ in {
       delta.navigate = true;
       merge.conflictstyle = "diff3";
       diff.colorMoved = "default";
+    } // lib.optionalAttrs (isLinux) {
+      credential.credentialStore = "cache";
     };
     delta = {
       enable = true;
