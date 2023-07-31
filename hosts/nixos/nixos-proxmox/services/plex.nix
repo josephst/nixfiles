@@ -11,6 +11,7 @@ in {
     enable = true;
     group = "media";
     package = pkgs.unstable.plex;
+    openFirewall = true;
   };
 
   services.caddy.virtualHosts."plex.${fqdn}" = {
