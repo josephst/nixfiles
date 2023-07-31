@@ -44,7 +44,6 @@
     hostName = lib.mkDefault ""; # Define your hostname. (managed by cloud-init)
     domain = "josephstahl.com";
     search = ["nixos.josephstahl.com" "taildbd4c.ts.net"];
-    firewall.enable = false;
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
   };
   # systemd.services.NetworkManager-wait-online.enable = false; # causes problems with tailscale
