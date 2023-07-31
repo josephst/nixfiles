@@ -41,7 +41,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking = {
-    hostName = lib.mkDefault ""; # Define your hostname. (managed by cloud-init)
+    hostName = lib.mkDefault "nixos"; # Define your hostname. (managed by cloud-init)
     domain = "josephstahl.com";
     search = ["nixos.josephstahl.com" "taildbd4c.ts.net"];
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
