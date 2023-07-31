@@ -9,10 +9,6 @@
   ...
 }: {
   imports = [
-    ## Common
-    ../../common # shared between NixOS and Darwin
-    ../shared.nix # shared between NixOS
-
     ## Orbstack
     # default LXD configuration
     "${modulesPath}/virtualisation/lxc-container.nix"

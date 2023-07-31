@@ -13,10 +13,9 @@ in {
   age.identityPaths = ["/etc/secrets/initrd/ssh_host_ed25519_key"];
 
   age.secrets.hashedUserPassword = {
-    file = ../../secrets/hashedUserPassword.age;
+    file = ../../../secrets/hashedUserPassword.age;
   };
 
-  users.mutableUsers = false;
   users.users = {
     joseph = {
       isNormalUser = true;
@@ -42,16 +41,13 @@ in {
   users.groups.media = {};
 
   environment = {
+    # NixOS specific (shared with Darin = goes in ../common/default.nix)
     systemPackages = builtins.attrValues {
       inherit
         (pkgs)
         cifs-utils
-        curl
-        openssh
         parted
         tailscale
-        vim
-        wget
         ;
     };
   };
@@ -73,18 +69,10 @@ in {
   };
 
   services = {
-    openssh = {
-      enable = lib.mkDefault true;
-      settings = {
-        PermitRootLogin = "without-password";
-      };
-    };
     resolved = {
       enable = lib.mkDefault true; # mkDefault lets it be overridden
     };
   };
 
   systemd.network.enable = lib.mkDefault true;
-  networking.useNetworkd = lib.mkDefault true;
-  networking.useDHCP = lib.mkDefault true;
 }

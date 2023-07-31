@@ -12,7 +12,7 @@ in {
     users.${user} = import ../../home/${user};
   };
   nix = {
-    package = pkgs.nix;
+    # package = pkgs.nix;
     registry.nixpkgs.flake = inputs.nixpkgs;
     settings = {
       experimental-features = ["nix-command" "flakes"];
@@ -28,8 +28,6 @@ in {
     extraOptions = ''
       extra-substituters = https://nix-community.cachix.org
       extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
-      keep-outputs = true
-      keep-derivations = true
       extra-nix-path = nixpkgs=flake:nixpkgs
     '';
   };
@@ -53,33 +51,15 @@ in {
           deploy-rs
           fish
           mkpasswd
+          openssh
           rclone
+          vim
           wget
           zsh
           ;
       }
       ++ [
         (pkgs.git.override {osxkeychainSupport = false;})
-      ];
-  };
-
-  fonts = {
-    fontDir.enable = true;
-    fonts =
-      lib.attrValues {
-        inherit
-          (pkgs)
-          source-code-pro
-          font-awesome
-          ;
-      }
-      ++ [
-        (pkgs.nerdfonts.override {
-          fonts = [
-            "FiraCode"
-            "Hack"
-          ];
-        })
       ];
   };
 

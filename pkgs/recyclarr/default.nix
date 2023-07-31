@@ -54,8 +54,7 @@ in
 
     sourceRoot = ".";
 
-    nativeBuildInputs =
-      [makeWrapper];
+    nativeBuildInputs = [makeWrapper];
     #   ++ lib.optional stdenv.isLinux autoPatchelfHook
     #   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
     # buildInputs = [icu zlib];

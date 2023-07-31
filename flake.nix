@@ -36,6 +36,9 @@
       url = "github:mitchellh/zig-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # SrvOS (better defaults for Nix configs)
+    srvos.url = "github:numtide/srvos";
   };
 
   outputs = {
@@ -47,6 +50,7 @@
     agenix,
     deploy-rs,
     zig,
+    srvos,
     ...
   } @ inputs: let
     supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
@@ -96,7 +100,10 @@
           [
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
-            ./hosts/nixos/nixos-orbstack
+            srvos.nixosModules.common
+            ./hosts/common # nixOS and Darwin
+            ./hosts/nixos/common # nixOS-specific
+            ./hosts/nixos/nixos-orbstack # host-specific
           ]
           ++ (builtins.attrValues nixosModules);
         specialArgs = {inherit inputs;};
@@ -110,7 +117,12 @@
           [
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
-            ./hosts/nixos/nixos-proxmox
+            srvos.nixosModules.server
+            srvos.nixosModules.mixins-systemd-boot
+            srvos.nixosModules.mixins-cloud-init # enable cloud-init
+            ./hosts/common # nixOS and Darwin
+            ./hosts/nixos/common # nixOS-specific
+            ./hosts/nixos/nixos-proxmox # host-specific
           ]
           ++ (builtins.attrValues nixosModules);
         specialArgs = {inherit inputs;};

@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   inputs,
+  lib,
   pkgs,
   config,
   ...
@@ -10,10 +11,6 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-
-    ## Common
-    ../../common # shared between NixOS and Darwin
-    ../shared.nix # shared between NixOS
 
     ## Services
     ./services/acme.nix
@@ -44,7 +41,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking = {
-    hostName = "nixos"; # Define your hostname.
+    hostName = lib.mkDefault ""; # Define your hostname. (managed by cloud-init)
     domain = "josephstahl.com";
     search = ["nixos.josephstahl.com" "taildbd4c.ts.net"];
     firewall.enable = false;

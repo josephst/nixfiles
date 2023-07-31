@@ -6,11 +6,6 @@
 }: let
   user = "joseph";
 in {
-  # os-specific config
-  imports = [
-    ../common
-  ];
-
   users.users.${user}.home = "/Users/${user}";
 
   nix = {
@@ -55,5 +50,25 @@ in {
         KeyRepeat = 2;
       };
     };
+  };
+
+  fonts = {
+    fontDir.enable = true;
+    fonts =
+      lib.attrValues {
+        inherit
+          (pkgs)
+          source-code-pro
+          font-awesome
+          ;
+      }
+      ++ [
+        (pkgs.nerdfonts.override {
+          fonts = [
+            "FiraCode"
+            "Hack"
+          ];
+        })
+      ];
   };
 }
