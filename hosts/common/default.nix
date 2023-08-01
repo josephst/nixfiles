@@ -6,7 +6,6 @@
 }: let
   user = "joseph";
 in {
-
   imports = [
     ./nix.nix
     ./trusted-nix-caches.nix
@@ -44,28 +43,23 @@ in {
       EDITOR = "nvim";
       VISUAL = "nvim";
     };
-    systemPackages =
-      lib.attrValues {
-        inherit
-          (pkgs)
-          agenix
-          bashInteractive
-          binutils
-          coreutils
-          curl
-          deploy-rs
-          fish
-          mkpasswd
-          openssh
-          rclone
-          vim
-          wget
-          zsh
-          ;
-      }
-      ++ [
-        (pkgs.git.override {osxkeychainSupport = false;})
-      ];
+    systemPackages = with pkgs; [
+      agenix
+      bashInteractive
+      binutils
+      coreutils
+      curl
+      deploy-rs
+      fish
+      (git.override
+        {osxkeychainSupport = false;})
+      mkpasswd
+      openssh
+      rclone
+      vim
+      wget
+      zsh
+    ];
   };
 
   # programs.(fish|zsh).enable must be defined here *and* in home-manager section

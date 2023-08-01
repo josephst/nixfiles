@@ -8,26 +8,11 @@
 in {
   users.users.${user}.home = "/Users/${user}";
 
-  nix = {
-    gc = {
-      automatic = true;
-      interval = {
-        Day = 7;
-      };
-      options = "--delete-older-than 7d";
-    };
-  };
-
   environment = {
     loginShell = "${pkgs.zsh}/bin/zsh -l";
-    systemPackages = builtins.attrValues {
-      inherit
-        (pkgs)
-        colima
-        # lima
-        
-        ;
-    };
+    systemPackages = with pkgs; [
+      lima
+    ];
   };
 
   # Make sure the nix daemon always runs
@@ -54,21 +39,15 @@ in {
 
   fonts = {
     fontDir.enable = true;
-    fonts =
-      lib.attrValues {
-        inherit
-          (pkgs)
-          source-code-pro
-          font-awesome
-          ;
-      }
-      ++ [
-        (pkgs.nerdfonts.override {
+    fonts = with pkgs; [
+      source-code-pro
+      font-awesome
+      (nerdfonts.override {
           fonts = [
             "FiraCode"
             "Hack"
           ];
         })
-      ];
+    ];
   };
 }

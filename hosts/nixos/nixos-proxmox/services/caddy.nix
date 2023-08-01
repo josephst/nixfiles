@@ -17,5 +17,5 @@ in {
     # in each service file (ie sabnzbd.nix, etc.)
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [80 443];
 }

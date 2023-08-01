@@ -1,5 +1,8 @@
-{ lib, pkgs, ... }:
 {
+  lib,
+  pkgs,
+  ...
+}: {
   # Use a version of Nix that works
   # nix.package = pkgs.nixVersions.nix_2_16;
 
@@ -24,9 +27,15 @@
 
   # garbage collection
   nix.gc.automatic = true;
-  nix.gc.options = "--delete-older-than 30d";
-} // lib.optionalAttrs (pkgs.stdenv.isLinux) {
-  nix.gc.dates = "weekly";
-} // lib.optionalAttrs (pkgs.stdenv.isDarwin) {
-  nix.gc.interval = { Hour = 12; Minute = 12; };
+  nix.gc.options = "--delete-older-than 7d";
 }
+# // lib.optionalAttrs (pkgs.stdenv.isLinux) {
+#   nix.gc.dates = "weekly";
+# }
+# // lib.optionalAttrs (pkgs.stdenv.isDarwin) {
+#   nix.gc.interval = {
+#     Day = 7;
+#     Hour = 12;
+#   };
+# }
+

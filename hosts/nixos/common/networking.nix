@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   # Allow PMTU / DHCP
   networking.firewall.allowPing = true;
 

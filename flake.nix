@@ -82,6 +82,8 @@
         modules = [
           home-manager.darwinModules.home-manager
           agenix.nixosModules.default
+          ./hosts/common
+          ./hosts/darwin/common
           ./hosts/darwin/josephs-air
         ];
         specialArgs = {inherit inputs;};
@@ -123,8 +125,7 @@
 
     deploy.nodes = {
       nixos = {
-        # use ip instead of hostname, in case coreDNS not yet set up
-        hostname = "192.168.1.10";
+        hostname = "nixos.josephstahl.com";
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.nixos;
           sshUser = "root";

@@ -23,13 +23,14 @@ in {
   # - systems with raids as this currently require manual configuration (https://github.com/NixOS/nixpkgs/issues/210210)
   # - for containers we currently rely on the `stage-2` init script that sets up our /etc
   boot.initrd.systemd.enable = lib.mkDefault (
-    !config.boot.initrd.network.enable &&
-    !(if lib.versionAtLeast (lib.versions.majorMinor lib.version) "23.11" then
-      config.boot.swraid.enable
-    else
-      config.boot.initrd.services.swraid.enable) &&
-    !config.boot.isContainer &&
-    !config.boot.growPartition
+    !config.boot.initrd.network.enable
+    && !(
+      if lib.versionAtLeast (lib.versions.majorMinor lib.version) "23.11"
+      then config.boot.swraid.enable
+      else config.boot.initrd.services.swraid.enable
+    )
+    && !config.boot.isContainer
+    && !config.boot.growPartition
   );
 
   # Allow sudo from the @wheel group
@@ -39,13 +40,13 @@ in {
   boot.tmp.cleanOnBoot = lib.mkDefault true;
 
   # If the user is in @wheel they are trusted by default.
-  nix.settings.trusted-users = [ "root" "@wheel" ];
+  nix.settings.trusted-users = ["root" "@wheel"];
 
   # No mutable users by default
   users.mutableUsers = false;
 
   # Make sure firewall is enabled
-  networking.firewall.enable = true;
+  networking.firewall.enable = lib.mkDefault true;
 
   # Delegate the hostname setting to dhcp/cloud-init by default
   networking.hostName = lib.mkDefault "";
