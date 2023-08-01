@@ -24,6 +24,9 @@
 
   # garbage collection
   nix.gc.automatic = true;
-  nix.gc.interval = if pkgs.stdenv.isLinux then "weekly" else { Hour = 12; Minute = 15; };
   nix.gc.options = "--delete-older-than 30d";
+} // lib.optionalAttrs (pkgs.stdenv.isLinux) {
+  nix.gc.dates = "weekly";
+} // lib.optionalAttrs (pkgs.stdenv.isDarwin) {
+  nix.gc.interval = { Hour = 12; Minute = 12; };
 }
