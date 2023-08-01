@@ -11,6 +11,8 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ../mixins/systemd-boot.nix
+    ../mixins/cloud-init.nix
 
     ## Services
     ./services/acme.nix
@@ -36,9 +38,8 @@
     ./services/uptime-kuma.nix
   ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Create the group for media stuff (plex, sabnzbd, etc)
+  users.groups.media = {};
 
   networking = {
     hostName = "nixos"; # Define your hostname. (managed by cloud-init)
