@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   # Use a version of Nix that works
   # nix.package = pkgs.nixVersions.nix_2_16;
@@ -24,6 +24,6 @@
 
   # garbage collection
   nix.gc.automatic = true;
-  nix.gc.interval = if stdenv.isLinux then "weekly" else { Hour = 12; Minute = 15; };
+  nix.gc.interval = if pkgs.stdenv.isLinux then "weekly" else { Hour = 12; Minute = 15; };
   nix.gc.options = "--delete-older-than 30d";
 }
