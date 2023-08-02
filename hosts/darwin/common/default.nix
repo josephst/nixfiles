@@ -43,11 +43,11 @@ in {
       source-code-pro
       font-awesome
       (nerdfonts.override {
-          fonts = [
-            "FiraCode"
-            "Hack"
-          ];
-        })
+        fonts = [
+          "FiraCode"
+          "Hack"
+        ];
+      })
     ];
   };
 }

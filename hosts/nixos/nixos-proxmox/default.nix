@@ -29,6 +29,7 @@
 
     ## Backup
     ./services/rclone.nix
+    ./services/samba.nix
     # ./services/restic/healthchecks.nix
     ./services/restic/b2.nix
     ./services/restic/nas_maintenance.nix
@@ -65,10 +66,26 @@
   fileSystems."/mnt/nas" = {
     device = "//192.168.1.12/public"; # NAS IP
     fsType = "cifs";
-    options = let
-      # prevent hanging on network changes
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=600,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,gid=media,file_mode=0775,dir_mode=0775";
-    in ["${automount_opts},credentials=${config.age.secrets.smb.path}"];
+    options = [
+      "x-systemd.automount"
+      "noauto"
+      "x-systemd.idle-timeout=600"
+      "x-systemd.device-timeout=5s"
+      "x-systemd.mount-timeout=5s"
+      "gid=media"
+      "file_mode=0775"
+      "dir_mode=0775"
+      "credentials=${config.age.secrets.smb.path}"
+    ];
+  };
+
+  fileSystems."/mnt/exthdd" = {
+    device = "/dev/disk/by-uuid/d7f9520d-262f-4e80-8296-964ca82eeb77";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5"
+    ];
   };
 
   # List services that you want to enable:
