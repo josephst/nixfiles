@@ -29,9 +29,11 @@
 
     ## Backup
     ./services/rclone.nix
+    # ./services/rsyncd.nix
     ./services/samba.nix
     # ./services/restic/healthchecks.nix
     ./services/restic/b2.nix
+    ./services/restic/exthdd.nix
     ./services/restic/nas_maintenance.nix
 
     ## Dashboard

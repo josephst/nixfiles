@@ -5,7 +5,7 @@
   lib,
   ...
 }: let
-  authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop"];
+  keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop"];
 in {
   # shared configuration that should be used for ALL NixOS installs
 
@@ -68,14 +68,10 @@ in {
       extraGroups = ["wheel" "media"]; # Enable ‘sudo’ for the user.
       # packages = with pkgs; []; # user's packages managed by home-manager
       passwordFile = config.age.secrets.hashedUserPassword.path;
-      openssh = {
-        inherit authorizedKeys;
-      };
+      openssh.authorizedKeys.keys = keys;
     };
     root = {
-      openssh = {
-        inherit authorizedKeys;
-      };
+      openssh.authorizedKeys.keys = keys;
     };
   };
 
