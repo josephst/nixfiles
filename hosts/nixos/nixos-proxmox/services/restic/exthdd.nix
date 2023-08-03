@@ -12,17 +12,26 @@
   ];
   checkOpts = ["--read-data-subset 500M" "--with-cache"];
 in {
-  age.secrets.restic-exthdd-env.file = ../../../../../secrets/resticexthdd.env.age;
+  age.secrets.restic-exthdd-env = {
+    file = ../../../../../secrets/resticexthdd.env.age;
+    # owner = "restic";
+    # group = "restic";
+  };
   # contents:
   # HC_UUID=<uuid for healthchecks>
 
-  age.secrets.restic-exthdd-pass.file = ../../../../../secrets/restic-exthdd.pass.age;
+  age.secrets.restic-exthdd-pass = {
+    file = ../../../../../secrets/restic-exthdd.pass.age;
+    owner = "restic";
+    group = "restic";
+  };
   # contents: password for restic repo
 
   services.restic.backups.exthdd = {
     initialize = false;
     passwordFile = config.age.secrets.restic-exthdd-pass.path;
     environmentFile = config.age.secrets.restic-exthdd-env.path;
+    user = "restic";
     repository = "/mnt/exthdd/restic";
     inherit pruneOpts;
     inherit checkOpts;
