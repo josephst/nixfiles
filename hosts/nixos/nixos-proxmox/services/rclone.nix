@@ -9,7 +9,7 @@
   fqdn = "${hostName}.${domain}";
 in {
   age.secrets.rcloneConf = {
-    file = ../../../../secrets/rcloneConf.age;
+    file = ../../../../secrets/rclone/rclone.conf.age;
   };
 
   users.users.restic = {
@@ -33,7 +33,7 @@ in {
       RestartSec = 5;
 
       # Security hardening
-      ReadWritePaths = [ ]; # no read-write paths, since it's reading/writing to NAS on network
+      ReadWritePaths = []; # no read-write paths, since it's reading/writing to NAS on network
       PrivateTmp = true;
       ProtectSystem = "strict";
       ProtectKernelTunables = true;
@@ -48,7 +48,6 @@ in {
     '';
     useACMEHost = fqdn;
   };
-
 
   systemd.tmpfiles.rules = [
     "d  /mnt/exthdd/restic  755 restic  restic"
@@ -66,7 +65,7 @@ in {
       RestartSec = 5;
 
       # Security hardening
-      ReadWritePaths = [ "/mnt/exthdd/restic" ];
+      ReadWritePaths = ["/mnt/exthdd/restic"];
       PrivateTmp = true;
       ProtectSystem = "strict";
       ProtectKernelTunables = true;

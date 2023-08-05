@@ -24,40 +24,49 @@ in {
   ];
 
   home = {
-    packages = with pkgs;
-      [
-        # custom packages
-        recyclarr
-        # nix
-        alejandra
-        cachix
-        nixpkgs-fmt
-        rnix-lsp
-        # misc
-        age
-        bashInteractive
-        exiftool
-        fd
-        hugo
-        httpie
-        just
-        jq
-        ncdu
-        python311
-        rclone
-        restic
-        silver-searcher
-        spoof-mac
-        tldr
-        # languages
-        nodejs
-        cargo
-        rustc
-      ]
-      ++ [
-        pkgs.python311Packages.poetry-core
-        pkgs.zigpkgs.master
-      ];
+    username = "joseph";
+    homeDirectory =
+      if pkgs.stdenv.isDarwin
+      then "/Users/joseph"
+      else "/home/joseph";
+    packages = with pkgs; [
+      # custom packages
+      recyclarr
+
+      # nix
+      alejandra
+      cachix
+      nixpkgs-fmt
+      nix-prefetch
+      rnix-lsp
+
+      # misc
+      age
+      bashInteractive
+      exiftool
+      fd
+      hugo
+      httpie
+      just
+      jq
+      less
+      ncdu
+      python311
+      rclone
+      restic
+      silver-searcher
+      spoof-mac
+      tldr
+
+      # languages
+      nodejs
+      cargo
+      rustc
+      zigpkgs.master
+
+      # python
+      python311Packages.poetry-core
+    ];
     stateVersion = "22.11";
     shellAliases = {
       top = "${pkgs.bottom}/bin/btm";

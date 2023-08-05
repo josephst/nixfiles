@@ -4,6 +4,7 @@
   ...
 }: let
   hostname = "josephs-air";
+  user = "joseph";
 in {
   # machine-specific config
   imports = [

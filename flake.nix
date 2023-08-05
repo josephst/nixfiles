@@ -92,6 +92,7 @@
           ./hosts/common
           ./hosts/darwin/common
           ./hosts/darwin/josephs-air
+          ./users/joseph.nix
         ];
         specialArgs = {inherit inputs;};
       };
@@ -108,6 +109,8 @@
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
             ./hosts/nixos/nixos-orbstack # host-specific
+            ./users/joseph.nix
+            ./users/root.nix
           ]
           ++ (builtins.attrValues nixosModules);
         specialArgs = {inherit inputs;};
@@ -124,6 +127,8 @@
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
             ./hosts/nixos/nixos-proxmox # host-specific
+            ./users/joseph.nix
+            ./users/root.nix
           ]
           ++ (builtins.attrValues nixosModules);
         specialArgs = {inherit inputs;};

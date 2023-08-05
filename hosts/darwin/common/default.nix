@@ -3,11 +3,7 @@
   inputs,
   pkgs,
   ...
-}: let
-  user = "joseph";
-in {
-  users.users.${user}.home = "/Users/${user}";
-
+}: {
   environment = {
     loginShell = "${pkgs.zsh}/bin/zsh -l";
     systemPackages = with pkgs; [

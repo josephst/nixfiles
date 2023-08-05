@@ -13,7 +13,7 @@
   checkOpts = ["--read-data-subset 500M" "--with-cache"];
 in {
   age.secrets.restic-exthdd-env = {
-    file = ../../../../../secrets/resticexthdd.env.age;
+    file = ../../../../../secrets/restic/exthdd.env.age;
     # owner = "restic";
     # group = "restic";
   };
@@ -21,7 +21,7 @@ in {
   # HC_UUID=<uuid for healthchecks>
 
   age.secrets.restic-exthdd-pass = {
-    file = ../../../../../secrets/restic-exthdd.pass.age;
+    file = ../../../../../secrets/restic/exthdd.pass.age;
     owner = "restic";
     group = "restic";
   };

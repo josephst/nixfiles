@@ -3,9 +3,7 @@
   pkgs,
   lib,
   ...
-}: let
-  user = "joseph";
-in {
+}: {
   imports = [
     ./nix.nix
     ./trusted-nix-caches.nix
@@ -13,20 +11,15 @@ in {
     ./well-known-hosts.nix
   ];
 
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    users.${user} = import ../../home/${user};
-  };
   nix = {
-    package = pkgs.nix;
+    package = pkgs.nixVersions.nix_2_16;
     registry.nixpkgs.flake = inputs.nixpkgs;
     settings = {
       auto-optimise-store = true;
       cores = lib.mkDefault 0; # value of 0 = all available cores
       max-jobs = lib.mkDefault "auto";
-      trusted-users = ["root" user];
-      allowed-users = ["root" user];
+      trusted-users = ["root" "joseph" "@wheel" "@staff"];
+      allowed-users = ["*"];
       # enabling sandbox prevents .NET from accessing /usr/bin/codesign
       # and stops binary signing from working
       # sandbox = true; # defaults to true on Linux, false for Darwin
@@ -36,10 +29,15 @@ in {
     '';
   };
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+  };
+
   environment = {
     variables = {
       LANG = "en_US.UTF-8";
-      SHELL = "${pkgs.zsh}/bin/zsh";
+      SHELL = "${pkgs.fish}/bin/fish";
       EDITOR = "nvim";
       VISUAL = "nvim";
     };
@@ -50,6 +48,7 @@ in {
       coreutils
       curl
       deploy-rs
+      file
       fish
       (git.override
         {osxkeychainSupport = false;})
