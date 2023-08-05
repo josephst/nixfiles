@@ -29,9 +29,9 @@ in {
 
   services.restic.backups.exthdd = {
     initialize = false;
+    user = "restic";
     passwordFile = config.age.secrets.restic-exthdd-pass.path;
     environmentFile = config.age.secrets.restic-exthdd-env.path;
-    user = "restic";
     repository = "/mnt/exthdd/restic";
     inherit pruneOpts;
     inherit checkOpts;

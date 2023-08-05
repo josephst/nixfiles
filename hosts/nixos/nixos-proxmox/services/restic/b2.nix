@@ -27,6 +27,7 @@ in {
 
   services.restic.backups.b2 = {
     initialize = false;
+    user = "restic";
     environmentFile = config.age.secrets.resticb2env.path;
     passwordFile = config.age.secrets.resticpass.path;
     rcloneConfigFile = config.age.secrets.rcloneConf.path;

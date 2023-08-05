@@ -6,7 +6,6 @@
 }: let
   inherit (config.networking) domain hostName;
   fqdn = "${hostName}.${domain}";
-  resticRepo = "rest:https://restic.${fqdn}";
 
   pruneOpts = [
     "--keep-daily 30"
@@ -25,9 +24,10 @@ in {
 
   services.restic.backups.nas_maintenance = {
     initialize = false;
+    user = "restic";
     environmentFile = config.age.secrets.resticLanEnv.path;
     passwordFile = config.age.secrets.resticpass.path;
-    repository = resticRepo;
+    repository = "rest:https://restic.${fqdn}";
     # no backup paths, only run prune command
     inherit pruneOpts;
     inherit checkOpts;
