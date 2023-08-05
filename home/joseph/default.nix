@@ -36,8 +36,9 @@ in {
       # nix
       alejandra
       cachix
-      nixpkgs-fmt
       nix-prefetch
+      nixpkgs-fmt
+      nixpkgs-review
       rnix-lsp
 
       # misc
