@@ -7,10 +7,13 @@ in {
   "smb.age".publicKeys = allKeys;
   "hashedUserPassword.age".publicKeys = allKeys;
   "dnsApiToken.age".publicKeys = allKeys;
+  "rsyncd.age".publicKeys = allKeys;
   "rcloneConf.age".publicKeys = allKeys;
   "resticLan.env.age".publicKeys = allKeys;
   "resticb2.env.age".publicKeys = allKeys;
+  "resticexthdd.env.age".publicKeys = allKeys;
   "restic.pass.age".publicKeys = allKeys;
+  "restic-exthdd.pass.age".publicKeys = allKeys;
   "netdata_nixos_claim.age".publicKeys = allKeys;
 }
 # `nix run github:ryantm/agenix -- --help` to run

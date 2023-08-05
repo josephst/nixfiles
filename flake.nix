@@ -36,6 +36,12 @@
       url = "github:mitchellh/zig-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # disko
+    # disko = {
+    #   url = "github:nix-community/disko";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
 
   outputs = {
@@ -47,6 +53,7 @@
     agenix,
     deploy-rs,
     zig,
+    # disko
     ...
   } @ inputs: let
     supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
@@ -82,6 +89,8 @@
         modules = [
           home-manager.darwinModules.home-manager
           agenix.nixosModules.default
+          ./hosts/common
+          ./hosts/darwin/common
           ./hosts/darwin/josephs-air
         ];
         specialArgs = {inherit inputs;};
@@ -96,7 +105,9 @@
           [
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
-            ./hosts/nixos/nixos-orbstack
+            ./hosts/common # nixOS and Darwin
+            ./hosts/nixos/common # nixOS-specific
+            ./hosts/nixos/nixos-orbstack # host-specific
           ]
           ++ (builtins.attrValues nixosModules);
         specialArgs = {inherit inputs;};
@@ -110,7 +121,9 @@
           [
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
-            ./hosts/nixos/nixos-proxmox
+            ./hosts/common # nixOS and Darwin
+            ./hosts/nixos/common # nixOS-specific
+            ./hosts/nixos/nixos-proxmox # host-specific
           ]
           ++ (builtins.attrValues nixosModules);
         specialArgs = {inherit inputs;};
@@ -119,8 +132,7 @@
 
     deploy.nodes = {
       nixos = {
-        # use ip instead of hostname, in case coreDNS not yet set up
-        hostname = "192.168.1.10";
+        hostname = "nixos.josephstahl.com";
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.nixos;
           sshUser = "root";

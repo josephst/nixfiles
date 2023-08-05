@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   inputs,
+  lib,
   pkgs,
   config,
   ...
@@ -10,10 +11,8 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-
-    ## Common
-    ../../common # shared between NixOS and Darwin
-    ../shared.nix # shared between NixOS
+    ../mixins/systemd-boot.nix
+    ../mixins/cloud-init.nix
 
     ## Services
     ./services/acme.nix
@@ -30,8 +29,11 @@
 
     ## Backup
     ./services/rclone.nix
+    # ./services/rsyncd.nix
+    ./services/samba.nix
     # ./services/restic/healthchecks.nix
     ./services/restic/b2.nix
+    ./services/restic/exthdd.nix
     ./services/restic/nas_maintenance.nix
 
     ## Dashboard
@@ -39,15 +41,13 @@
     ./services/uptime-kuma.nix
   ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Create the group for media stuff (plex, sabnzbd, etc)
+  users.groups.media = {};
 
   networking = {
-    hostName = "nixos"; # Define your hostname.
+    hostName = "nixos"; # Define your hostname. (managed by cloud-init)
     domain = "josephstahl.com";
     search = ["nixos.josephstahl.com" "taildbd4c.ts.net"];
-    firewall.enable = false;
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
   };
   # systemd.services.NetworkManager-wait-online.enable = false; # causes problems with tailscale
@@ -68,10 +68,26 @@
   fileSystems."/mnt/nas" = {
     device = "//192.168.1.12/public"; # NAS IP
     fsType = "cifs";
-    options = let
-      # prevent hanging on network changes
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=600,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,gid=media,file_mode=0775,dir_mode=0775";
-    in ["${automount_opts},credentials=${config.age.secrets.smb.path}"];
+    options = [
+      "x-systemd.automount"
+      "noauto"
+      "x-systemd.idle-timeout=600"
+      "x-systemd.device-timeout=5s"
+      "x-systemd.mount-timeout=5s"
+      "gid=media"
+      "file_mode=0775"
+      "dir_mode=0775"
+      "credentials=${config.age.secrets.smb.path}"
+    ];
+  };
+
+  fileSystems."/mnt/exthdd" = {
+    device = "/dev/disk/by-uuid/d7f9520d-262f-4e80-8296-964ca82eeb77";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=5"
+    ];
   };
 
   # List services that you want to enable:

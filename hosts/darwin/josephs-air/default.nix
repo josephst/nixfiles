@@ -8,7 +8,6 @@ in {
   # machine-specific config
   imports = [
     ./brew.nix
-    ../shared.nix
   ];
 
   networking = {

@@ -6,6 +6,13 @@
 }: let
   user = "joseph";
 in {
+  imports = [
+    ./nix.nix
+    ./trusted-nix-caches.nix
+    ./upgrade-diff.nix
+    ./well-known-hosts.nix
+  ];
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -15,21 +22,16 @@ in {
     package = pkgs.nix;
     registry.nixpkgs.flake = inputs.nixpkgs;
     settings = {
-      experimental-features = ["nix-command" "flakes"];
       auto-optimise-store = true;
-      cores = lib.mkDefault 4;
-      max-jobs = lib.mkDefault 4;
+      cores = lib.mkDefault 0; # value of 0 = all available cores
+      max-jobs = lib.mkDefault "auto";
       trusted-users = ["root" user];
       allowed-users = ["root" user];
       # enabling sandbox prevents .NET from accessing /usr/bin/codesign
       # and stops binary signing from working
-      # sandbox = true; # already defaults to true on Linux, make true for Darwin too
+      # sandbox = true; # defaults to true on Linux, false for Darwin
     };
     extraOptions = ''
-      extra-substituters = https://nix-community.cachix.org
-      extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
-      keep-outputs = true
-      keep-derivations = true
       extra-nix-path = nixpkgs=flake:nixpkgs
     '';
   };
@@ -41,46 +43,23 @@ in {
       EDITOR = "nvim";
       VISUAL = "nvim";
     };
-    systemPackages =
-      lib.attrValues {
-        inherit
-          (pkgs)
-          agenix
-          bashInteractive
-          binutils
-          coreutils
-          curl
-          deploy-rs
-          fish
-          mkpasswd
-          rclone
-          wget
-          zsh
-          ;
-      }
-      ++ [
-        (pkgs.git.override {osxkeychainSupport = false;})
-      ];
-  };
-
-  fonts = {
-    fontDir.enable = true;
-    fonts =
-      lib.attrValues {
-        inherit
-          (pkgs)
-          source-code-pro
-          font-awesome
-          ;
-      }
-      ++ [
-        (pkgs.nerdfonts.override {
-          fonts = [
-            "FiraCode"
-            "Hack"
-          ];
-        })
-      ];
+    systemPackages = with pkgs; [
+      agenix
+      bashInteractive
+      binutils
+      coreutils
+      curl
+      deploy-rs
+      fish
+      (git.override
+        {osxkeychainSupport = false;})
+      mkpasswd
+      openssh
+      rclone
+      vim
+      wget
+      zsh
+    ];
   };
 
   # programs.(fish|zsh).enable must be defined here *and* in home-manager section

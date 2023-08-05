@@ -11,19 +11,21 @@ in {
     userName = "Joseph Stahl";
     signing.key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop";
     signing.signByDefault = isDarwin; # only sign on macOS for now (simplicity)
-    extraConfig = {
-      credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
-      gpg.format = "ssh";
-      gpg.ssh.program = lib.optionalString isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
-      init.defaultBranch = "main";
-      pull.rebase = "true";
-      # delta options
-      delta.navigate = true;
-      merge.conflictstyle = "diff3";
-      diff.colorMoved = "default";
-    } // lib.optionalAttrs (isLinux) {
-      credential.credentialStore = "cache";
-    };
+    extraConfig =
+      {
+        credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
+        gpg.format = "ssh";
+        gpg.ssh.program = lib.optionalString isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+        init.defaultBranch = "main";
+        pull.rebase = "true";
+        # delta options
+        delta.navigate = true;
+        merge.conflictstyle = "diff3";
+        diff.colorMoved = "default";
+      }
+      // lib.optionalAttrs isLinux {
+        credential.credentialStore = "cache";
+      };
     delta = {
       enable = true;
       options = {
