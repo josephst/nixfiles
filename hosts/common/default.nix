@@ -19,7 +19,7 @@ in {
     users.${user} = import ../../home/${user};
   };
   nix = {
-    # package = pkgs.nix;
+    package = pkgs.nix;
     registry.nixpkgs.flake = inputs.nixpkgs;
     settings = {
       auto-optimise-store = true;
