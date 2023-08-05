@@ -44,7 +44,7 @@ in {
       ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
     '';
     backupCleanupCommand = ''
-      output=$(journalctl --unit restic-backups-exthdd.service --since=yesterday --boot --no-pager | \
+      output=$(journalctl --unit %n.service --since=yesterday --boot --no-pager | \
         ${pkgs.coreutils}/bin/tail --bytes 100000)
       ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$EXIT_STATUS" --data-raw "$output"
     '';

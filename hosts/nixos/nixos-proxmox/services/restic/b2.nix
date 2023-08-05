@@ -43,7 +43,7 @@ in {
       ${pkgs.rclone}/bin/rclone sync -v $RCLONE_LOCAL $RCLONE_REMOTE --transfers=16
     '';
     backupCleanupCommand = ''
-      output=$(journalctl --unit restic-backups-b2.service --since=yesterday --boot --no-pager | \
+      output=$(journalctl --unit %n --since=yesterday --boot --no-pager | \
         ${pkgs.coreutils}/bin/tail --bytes 100000)
       ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$EXIT_STATUS" --data-raw "$output"
     '';
