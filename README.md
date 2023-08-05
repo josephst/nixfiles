@@ -42,13 +42,13 @@ nix-shell -p git nixFlakes
 # alternatively, may make new keys with ssh-keygen and copy them to github
 # not necessary if cloning a public repo
 mkdir ~/.ssh
-vim ~/.ssh/id_ed25519 # enter private key that is used to authenticate with Github (stored in 1password)
+vim ~/.ssh/id_ed25519 # paste private key that is used to authenticate with Github (stored in 1password)
 chmod 600 ~/.ssh/id_ed25519
 
 # add new keys for agenix
-mkdir -p /mnt/etc/secrets/initrd
-ssh-keygen -t ed25519 -N "" -f /mnt/etc/secrets/initrd/ssh_host_ed25519_key
-cat /mnt/etc/secrets/initrd/ssh_host_ed25519_key.pub # copy the public key
+mkdir -p /mnt/etc/secrets/agenix
+ssh-keygen -t ed25519 -N "" -f /mnt/etc/secrets/agenix/ssh_host_ed25519_key
+cat /mnt/etc/secrets/agenix/ssh_host_ed25519_key.pub # copy the public key
 # re-encrypt with this new key, then pull the repo again to get newly encrypted files
 cd /mnt/etc/nixos
 git pull

@@ -56,7 +56,10 @@ in {
   ### START personal configuration
 
   # use age encryption key in special location (public & private keys created during nixos install)
-  age.identityPaths = ["/etc/secrets/initrd/ssh_host_ed25519_key"];
+  age.identityPaths = lib.mkDefault [
+    "/etc/secrets/agenix/ssh_host_ed25519_key"
+    "/etc/ssh/ssh_host_ed25519_key"
+  ];
 
   age.secrets.hashedUserPassword = {
     file = ../../../secrets/hashedUserPassword.age;
@@ -97,9 +100,8 @@ in {
   };
 
   services = {
-    resolved = {
-      enable = lib.mkDefault true; # mkDefault lets it be overridden
-    };
+    resolved.enable = lib.mkDefault true; # mkDefault lets it be overridden
+    openssh.enable = lib.mkDefault true;
   };
 
   systemd.network.enable = lib.mkDefault true;
