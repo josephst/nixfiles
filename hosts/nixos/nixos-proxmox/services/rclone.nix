@@ -27,7 +27,6 @@ in {
     wantedBy = ["multi-user.target"];
     serviceConfig = {
       User = "restic";
-      Group = "restic";
       LoadCredential = ["RCLONE_CONF:${config.age.secrets.rcloneConf.path}"];
       ExecStart = "${pkgs.rclone}/bin/rclone --config \${CREDENTIALS_DIRECTORY}/RCLONE_CONF serve restic --addr :${port} nas:/scratch/Restic";
       Restart = "on-abnormal";
