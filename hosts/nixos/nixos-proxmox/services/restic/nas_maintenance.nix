@@ -19,7 +19,10 @@ in {
   age.secrets.resticLanEnv.file = ../../../../../secrets/restic/nas.env.age;
   # contents: HC_UUID=<uuid>
 
-  age.secrets.resticpass.file = ../../../../../secrets/restic/nas.pass.age;
+  age.secrets.resticpass = {
+    file = ../../../../../secrets/restic/nas.pass.age;
+    owner = "restic";
+  };
   # contents: repo password
 
   services.restic.backups.nas_maintenance = {
@@ -40,9 +43,9 @@ in {
       ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
     '';
     backupCleanupCommand = ''
-      output=$(journalctl --unit %n.service --since=yesterday --boot --no-pager | \
+      output=$(journalctl --unit restic-backups-nas_maintenance.service --since=yesterday --boot --no-pager | \
         ${pkgs.coreutils}/bin/tail --bytes 100000)
-      ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$EXIT_STATUS" --data-raw "$output"
+      ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$?" --data-raw "$output"
     '';
   };
 }

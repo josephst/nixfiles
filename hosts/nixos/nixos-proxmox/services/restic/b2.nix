@@ -22,7 +22,10 @@ in {
   age.secrets.resticpass.file = ../../../../../secrets/restic/nas.pass.age;
   # contents: password for restic repo
 
-  age.secrets.rcloneConf.file = ../../../../../secrets/rclone/rclone.conf.age;
+  age.secrets.rcloneConf = {
+    file = ../../../../../secrets/rclone/rclone.conf.age;
+    owner = "restic";
+  };
   # contents: rclone.conf file contents with NAS and B2 access info
 
   services.restic.backups.b2 = {
@@ -44,9 +47,9 @@ in {
       ${pkgs.rclone}/bin/rclone sync -v $RCLONE_LOCAL $RCLONE_REMOTE --transfers=16
     '';
     backupCleanupCommand = ''
-      output=$(journalctl --unit %n --since=yesterday --boot --no-pager | \
+      output=$(journalctl --unit restic-backups-b2.service --since=yesterday --boot --no-pager | \
         ${pkgs.coreutils}/bin/tail --bytes 100000)
-      ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$EXIT_STATUS" --data-raw "$output"
+      ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$?" --data-raw "$output"
     '';
   };
 }
