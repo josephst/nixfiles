@@ -27,6 +27,7 @@
       # "docker"
       "git-credential-manager"
       "iterm2"
+      "linearmouse"
       "orbstack"
       # "raycast"
       "rectangle"
