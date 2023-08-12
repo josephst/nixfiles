@@ -13,7 +13,7 @@
       "homebrew/cask-fonts"
       "homebrew/cask-versions"
       "homebrew/services"
-      "microsoft/git"
+      # "microsoft/git"
     ];
 
     casks = [
@@ -25,7 +25,7 @@
       # "darktable"
       "digikam"
       # "docker"
-      "git-credential-manager-core"
+      "git-credential-manager"
       "iterm2"
       "orbstack"
       # "raycast"
