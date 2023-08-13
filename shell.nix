@@ -16,11 +16,6 @@
       neovim
       nix
       starship
-
-      # TODO: delete this testing section
-      (python310.withPackages (ps: [ps.influxdb]))
-      # python3
-      # python310Packages.influxdb2
     ];
     shellHook = ''
       eval "$(${pkgs.starship}/bin/starship init bash)"
