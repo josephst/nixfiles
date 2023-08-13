@@ -12,15 +12,6 @@ in {
     file = ../../../../secrets/rclone/rclone.conf.age;
   };
 
-  users.users.restic = {
-    group = "restic";
-    # home = cfg.dataDir;
-    createHome = false;
-    uid = config.ids.uids.restic;
-  };
-
-  users.groups.restic.gid = config.ids.uids.restic;
-
   systemd.services.rclone-restic-server = {
     description = "Serve NAS restic backup directory using Rclone";
     after = ["syslog.target" "network.target"];
