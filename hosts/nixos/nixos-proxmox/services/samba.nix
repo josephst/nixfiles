@@ -16,7 +16,9 @@
   # you must add their password using smbpasswd -a <user> as root.
   services.samba = {
     enable = true; # TODO: enable once samba fully set up
-    package = pkgs.samba4Full;
+    package = (pkgs.samba4Full.override {
+      enableCephFS = false;
+    });
     securityType = "user";
     extraConfig = ''
       server string = nixos
