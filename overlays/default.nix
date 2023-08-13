@@ -42,4 +42,5 @@
     #         inherit src version;
     #       });
     # });
+  };
 }
