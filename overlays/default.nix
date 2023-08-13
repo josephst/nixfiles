@@ -42,22 +42,39 @@
     #         inherit src version;
     #       });
     # });
-    python3 = prev.python3.override {
-      packageOverrides = self: super: {
-        influxdb = super.influxdb.overridePythonAttrs(old: {
-          # doCheck = false;
-          name = "python3.10-influxdb-5.3.1-custom";
+
+    python310 = prev.python310.override ({
+      packageOverrides = pself: psuper: {
+        influxdb = psuper.influxdb.overridePythonAttrs (old: {
+          doCheck = true;
           nativeCheckInputs = [
-            super.pytestCheckHook
-            super.requests-mock
-            super.mock
-            super.nose
+            psuper.pytestCheckHook
+            psuper.requests-mock
+            psuper.mock
+            psuper.nose
             # pandas
             (prev.python3Packages.callPackage ./python/pandas-153.nix {})
           ];
         });
       };
-    };
-    python310Packages = python3.pkgs;
+    });
+    python3 = python310;
+    python3Packages = python310.pkgs;
+
+    # python3Packages = python3.pkgs;
+    #     influxdb = python-prev.influxdb.overridePythonAttrs (old: {
+    #       doCheck = false;
+    #       name = "custom-python3.10-influxdb-5.3.1";
+    #       # nativeCheckInputs = [
+    #       #   python-prev.pytestCheckHook
+    #       #   python-prev.requests-mock
+    #       #   python-prev.mock
+    #       #   python-prev.nose
+    #       #   # pandas
+    #       #   (prev.python3Packages.callPackage ./python/pandas-153.nix {})
+    #       # ];
+    #     });
+    #   };
+    # };
   };
 }
