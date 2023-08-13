@@ -1,6 +1,7 @@
 {inputs, ...}: {
   agenix = inputs.agenix.overlays.default;
   zig = inputs.zig.overlays.default;
+
   additions = final: prev:
   # this adds custom pkgs in the same namespace as all other packages
   # (ie nixpkgs.recyclarr)
@@ -45,6 +46,7 @@
       packageOverrides = self: super: {
         influxdb = super.influxdb.overridePythonAttrs(old: {
           # doCheck = false;
+          name = "python3.10-influxdb-5.3.1-custom";
           nativeCheckInputs = [
             super.pytestCheckHook
             super.requests-mock
