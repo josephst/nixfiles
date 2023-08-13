@@ -16,7 +16,11 @@
   # you must add their password using smbpasswd -a <user> as root.
   services.samba = {
     enable = true; # TODO: enable once samba fully set up
-    package = pkgs.samba4Full;
+    package = (pkgs.samba.override {
+      # ceph support broken as of 2023-08-13 on nixpkgs-unstable
+      # relies on EOL version of influxdb which is incompatible with latest pandas release
+      enableCephFS = false;
+    });
     securityType = "user";
     extraConfig = ''
       server string = nixos

@@ -1,6 +1,7 @@
 {inputs, ...}: {
   agenix = inputs.agenix.overlays.default;
   zig = inputs.zig.overlays.default;
+
   additions = final: prev:
   # this adds custom pkgs in the same namespace as all other packages
   # (ie nixpkgs.recyclarr)
@@ -8,15 +9,19 @@
       pkgs = final;
       inherit inputs;
     };
-  unstable = final: prev: {
+  channels = final: prev: {
     # this adds nixpkgs-unstable as an overlays, available as nixpkgs.unstable.foobar
     # doesn't do much now, since we're already following unstable
     unstable = import inputs.nixpkgs {
       system = final.system;
       config.allowUnfree = true;
     };
+    stable = import inputs.nixpkgs-stable {
+      system = final.system;
+      config.allowUnfree = true;
+    };
   };
-  modifications = final: prev: {
+  modifications = final: prev: rec {
     # # override lego version (ACME certificates) with newest rev from github
     # # which supports google domains
     # # TODO: delete this once v4.11 is released to nixos unstable channel
