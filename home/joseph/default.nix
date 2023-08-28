@@ -44,6 +44,7 @@ in {
       # misc
       age
       bashInteractive
+      croc # file sharing
       exiftool
       fd
       hugo
@@ -55,6 +56,7 @@ in {
       python311
       rclone
       restic
+      rsync
       silver-searcher
       spoof-mac
       tldr
@@ -70,8 +72,9 @@ in {
     ];
     stateVersion = "22.11";
     shellAliases = {
-      top = "${pkgs.bottom}/bin/btm";
-      cat = "${pkgs.bat}/bin/bat --paging=never --style=plain,header";
+      top = "btm";
+      copy = "rsync -rvg --progress"; # copy <source> <destination>
+      cat = "bat --paging=never --style=plain,header";
     };
   };
 
