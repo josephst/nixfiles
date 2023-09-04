@@ -20,7 +20,7 @@
   networking = {
     hostName = "nixos-orbstack"; # Define your hostname.
     domain = "josephstahl.com";
-    search = ["nixos.josephstahl.com" "taildbd4c.ts.net"];
+    search = ["josephstahl.com" "taildbd4c.ts.net"];
     firewall.enable = false;
     # networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
