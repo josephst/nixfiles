@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  fqdn = config.networking.fqdn
+  fqdn = config.networking.fqdn;
 
   pruneOpts = [
     "--keep-daily 30"

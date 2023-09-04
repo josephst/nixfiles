@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  fqdn = config.networking.fqdn
+  fqdn = config.networking.fqdn;
 in {
   services.sabnzbd = {
     enable = true;

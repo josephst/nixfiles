@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  fqdn = config.networking.fqdn
+  fqdn = config.networking.fqdn;
 in {
   services.uptime-kuma = {
     enable = true;

@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  fqdn = config.networking.fqdn
+  fqdn = config.networking.fqdn;
 in {
   age.secrets.dnsApiToken = {
     file = ../../../../secrets/dnsApiToken.age;

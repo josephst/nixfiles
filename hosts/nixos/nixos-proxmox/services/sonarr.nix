@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  fqdn = config.networking.fqdn
+  fqdn = config.networking.fqdn;
 in {
   services.sonarr = {
     enable = true;

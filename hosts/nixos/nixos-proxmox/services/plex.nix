@@ -4,7 +4,7 @@
   ...
 }: let
   cfg = config.services.plex;
-  fqdn = config.networking.fqdn
+  fqdn = config.networking.fqdn;
 in {
   services.plex = {
     enable = true;

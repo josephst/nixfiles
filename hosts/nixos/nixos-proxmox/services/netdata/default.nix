@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  fqdn = config.networking.fqdn
+  fqdn = config.networking.fqdn;
 in {
   age.secrets.netdata_nixos_claim.file = ../../../../../secrets/netdata_nixos_claim.age;
   services.netdata = {

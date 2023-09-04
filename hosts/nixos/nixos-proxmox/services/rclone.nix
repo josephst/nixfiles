@@ -5,7 +5,7 @@
 }: let
   port = toString 8081;
   extHddPort = toString 8082;
-  fqdn = config.networking.fqdn
+  fqdn = config.networking.fqdn;
 in {
   age.secrets.rcloneConf = {
     file = ../../../../secrets/rclone/rclone.conf.age;
