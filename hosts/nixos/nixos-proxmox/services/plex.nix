@@ -4,8 +4,7 @@
   ...
 }: let
   cfg = config.services.plex;
-  inherit (config.networking) domain hostName;
-  fqdn = "${hostName}.${domain}";
+  fqdn = config.networking.fqdn
 in {
   services.plex = {
     enable = true;

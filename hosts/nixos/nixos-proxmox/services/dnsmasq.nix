@@ -3,8 +3,7 @@
   config,
   ...
 }: let
-  inherit (config.networking) domain hostName;
-  fqdn = "${hostName}.${domain}";
+  fqdn = config.networking.fqdn
 in {
   services.dnsmasq = {
     enable = true;

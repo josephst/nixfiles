@@ -4,8 +4,7 @@
   lib,
   ...
 }: let
-  inherit (config.networking) domain hostName;
-  fqdn = "${hostName}.${domain}";
+  fqdn = config.networking.fqdn
 in {
   services.sabnzbd = {
     enable = true;

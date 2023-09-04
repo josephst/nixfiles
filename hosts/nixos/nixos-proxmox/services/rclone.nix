@@ -5,8 +5,7 @@
 }: let
   port = toString 8081;
   extHddPort = toString 8082;
-  inherit (config.networking) domain hostName;
-  fqdn = "${hostName}.${domain}";
+  fqdn = config.networking.fqdn
 in {
   age.secrets.rcloneConf = {
     file = ../../../../secrets/rclone/rclone.conf.age;

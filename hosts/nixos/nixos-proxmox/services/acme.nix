@@ -4,8 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.networking) domain hostName;
-  fqdn = "${hostName}.${domain}";
+  fqdn = config.networking.fqdn
 in {
   age.secrets.dnsApiToken = {
     file = ../../../../secrets/dnsApiToken.age;
