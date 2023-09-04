@@ -48,7 +48,7 @@
   networking = {
     hostName = "nixos"; # Define your hostname. (managed by cloud-init)
     domain = "josephstahl.com";
-    search = ["josephstahl.com" "taildbd4c.ts.net"];
+    # search = ["josephstahl.com" "taildbd4c.ts.net"];
     networkmanager.enable = true; # Easiest to use and most distros use this by default.
   };
   systemd.network.wait-online.anyInterface = true;
