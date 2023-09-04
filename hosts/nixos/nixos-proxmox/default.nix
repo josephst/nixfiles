@@ -97,7 +97,7 @@
 
   services.resolved.extraConfig = ''
     DNS=127.0.0.1
-    DNSStubListener=no
+    # DNSStubListener=no
   ''; # disable stub listener since coreDNS is already listening on :53
   services.resolved.dnssec = "false";
 

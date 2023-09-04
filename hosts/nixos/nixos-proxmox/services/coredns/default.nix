@@ -9,6 +9,7 @@ in {
     enable = true;
     config = ''
       . {
+        bind 192.168.1.10
         log . {
           class denial error
         }
@@ -19,16 +20,19 @@ in {
       }
 
       ts.net {
+        bind 192.168.1.10
         forward . 100.100.100.100
         errors
       }
 
       taildbd4c.ts.net {
+        bind 192.168.1.10
         forward . 100.100.100.100
         errors
       }
 
       nixos.josephstahl.com {
+        bind 192.168.1.10
         # file ${./nixos.josephstahl.com.zone}
         template IN A  {
             answer "{{ .Name }} 0 IN A 192.168.1.10"
@@ -36,6 +40,7 @@ in {
       }
 
       proxmox.josephstahl.com {
+        bind 192.168.1.10
         template IN A {
           answer "{{ .Name }} 0 IN A 192.168.1.7"
         }
