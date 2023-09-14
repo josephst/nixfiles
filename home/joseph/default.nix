@@ -12,10 +12,10 @@ in {
     ./apps/bat.nix
     ./apps/bottom.nix
     ./apps/direnv.nix
-    ./apps/exa.nix
     ./apps/fish.nix
     ./apps/fzf.nix
     ./apps/git.nix
+    ./apps/lsd.nix
     ./apps/neovim.nix
     ./apps/nushell
     ./apps/ssh.nix
