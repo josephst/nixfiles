@@ -33,24 +33,25 @@ in {
 
       nixos.josephstahl.com {
         bind 192.168.1.10
-        # file ${./nixos.josephstahl.com.zone}
-        template IN A  {
-            answer "{{ .Name }} 0 IN A 192.168.1.10"
-        }
+        file ${./nixos.josephstahl.com.zone}
       }
 
       nas.josephstahl.com {
         bind 192.168.1.10
-        template IN A {
-          answer "{{ .Name }} 0 IN A 192.168.1.12"
+        hosts {
+          192.168.1.12  nas.josephstahl.com
+          fallthrough
         }
+        whoami
       }
 
       proxmox.josephstahl.com {
         bind 192.168.1.10
-        template IN A {
-          answer "{{ .Name }} 0 IN A 192.168.1.7"
+        hosts {
+          192.168.1.7   proxmox.josephstahl.com
+          fallthrough
         }
+        whoami
       }
     '';
   };

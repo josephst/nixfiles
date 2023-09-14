@@ -20,7 +20,7 @@ in {
         openssh.authorizedKeys.keys = keys;
       }
       // lib.optionalAttrs isLinux {
-        passwordFile = config.age.secrets.joseph.path;
+        hashedPasswordFile = config.age.secrets.joseph.path;
         isNormalUser = true;
         createHome = true;
         shell = pkgs.fish;
