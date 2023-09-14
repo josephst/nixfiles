@@ -93,5 +93,7 @@ in {
     openssh.enable = lib.mkDefault true;
   };
 
+  security.pam.enableSSHAgentAuth = true; # enable password-less sudo (using SSH keys)
+
   systemd.network.enable = lib.mkDefault true;
 }
