@@ -1,6 +1,7 @@
 {inputs, ...}: {
   agenix = inputs.agenix.overlays.default;
   zig = inputs.zig.overlays.default;
+  deploy-rs = inputs.deploy-rs.overlay;
 
   additions = final: prev:
   # this adds custom pkgs in the same namespace as all other packages

@@ -39,6 +39,13 @@ in {
         }
       }
 
+      nas.josephstahl.com {
+        bind 192.168.1.10
+        template IN A {
+          answer "{{ .Name }} 0 IN A 192.168.1.12"
+        }
+      }
+
       proxmox.josephstahl.com {
         bind 192.168.1.10
         template IN A {
