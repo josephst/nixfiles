@@ -6,7 +6,7 @@
   fqdn = config.networking.fqdn;
 in {
   services.coredns = {
-    enable = true;
+    enable = false;
     config = ''
       . {
         bind 192.168.1.10

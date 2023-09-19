@@ -137,6 +137,8 @@
 
     deploy.nodes = {
       nixos = {
+        # override hostname with `nix run github:serokell/deploy-rs .#nixos -- --hostname 192.168.1.10`
+        # (if DNS not yet set up/ working)
         hostname = "nixos.josephstahl.com";
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.nixos;

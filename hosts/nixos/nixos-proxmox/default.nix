@@ -17,7 +17,8 @@
     ## Services
     ./services/acme.nix
     ./services/caddy.nix
-    ./services/coredns
+    # ./services/coredns
+    ./services/dnsmasq.nix
     ./services/netdata
     ./services/tailscale.nix
     ## Media
@@ -96,11 +97,11 @@
     qemuGuest.enable = true;
   };
 
-  services.resolved.extraConfig = ''
-    DNS=127.0.0.1
-    # DNSStubListener=no
-  ''; # disable stub listener since coreDNS is already listening on :53
-  services.resolved.dnssec = "false";
+  # services.resolved.extraConfig = ''
+  #   # DNS=127.0.0.1
+  #   # DNSStubListener=no
+  # ''; # disable stub listener since coreDNS is already listening on :53
+  services.resolved.dnssec = "allow-downgrade";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
