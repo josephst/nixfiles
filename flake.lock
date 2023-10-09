@@ -214,10 +214,24 @@
         "home-manager": "home-manager_2",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
-        "nixpkgs-unstable": [
-          "nixpkgs"
-        ],
+        "secrets": "secrets",
         "zig": "zig"
+      }
+    },
+    "secrets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1696876250,
+        "narHash": "sha256-w+5E99rQwQAoyYB3l/nN23xvir9iHmWSJp3g8fiN1ns=",
+        "ref": "refs/heads/main",
+        "rev": "89946b9394320718a4b20e3ede2154e3adb13d08",
+        "revCount": 1,
+        "type": "git",
+        "url": "ssh://git@github.com/josephst/nix-secrets.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/josephst/nix-secrets.git"
       }
     },
     "utils": {

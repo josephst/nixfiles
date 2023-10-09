@@ -13,7 +13,7 @@
 
   nix = {
     package = pkgs.nixUnstable;
-    registry.nixpkgs.flake = inputs.nixpkgs;
+    # registry.nixpkgs.flake = inputs.nixpkgs;
     settings = {
       auto-optimise-store = true;
       cores = lib.mkDefault 0; # value of 0 = all available cores

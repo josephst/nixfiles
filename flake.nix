@@ -5,7 +5,7 @@
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-unstable.follows = "nixpkgs";
+    # nixpkgs-unstable.follows = "nixpkgs";
 
     # home-manager
     home-manager = {
@@ -59,9 +59,8 @@
     deploy-rs,
     zig,
     # disko,
-    secrets,
-    ...
-  } @ inputs: let
+    secrets
+  } @inputs: let
     supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
     forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
@@ -100,7 +99,7 @@
           ./hosts/darwin/josephs-air
           ./users/joseph.nix
         ];
-        specialArgs = {inherit inputs;};
+        specialArgs = inputs;
       };
     };
 
@@ -119,7 +118,7 @@
             ./users/root.nix
           ]
           ++ (builtins.attrValues nixosModules);
-        specialArgs = {inherit inputs;};
+        specialArgs = inputs;
       };
 
       nixos = nixpkgs.lib.nixosSystem {
@@ -137,7 +136,7 @@
             ./users/root.nix
           ]
           ++ (builtins.attrValues nixosModules);
-        specialArgs = {inherit inputs;};
+        specialArgs = inputs;
       };
     };
 
