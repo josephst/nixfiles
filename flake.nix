@@ -42,6 +42,11 @@
     #   url = "github:nix-community/disko";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
+
+    secrets = {
+      url = "git+ssh://git@github.com/josephst/nix-secrets.git"; # Change this!
+      flake = false;
+    };
   };
 
   outputs = {
@@ -53,7 +58,8 @@
     agenix,
     deploy-rs,
     zig,
-    # disko
+    # disko,
+    secrets,
     ...
   } @ inputs: let
     supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
@@ -88,7 +94,7 @@
         pkgs = legacyPackages.aarch64-darwin;
         modules = [
           home-manager.darwinModules.home-manager
-          agenix.nixosModules.default
+          agenix.darwinModules.default
           ./hosts/common
           ./hosts/darwin/common
           ./hosts/darwin/josephs-air

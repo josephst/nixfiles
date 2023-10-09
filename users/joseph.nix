@@ -7,8 +7,6 @@
   inherit (pkgs.stdenv) isDarwin isLinux;
   keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop joseph@1password"];
 in {
-  age.secrets.joseph.file = ../secrets/users/joseph.age;
-
   users.users = {
     joseph =
       {

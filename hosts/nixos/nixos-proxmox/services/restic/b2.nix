@@ -12,22 +12,6 @@
   ];
   checkOpts = ["--read-data-subset 500M" "--with-cache"];
 in {
-  age.secrets.resticb2env.file = ../../../../../secrets/restic/b2.env.age;
-  # contents:
-  # RCLONE_LOCAL=<rclone path>
-  # RCLONE_REMOTE=<rclone path>
-  # RESTIC_REPOSITORY=<restic path to b2 repository (ie rclone:b2:...)
-  # HC_UUID=<uuid for healthchecks>
-
-  age.secrets.resticpass.file = ../../../../../secrets/restic/nas.pass.age;
-  # contents: password for restic repo
-
-  age.secrets.rcloneConf = {
-    file = ../../../../../secrets/rclone/rclone.conf.age;
-    owner = "restic";
-  };
-  # contents: rclone.conf file contents with NAS and B2 access info
-
   services.restic.backups.b2 = {
     initialize = false;
     user = "restic";

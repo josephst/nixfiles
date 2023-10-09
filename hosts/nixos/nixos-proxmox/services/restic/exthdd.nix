@@ -12,18 +12,6 @@
   ];
   checkOpts = ["--read-data-subset 500M" "--with-cache"];
 in {
-  age.secrets.restic-exthdd-env = {
-    file = ../../../../../secrets/restic/exthdd.env.age;
-  };
-  # contents:
-  # HC_UUID=<uuid for healthchecks>
-
-  age.secrets.restic-exthdd-pass = {
-    file = ../../../../../secrets/restic/exthdd.pass.age;
-    owner = "restic";
-  };
-  # contents: password for restic repo
-
   services.restic.backups.exthdd = {
     initialize = false;
     user = "restic";

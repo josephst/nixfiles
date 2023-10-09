@@ -61,12 +61,6 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  age.secrets.smb = {
-    file = ../../../secrets/smb.age;
-    owner = "root";
-    group = "root";
-  };
-
   fileSystems."/mnt/nas" = {
     device = "//192.168.1.12/public"; # NAS IP
     fsType = "cifs";

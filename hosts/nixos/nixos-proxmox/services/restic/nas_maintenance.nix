@@ -15,15 +15,6 @@
   ];
   checkOpts = ["--with-cache"];
 in {
-  age.secrets.resticLanEnv.file = ../../../../../secrets/restic/nas.env.age;
-  # contents: HC_UUID=<uuid>
-
-  age.secrets.resticpass = {
-    file = ../../../../../secrets/restic/nas.pass.age;
-    owner = "restic";
-  };
-  # contents: repo password
-
   services.restic.backups.nas_maintenance = {
     initialize = false;
     user = "restic";

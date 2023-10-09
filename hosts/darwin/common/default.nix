@@ -4,6 +4,10 @@
   pkgs,
   ...
 }: {
+  imports = [
+    ./secrets.nix
+  ];
+
   environment = {
     loginShell = "${pkgs.zsh}/bin/zsh -l";
     systemPackages = with pkgs; [

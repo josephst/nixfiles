@@ -7,10 +7,6 @@
   extHddPort = toString 8082;
   fqdn = config.networking.fqdn;
 in {
-  age.secrets.rcloneConf = {
-    file = ../../../../secrets/rclone/rclone.conf.age;
-  };
-
   systemd.services.rclone-restic-server = {
     description = "Serve NAS restic backup directory using Rclone";
     after = ["syslog.target" "network.target"];
