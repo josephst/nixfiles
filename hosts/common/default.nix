@@ -12,7 +12,7 @@
   ];
 
   nix = {
-    package = pkgs.nixVersions.nix_2_16;
+    package = pkgs.nixUnstable;
     registry.nixpkgs.flake = inputs.nixpkgs;
     settings = {
       auto-optimise-store = true;
