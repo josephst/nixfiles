@@ -60,6 +60,7 @@ in {
       silver-searcher
       spoof-mac
       tldr
+      yt-dlp
 
       # languages
       nodejs
