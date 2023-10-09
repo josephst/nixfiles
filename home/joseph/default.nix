@@ -61,6 +61,7 @@ in {
       spoof-mac
       tldr
       yt-dlp
+      ffmpeg_6
 
       # languages
       nodejs
