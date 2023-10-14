@@ -28,6 +28,7 @@
       "git-credential-manager"
       "iterm2"
       "logi-options-plus"
+      "microsoft-teams"
       "orbstack"
       # "raycast"
       "rectangle"
