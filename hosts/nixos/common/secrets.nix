@@ -3,6 +3,11 @@
 let user = "joseph"; in
 {
 
+  age.identityPaths = [
+    # make sure this key is copied from 1password prior to running agenix
+    "/home/${user}/.ssh/id_ed25519"
+  ];
+
   age.secrets.smb = {
     file = "${secrets}/smb.age";
     owner = "root";

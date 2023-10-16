@@ -54,20 +54,6 @@ in {
 
   ### END srvOS portion
 
-  ### START personal configuration
-
-  # use age encryption key in special location (public & private keys created during nixos install)
-  age.identityPaths = [
-    "/etc/secrets/agenix/ssh_host_ed25519_key"
-    "/etc/ssh/ssh_host_ed25519_key"
-  ];
-
-  users.users = {
-    root = {
-      openssh.authorizedKeys.keys = keys;
-    };
-  };
-
   environment = {
     # NixOS specific (shared with Darin = goes in ../../common/default.nix)
     systemPackages = builtins.attrValues {

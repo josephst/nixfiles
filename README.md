@@ -45,13 +45,18 @@ mkdir ~/.ssh
 vim ~/.ssh/id_ed25519 # paste private key that is used to authenticate with Github (stored in 1password)
 chmod 600 ~/.ssh/id_ed25519
 
-# add new keys for agenix
-mkdir -p /mnt/etc/secrets/agenix
-ssh-keygen -t ed25519 -N "" -f /mnt/etc/secrets/agenix/ssh_host_ed25519_key
-cat /mnt/etc/secrets/agenix/ssh_host_ed25519_key.pub # copy the public key
-# re-encrypt with this new key, then pull the repo again to get newly encrypted files
-cd /mnt/etc/nixos
-git pull
+# Create new SSH keys for the system
+# need a user key (ie ~/.ssh/id_ed25519{,.pub})
+# and a root key (ie /root/.ssh/id_ed25519{,.pub})
+# USER KEY: copy from 1password to /mnt/home/$USERNAME/.ssh/
+mkdir -p /mnt/home/${USERNAME}/.ssh
+chown nixos /mnt/home/${USERNAME}/.ssh
+echo "add public and private keys to /mnt/home/${USERNAME}/.ssh/id_25519{,.pub}"
+# ROOT KEY
+mkdir -p /mnt/root/.ssh
+echo "copy public and private keys to /mnt/home/root/.ssh/id_25519{,.pub}"
+# when agenix runs, looks for keys in /home/joseph/.ssh
+ln -s /mnt/home/${USERNAME} /home/${USERNAME}
 
 # once shell loaded, clone the repo to /mnt/etc/nixos
 git clone git@github.com:josephst/nixfiles.git /mnt/etc/nixos
