@@ -3,10 +3,6 @@
 let user = "joseph"; in
 {
 
-  age.identityPaths = [
-    "/home/${user}/.ssh/id_ed25519"
-  ];
-
   age.secrets.smb = {
     file = "${secrets}/smb.age";
     owner = "root";
