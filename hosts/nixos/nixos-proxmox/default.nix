@@ -14,6 +14,9 @@
     ../mixins/systemd-boot.nix
     ../mixins/cloud-init.nix
 
+    # Secrets
+    ./secrets.nix
+
     ## Services
     ./services/acme.nix
     ./services/caddy.nix
