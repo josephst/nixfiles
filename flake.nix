@@ -4,7 +4,7 @@
   inputs = {
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
-    nixpkgs.url = "github:josephst/nixpkgs/fix/lxc-container-bootloader";
+    nixpkgs.url = "github:josephst/nixpkgs/fix-lxc-container-bootloader";
     # nixpkgs-unstable.follows = "nixpkgs";
 
     # home-manager
