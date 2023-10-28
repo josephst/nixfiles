@@ -6,6 +6,8 @@ let user = "joseph"; in
   age.identityPaths = [
     # make sure this key is copied from 1password prior to running agenix
     "/home/${user}/.ssh/id_ed25519"
+    # also use the built-in key
+    "/etc/ssh/ssh_host_ed25519_key"
   ];
 
   age.secrets.joseph.file = "${secrets}/users/joseph.age";
