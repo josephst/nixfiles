@@ -8,7 +8,7 @@
 in {
   services.netdata = {
     package = pkgs.netdataCloud;
-    enable = true;
+    enable = false;
     claimTokenFile = config.age.secrets.netdata_nixos_claim.path;
     # uptime monitoring now done up uptime-kuma
     # configDir = {
