@@ -7,6 +7,7 @@
   fqdn = config.networking.fqdn;
 in {
   services.netdata = {
+    package = pkgs.netdataCloud;
     enable = true;
     claimTokenFile = config.age.secrets.netdata_nixos_claim.path;
     # uptime monitoring now done up uptime-kuma
