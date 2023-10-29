@@ -1,7 +1,6 @@
 {inputs, ...}: {
   agenix = inputs.agenix.overlays.default;
   zig = inputs.zig.overlays.default;
-  # deploy-rs = inputs.deploy-rs.overlay;
 
   additions = final: prev:
   # this adds custom pkgs in the same namespace as all other packages
@@ -22,7 +21,7 @@
       config.allowUnfree = true;
     };
   };
-  modifications = final: prev: rec {
+  modifications = final: prev: {
     # # override lego version (ACME certificates) with newest rev from github
     # # which supports google domains
     # # TODO: delete this once v4.11 is released to nixos unstable channel
@@ -43,15 +42,5 @@
     #         inherit src version;
     #       });
     # });
-    # TODO: remove once https://github.com/NixOS/nixpkgs/pull/260791 is merged
-    mkpasswd = prev.mkpasswd.overrideAttrs(old: {
-      patches = (old.patches or []) ++ [
-        (prev.fetchpatch {
-          url = "https://raw.githubusercontent.com/NixOS/nixpkgs/f9114acb1794b0f163d391771501d89289283886/pkgs/tools/networking/whois/clang.patch";
-          # hash = prev.lib.fakeHash;
-          hash = "sha256-n50v8yqWRsCPqVPKaF+fCSB1oo5pq3ZejenwEUqrqLk=";
-        })
-      ];
-    });
   };
 }

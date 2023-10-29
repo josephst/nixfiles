@@ -33,7 +33,7 @@
 
     ## Backup
     ./services/rclone.nix
-    # ./services/rsyncd.nix
+    ./services/rsync.nix
     ./services/samba.nix
     # ./services/restic/healthchecks.nix
     ./services/restic/restic-user.nix

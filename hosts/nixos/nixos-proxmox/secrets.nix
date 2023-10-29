@@ -42,14 +42,19 @@ let user = "joseph"; in
     owner = "restic";
   };
 
-  age.secrets.resticLanEnv.file = "${secrets}/restic/nas.env.age";
   # contents: HC_UUID=<uuid>
+  age.secrets.resticLanEnv.file = "${secrets}/restic/nas.env.age";
 
+  # contents: repo password
   age.secrets.resticpass = {
     file = "${secrets}/restic/nas.pass.age";
     owner = "restic";
   };
-  # contents: repo password
+
+  # contents: password for rsyncd
+  age.secrets.rsyncd-secrets = {
+    file = "${secrets}/rsyncd-secrets.age";
+  };
 
   ###########################
 

@@ -68,7 +68,7 @@
 
     legacyPackages = forAllSystems (
       system:
-        import inputs.nixpkgs {
+        import nixpkgs {
           inherit system;
           overlays = builtins.attrValues overlays;
           config.allowUnfree = true;
@@ -77,7 +77,7 @@
 
     nixosModules = import ./modules/nixos;
   in {
-    overlays = overlays;
+    inherit overlays;
 
     packages = forAllSystems (
       system: let
