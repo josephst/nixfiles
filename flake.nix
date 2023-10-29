@@ -4,7 +4,7 @@
   inputs = {
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
-    nixpkgs.url = "github:josephst/nixpkgs/systemd-domainname";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # nixpkgs-unstable.follows = "nixpkgs";
 
     # home-manager
