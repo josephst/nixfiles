@@ -19,7 +19,7 @@
 
   networking = {
     hostName = "nixos-orbstack"; # Define your hostname.
-    domain = "josephstahl.com"; # needs nettools installed
+    domain = "josephstahl.com";
     firewall.enable = false;
     # networkmanager.enable = true; # Easiest to use and most distros use this by default.
 

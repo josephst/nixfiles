@@ -60,7 +60,6 @@ in {
       inherit
         (pkgs)
         cifs-utils
-        nettools
         parted
         tailscale
         ;
