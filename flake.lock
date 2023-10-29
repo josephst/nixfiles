@@ -176,16 +176,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1698540583,
-        "narHash": "sha256-Xhw48WB4aSmE6cmUOHjcxDqgZMaeUbK50ONcPfnBYyU=",
+        "lastModified": 1698545605,
+        "narHash": "sha256-bI7seoz7ga2lVINIq6X9fDagGsplQ7QSIaRfSn2uqYY=",
         "owner": "josephst",
         "repo": "nixpkgs",
-        "rev": "8b86776e12857c3740edfd9e54011d4cb73df2bc",
+        "rev": "f14e6c8b453e9c643f4e50262511b4c9e0ac08e2",
         "type": "github"
       },
       "original": {
         "owner": "josephst",
-        "ref": "fix/netdata-relative-path",
+        "ref": "systemd-domainname",
         "repo": "nixpkgs",
         "type": "github"
       }
