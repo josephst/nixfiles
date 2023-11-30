@@ -4,7 +4,8 @@
   inputs = {
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:josephst/nixpkgs/whois-implicit-functions";
     # nixpkgs-unstable.follows = "nixpkgs";
 
     # home-manager

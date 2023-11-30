@@ -1,0 +1,31 @@
+Fix:
+
+implicit declaration of function 'getpass' is invalid in C99
+
+implicitly declaring library function 'snprintf' with type 'int (char *, unsigned long, const char *, ...)'
+
+implicitly declaring library function 'strdup' with type 'char *(const char *)'
+
+Based on https://github.com/macports/macports-ports/blame/93de4e9fc1e5e8427bf98f48209e783a5e8fab57/net/whois/files/implicit.patch by ryandesign
+
+--- a/mkpasswd.c	2023-07-24 15:41:53.000000000 -0500
++++ b/mkpasswd.c	2023-07-24 15:41:53.000000000 -0500
+@@ -19,7 +19,6 @@
+  */
+
+ /* for crypt, snprintf and strcasecmp */
+-#define _XOPEN_SOURCE 500
+ #define _BSD_SOURCE 1
+ #define _DEFAULT_SOURCE 1
+ #define __EXTENSIONS__ 1
+--- a/utils.c	2017-07-27 10:44:55.000000000 -0500
++++ b/utils.c	2020-10-06 22:35:52.000000000 -0500
+@@ -21,7 +21,7 @@
+  */
+
+ /* for strdup */
+-#define _XOPEN_SOURCE 500
++#define _XOPEN_SOURCE 600
+
+ /* System library */
+ #include <stdio.h>
