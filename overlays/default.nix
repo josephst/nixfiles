@@ -43,10 +43,14 @@
     #       });
     # });
     # remove once upstreamed
-    # whois = prev.whois.overrideAttrs(old: {
-    #   patches = (old.patches or []) ++ [
-    #     ./whois/implicit.patch
-    #   ];
-    # });
+    whois = prev.whois.overrideAttrs(old: {
+      patches = (old.patches or []) ++ [
+        (prev.fetchpatch {
+          url = "https://github.com/macports/macports-ports/raw/93de4e9fc1e5e8427bf98f48209e783a5e8fab57/net/whois/files/implicit.patch";
+          extraPrefix = "";
+          hash = "sha256-ogVylQz//tpXxPNIWIHkhghvToU1z1D1FfnUBdZLyRY=";
+        })
+      ];
+    });
   };
 }
