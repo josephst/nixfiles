@@ -64,6 +64,7 @@ in {
       ffmpeg_6
 
       # languages
+      nim
       nodejs
       cargo
       rustc
