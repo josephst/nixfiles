@@ -38,6 +38,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # llama.cpp
+    llama-cpp = {
+      url = "github:ggerganov/llama.cpp";
+    };
+
     # disko
     # disko = {
     #   url = "github:nix-community/disko";
@@ -59,6 +64,7 @@
     agenix,
     deploy-rs,
     zig,
+    llama-cpp,
     # disko,
     secrets
   } @inputs: let

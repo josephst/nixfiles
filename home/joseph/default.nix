@@ -41,6 +41,9 @@ in {
       nixpkgs-review
       rnix-lsp
 
+      # GPT
+      llama-cpp
+
       # misc
       age
       bashInteractive

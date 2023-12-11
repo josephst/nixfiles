@@ -1,0 +1,10 @@
+[1702323396] Log start
+[1702323396] Cmd: llama
+[1702323396] main: build = 0 (unknown)
+[1702323396] main: built with clang version 11.1.0 for aarch64-apple-darwin
+[1702323396] main: seed  = 1702323396
+[1702323396] main: llama backend init
+[1702323396] main: load the model and apply lora adapter, if any
+[1702323396] error loading model: failed to open models/7B/ggml-model-f16.gguf: No such file or directory
+[1702323396] llama_load_model_from_file: failed to load model
+[1702323396] main: error: unable to load model
