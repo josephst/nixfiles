@@ -18,8 +18,9 @@ gc age='7':
     nix-collect-garbage --delete-older-than {{ age }}d
 
 # deploy to proxmox nixos VM
+# (use the binary from nixpkgs to allow for using binary cache instead of rebuilding)
 deploy:
-  nix run github:serokell/deploy-rs .#nixos
+  nix run github:nixos/nixpkgs/nixpkgs-unstable#deploy-rs .#nixos
 
 # update flakes
 update:

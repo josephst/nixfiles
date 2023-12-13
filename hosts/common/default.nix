@@ -47,7 +47,7 @@
       binutils
       coreutils
       curl
-      deploy-rs
+      deploy-rs.deploy-rs
       file
       fish
       (git.override

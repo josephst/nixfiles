@@ -2,11 +2,13 @@
   agenix = inputs.agenix.overlays.default;
   zig = inputs.zig.overlays.default;
 
+  deploy-rs = inputs.deploy-rs.overlay;
+
   additions = final: prev:
   # this adds custom pkgs in the same namespace as all other packages
   # (ie nixpkgs.recyclarr)
     import ../pkgs {
-      pkgs = final;
+      pkgs = prev;
       inherit inputs;
     };
   channels = final: prev: {
@@ -22,6 +24,8 @@
     };
   };
   modifications = final: prev: {
+    # don't build deploy-rs from source
+    deploy-rs = { inherit (prev.deploy-rs) deploy-rs; lib = prev.deploy-rs.lib; };
     # # override lego version (ACME certificates) with newest rev from github
     # # which supports google domains
     # # TODO: delete this once v4.11 is released to nixos unstable channel

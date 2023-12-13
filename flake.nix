@@ -153,7 +153,7 @@
         # (if DNS not yet set up/ working)
         hostname = "nixos.josephstahl.com";
         profiles.system = {
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.nixos;
+          path = legacyPackages.deploy-rs.lib.activate.nixos self.nixosConfigurations.nixos;
           sshUser = "root";
           magicRollback = true;
           remoteBuild = true; # since it may be cross-platform
