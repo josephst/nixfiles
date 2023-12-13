@@ -52,5 +52,32 @@
     #     })
     #   ];
     # });
+    python311 = prev.python311.override {
+      packageOverrides = python-self: python-super: {
+        # remove once https://github.com/NixOS/nixpkgs/pull/273538 merged
+        huggingface-hub = let
+          version = "0.19.4";
+        in python-super.huggingface-hub.overridePythonAttrs(old: {
+          inherit version;
+          src = prev.fetchFromGitHub {
+            owner = "huggingface";
+            repo = "huggingface_hub";
+            rev = "refs/tags/v${version}";
+            hash = "sha256-bK/Cg+ZFhf9TrTVlDU35cLMDuTmdH4bN/QuPVeUVDsI=";
+          };
+        });
+        transformers = let
+          version = "4.36.0";
+        in python-super.transformers.overridePythonAttrs(old: {
+          inherit version;
+          src = prev.fetchFromGithub {
+            owner = "huggingface";
+            repo = "transformers";
+            rev = "refs/tags/v${version}";
+            hash = "sha256-aEqWH03/ghMpEmYMkNlHoPNYD1a+HIO2gSSWchQA9Qs=";
+          };
+        });
+      };
+    };
   };
 }

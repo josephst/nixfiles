@@ -43,6 +43,7 @@ in {
 
       # GPT
       llama-cpp
+      python311Packages.huggingface-hub
 
       # misc
       age
