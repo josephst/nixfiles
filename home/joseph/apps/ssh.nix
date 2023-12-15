@@ -10,6 +10,7 @@
         "nixos" = {
           hostname = "nixos";
           user = "joseph";
+          forwardAgent = true;
         };
       }
       // lib.attrsets.optionalAttrs pkgs.stdenv.isDarwin {
