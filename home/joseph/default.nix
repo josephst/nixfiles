@@ -37,6 +37,7 @@ in {
       alejandra
       cachix
       nix-prefetch
+      nix-update
       nixpkgs-fmt
       nixpkgs-review
       rnix-lsp
