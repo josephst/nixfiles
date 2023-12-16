@@ -24,8 +24,12 @@
     };
   };
   modifications = final: prev: {
-    # don't build deploy-rs from source
-    deploy-rs = { inherit (prev.deploy-rs) deploy-rs; lib = prev.deploy-rs.lib; };
+    # don't build deploy-rs from source - goal is to use deploy-rs from nix cache,
+    # and lib from the deploy-rs flake
+    deploy-rs = let
+      pkgs = import inputs.nixpkgs {
+        system = final.system;
+      }; in { deploy-rs = pkgs.deploy-rs; lib = prev.deploy-rs.lib; };
     # # override lego version (ACME certificates) with newest rev from github
     # # which supports google domains
     # # TODO: delete this once v4.11 is released to nixos unstable channel

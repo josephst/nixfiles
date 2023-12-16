@@ -3,7 +3,7 @@
 
   inputs = {
     # package repos
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # nixpkgs.url = "github:josephst/nixpkgs/whois-implicit-functions";
     # nixpkgs-unstable.follows = "nixpkgs";
@@ -153,7 +153,7 @@
         # (if DNS not yet set up/ working)
         hostname = "nixos.josephstahl.com";
         profiles.system = {
-          path = legacyPackages.deploy-rs.lib.activate.nixos self.nixosConfigurations.nixos;
+          path = legacyPackages.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.nixos;
           sshUser = "root";
           magicRollback = true;
           remoteBuild = true; # since it may be cross-platform
