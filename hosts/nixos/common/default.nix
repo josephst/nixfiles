@@ -73,6 +73,10 @@ in {
     ssh = {
       startAgent = true;
     };
+    fish = {
+      # workaround for https://github.com/NixOS/nixpkgs/issues/173421
+      useBabelfish = true;
+    };
   };
 
   services = {
@@ -82,6 +86,4 @@ in {
 
   security.pam.enableSSHAgentAuth = true; # enable password-less sudo (using SSH keys)
   security.pam.services.sudo.sshAgentAuth = true;
-
-  systemd.network.enable = lib.mkDefault true;
 }
