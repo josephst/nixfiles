@@ -70,6 +70,7 @@ in {
 
       # languages
       nim
+      nimble # package manager for nim
       nodejs
       cargo
       rustc
