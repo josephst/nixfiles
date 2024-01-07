@@ -62,7 +62,7 @@
     # });
     python311 = prev.python311.override {
       packageOverrides = python-self: python-super: {
-        # remove once https://github.com/NixOS/nixpkgs/pull/273538 merged
+        # remove once https://nixpk.gs/pr-tracker.html?pr=271586 merged into unstable
         huggingface-hub = let
           version = "0.19.4";
         in python-super.huggingface-hub.overridePythonAttrs(old: {
