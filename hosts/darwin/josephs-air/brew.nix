@@ -33,6 +33,7 @@
       # "raycast"
       "rectangle"
       "spotify"
+      "stats"
       "steam"
       "utm"
       "vlc"
