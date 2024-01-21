@@ -84,6 +84,6 @@ in {
     openssh.enable = lib.mkDefault true;
   };
 
-  security.pam.enableSSHAgentAuth = true; # enable password-less sudo (using SSH keys)
+  security.pam.sshAgentAuth.enable = true; # enable password-less sudo (using SSH keys)
   security.pam.services.sudo.sshAgentAuth = true;
 }

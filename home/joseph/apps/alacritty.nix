@@ -25,7 +25,7 @@
         };
         # option_as_alt = "Both"; # supported in v0.12
       };
-      # key_bindings = [
+      key_bindings = [
       #   # macOS quality of life things
       #   {
       #     key = "N";
@@ -75,7 +75,7 @@
       #     mods = "Alt";
       #     chars = ''\x1bc'';
       #   }
-      # ];
+      ];
       selection = {
         semantic_escape_chars = ",│`|:\"' ()[]{}<>\t";
         save_to_clipboard = true;
