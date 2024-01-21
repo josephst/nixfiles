@@ -25,57 +25,57 @@
         };
         # option_as_alt = "Both"; # supported in v0.12
       };
-      key_bindings = [
-        # macOS quality of life things
-        {
-          key = "N";
-          mods = "Command";
-          action = "SpawnNewInstance";
-        }
-        {
-          key = "Space";
-          mods = "Alt";
-          chars = " ";
-        }
-        {
-          # delete word/line
-          key = "Back";
-          mods = "Super";
-          chars = ''\x15'';
-        }
-        {
-          # one word left
-          key = "Left";
-          mods = "Alt";
-          chars = ''\x1bb'';
-        }
-        {
-          # one word right
-          key = "Right";
-          mods = "Alt";
-          chars = ''\x1bf'';
-        }
-        {
-          # Home
-          key = "Left";
-          mods = "Command";
-          chars = ''\x1bOH'';
-          mode = "AppCursor";
-        }
-        {
-          # End
-          key = "Right";
-          mods = "Command";
-          chars = ''\x1bOF'';
-          mode = "AppCursor";
-        }
-        {
-          # Alt-C for FZF (note that remaining alt keys will still send unicode chars on mac)
-          key = "C";
-          mods = "Alt";
-          chars = ''\x1bc'';
-        }
-      ];
+      # key_bindings = [
+      #   # macOS quality of life things
+      #   {
+      #     key = "N";
+      #     mods = "Command";
+      #     action = "SpawnNewInstance";
+      #   }
+      #   {
+      #     key = "Space";
+      #     mods = "Alt";
+      #     chars = " ";
+      #   }
+      #   {
+      #     # delete word/line
+      #     key = "Back";
+      #     mods = "Super";
+      #     chars = ''\u0015'';
+      #   }
+      #   {
+      #     # one word left
+      #     key = "Left";
+      #     mods = "Alt";
+      #     chars = ''\x1bb'';
+      #   }
+      #   {
+      #     # one word right
+      #     key = "Right";
+      #     mods = "Alt";
+      #     chars = ''\x1bf'';
+      #   }
+      #   {
+      #     # Home
+      #     key = "Left";
+      #     mods = "Command";
+      #     chars = ''\x1bOH'';
+      #     mode = "AppCursor";
+      #   }
+      #   {
+      #     # End
+      #     key = "Right";
+      #     mods = "Command";
+      #     chars = ''\x1bOF'';
+      #     mode = "AppCursor";
+      #   }
+      #   {
+      #     # Alt-C for FZF (note that remaining alt keys will still send unicode chars on mac)
+      #     key = "C";
+      #     mods = "Alt";
+      #     chars = ''\x1bc'';
+      #   }
+      # ];
       selection = {
         semantic_escape_chars = ",│`|:\"' ()[]{}<>\t";
         save_to_clipboard = true;
