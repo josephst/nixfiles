@@ -25,12 +25,12 @@
   };
   modifications = final: prev: {
     # delete when https://github.com/NixOS/nixpkgs/pull/288471 merged
-    alacritty = prev.alacritty.overrideAttrs(old: {
-      postPatch = prev.lib.optionalString prev.stdenv.isLinux ''
-        substituteInPlace alacritty/src/config/ui_config.rs \
-          --replace xdg-open ${prev.xdg-utils}/bin/xdg-open
-      '';
-    });
+    # alacritty = prev.alacritty.overrideAttrs(old: {
+    #   postPatch = prev.lib.optionalString prev.stdenv.isLinux ''
+    #     substituteInPlace alacritty/src/config/ui_config.rs \
+    #       --replace xdg-open ${prev.xdg-utils}/bin/xdg-open
+    #   '';
+    # });
     # don't build deploy-rs from source - goal is to use deploy-rs from nix cache,
     # and lib from the deploy-rs flake
     deploy-rs = let
