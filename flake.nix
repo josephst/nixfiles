@@ -94,7 +94,7 @@
     );
 
     darwinConfigurations = {
-      josephs-air = darwin.lib.darwinSystem {
+      Josephs-MacBook-Air = darwin.lib.darwinSystem {
         # darwin-rebuild switch --flake .
         system = "aarch64-darwin";
         pkgs = legacyPackages.aarch64-darwin;
