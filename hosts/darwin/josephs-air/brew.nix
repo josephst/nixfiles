@@ -29,6 +29,7 @@
       "iterm2"
       "logi-options-plus"
       "microsoft-teams"
+      "ollama"
       "orbstack"
       # "raycast"
       "rectangle"
