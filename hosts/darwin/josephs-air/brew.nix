@@ -31,7 +31,7 @@
       "microsoft-teams"
       "ollama"
       "orbstack"
-      # "raycast"
+      "raycast"
       "rectangle"
       "spotify"
       "stats"
