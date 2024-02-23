@@ -88,6 +88,7 @@ in {
   };
 
   programs = {
+    atuin.enable = true;
     gitui.enable = true;
     lazygit.enable = true;
     home-manager.enable = true;
