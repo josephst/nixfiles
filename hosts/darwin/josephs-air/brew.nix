@@ -39,6 +39,7 @@
       "utm"
       "vlc"
       "visual-studio-code"
+      "warp"
       "zoom"
     ];
 
