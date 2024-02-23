@@ -97,6 +97,12 @@ in {
     zoxide.enable = true;
   };
 
+  programs.starship.settings = {
+    line_break = {
+      disabled = true;
+    };
+  };
+
   xdg = {
     # todo: look into this option more
     enable = false;
