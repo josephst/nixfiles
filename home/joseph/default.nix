@@ -40,7 +40,7 @@ in {
       nix-update
       nixpkgs-fmt
       nixpkgs-review
-      rnix-lsp
+      nil
 
       # GPT
       llama-cpp
