@@ -1,4 +1,4 @@
-{ secrets, ... }:
+{ ... }:
 
 let user = "joseph"; in
 {
@@ -10,7 +10,7 @@ let user = "joseph"; in
     "/etc/ssh/ssh_host_ed25519_key"
   ];
 
-  age.secrets.joseph.file = "${secrets}/users/joseph.age";
+  age.secrets.joseph.file = "../../../users/joseph.age";
 
   ###########################
 

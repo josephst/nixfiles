@@ -48,11 +48,6 @@
     #   url = "github:nix-community/disko";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-
-    secrets = {
-      url = "github:josephst/nix-secrets";
-      flake = false;
-    };
   };
 
   outputs = {
