@@ -1,4 +1,4 @@
-{ config, pkgs, agenix, secrets, ... }:
+{ secrets, ... }:
 
 let user = "joseph"; in
 {

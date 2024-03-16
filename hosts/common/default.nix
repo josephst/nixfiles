@@ -1,10 +1,11 @@
 {
-  inputs,
   pkgs,
+  config,
   lib,
   ...
 }: {
   imports = [
+    ./secrets.nix
     ./nix.nix
     ./trusted-nix-caches.nix
     ./upgrade-diff.nix
@@ -26,6 +27,7 @@
     };
     extraOptions = ''
       extra-nix-path = nixpkgs=flake:nixpkgs
+      !include ${config.age.secrets.ghToken.path}
     '';
   };
 

@@ -4,8 +4,8 @@
   pkgs ? (import ../nixpkgs.nix) {},
   inputs,
 }: {
-  dashy = pkgs.callPackage ./dashy {};
-  git-credential-manager = pkgs.callPackage ./git-credential-manager {};
+  # dashy = pkgs.callPackage ./dashy {};
+  # git-credential-manager = pkgs.callPackage ./git-credential-manager {};
   llama-cpp = inputs.llama-cpp.packages."${pkgs.system}".default;
   # recyclarr = pkgs.callPackage ./recyclarr {}; # merged into nixpkgs upstream
 }

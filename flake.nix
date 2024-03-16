@@ -50,7 +50,7 @@
     # };
 
     secrets = {
-      url = "git+ssh://git@github.com/josephst/nix-secrets.git"; # Change this!
+      url = "github:josephst/nix-secrets";
       flake = false;
     };
   };
