@@ -287,24 +287,7 @@
         "llama-cpp": "llama-cpp",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-stable": "nixpkgs-stable",
-        "secrets": "secrets",
         "zig": "zig"
-      }
-    },
-    "secrets": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1710591772,
-        "narHash": "sha256-scbnes49drOr//c0o+OKBwNzC82qNC76Gn7n9d+lmrI=",
-        "owner": "josephst",
-        "repo": "nix-secrets",
-        "rev": "56e9780f7aa484a9cb0eaa75f7d155fb5118907c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "josephst",
-        "repo": "nix-secrets",
-        "type": "github"
       }
     },
     "systems": {
