@@ -93,7 +93,12 @@ in {
     lazygit.enable = true;
     home-manager.enable = true;
     ripgrep.enable = true;
-    starship.enable = true;
+    starship = {
+      enable = true;
+      settings = {
+        command_timeout = 800;
+      };
+    };
     zoxide.enable = true;
   };
 
