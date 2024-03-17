@@ -17,11 +17,15 @@ in {
         gpg.format = "ssh";
         gpg.ssh.program = lib.optionalString isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
         init.defaultBranch = "main";
+        push.autoSetupRemote = "true";
         pull.rebase = "true";
+        rebase.autosquash = "true";
+        # rebase.autostash = "true";
         # delta options
         delta.navigate = true;
-        merge.conflictstyle = "diff3";
+        merge.conflictstyle = "zdiff3";
         diff.colorMoved = "default";
+        interactive.diffFilter = "delta --color-only";
       }
       // lib.optionalAttrs isLinux {
         credential.credentialStore = "cache";
