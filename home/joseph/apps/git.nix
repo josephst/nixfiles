@@ -25,15 +25,12 @@ in {
         delta.navigate = true;
         merge.conflictstyle = "zdiff3";
         diff.colorMoved = "default";
-        interactive.diffFilter = "delta --color-only";
       }
       // lib.optionalAttrs isLinux {
         credential.credentialStore = "cache";
       };
     delta = {
       enable = true;
-      options = {
-      };
     };
     ignores = [
       # Compiled Python files
