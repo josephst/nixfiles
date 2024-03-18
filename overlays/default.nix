@@ -67,11 +67,15 @@
     #     })
     #   ];
     # });
-    llama-cpp = prev.llama-cpp.overrideAttrs(old: {
-      preConfigure = ''
-        export PATH=/usr/bin:$PATH # make sure /usr/bin/xcrun is on PATH
+    llama-cpp = let
+      darwinSymlinks = prev.runCommand "darwin-build-symlinks" {} ''
+        mkdir -p $out/bin
+        ln -s /usr/bin/xcrun $out/bin
       '';
-    });
+    in (prev.llama-cpp.overrideAttrs(old: {
+        nativeBuildInputs = old.nativeBuildInputs ++ (prev.lib.optional prev.stdenv.isDarwin [darwinSymlinks]);
+    }));
+
     python311 = prev.python311.override {
       packageOverrides = python-self: python-super: {
         # remove once https://nixpk.gs/pr-tracker.html?pr=271586 merged into unstable
