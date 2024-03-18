@@ -49,6 +49,7 @@ in {
       # misc
       age
       bashInteractive
+      cmake
       croc # file sharing
       exiftool
       fd

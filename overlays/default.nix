@@ -67,6 +67,11 @@
     #     })
     #   ];
     # });
+    llama-cpp = prev.llama-cpp.overrideAttrs(old: {
+      preConfigure = ''
+        export PATH=/usr/bin:$PATH # make sure /usr/bin/xcrun is on PATH
+      '';
+    });
     python311 = prev.python311.override {
       packageOverrides = python-self: python-super: {
         # remove once https://nixpk.gs/pr-tracker.html?pr=271586 merged into unstable
