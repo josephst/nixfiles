@@ -43,7 +43,7 @@
 
     ## Dashboard
     ./services/homepage
-    ./services/uptime-kuma.nix
+    # ./services/uptime-kuma.nix
   ];
 
   # Create the group for media stuff (plex, sabnzbd, etc)
