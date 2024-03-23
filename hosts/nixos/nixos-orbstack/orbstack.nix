@@ -23,11 +23,14 @@ with lib; {
 
   # add OrbStack CLI tools to PATH
   environment.shellInit = ''
-    . /opt/orbstack-guest/etc/profile-early
+    # . /opt/orbstack-guest/etc/profile-early # empty
 
     # add your customizations here
 
-    . /opt/orbstack-guest/etc/profile-late
+    # . /opt/orbstack-guest/etc/profile-late
+    if [ -n "''${PATH##*/opt/orbstack-guest/bin*}" ]; then
+      export PATH="/opt/orbstack-guest/bin-hiprio:/opt/orbstack-guest/data/bin/cmdlinks:$PATH:/opt/orbstack-guest/bin"
+    fi
   '';
 
   # resolv.conf: NixOS doesn't use systemd-resolved
