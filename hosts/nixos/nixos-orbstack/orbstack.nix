@@ -49,14 +49,12 @@ with lib; {
 
   # systemd
   systemd.services."systemd-oomd".serviceConfig.WatchdogSec = 0;
-  systemd.services."systemd-resolved".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-userdbd".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-udevd".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-timesyncd".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-timedated".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-portabled".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-nspawn@".serviceConfig.WatchdogSec = 0;
-  systemd.services."systemd-networkd".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-machined".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-localed".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-logind".serviceConfig.WatchdogSec = 0;
@@ -74,9 +72,9 @@ with lib; {
   '';
 
   # extra certificates
-  security.pki.certificateFiles = [
-    "/opt/orbstack-guest/run/extra-certs.crt"
-  ];
+  security.pki.certificates =
+    lib.optional (builtins.pathExists "/opt/orbstack-guest/run/extra-certs.crt")
+    (builtins.readFile "/opt/orbstack-guest/run/extra-certs.crt");
 
   # indicate builder support for emulated architectures
   nix.extraOptions = "extra-platforms = x86_64-linux i686-linux";
