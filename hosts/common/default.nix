@@ -24,7 +24,7 @@
       # enabling sandbox prevents .NET from accessing /usr/bin/codesign
       # and stops binary signing from working
       # sandbox = true; # defaults to true on Linux, false for Darwin
-      sandbox = if pkgs.stdenv.isDarwin then "relaxed" else true;
+      sandbox = if pkgs.stdenv.isDarwin then "false" else true;
     };
     extraOptions = ''
       extra-nix-path = nixpkgs=flake:nixpkgs
