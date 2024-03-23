@@ -37,7 +37,11 @@
     deploy-rs = let
       pkgs = import inputs.nixpkgs {
         system = final.system;
-      }; in { deploy-rs = pkgs.deploy-rs; lib = prev.deploy-rs.lib; };
+      };
+    in {
+      deploy-rs = pkgs.deploy-rs;
+      lib = prev.deploy-rs.lib;
+    };
     # # override lego version (ACME certificates) with newest rev from github
     # # which supports google domains
     # # TODO: delete this once v4.11 is released to nixos unstable channel

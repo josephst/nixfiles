@@ -1,7 +1,7 @@
 let
   # users
   joseph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop";
-  
+
   # systems
   nixos-proxmox = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKdEOEVwz2xyTtGE3EHIy7gTepGCbyqnU5SDd6/2/EkL root@nixos";
   allKeys = [joseph nixos-proxmox];

@@ -22,7 +22,7 @@ in {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 873 ];
+  networking.firewall.allowedTCPPorts = [873];
 
   users.users.rsyncd = {
     isSystemUser = true;

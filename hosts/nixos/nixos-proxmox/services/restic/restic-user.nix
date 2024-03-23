@@ -1,4 +1,8 @@
-{config, pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   users.users.restic = {
     group = "restic";
     # home = cfg.dataDir;

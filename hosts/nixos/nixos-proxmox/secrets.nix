@@ -1,7 +1,6 @@
-{ ... }:
-
-let user = "joseph"; in
-{
+{...}: let
+  user = "joseph";
+in {
   # secrets specific to this device
   age.secrets.smb = {
     file = ../../../secrets/smb.age;
@@ -75,5 +74,4 @@ let user = "joseph"; in
   #   owner = "${user}";
   #   group = "wheel";
   # };
-
 }

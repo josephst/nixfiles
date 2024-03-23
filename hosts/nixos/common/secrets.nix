@@ -1,8 +1,6 @@
-{ ... }:
-
-let user = "joseph"; in
-{
-
+{...}: let
+  user = "joseph";
+in {
   age.identityPaths = [
     # make sure this key is copied from 1password prior to running agenix
     "/home/${user}/.ssh/id_ed25519"
@@ -31,5 +29,4 @@ let user = "joseph"; in
   #   owner = "${user}";
   #   group = "wheel";
   # };
-
 }

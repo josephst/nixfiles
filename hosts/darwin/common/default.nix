@@ -23,7 +23,11 @@
   nix.gc = {
     user = "root";
     automatic = true;
-    interval = { Weekday = 0; Hour = 2; Minute = 0; };
+    interval = {
+      Weekday = 0;
+      Hour = 2;
+      Minute = 0;
+    };
   };
 
   system = {

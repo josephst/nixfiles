@@ -59,7 +59,7 @@
       # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
       IPv6AcceptRA = true;
     };
-    domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
+    domains = ["josephstahl.com"]; # look up ie nixos.josephstahl.com on the local DNS server
     # make routing on this interface a dependency for network-online.target
     linkConfig.RequiredForOnline = "routable";
   };

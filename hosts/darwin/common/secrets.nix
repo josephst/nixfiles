@@ -1,8 +1,6 @@
-{ ... }:
-
-let user = "joseph"; in
-{
-
+{...}: let
+  user = "joseph";
+in {
   age.identityPaths = [
     "/Users/${user}/.ssh/id_ed25519"
   ];
@@ -41,5 +39,4 @@ let user = "joseph"; in
   #   mode = "600";
   #   owner = "${user}";
   # };
-
 }
