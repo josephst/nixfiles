@@ -4,7 +4,8 @@ let
 
   # systems
   nixos-proxmox = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKdEOEVwz2xyTtGE3EHIy7gTepGCbyqnU5SDd6/2/EkL root@nixos";
-  allKeys = [joseph nixos-proxmox];
+  nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIpnzK+uR7Bv5OVg04zk3/5TkhjtJYQGQGQOxIr6leeC joseph@nixos-orbstack";
+  allKeys = [joseph nixos-proxmox nixos-orbstack];
 in {
   "dnsApiToken.age".publicKeys = allKeys;
   "netdata_nixos_claim.age".publicKeys = allKeys;
