@@ -40,7 +40,8 @@
 
     # llama.cpp
     llama-cpp = {
-      url = "github:ggerganov/llama.cpp";
+      # url = "github:ggerganov/llama.cpp";
+      url = "github:josephst/llama.cpp/nix-darwin-xcrun";
     };
 
     # disko
