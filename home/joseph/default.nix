@@ -43,7 +43,7 @@ in {
       nil
 
       # GPT
-      llama-cpp
+      llamaPackages.llama-cpp # from llama-cpp overlay
       python311Packages.huggingface-hub
 
       # misc
