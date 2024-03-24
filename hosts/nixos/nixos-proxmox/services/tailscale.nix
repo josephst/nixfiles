@@ -1,10 +1,8 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
+{ pkgs, config, ... }:
+let
   inherit (config.networking) hostName;
-in {
+in
+{
   # run tailscale up --accept-dns=false --ssh to start tailscale
   services.tailscale = {
     enable = true;

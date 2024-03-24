@@ -1,10 +1,8 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
+{ pkgs, config, ... }:
+let
   fqdn = config.networking.fqdn;
-in {
+in
+{
   services.prowlarr = {
     enable = true;
   };

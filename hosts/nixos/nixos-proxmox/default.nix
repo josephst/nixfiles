@@ -7,7 +7,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -47,7 +48,7 @@
   ];
 
   # Create the group for media stuff (plex, sabnzbd, etc)
-  users.groups.media = {};
+  users.groups.media = { };
 
   networking = {
     hostName = "nixos"; # Define your hostname. (managed by cloud-init)

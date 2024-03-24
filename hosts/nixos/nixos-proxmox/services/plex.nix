@@ -1,11 +1,9 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
+{ pkgs, config, ... }:
+let
   cfg = config.services.plex;
   fqdn = config.networking.fqdn;
-in {
+in
+{
   services.plex = {
     enable = true;
     group = "media";

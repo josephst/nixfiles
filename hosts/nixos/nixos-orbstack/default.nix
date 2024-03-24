@@ -7,7 +7,8 @@
   config,
   modulesPath,
   ...
-}: {
+}:
+{
   imports = [
     ## Orbstack
     # default LXD configuration

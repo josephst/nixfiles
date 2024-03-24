@@ -1,10 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{ config, pkgs, ... }:
+let
   fqdn = config.networking.fqdn;
-in {
+in
+{
   services.uptime-kuma = {
     enable = true;
     settings = {

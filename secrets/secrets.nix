@@ -5,8 +5,13 @@ let
   # systems
   nixos-proxmox = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKdEOEVwz2xyTtGE3EHIy7gTepGCbyqnU5SDd6/2/EkL root@nixos";
   nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIpnzK+uR7Bv5OVg04zk3/5TkhjtJYQGQGQOxIr6leeC joseph@nixos-orbstack";
-  allKeys = [joseph nixos-proxmox nixos-orbstack];
-in {
+  allKeys = [
+    joseph
+    nixos-proxmox
+    nixos-orbstack
+  ];
+in
+{
   "dnsApiToken.age".publicKeys = allKeys;
   "netdata_nixos_claim.age".publicKeys = allKeys;
   "rclone/rclone.conf.age".publicKeys = allKeys;
@@ -23,4 +28,3 @@ in {
 # `nix run github:ryantm/agenix -- --help` to run
 # to rekey: get ssh private key from 1password (export -> no password)
 # then run `agenix --rekey -i ~/Downloads/id_ed25519` (or whereever key was downloaded to)
-

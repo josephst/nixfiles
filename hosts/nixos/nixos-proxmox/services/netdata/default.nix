@@ -3,9 +3,11 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   fqdn = config.networking.fqdn;
-in {
+in
+{
   services.netdata = {
     package = pkgs.netdataCloud;
     enable = true;

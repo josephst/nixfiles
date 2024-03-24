@@ -1,15 +1,11 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: let
+{ inputs, pkgs, ... }:
+let
   hostname = "Josephs-MacBook-Air";
   user = "joseph";
-in {
+in
+{
   # machine-specific config
-  imports = [
-    ./brew.nix
-  ];
+  imports = [ ./brew.nix ];
 
   networking = {
     # need to escape the single quote here
@@ -17,7 +13,7 @@ in {
     computerName = "Joseph's MacBook Air";
     hostName = hostname;
     localHostName = hostname;
-    search = ["lan"];
-    knownNetworkServices = ["WiFi"];
+    search = [ "lan" ];
+    knownNetworkServices = [ "WiFi" ];
   };
 }

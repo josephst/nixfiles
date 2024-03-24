@@ -7,15 +7,16 @@
   pkgs,
   ...
 }:
-with lib; {
+with lib;
+{
   # sudoers
   security.sudo.extraRules = [
     {
-      users = ["joseph"];
+      users = [ "joseph" ];
       commands = [
         {
           command = "ALL";
-          options = ["NOPASSWD"];
+          options = [ "NOPASSWD" ];
         }
       ];
     }
@@ -75,9 +76,9 @@ with lib; {
   '';
 
   # extra certificates
-  security.pki.certificates =
-    lib.optional (builtins.pathExists "/opt/orbstack-guest/run/extra-certs.crt")
-    (builtins.readFile "/opt/orbstack-guest/run/extra-certs.crt");
+  security.pki.certificates = lib.optional (builtins.pathExists "/opt/orbstack-guest/run/extra-certs.crt") (
+    builtins.readFile "/opt/orbstack-guest/run/extra-certs.crt"
+  );
 
   # indicate builder support for emulated architectures
   nix.extraOptions = "extra-platforms = x86_64-linux i686-linux";

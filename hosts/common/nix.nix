@@ -1,8 +1,5 @@
+{ lib, pkgs, ... }:
 {
-  lib,
-  pkgs,
-  ...
-}: {
   # Use a version of Nix that works
   # nix.package = pkgs.nixVersions.nix_2_16;
 
@@ -38,4 +35,3 @@
 #     Hour = 12;
 #   };
 # }
-

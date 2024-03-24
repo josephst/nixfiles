@@ -51,67 +51,75 @@
     # };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    nixpkgs-stable,
-    home-manager,
-    darwin,
-    agenix,
-    deploy-rs,
-    zig,
-    llama-cpp,
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-stable,
+      home-manager,
+      darwin,
+      agenix,
+      deploy-rs,
+      zig,
+      llama-cpp,
     # disko,
     # secrets
-  } @ inputs: let
-    supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
-    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+    }@inputs:
+    let
+      supportedSystems = [
+        "x86_64-linux"
+        "x86_64-darwin"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
-    overlays = import ./overlays {inherit inputs;};
+      overlays = import ./overlays { inherit inputs; };
 
-    legacyPackages = forAllSystems (
-      system:
+      legacyPackages = forAllSystems (
+        system:
         import nixpkgs {
           inherit system;
           overlays = builtins.attrValues overlays;
           config.allowUnfree = true;
         }
-    );
+      );
 
-    nixosModules = import ./modules/nixos;
-  in {
-    inherit overlays;
+      nixosModules = import ./modules/nixos;
+    in
+    {
+      inherit overlays;
 
-    packages = forAllSystems (
-      system: let
-        pkgs = legacyPackages.${system};
-      in
-        import ./pkgs {inherit pkgs inputs;}
-    );
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = legacyPackages.${system};
+        in
+        import ./pkgs { inherit pkgs inputs; }
+      );
 
-    darwinConfigurations = {
-      Josephs-MacBook-Air = darwin.lib.darwinSystem {
-        # darwin-rebuild switch --flake .
-        system = "aarch64-darwin";
-        pkgs = legacyPackages.aarch64-darwin;
-        modules = [
-          home-manager.darwinModules.home-manager
-          agenix.darwinModules.default
-          ./hosts/common
-          ./hosts/darwin/common
-          ./hosts/darwin/josephs-air
-          ./users/joseph.nix
-        ];
-        specialArgs = inputs;
+      darwinConfigurations = {
+        Josephs-MacBook-Air = darwin.lib.darwinSystem {
+          # darwin-rebuild switch --flake .
+          system = "aarch64-darwin";
+          pkgs = legacyPackages.aarch64-darwin;
+          modules = [
+            home-manager.darwinModules.home-manager
+            agenix.darwinModules.default
+            ./hosts/common
+            ./hosts/darwin/common
+            ./hosts/darwin/josephs-air
+            ./users/joseph.nix
+          ];
+          specialArgs = inputs;
+        };
       };
-    };
 
-    nixosConfigurations = {
-      nixos-orbstack = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        pkgs = legacyPackages.aarch64-linux;
-        modules =
-          [
+      nixosConfigurations = {
+        nixos-orbstack = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          pkgs = legacyPackages.aarch64-linux;
+          modules = [
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             ./hosts/common # nixOS and Darwin
@@ -119,17 +127,15 @@
             ./hosts/nixos/nixos-orbstack # host-specific
             ./users/joseph.nix
             ./users/root.nix
-          ]
-          ++ (builtins.attrValues nixosModules);
-        specialArgs = inputs;
-      };
+          ] ++ (builtins.attrValues nixosModules);
+          specialArgs = inputs;
+        };
 
-      nixos = nixpkgs.lib.nixosSystem {
-        # nixos-rebuild switch --flake .
-        system = "x86_64-linux";
-        pkgs = legacyPackages.x86_64-linux;
-        modules =
-          [
+        nixos = nixpkgs.lib.nixosSystem {
+          # nixos-rebuild switch --flake .
+          system = "x86_64-linux";
+          pkgs = legacyPackages.x86_64-linux;
+          modules = [
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             ./hosts/common # nixOS and Darwin
@@ -137,47 +143,46 @@
             ./hosts/nixos/nixos-proxmox # host-specific
             ./users/joseph.nix
             ./users/root.nix
-          ]
-          ++ (builtins.attrValues nixosModules);
-        specialArgs = inputs;
-      };
-    };
-
-    deploy.nodes = {
-      nixos = {
-        # override hostname with `nix run github:serokell/deploy-rs .#nixos -- --hostname 192.168.1.10`
-        # (if DNS not yet set up/ working)
-        hostname = "nixos.josephstahl.com";
-        profiles.system = {
-          path = legacyPackages.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.nixos;
-          sshUser = "root";
-          magicRollback = true;
-          remoteBuild = true; # since it may be cross-platform
+          ] ++ (builtins.attrValues nixosModules);
+          specialArgs = inputs;
         };
       };
+
+      deploy.nodes = {
+        nixos = {
+          # override hostname with `nix run github:serokell/deploy-rs .#nixos -- --hostname 192.168.1.10`
+          # (if DNS not yet set up/ working)
+          hostname = "nixos.josephstahl.com";
+          profiles.system = {
+            path = legacyPackages.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.nixos;
+            sshUser = "root";
+            magicRollback = true;
+            remoteBuild = true; # since it may be cross-platform
+          };
+        };
+      };
+
+      # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+
+      # `nix develop`
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = legacyPackages.${system};
+        in
+        import ./shell.nix { inherit pkgs; }
+      );
+
+      # `nix fmt`
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
     };
-
-    # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-
-    # `nix develop`
-    devShells = forAllSystems (
-      system: let
-        pkgs = legacyPackages.${system};
-      in
-        import ./shell.nix {inherit pkgs;}
-    );
-
-    # `nix fmt`
-    formatter = forAllSystems (
-      system:
-        nixpkgs.legacyPackages.${system}.alejandra
-    );
-  };
 
   # configure nix
   nixConfig = {
     commit-lockfile-summary = "flake: bump inputs";
-    extra-substituters = ["https://nix-community.cachix.org"];
-    extra-trusted-public-keys = ["nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
+    extra-substituters = [ "https://nix-community.cachix.org" ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
   };
 }

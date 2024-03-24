@@ -1,8 +1,5 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
   programs.alacritty = {
     # also declared as a homebrew cask
     # duplication is so that configuration can be done here, and
@@ -82,23 +79,25 @@
         semantic_escape_chars = ",│`|:\"' ()[]{}<>\t";
         save_to_clipboard = true;
       };
-      font = let
-        fontname = "FiraCode Nerd Font Mono";
-      in {
-        normal = {
-          family = fontname;
-          style = "Regular";
+      font =
+        let
+          fontname = "FiraCode Nerd Font Mono";
+        in
+        {
+          normal = {
+            family = fontname;
+            style = "Regular";
+          };
+          bold = {
+            family = fontname;
+            style = "Bold";
+          };
+          italic = {
+            family = fontname;
+            style = "Light";
+          };
+          size = 12;
         };
-        bold = {
-          family = fontname;
-          style = "Bold";
-        };
-        italic = {
-          family = fontname;
-          style = "Light";
-        };
-        size = 12;
-      };
       cursor.style = "Block";
       colors = {
         primary = {

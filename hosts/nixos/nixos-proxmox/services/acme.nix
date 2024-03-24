@@ -3,9 +3,11 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   fqdn = config.networking.fqdn;
-in {
+in
+{
   security.acme = {
     acceptTerms = true;
     # TODO: hide email?
@@ -13,7 +15,7 @@ in {
     defaults.dnsResolver = "1.1.1.1:53";
     certs."${fqdn}" = {
       domain = "*.${fqdn}";
-      extraDomainNames = [fqdn];
+      extraDomainNames = [ fqdn ];
       dnsProvider = "cloudflare";
       # group = config.services.caddy.group;
       credentialsFile = config.age.secrets.dnsApiToken.path;

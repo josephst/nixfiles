@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{ config, pkgs, ... }:
+let
   pruneOpts = [
     "--keep-daily 30"
     "--keep-weekly 52"
@@ -10,8 +7,12 @@
     "--keep-yearly 10"
     "--keep-tag forever"
   ];
-  checkOpts = ["--read-data-subset 500M" "--with-cache"];
-in {
+  checkOpts = [
+    "--read-data-subset 500M"
+    "--with-cache"
+  ];
+in
+{
   services.restic.backups.exthdd = {
     initialize = false;
     user = "restic";

@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   # Based on https://unix.stackexchange.com/questions/16578/resizable-serial-console-window
   resize = pkgs.writeScriptBin "resize" ''
     export PATH=${pkgs.coreutils}/bin
@@ -27,7 +28,8 @@
     stty "$old"
     stty cols "$cols" rows "$rows"
   '';
-in {
+in
+{
   options = {
     # FIXME: we may move this setting upstream, once we collected some
     # experience across different vendors and hardware configuration.
@@ -36,11 +38,11 @@ in {
     srvos.boot.consoles = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default =
-        ["tty0"]
+        [ "tty0" ]
         ++ (lib.optional (pkgs.stdenv.hostPlatform.isAarch) "ttyAMA0,115200")
         ++ (lib.optional (pkgs.stdenv.hostPlatform.isRiscV64) "ttySIF0,115200")
-        ++ ["ttyS0,115200"];
-      example = ["ttyS2,115200"];
+        ++ [ "ttyS0,115200" ];
+      example = [ "ttyS2,115200" ];
       description = lib.mdDoc ''
         The Linux kernel console option allows you to configure various devices as
         consoles. The default setting is configured to provide access to serial
@@ -61,7 +63,7 @@ in {
     environment.loginShellInit = "${resize}/bin/resize";
 
     # allows user to change terminal size when it changed locally
-    environment.systemPackages = [resize];
+    environment.systemPackages = [ resize ];
 
     # default is something like vt220... however we want to get alt least some colors...
     systemd.services."serial-getty@".environment.TERM = "xterm-256color";

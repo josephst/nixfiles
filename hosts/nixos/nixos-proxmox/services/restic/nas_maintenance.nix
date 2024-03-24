@@ -3,7 +3,8 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   fqdn = config.networking.fqdn;
 
   pruneOpts = [
@@ -13,8 +14,9 @@
     "--keep-yearly 10"
     "--keep-tag forever"
   ];
-  checkOpts = ["--with-cache"];
-in {
+  checkOpts = [ "--with-cache" ];
+in
+{
   services.restic.backups.nas_maintenance = {
     initialize = false;
     user = "restic";

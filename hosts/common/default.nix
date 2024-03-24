@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./secrets.nix
     ./nix.nix
@@ -19,15 +20,17 @@
       auto-optimise-store = true;
       cores = lib.mkDefault 0; # value of 0 = all available cores
       max-jobs = lib.mkDefault "auto";
-      trusted-users = ["root" "joseph" "@wheel" "@staff"];
-      allowed-users = ["*"];
+      trusted-users = [
+        "root"
+        "joseph"
+        "@wheel"
+        "@staff"
+      ];
+      allowed-users = [ "*" ];
       # enabling sandbox prevents .NET from accessing /usr/bin/codesign
       # and stops binary signing from working
       # sandbox = true; # defaults to true on Linux, false for Darwin
-      sandbox =
-        if pkgs.stdenv.isDarwin
-        then false
-        else true;
+      sandbox = if pkgs.stdenv.isDarwin then false else true;
     };
     extraOptions = ''
       extra-nix-path = nixpkgs=flake:nixpkgs
@@ -56,8 +59,7 @@
       deploy-rs.deploy-rs
       file
       fish
-      (git.override
-        {osxkeychainSupport = false;})
+      (git.override { osxkeychainSupport = false; })
       mkpasswd
       openssh
       rclone

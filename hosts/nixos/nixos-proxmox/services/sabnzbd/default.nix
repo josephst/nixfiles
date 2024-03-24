@@ -3,9 +3,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   fqdn = config.networking.fqdn;
-in {
+in
+{
   services.sabnzbd = {
     enable = true;
     group = "media";
@@ -22,6 +24,9 @@ in {
   };
 
   systemd.services.sabnzbd = {
-    after = ["network.target" "mnt-nas.automount"];
+    after = [
+      "network.target"
+      "mnt-nas.automount"
+    ];
   };
 }

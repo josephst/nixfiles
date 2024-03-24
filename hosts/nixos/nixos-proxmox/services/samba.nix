@@ -1,8 +1,5 @@
+{ lib, pkgs, ... }:
 {
-  lib,
-  pkgs,
-  ...
-}: {
   services.samba-wsdd.enable = true;
   services.samba.openFirewall = true;
   networking.firewall.allowedTCPPorts = [

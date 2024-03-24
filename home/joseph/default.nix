@@ -1,11 +1,9 @@
 # home manager config
-{
-  pkgs,
-  lib,
-  ...
-}: let
+{ pkgs, lib, ... }:
+let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
-in {
+in
+{
   imports = [
     ./apps/alacritty.nix
     ./apps/bash.nix
@@ -25,10 +23,7 @@ in {
 
   home = {
     username = "joseph";
-    homeDirectory =
-      if pkgs.stdenv.isDarwin
-      then "/Users/joseph"
-      else "/home/joseph";
+    homeDirectory = if pkgs.stdenv.isDarwin then "/Users/joseph" else "/home/joseph";
     packages = with pkgs; [
       # custom packages
       recyclarr

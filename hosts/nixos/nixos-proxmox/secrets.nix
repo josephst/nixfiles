@@ -1,6 +1,8 @@
-{...}: let
+{ ... }:
+let
   user = "joseph";
-in {
+in
+{
   # secrets specific to this device
   age.secrets.smb = {
     file = ../../../secrets/smb.age;

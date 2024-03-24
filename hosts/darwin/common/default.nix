@@ -1,18 +1,11 @@
 # system-wide nix config (ie NOT home-manager stuff)
+{ inputs, pkgs, ... }:
 {
-  inputs,
-  pkgs,
-  ...
-}: {
-  imports = [
-    ./secrets.nix
-  ];
+  imports = [ ./secrets.nix ];
 
   environment = {
     loginShell = "${pkgs.zsh}/bin/zsh -l";
-    systemPackages = with pkgs; [
-      lima
-    ];
+    systemPackages = with pkgs; [ lima ];
   };
 
   # Make sure the nix daemon always runs

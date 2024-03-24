@@ -1,22 +1,20 @@
-{
-  pkgs,
-  lib,
-  ...
-}: let
+{ pkgs, lib, ... }:
+let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
-in {
+in
+{
   programs.fish = {
     enable = true;
-    plugins = [];
+    plugins = [ ];
     interactiveShellInit =
       (
-        if isDarwin
-        then
+        if isDarwin then
           (
             "eval $(/opt/homebrew/bin/brew shellenv)\n"
             # + (builtins.readFile ./fish/iterm2_shell_integration.fish)
           )
-        else ""
+        else
+          ""
       )
       + ''
         # Configure auto-attach/exit to your likings (default is off).

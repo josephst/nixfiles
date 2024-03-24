@@ -1,10 +1,8 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
+{ pkgs, config, ... }:
+let
   fqdn = config.networking.fqdn;
-in {
+in
+{
   services.coredns = {
     enable = false;
     config = ''
@@ -56,6 +54,6 @@ in {
     '';
   };
 
-  networking.firewall.allowedTCPPorts = [53];
-  networking.firewall.allowedUDPPorts = [53];
+  networking.firewall.allowedTCPPorts = [ 53 ];
+  networking.firewall.allowedUDPPorts = [ 53 ];
 }

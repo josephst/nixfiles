@@ -1,13 +1,15 @@
-{inputs, ...}: {
+{ inputs, ... }:
+{
   agenix = inputs.agenix.overlays.default;
   zig = inputs.zig.overlays.default;
   llama-cpp = inputs.llama-cpp.overlays.default;
 
   deploy-rs = inputs.deploy-rs.overlay;
 
-  additions = final: prev:
-  # this adds custom pkgs in the same namespace as all other packages
-  # (ie nixpkgs.recyclarr)
+  additions =
+    final: prev:
+    # this adds custom pkgs in the same namespace as all other packages
+    # (ie nixpkgs.recyclarr)
     import ../pkgs {
       pkgs = prev;
       inherit inputs;
@@ -34,14 +36,14 @@
     # });
     # don't build deploy-rs from source - goal is to use deploy-rs from nix cache,
     # and lib from the deploy-rs flake
-    deploy-rs = let
-      pkgs = import inputs.nixpkgs {
-        system = final.system;
+    deploy-rs =
+      let
+        pkgs = import inputs.nixpkgs { system = final.system; };
+      in
+      {
+        deploy-rs = pkgs.deploy-rs;
+        lib = prev.deploy-rs.lib;
       };
-    in {
-      deploy-rs = pkgs.deploy-rs;
-      lib = prev.deploy-rs.lib;
-    };
     # # override lego version (ACME certificates) with newest rev from github
     # # which supports google domains
     # # TODO: delete this once v4.11 is released to nixos unstable channel

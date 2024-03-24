@@ -1,6 +1,8 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
-in {
+in
+{
   programs.nushell = {
     enable = true;
     configFile.source = ./config.nu;

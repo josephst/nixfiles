@@ -4,9 +4,13 @@
   config,
   lib,
   ...
-}: let
-  keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop joseph@1password"];
-in {
+}:
+let
+  keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop joseph@1password"
+  ];
+in
+{
   # shared configuration that should be used for ALL NixOS installs
 
   ### taken from SrvOS (https://github.com/numtide/srvos/tree/main/nixos/common)
@@ -26,9 +30,10 @@ in {
   boot.initrd.systemd.enable = lib.mkDefault (
     !config.boot.initrd.network.enable
     && !(
-      if lib.versionAtLeast (lib.versions.majorMinor lib.version) "23.11"
-      then config.boot.swraid.enable
-      else config.boot.initrd.services.swraid.enable
+      if lib.versionAtLeast (lib.versions.majorMinor lib.version) "23.11" then
+        config.boot.swraid.enable
+      else
+        config.boot.initrd.services.swraid.enable
     )
     && !config.boot.isContainer
     && !config.boot.growPartition
@@ -41,7 +46,10 @@ in {
   boot.tmp.cleanOnBoot = lib.mkDefault true;
 
   # If the user is in @wheel they are trusted by default.
-  nix.settings.trusted-users = ["root" "@wheel"];
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+  ];
 
   # No mutable users by default
   users.mutableUsers = false;
@@ -56,14 +64,7 @@ in {
 
   environment = {
     # NixOS specific (shared with Darin = goes in ../../common/default.nix)
-    systemPackages = builtins.attrValues {
-      inherit
-        (pkgs)
-        cifs-utils
-        parted
-        tailscale
-        ;
-    };
+    systemPackages = builtins.attrValues { inherit (pkgs) cifs-utils parted tailscale; };
   };
 
   programs = {

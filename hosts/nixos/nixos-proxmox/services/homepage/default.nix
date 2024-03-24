@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{ config, pkgs, ... }:
+let
   fqdn = config.networking.fqdn;
   webRoot = pkgs.buildEnv {
     name = "webroot";
@@ -11,7 +8,8 @@
       (pkgs.writeTextDir "new.min.css" (builtins.readFile ./new.min.css))
     ];
   };
-in {
+in
+{
   services.caddy.virtualHosts."${fqdn}" = {
     extraConfig = ''
       encode gzip

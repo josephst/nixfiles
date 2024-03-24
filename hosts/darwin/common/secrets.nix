@@ -1,9 +1,9 @@
-{...}: let
+{ ... }:
+let
   user = "joseph";
-in {
-  age.identityPaths = [
-    "/Users/${user}/.ssh/id_ed25519"
-  ];
+in
+{
+  age.identityPaths = [ "/Users/${user}/.ssh/id_ed25519" ];
 
   # age.secrets."syncthing-cert" = {
   #   symlink = true;

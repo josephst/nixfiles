@@ -1,10 +1,8 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
+{ pkgs, config, ... }:
+let
   fqdn = config.networking.fqdn;
-in {
+in
+{
   services.caddy = {
     enable = true;
     globalConfig = ''
@@ -16,5 +14,8 @@ in {
     # in each service file (ie sabnzbd.nix, etc.)
   };
 
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 }

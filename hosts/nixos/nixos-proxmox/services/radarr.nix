@@ -1,10 +1,8 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
+{ pkgs, config, ... }:
+let
   fqdn = config.networking.fqdn;
-in {
+in
+{
   services.radarr = {
     enable = true;
     group = "media";
@@ -21,7 +19,7 @@ in {
   # Ensure that radarr waits for the downloads and media directories to be
   # available.
   systemd.services.radarr = {
-    wantedBy = ["multi-user.target"];
+    wantedBy = [ "multi-user.target" ];
     after = [
       "network.target"
       "mnt-nas.automount"

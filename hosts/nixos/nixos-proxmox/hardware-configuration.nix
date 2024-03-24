@@ -7,32 +7,48 @@
   pkgs,
   modulesPath,
   ...
-}: {
-  imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-  ];
+}:
+{
+  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
-  boot.initrd.availableKernelModules = ["uhci_hcd" "ehci_pci" "ahci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = [];
-  boot.extraModulePackages = [];
+  boot.initrd.availableKernelModules = [
+    "uhci_hcd"
+    "ehci_pci"
+    "ahci"
+    "virtio_pci"
+    "virtio_scsi"
+    "sd_mod"
+    "sr_mod"
+  ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/e3db03bc-b4b2-4b68-ab30-d32a1d49a1ec";
     fsType = "btrfs";
-    options = ["subvol=root" "compress=zstd"];
+    options = [
+      "subvol=root"
+      "compress=zstd"
+    ];
   };
 
   fileSystems."/nix" = {
     device = "/dev/disk/by-uuid/e3db03bc-b4b2-4b68-ab30-d32a1d49a1ec";
     fsType = "btrfs";
-    options = ["subvol=nix" "compress=zstd"];
+    options = [
+      "subvol=nix"
+      "compress=zstd"
+    ];
   };
 
   fileSystems."/home" = {
     device = "/dev/disk/by-uuid/e3db03bc-b4b2-4b68-ab30-d32a1d49a1ec";
     fsType = "btrfs";
-    options = ["subvol=home" "compress=zstd"];
+    options = [
+      "subvol=home"
+      "compress=zstd"
+    ];
   };
 
   fileSystems."/boot" = {
@@ -40,9 +56,7 @@
     fsType = "vfat";
   };
 
-  swapDevices = [
-    {device = "/dev/disk/by-uuid/3cbc8ec2-fe4c-4a6a-bc38-dcfeba444f31";}
-  ];
+  swapDevices = [ { device = "/dev/disk/by-uuid/3cbc8ec2-fe4c-4a6a-bc38-dcfeba444f31"; } ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -59,7 +73,7 @@
       # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
       IPv6AcceptRA = true;
     };
-    domains = ["josephstahl.com"]; # look up ie nixos.josephstahl.com on the local DNS server
+    domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
     # make routing on this interface a dependency for network-online.target
     linkConfig.RequiredForOnline = "routable";
   };

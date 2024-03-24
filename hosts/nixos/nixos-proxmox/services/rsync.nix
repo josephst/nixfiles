@@ -1,10 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{ config, pkgs, ... }:
+let
   backupPath = "/mnt/exthdd/nas-rsyncd";
-in {
+in
+{
   services.rsyncd = {
     enable = true;
     settings = {
@@ -22,18 +20,16 @@ in {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [873];
+  networking.firewall.allowedTCPPorts = [ 873 ];
 
   users.users.rsyncd = {
     isSystemUser = true;
     group = "rsyncd";
   };
 
-  users.groups.rsyncd = {};
+  users.groups.rsyncd = { };
 
-  systemd.tmpfiles.rules = [
-    "d '${backupPath}' 0755 rsyncd rsyncd - -"
-  ];
+  systemd.tmpfiles.rules = [ "d '${backupPath}' 0755 rsyncd rsyncd - -" ];
 
   systemd.services.rsyncd.serviceConfig = {
     AmbientCapabilities = "cap_net_bind_service";
