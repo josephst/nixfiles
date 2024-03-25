@@ -22,6 +22,7 @@ in
       delta.navigate = true;
       merge.conflictstyle = "zdiff3";
       diff.colorMoved = "default";
+      rerere.enabled = true;
     } // lib.optionalAttrs isLinux { credential.credentialStore = "cache"; };
     delta = {
       enable = true;
