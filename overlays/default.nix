@@ -3,17 +3,14 @@
   agenix = inputs.agenix.overlays.default;
   zig = inputs.zig.overlays.default;
   llama-cpp = inputs.llama-cpp.overlays.default;
-
   deploy-rs = inputs.deploy-rs.overlays.default;
 
   additions =
     final: prev:
     # this adds custom pkgs in the same namespace as all other packages
     # (ie nixpkgs.recyclarr)
-    import ../pkgs {
-      pkgs = prev;
-      inherit inputs;
-    };
+    import ../pkgs { pkgs = final; };
+
   channels = final: prev: {
     # this adds nixpkgs-unstable as an overlays, available as nixpkgs.unstable.foobar
     # doesn't do much now, since we're already following unstable
@@ -26,6 +23,18 @@
       config.allowUnfree = true;
     };
   };
+
+  security = final: prev: {
+    # for https://github.com/NixOS/nixpkgs/pull/300028, but causes HUGE rebuild
+    # xz = prev.xz.overrideAttrs (old: rec {
+    #   version = "5.4.6";
+    #   src = final.fetchurl {
+    #     url = "mirror://sourceforge/lzmautils/xz-${version}.tar.bz2";
+    #     sha256 = "sha256-kThRsnTo4dMXgeyUnxwj6NvPDs9uc6JDbcIXad0+b0k=";
+    #   };
+    # });
+  };
+
   modifications = final: prev: {
     # delete when https://github.com/NixOS/nixpkgs/pull/288471 merged
     # alacritty = prev.alacritty.overrideAttrs(old: {
@@ -83,21 +92,21 @@
     #     nativeBuildInputs = old.nativeBuildInputs ++ (prev.lib.optional prev.stdenv.isDarwin [darwinSymlinks]);
     # }));
 
-    python311 = prev.python311.override {
-      packageOverrides = python-self: python-super: {
-        # remove once https://nixpk.gs/pr-tracker.html?pr=271586 merged into unstable
-        # huggingface-hub = let
-        #   version = "0.19.4";
-        # in python-super.huggingface-hub.overridePythonAttrs(old: {
-        #   inherit version;
-        #   src = prev.fetchFromGitHub {
-        #     owner = "huggingface";
-        #     repo = "huggingface_hub";
-        #     rev = "refs/tags/v${version}";
-        #     hash = "sha256-bK/Cg+ZFhf9TrTVlDU35cLMDuTmdH4bN/QuPVeUVDsI=";
-        #   };
-        # });
-      };
-    };
+    # python311 = prev.python311.override {
+    #   packageOverrides = python-self: python-super: {
+    #     # remove once https://nixpk.gs/pr-tracker.html?pr=271586 merged into unstable
+    #     # huggingface-hub = let
+    #     #   version = "0.19.4";
+    #     # in python-super.huggingface-hub.overridePythonAttrs(old: {
+    #     #   inherit version;
+    #     #   src = prev.fetchFromGitHub {
+    #     #     owner = "huggingface";
+    #     #     repo = "huggingface_hub";
+    #     #     rev = "refs/tags/v${version}";
+    #     #     hash = "sha256-bK/Cg+ZFhf9TrTVlDU35cLMDuTmdH4bN/QuPVeUVDsI=";
+    #     #   };
+    #     # });
+    #   };
+    # };
   };
 }

@@ -95,7 +95,7 @@
         let
           pkgs = legacyPackages.${system};
         in
-        import ./pkgs { inherit pkgs inputs; }
+        import ./pkgs { inherit pkgs; }
       );
 
       darwinConfigurations = {

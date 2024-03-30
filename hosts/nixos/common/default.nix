@@ -16,6 +16,7 @@ in
   ### taken from SrvOS (https://github.com/numtide/srvos/tree/main/nixos/common)
   imports = [
     ./secrets.nix
+    ./security.nix
     ./mdmonitor-fix.nix
     ./networking.nix
     ./nix.nix
