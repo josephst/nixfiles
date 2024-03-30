@@ -4,7 +4,7 @@
   zig = inputs.zig.overlays.default;
   llama-cpp = inputs.llama-cpp.overlays.default;
 
-  deploy-rs = inputs.deploy-rs.overlay;
+  deploy-rs = inputs.deploy-rs.overlays.default;
 
   additions =
     final: prev:
