@@ -263,6 +263,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-staging": {
+      "locked": {
+        "lastModified": 1711800066,
+        "narHash": "sha256-ifNDU0R3OgfNhgTAwQckfaY3pi3lOed+SAes7mffJrM=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "48d06167c6d80ba706833f8f76f8a8fe7c33786c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "staging-next",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1711715736,
@@ -288,6 +304,7 @@
         "llama-cpp": "llama-cpp",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-stable": "nixpkgs-stable",
+        "nixpkgs-staging": "nixpkgs-staging",
         "zig": "zig"
       }
     },
