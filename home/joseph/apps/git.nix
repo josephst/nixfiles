@@ -7,7 +7,11 @@ in
     enable = true;
     userEmail = "1269177+josephst@users.noreply.github.com";
     userName = "Joseph Stahl";
-    signing.signByDefault = isDarwin; # only sign on macOS for now (simplicity)
+    signing = {
+      # only sign on macOS for now (simplicity)
+      key = lib.optionalString isDarwin "gpg --list-secret-keys --keyid-format=long";
+      signByDefault = isDarwin;
+    };
     extraConfig = {
       credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
       gpg.format = "ssh";
