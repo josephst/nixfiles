@@ -148,6 +148,15 @@
           ] ++ (builtins.attrValues nixosModules);
           specialArgs = inputs;
         };
+
+        attic-cache = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          pkgs = legacyPackages.x86_64-linux;
+          modules = [
+            "${nixpkgs}/nixos/modules/virtualization/proxmox-lxc.nix"
+            ./users/root.nix
+          ];
+        };
       };
 
       deploy.nodes = {

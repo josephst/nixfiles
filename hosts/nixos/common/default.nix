@@ -5,11 +5,6 @@
   lib,
   ...
 }:
-let
-  keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop joseph@1password"
-  ];
-in
 {
   # shared configuration that should be used for ALL NixOS installs
 
