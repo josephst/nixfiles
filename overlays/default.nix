@@ -26,10 +26,10 @@
 
   security = final: prev: {
     # for https://github.com/NixOS/nixpkgs/pull/300028, but causes HUGE rebuild
-    xz = prev.xz.overrideAttrs (old: {
-      version = inputs.nixpkgs-staging.legacyPackages.${final.system}.xz.version;
-      src = inputs.nixpkgs-staging.legacyPackages.${final.system}.xz.src;
-    });
+    # xz = prev.xz.overrideAttrs (old: {
+    #   version = inputs.nixpkgs-staging.legacyPackages.${final.system}.xz.version;
+    #   src = inputs.nixpkgs-staging.legacyPackages.${final.system}.xz.src;
+    # });
   };
 
   modifications = final: prev: {
