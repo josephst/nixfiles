@@ -35,17 +35,22 @@
       force directory mode = 2755
     '';
     shares = {
+      # public = {
+      #   path = "/mnt/exthdd/shares/public";
+      #   "read only" = "no";
+      #   "guest ok" = "yes";
+      # };
+      # joseph = {
+      #   path = "/mnt/exthdd/shares/joseph";
+      #   "read only" = "no";
+      #   "valid users" = "joseph";
+      #   "force user" = "joseph";
+      #   "force group" = "users";
+      # };
       public = {
-        path = "/mnt/exthdd/shares/public";
+        path = "/mnt/shared";
         "read only" = "no";
         "guest ok" = "yes";
-      };
-      joseph = {
-        path = "/mnt/exthdd/shares/joseph";
-        "read only" = "no";
-        "valid users" = "joseph";
-        "force user" = "joseph";
-        "force group" = "users";
       };
     };
   };

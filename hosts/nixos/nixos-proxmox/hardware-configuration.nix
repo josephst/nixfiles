@@ -35,6 +35,11 @@
     fsType = "vfat";
   };
 
+  fileSystems."/mnt/shared" = {
+    device = "/dev/disk/by-label/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1-part1";
+    fsType = "ext4";
+  };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
