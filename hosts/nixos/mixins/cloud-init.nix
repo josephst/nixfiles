@@ -24,7 +24,9 @@
       })
     );
 
-  networking.useNetworkd = lib.mkDefault true;
+  # better to write all configuration manually
+  # https://nixos.wiki/wiki/Systemd-networkd
+  # networking.useNetworkd = lib.mkDefault false;
   networking.useDHCP = lib.mkDefault false;
 
   # Delegate the hostname setting to cloud-init by default
