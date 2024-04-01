@@ -25,15 +25,7 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/f2add5a4-8511-4b7b-bf20-29a57855f652";
-    fsType = "ext4";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/EAF7-AB18";
-    fsType = "vfat";
-  };
+  # file systems managed by disko
 
   swapDevices = [ ];
 
