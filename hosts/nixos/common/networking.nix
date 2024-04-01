@@ -9,7 +9,7 @@
 
   # Use networkd instead of the pile of shell scripts
   systemd.network.enable = lib.mkDefault true;
-  networking.useNetworkd = lib.mkDefault true;
+  # networking.useNetworkd = lib.mkDefault true;
   # don't autogenerate config. Best to use systemd-networkd
   networking.useDHCP = lib.mkDefault false;
 

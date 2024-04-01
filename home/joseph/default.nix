@@ -78,7 +78,7 @@ in
     stateVersion = "22.11";
     shellAliases = {
       top = "btm";
-      copy = "rsync -rvg --progress"; # copy <source> <destination>
+      copy = "rsync --archive -hh --partial --info=stats1,progress2 --modify-window=1"; # copy <source> <destination>
       cat = "bat --paging=never --style=plain,header";
     };
   };
