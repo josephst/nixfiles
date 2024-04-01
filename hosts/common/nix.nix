@@ -10,13 +10,14 @@
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
+    "repl-flake"
   ];
 
   # The default at 10 is rarely enough.
   nix.settings.log-lines = lib.mkDefault 25;
 
   # Avoid disk full issues
-  nix.settings.max-free = lib.mkDefault (1000 * 1000 * 1000);
+  nix.settings.max-free = lib.mkDefault (3000 * 1000 * 1000);
   nix.settings.min-free = lib.mkDefault (128 * 1000 * 1000);
 
   # Avoid copying unnecessary stuff over SSH
