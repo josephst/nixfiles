@@ -31,6 +31,7 @@
     ./services/prowlarr.nix
     ./services/radarr.nix
     ./services/sonarr.nix
+    ./services/unifi.nix
 
     ## Backup
     ./services/rclone.nix
