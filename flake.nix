@@ -160,11 +160,9 @@
           system = "x86_64-linux";
           pkgs = legacyPackages.x86_64-linux;
           modules = [
-            "${nixpkgs}/nixos/modules/virtualization/proxmox-lxc.nix"
             attic.nixosModules.atticd
             ./users/root.nix
-            ./hosts/common
-            ./hosts/nixos
+            ./hosts/nixos/attic
           ];
         };
       };
