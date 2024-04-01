@@ -1,18 +1,13 @@
 { lib, pkgs, ... }:
 {
   services.samba-wsdd.enable = true;
+  services.samba-wsdd.openFirewall = true;
   services.samba.openFirewall = true;
-  networking.firewall.allowedTCPPorts = [
-    5357 # wsdd
-  ];
-  networking.firewall.allowedUDPPorts = [
-    3702 # wsdd
-  ];
 
   # For a user to be authenticated on the samba server,
   # you must add their password using smbpasswd -a <user> as root.
   services.samba = {
-    enable = true; # TODO: enable once samba fully set up
+    enable = true;
     package = pkgs.samba.override {
       # ceph support broken as of 2023-08-13 on nixpkgs-unstable
       # relies on EOL version of influxdb which is incompatible with latest pandas release
