@@ -22,6 +22,8 @@ in
     ./nix.nix
     ./openssh.nix
     ./serial.nix
+    ./sudo.nix
+    ./zfs.nix
   ];
 
   # Use systemd during boot as well on systems except:

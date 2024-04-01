@@ -8,9 +8,7 @@ let
 
   # systems
   nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIpnzK+uR7Bv5OVg04zk3/5TkhjtJYQGQGQOxIr6leeC joseph@nixos-orbstack";
-  allKeys = [
-    nixos-orbstack
-  ] ++ builtins.attrValues joseph;
+  allKeys = [ nixos-orbstack ] ++ builtins.attrValues joseph;
 in
 {
   "dnsApiToken.age".publicKeys = allKeys;

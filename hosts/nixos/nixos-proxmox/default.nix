@@ -12,8 +12,13 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+
+    # srvOS
+    ../mixins/cloud-init.nix
+    ../mixins/nix-experimental.nix
     ../mixins/systemd-boot.nix
-    # ../mixins/cloud-init.nix
+    ../mixins/server.nix
+    ../mixins/terminfo.nix
 
     # Secrets
     ./secrets.nix
