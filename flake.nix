@@ -156,15 +156,15 @@
           specialArgs = inputs;
         };
 
-        # attic-cache = nixpkgs.lib.nixosSystem {
-        #   system = "x86_64-linux";
-        #   pkgs = legacyPackages.x86_64-linux;
-        #   modules = [
-        #     attic.nixosModules.atticd
-        #     ./users/root.nix
-        #     ./hosts/nixos/attic
-        #   ];
-        # };
+        attic-cache = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          pkgs = legacyPackages.x86_64-linux;
+          modules = [
+            attic.nixosModules.atticd
+            ./users/root.nix
+            ./hosts/nixos/attic
+          ];
+        };
       };
 
       deploy.nodes = {
