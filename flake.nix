@@ -27,6 +27,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # attic
+    attic = {
+      url = "github:zhaofengli/attic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # deploy-rs
     deploy-rs = {
       url = "github:serokell/deploy-rs";
@@ -41,15 +47,15 @@
 
     # llama.cpp
     llama-cpp = {
-      # url = "github:ggerganov/llama.cpp";
-      url = "github:josephst/llama.cpp/nix-darwin-xcrun";
+      url = "github:ggerganov/llama.cpp";
+      # url = "github:josephst/llama.cpp/nix-darwin-xcrun";
     };
 
     # disko
-    # disko = {
-    #   url = "github:nix-community/disko";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -61,10 +67,11 @@
       home-manager,
       darwin,
       agenix,
+      attic,
       deploy-rs,
       zig,
       llama-cpp,
-    # disko,
+      disko,
     # secrets
     }@inputs:
     let
@@ -154,7 +161,10 @@
           pkgs = legacyPackages.x86_64-linux;
           modules = [
             "${nixpkgs}/nixos/modules/virtualization/proxmox-lxc.nix"
+            attic.nixosModules.atticd
             ./users/root.nix
+            ./hosts/common
+            ./hosts/nixos
           ];
         };
       };
