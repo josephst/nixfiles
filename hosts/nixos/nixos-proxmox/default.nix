@@ -14,7 +14,7 @@
     ./hardware-configuration.nix
 
     # srvOS
-    ../mixins/cloud-init.nix
+    # ../mixins/cloud-init.nix
     ../mixins/nix-experimental.nix
     ../mixins/systemd-boot.nix
     ../mixins/server.nix
