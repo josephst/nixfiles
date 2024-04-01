@@ -19,7 +19,7 @@ in
       + ''
         # Configure auto-attach/exit to your likings (default is off).
         if test "$TERM_PROGRAM" != "vscode"
-          set ZELLIJ_AUTO_ATTACH false
+          set ZELLIJ_AUTO_ATTACH true
           set ZELLIJ_AUTO_EXIT true
           eval (zellij setup --generate-auto-start fish | string collect)
           if not set -q ZELLIJ
