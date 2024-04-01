@@ -37,18 +37,18 @@
   # networking.interfaces.enp6s18.useDHCP = lib.mkDefault true;
 
   # configured by cloud-init
-  # systemd.network.networks."10-lan" = {
-  #   matchConfig.Name = "enp6s18";
-  #   networkConfig = {
-  #     # start a DHCP Client for IPv4 Addressing/Routing
-  #     DHCP = "ipv4";
-  #     # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
-  #     IPv6AcceptRA = true;
-  #   };
-  #   domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
-  #   # make routing on this interface a dependency for network-online.target
-  #   linkConfig.RequiredForOnline = "routable";
-  # };
+  systemd.network.networks."10-lan" = {
+    matchConfig.Name = "enp6s18";
+    networkConfig = {
+      # start a DHCP Client for IPv4 Addressing/Routing
+      DHCP = "ipv4";
+      # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
+      IPv6AcceptRA = true;
+    };
+    domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
+    # make routing on this interface a dependency for network-online.target
+    linkConfig.RequiredForOnline = "routable";
+  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
