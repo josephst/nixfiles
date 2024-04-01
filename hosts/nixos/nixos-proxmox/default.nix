@@ -40,7 +40,7 @@
     # ./services/restic/healthchecks.nix
     ./services/restic/restic-user.nix
     ./services/restic/b2.nix
-    ./services/restic/exthdd.nix
+    # ./services/restic/exthdd.nix
     ./services/restic/nas_maintenance.nix
 
     ## Dashboard
@@ -84,14 +84,14 @@
     ];
   };
 
-  fileSystems."/mnt/exthdd" = {
-    device = "/dev/disk/by-uuid/d7f9520d-262f-4e80-8296-964ca82eeb77";
-    fsType = "ext4";
-    options = [
-      "nofail"
-      "x-systemd.device-timeout=5"
-    ];
-  };
+  # fileSystems."/mnt/exthdd" = {
+  #   device = "/dev/disk/by-uuid/d7f9520d-262f-4e80-8296-964ca82eeb77";
+  #   fsType = "ext4";
+  #   options = [
+  #     "nofail"
+  #     "x-systemd.device-timeout=5"
+  #   ];
+  # };
 
   # List services that you want to enable:
   services = {
