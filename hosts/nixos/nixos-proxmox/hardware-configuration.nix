@@ -40,8 +40,10 @@
   systemd.network.networks."10-lan" = {
     matchConfig.Name = "enp6s18";
     networkConfig = {
-      # start a DHCP Client for IPv4 Addressing/Routing
-      DHCP = "ipv4";
+      Address = "192.168.1.10/24";
+      Gateway = "192.168.1.1";
+      DNS = "1.1.1.1";
+
       # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
       IPv6AcceptRA = true;
     };
