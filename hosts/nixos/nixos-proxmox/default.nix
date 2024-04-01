@@ -39,14 +39,14 @@
     ./services/sonarr.nix
 
     ## Backup
-    ./services/rclone.nix
-    ./services/rsync.nix
+    # ./services/rclone.nix
+    # ./services/rsync.nix
     ./services/samba.nix
     # ./services/restic/healthchecks.nix
-    ./services/restic/restic-user.nix
-    ./services/restic/b2.nix
+    # ./services/restic/restic-user.nix
+    # ./services/restic/b2.nix
     # ./services/restic/exthdd.nix
-    ./services/restic/nas_maintenance.nix
+    # ./services/restic/nas_maintenance.nix
 
     ## Dashboard
     ./services/homepage

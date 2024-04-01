@@ -6,7 +6,7 @@ let
     joseph-macbook-air = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDuLA4wwwupvYW3UJTgOtcOUHwpmRR9gy/N+F6n11d5v";
   };
 
-  # systems
+  # systems (need these for BTRFS, where a user key in /home won't be mounted when secrets are trying to be decrypted)
   nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIpnzK+uR7Bv5OVg04zk3/5TkhjtJYQGQGQOxIr6leeC joseph@nixos-orbstack";
   nixos-proxmox = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFYA8DgvT2tiD6My3maKFHxeKjSmmBPGVBuZN3EO5XmG root@nixos";
   allKeys = [ nixos-orbstack nixos-proxmox ] ++ builtins.attrValues joseph;
