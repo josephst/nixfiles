@@ -13,7 +13,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../mixins/systemd-boot.nix
-    ../mixins/cloud-init.nix
+    # ../mixins/cloud-init.nix
 
     # Secrets
     ./secrets.nix
