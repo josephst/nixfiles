@@ -9,7 +9,7 @@ in
     userName = "Joseph Stahl";
     signing = {
       # only sign on macOS for now (simplicity)
-      key = lib.optionalString isDarwin "gpg --list-secret-keys --keyid-format=long";
+      key = lib.optionalString isDarwin "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop";
       signByDefault = isDarwin;
     };
     extraConfig = {
