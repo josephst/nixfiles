@@ -12,6 +12,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./disko.nix
 
     # srvOS
     # ../mixins/cloud-init.nix

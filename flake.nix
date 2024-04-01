@@ -147,6 +147,7 @@
           modules = [
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
+            disko.nixosModules.disko
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
             ./hosts/nixos/nixos-proxmox # host-specific

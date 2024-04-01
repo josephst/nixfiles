@@ -3,7 +3,7 @@
     disk = {
       sda = {
         type = "disk";
-        device = "/dev/sda";
+        device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0";
         content = {
           type = "gpt";
           partitions = {
@@ -27,15 +27,15 @@
                 # Subvolumes must set a mountpoint in order to be mounted,
                 # unless their parent is mounted
                 subvolumes = {
-                  "@root" = {
+                  "/root" = {
                     mountpoint = "/";
                     mountOptions = [ "compress=zstd" ];
                   };
-                  "@home" = {
+                  "/home" = {
                     mountpoint = "/home";
                     mountOptions = [ "compress=zstd" ];
                   };
-                  "@nix" = {
+                  "/nix" = {
                     mountpoint = "/nix";
                     mountOptions = [
                       "compress=zstd"
