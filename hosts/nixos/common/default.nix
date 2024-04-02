@@ -54,15 +54,23 @@
 
   # Make sure firewall is enabled
   networking.firewall.enable = lib.mkDefault true;
-
   # Delegate the hostname setting to dhcp/cloud-init by default
   networking.hostName = lib.mkDefault "";
 
   ### END srvOS portion
 
+  hardware = {
+    enableRedistributableFirmware = true;
+    enableAllFirmware = true;
+  };
+
   environment = {
     # NixOS specific (shared with Darin = goes in ../../common/default.nix)
-    systemPackages = builtins.attrValues { inherit (pkgs) cifs-utils parted tailscale; };
+    systemPackages = with pkgs; [
+      cifs-utils
+      parted
+      tailscale
+    ];
   };
 
   programs = {

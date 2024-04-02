@@ -13,34 +13,42 @@
       "homebrew/cask-fonts"
       "homebrew/cask-versions"
       "homebrew/services"
-      # "microsoft/git"
     ];
 
     casks = [
+      # dev tools
       "1password-cli"
       "1password"
       "alacritty"
-      "appcleaner"
       "cyberduck"
-      # "darktable"
-      "digikam"
-      # "docker"
       "git-credential-manager"
       "iterm2"
-      "logi-options-plus"
-      "microsoft-teams"
-      "ollama"
       "orbstack"
-      "raycast"
-      "rectangle"
-      "spotify"
-      "stats"
-      "steam"
       "utm"
-      "vlc"
       "visual-studio-code"
       "warp"
+
+      # utility
+      "appcleaner"
+      "logi-options-plus"
+
+      # media
+      "digikam"
+      "spotify"
+      "steam"
+      "vlc"
+
+      # communication
+      "microsoft-teams"
       "zoom"
+
+      # AI
+      "ollama"
+
+      # productivity
+      "raycast"
+      "rectangle"
+      "stats"
     ];
 
     masApps = {

@@ -23,13 +23,12 @@ in
 
   home = {
     username = "joseph";
-    homeDirectory = if pkgs.stdenv.isDarwin then "/Users/joseph" else "/home/joseph";
+    homeDirectory = if isDarwin then "/Users/joseph" else "/home/joseph";
     packages = with pkgs; [
       # custom packages
       recyclarr
 
       # nix
-      alejandra
       cachix
       nix-prefetch
       nix-update
@@ -60,7 +59,7 @@ in
       rsync
       silver-searcher
       spoof-mac
-      tldr
+      tldr # cheatsheets in terminal
       yt-dlp
       ffmpeg_6
 

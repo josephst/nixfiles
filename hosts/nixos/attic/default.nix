@@ -9,9 +9,7 @@
   ...
 }:
 {
-  imports = [
-    (modulesPath + "/virtualization/proxmox-lxc.nix")
-  ];
+  imports = [ (modulesPath + "/virtualization/proxmox-lxc.nix") ];
 
   system.stateVersion = "24.05";
 }

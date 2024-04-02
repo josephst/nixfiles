@@ -64,7 +64,7 @@
 
   networking = {
     hostName = "nixos"; # Define your hostname. (managed by cloud-init)
-    hostId = "92176031"; # for ZFS
+    hostId = builtins.substring 0 8 (builtins.hashString "md5" config.networking.hostName);
     domain = "josephstahl.com";
     # search = ["josephstahl.com" "taildbd4c.ts.net"];
 
