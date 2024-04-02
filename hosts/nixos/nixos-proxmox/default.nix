@@ -53,11 +53,15 @@
     # ./services/uptime-kuma.nix
   ];
 
+  boot.zfs.enabled = true;
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+
   # Create the group for media stuff (plex, sabnzbd, etc)
   users.groups.media = { };
 
   networking = {
     hostName = "nixos"; # Define your hostname. (managed by cloud-init)
+    hostId = "92176031"; # for ZFS
     domain = "josephstahl.com";
     # search = ["josephstahl.com" "taildbd4c.ts.net"];
 
@@ -73,21 +77,21 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  fileSystems."/mnt/nas" = {
-    device = "//192.168.1.12/public"; # NAS IP
-    fsType = "cifs";
-    options = [
-      "x-systemd.automount"
-      "noauto"
-      "x-systemd.idle-timeout=600"
-      "x-systemd.device-timeout=5s"
-      "x-systemd.mount-timeout=5s"
-      "gid=media"
-      "file_mode=0775"
-      "dir_mode=0775"
-      "credentials=${config.age.secrets.smb.path}"
-    ];
-  };
+  # fileSystems."/mnt/nas" = {
+  #   device = "//192.168.1.12/public"; # NAS IP
+  #   fsType = "cifs";
+  #   options = [
+  #     "x-systemd.automount"
+  #     "noauto"
+  #     "x-systemd.idle-timeout=600"
+  #     "x-systemd.device-timeout=5s"
+  #     "x-systemd.mount-timeout=5s"
+  #     "gid=media"
+  #     "file_mode=0775"
+  #     "dir_mode=0775"
+  #     "credentials=${config.age.secrets.smb.path}"
+  #   ];
+  # };
 
   # fileSystems."/mnt/exthdd" = {
   #   device = "/dev/disk/by-uuid/d7f9520d-262f-4e80-8296-964ca82eeb77";
