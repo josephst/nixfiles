@@ -25,7 +25,13 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  # file systems managed by disko
+  # root file systems managed by disko
+
+  # zfs file systems managed here
+  fileSystems."/mnt/storage" = {
+    device = "zpool/root";
+    fsType = "zfs";
+  };
 
   swapDevices = [ ];
 
