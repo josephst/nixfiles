@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 let
   user = "joseph";
 in
@@ -6,9 +6,9 @@ in
   age.identityPaths = [
     # make sure this key is copied from 1password prior to running agenix
     "/home/${user}/.ssh/id_ed25519"
-    # also use the built-in key
-    "/etc/ssh/ssh_host_ed25519_key"
-  ];
+    # key to use for new installs, prior to generation of hostKeys
+    "/etc/agenixKey"
+  ] ++ config.services.openssh.hostKeys;
 
   age.secrets.joseph.file = ../../../secrets/users/joseph.age;
 

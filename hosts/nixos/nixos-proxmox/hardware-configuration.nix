@@ -30,11 +30,11 @@
 
   # root file systems managed by disko
 
-  # zfs file systems managed here
-  fileSystems."/mnt/storage" = {
-    device = "zpool/root";
-    fsType = "zfs";
-  };
+  # zfs file systems managed by zfs (zpool/root -o mountpoint=/mnt/storage)
+  # fileSystems."/mnt/storage" = {
+  #   device = "zpool/root";
+  #   fsType = "zfs";
+  # };
 
   swapDevices = [ ];
 
