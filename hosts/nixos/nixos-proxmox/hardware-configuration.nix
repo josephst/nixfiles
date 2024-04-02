@@ -25,6 +25,7 @@
     initrd.kernelModules = [ ];
 
     # from https://nixos.wiki/wiki/Remote_disk_unlocking
+    kernelParams = [ "ip=192.168.1.10::192.168.1.1:255.255.255.0:nixos::none" ];
     initrd.network = {
       enable = true;
       # To prevent ssh clients from freaking out because a different host key is used,
