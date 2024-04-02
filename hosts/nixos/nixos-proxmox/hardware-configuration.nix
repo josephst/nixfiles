@@ -29,23 +29,25 @@
       enable = true;
       # To prevent ssh clients from freaking out because a different host key is used,
       # a different port for ssh is useful (assuming the same host has also a regular sshd running)
-      port = 2222;
-      # hostKeys paths must be unquoted strings, otherwise you'll run into issues with boot.initrd.secrets
-      # the keys are copied to initrd from the path specified; multiple keys can be set
-      # you can generate any number of host keys using
-      # `ssh-keygen -t ed25519 -N "" -f /path/to/ssh_host_ed25519_key`
-      hostKeys = [ /etc/secrets/initrd/ssh_host_rsa_key ];
-      # public ssh key used for login
-      authorizedKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDuLA4wwwupvYW3UJTgOtcOUHwpmRR9gy/N+F6n11d5v joseph@macbook-air"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop joseph"
-      ];
+      ssh = {
+        port = 2222;
+        # hostKeys paths must be unquoted strings, otherwise you'll run into issues with boot.initrd.secrets
+        # the keys are copied to initrd from the path specified; multiple keys can be set
+        # you can generate any number of host keys using
+        # `ssh-keygen -t ed25519 -N "" -f /path/to/ssh_host_ed25519_key`
+        hostKeys = [ /etc/secrets/initrd/ssh_host_rsa_key ];
+        # public ssh key used for login
+        authorizedKeys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDuLA4wwwupvYW3UJTgOtcOUHwpmRR9gy/N+F6n11d5v joseph@macbook-air"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop joseph"
+        ];
+      };
       postCommands = ''
-        # Import all pools
-        zpool import -a
-        # Add the load-key command to the .profile
-        echo "zfs load-key -a; killall zfs" >> /root/.profile
-      '';
+          # Import all pools
+          zpool import -a
+          # Add the load-key command to the .profile
+          echo "zfs load-key -a; killall zfs" >> /root/.profile
+        '';
     };
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
