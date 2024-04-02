@@ -46,17 +46,12 @@ vim ~/.ssh/id_ed25519 # paste private key that is used to authenticate with Gith
 chmod 600 ~/.ssh/id_ed25519
 
 # Create new SSH keys for the system
-# need a user key (ie ~/.ssh/id_ed25519{,.pub})
-# and a root key (ie /root/.ssh/id_ed25519{,.pub})
-# USER KEY: copy from 1password to /mnt/home/$USERNAME/.ssh/
-mkdir -p /mnt/home/${USERNAME}/.ssh
-chown nixos /mnt/home/${USERNAME}/.ssh
-echo "add public and private keys to /mnt/home/${USERNAME}/.ssh/id_25519{,.pub}"
-# ROOT KEY
-mkdir -p /mnt/root/.ssh
-echo "copy public and private keys to /mnt/home/root/.ssh/id_25519{,.pub}"
-# when agenix runs, looks for keys in /home/joseph/.ssh
-ln -s /mnt/home/${USERNAME} /home/${USERNAME}
+# A
+# when agenix runs, use /etc/agenixKey for initial install
+vim /mnt/etc/agenixKey
+chmod 600 /mnt/etc/agenixKey
+ln -s /mnt/etc/agenixKey /etc/agenixKey
+# after initial install, rekey secrets with the generated hostKey
 
 # once shell loaded, clone the repo to /mnt/etc/nixos
 git clone git@github.com:josephst/nixfiles.git /mnt/etc/nixos
