@@ -53,7 +53,10 @@
     # ./services/uptime-kuma.nix
   ];
 
-  boot.zfs.enabled = true;
+  boot.supportedFilesystems = [
+    "btrfs"
+    "zfs"
+  ];
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   # Create the group for media stuff (plex, sabnzbd, etc)
