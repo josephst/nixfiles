@@ -12,18 +12,44 @@
 {
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
-  boot.initrd.availableKernelModules = [
-    "uhci_hcd"
-    "ehci_pci"
-    "ahci"
-    "virtio_pci"
-    "virtio_scsi"
-    "sd_mod"
-    "sr_mod"
-  ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    initrd.availableKernelModules = [
+      "uhci_hcd"
+      "ehci_pci"
+      "ahci"
+      "virtio_pci"
+      "virtio_scsi"
+      "sd_mod"
+      "sr_mod"
+    ];
+    initrd.kernelModules = [ ];
+
+    # from https://nixos.wiki/wiki/Remote_disk_unlocking
+    initrd.network = {
+      enable = true;
+      # To prevent ssh clients from freaking out because a different host key is used,
+      # a different port for ssh is useful (assuming the same host has also a regular sshd running)
+      port = 2222;
+      # hostKeys paths must be unquoted strings, otherwise you'll run into issues with boot.initrd.secrets
+      # the keys are copied to initrd from the path specified; multiple keys can be set
+      # you can generate any number of host keys using
+      # `ssh-keygen -t ed25519 -N "" -f /path/to/ssh_host_ed25519_key`
+      hostKeys = [ /etc/secrets/initrd/ssh_host_rsa_key ];
+      # public ssh key used for login
+      authorizedKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDuLA4wwwupvYW3UJTgOtcOUHwpmRR9gy/N+F6n11d5v joseph@macbook-air"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop joseph"
+      ];
+      postCommands = ''
+        # Import all pools
+        zpool import -a
+        # Add the load-key command to the .profile
+        echo "zfs load-key -a; killall zfs" >> /root/.profile
+      '';
+    };
+    kernelModules = [ "kvm-amd" ];
+    extraModulePackages = [ ];
+  };
 
   # root file systems managed by disko
 
@@ -32,6 +58,11 @@
     device = "zpool/root";
     fsType = "zfs";
   };
+
+  # remotely unlock encrypted storage
+  boot = {
+
+  }
 
   swapDevices = [ ];
 
