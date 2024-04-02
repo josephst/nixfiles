@@ -11,7 +11,7 @@ let
 
   # systems (need these for BTRFS, where a user key in /home won't be mounted when secrets are trying to be decrypted)
   nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIpnzK+uR7Bv5OVg04zk3/5TkhjtJYQGQGQOxIr6leeC joseph@nixos-orbstack";
-  nixos-proxmox = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFYA8DgvT2tiD6My3maKFHxeKjSmmBPGVBuZN3EO5XmG root@nixos";
+  nixos-proxmox = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL4F2rodZ/DMzp2bblvV3LNTHtV89XOYATeHKIwzES0D root@nixos";
   allKeys = [
     installerKey
     nixos-orbstack
