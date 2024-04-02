@@ -59,11 +59,6 @@
     fsType = "zfs";
   };
 
-  # remotely unlock encrypted storage
-  boot = {
-
-  }
-
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
