@@ -12,7 +12,7 @@ in
     enable = true;
     resolveLocalQueries = false;
     settings = {
-      listen-address = [ "192.168.1.57" ];
+      listen-address = [ "192.168.1.10" ];
       interface = "enp6s18";
       bind-interfaces = true;
       no-resolv = true; # use specific upstreams, as the /etc/resolv.conf file just points to systemd-resolved (which points back to dnsmasq...)
