@@ -54,6 +54,42 @@
           };
         };
       };
+      storage = {
+        type = "disk";
+        device = "";
+        content = {
+          type = "gpt";
+          partitions = {
+            root = {
+              size = "100%";
+              content = {
+                type = "btrfs";
+                extraArgs = [ "-f" ]; # Override existing partition
+                # Subvolumes must set a mountpoint in order to be mounted,
+                # unless their parent is mounted
+                subvolumes = {
+                  "/storage" = {
+                    mountpoint = "/storage";
+                    mountOptions = [ "compress=zstd" "noatime" ];
+                  };
+                  "/storage/restic" = {
+                    mountpoint = "/storage/restic";
+                    mountOptions = [ "noatime" ]; # already compressed & encrypted data
+                  };
+                  "/storage/media" = {
+                    mountpoint = "/storage/media";
+                    mountOptions = [ "noatime" ];
+                  };
+                  "/storage/homes" = {
+                    mountpoint = "/storage/homes";
+                    mountOptions = [ "compress=zstd" "noatime" ];
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
     };
   };
 }
