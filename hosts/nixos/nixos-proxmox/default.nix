@@ -56,9 +56,7 @@
 
   boot.supportedFilesystems = [
     "btrfs"
-    "zfs"
   ];
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   # Create the group for media stuff (plex, sabnzbd, etc)
   users.groups.media = { };

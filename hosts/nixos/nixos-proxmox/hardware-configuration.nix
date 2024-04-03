@@ -25,16 +25,6 @@
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
-    zfs = {
-      extraPools = [ "storage" ];
-      passwordTimeout = 30; # don't wait (and hang) forever
-
-      # run zfs mount -al to load keys and mount all configured partitions
-      requestEncryptionCredentials = false; # needs to be true if root is on ZFS, but causes hangs otherwise
-
-      forceImportRoot = false; # recommended to set false by docs (true for historical reasons)
-      forceImportAll = false;
-    };
   };
 
   # root file systems managed by disko
