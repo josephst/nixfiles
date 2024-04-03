@@ -62,7 +62,7 @@
       # `soft` means not to re-convert chunks that already have desired profile
       storage1 = {
         type = "disk";
-        device = "";
+        device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1";
         content = {
           type = "gpt";
           partitions = {
