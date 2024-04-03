@@ -1,6 +1,6 @@
 {
   disko.devices = {
-    sda = {
+    disk = {
       internal = {
         type = "disk";
         device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0";
