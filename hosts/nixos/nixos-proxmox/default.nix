@@ -54,9 +54,9 @@
     # ./services/uptime-kuma.nix
   ];
 
-  boot.supportedFilesystems = [
-    "btrfs"
-  ];
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+  };
 
   # Create the group for media stuff (plex, sabnzbd, etc)
   users.groups.media = { };
@@ -69,9 +69,7 @@
 
     # networkmanager - disabled, use systemd-networkd instead
     networkmanager.enable = false; # Easiest to use and most distros use this by default.
-    # networkmanager.unmanaged = ["tailscale0"];
   };
-  systemd.network.wait-online.anyInterface = true;
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -107,13 +105,13 @@
   # List services that you want to enable:
   services = {
     qemuGuest.enable = true;
+    resolved.dnssec = "allow-downgrade";
+    btrfs.autoScrub = {
+      enable = true;
+      interval = "monthly";
+      fileSystems = [ "/" ];
+    };
   };
-
-  # services.resolved.extraConfig = ''
-  #   # DNS=127.0.0.1
-  #   # DNSStubListener=no
-  # ''; # disable stub listener since coreDNS is already listening on :53
-  services.resolved.dnssec = "allow-downgrade";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

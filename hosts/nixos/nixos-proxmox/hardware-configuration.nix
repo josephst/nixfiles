@@ -25,18 +25,9 @@
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
-    kernelPackages = pkgs.linuxPackages_latest;
   };
 
-  # root file systems managed by disko
-
-  # zfs file systems managed by zfs (zpool/root -o mountpoint=/mnt/storage)
-  # fileSystems."/mnt/storage" = {
-  #   device = "zpool/root";
-  #   fsType = "zfs";
-  # };
-
-  swapDevices = [ ];
+  swapDevices = [ { device = "/.swapvol/swapfile"; } ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
