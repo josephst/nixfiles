@@ -64,7 +64,7 @@
 
   networking = {
     hostName = "nixos"; # Define your hostname. (managed by cloud-init)
-    hostId = "e2dfd73"; # head -c 8 /etc/machine-id
+    hostId = "e2dfd738"; # head -c 8 /etc/machine-id
     domain = "josephstahl.com";
     # search = ["josephstahl.com" "taildbd4c.ts.net"];
 
