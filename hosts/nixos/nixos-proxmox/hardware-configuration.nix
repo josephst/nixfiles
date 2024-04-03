@@ -25,9 +25,13 @@
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
-    zfs.requestEncryptionCredentials = false; # needs to be true if root is on ZFS, but causes hangs otherwise
-    zfs.forceImportRoot = false; # recommended to set false by docs (true for historical reasons)
-    zfs.forceImportAll = false;
+    zfs = {
+      extraPools = "storage";
+      passwordTimeout = 30; # don't wait (and hang) forever
+      requestEncryptionCredentials = false; # needs to be true if root is on ZFS, but causes hangs otherwise
+      forceImportRoot = false; # recommended to set false by docs (true for historical reasons)
+      forceImportAll = false;
+    };
   };
 
   # root file systems managed by disko
