@@ -1,7 +1,7 @@
 {
   disko.devices = {
     disk = {
-      sda = {
+      internal = {
         type = "disk";
         device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0";
         content = {
@@ -29,11 +29,11 @@
                 subvolumes = {
                   "/root" = {
                     mountpoint = "/";
-                    mountOptions = [ "compress=zstd" ];
+                    mountOptions = [ "compress=zstd" "noatime" ];
                   };
                   "/home" = {
                     mountpoint = "/home";
-                    mountOptions = [ "compress=zstd" ];
+                    mountOptions = [ "compress=zstd" "noatime" ];
                   };
                   "/nix" = {
                     mountpoint = "/nix";
@@ -41,6 +41,12 @@
                       "compress=zstd"
                       "noatime"
                     ];
+                  };
+                  "/swap" = {
+                    mountpoint = "/.swapvol";
+                    swap = {
+                      swapfile.size = "2G";
+                    };
                   };
                 };
               };
