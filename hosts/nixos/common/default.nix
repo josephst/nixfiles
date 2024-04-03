@@ -68,7 +68,6 @@
     # NixOS specific (shared with Darin = goes in ../../common/default.nix)
     systemPackages = with pkgs; [
       cifs-utils
-      parted
       tailscale
     ];
   };

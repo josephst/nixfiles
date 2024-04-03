@@ -60,6 +60,7 @@
       file
       fish
       (git.override { osxkeychainSupport = false; })
+      gptfdisk
       mkpasswd
       openssh
       rclone
