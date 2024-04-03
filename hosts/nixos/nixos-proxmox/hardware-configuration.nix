@@ -25,6 +25,7 @@
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
+    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   # root file systems managed by disko
