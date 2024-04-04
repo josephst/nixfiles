@@ -31,17 +31,17 @@ in
   #   owner = "restic";
   # };
 
-  age.secrets.restic-exthdd-env = {
+  age.secrets.restic-localstorage-env = {
     # contents:
     # HC_UUID=<uuid for healthchecks>
-    file = ../../../secrets/restic/exthdd.env.age;
+    file = ../../../secrets/restic/localstorage.env.age;
   };
 
-  # age.secrets.restic-exthdd-pass = {
-  #   # contents: password for restic repo
-  #   file = ../../../secrets/restic/exthdd.pass.age;
-  #   owner = "restic";
-  # };
+  age.secrets.restic-localstorage-pass = {
+    # contents: password for restic repo
+    file = ../../../secrets/restic/localstorage.pass.age;
+    owner = "restic";
+  };
 
   # contents: HC_UUID=<uuid>
   age.secrets.resticLanEnv.file = ../../../secrets/restic/nas.env.age;

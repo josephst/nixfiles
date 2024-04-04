@@ -17,7 +17,6 @@
     description = "Guest user for accessing Samba shares";
     group = "users";
     extraGroups = [ "media" ];
-    home = "/storage/homes/public";
     shell = "/bin/nologin";
     uid = 3000; # keep same UID between reinstalls
   };
@@ -47,13 +46,6 @@
           user = "samba-guest";
           group = "media";
           mode = "0775";
-        };
-      };
-      "/storage/restic" = {
-        d = {
-          user = "restic";
-          group = "restic";
-          mode = "0755";
         };
       };
       "/storage/homes/public" = {

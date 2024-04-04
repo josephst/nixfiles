@@ -24,8 +24,8 @@ in
   "netdata_nixos_claim.age".publicKeys = allKeys;
   "rclone/rclone.conf.age".publicKeys = allKeys;
   "restic/b2.env.age".publicKeys = allKeys;
-  "restic/exthdd.env.age".publicKeys = allKeys;
-  "restic/exthdd.pass.age".publicKeys = allKeys;
+  "restic/localstorage.env.age".publicKeys = allKeys;
+  "restic/localstorage.pass.age".publicKeys = allKeys;
   "restic/nas.env.age".publicKeys = allKeys;
   "restic/nas.pass.age".publicKeys = allKeys;
   "rsyncd-secrets.age".publicKeys = allKeys;

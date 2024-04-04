@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   users.users.restic = {
+    isSystemUser = true;
     group = "restic";
     # home = cfg.dataDir;
     createHome = false;
