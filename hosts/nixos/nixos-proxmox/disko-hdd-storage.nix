@@ -22,7 +22,10 @@
                 subvolumes = {
                   "/storage" = {
                     mountpoint = "/storage";
-                    mountOptions = [ "compress=zstd" "noatime" ];
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
                   };
                   "/storage/restic" = {
                     mountpoint = "/storage/restic";
@@ -34,7 +37,10 @@
                   };
                   "/storage/homes" = {
                     mountpoint = "/storage/homes";
-                    mountOptions = [ "compress=zstd" "noatime" ];
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
                   };
                 };
               };

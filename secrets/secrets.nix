@@ -29,7 +29,8 @@ in
   "restic/nas.env.age".publicKeys = allKeys;
   "restic/nas.pass.age".publicKeys = allKeys;
   "rsyncd-secrets.age".publicKeys = allKeys;
-  "smb.age".publicKeys = allKeys;
+  "smb.age".publicKeys = allKeys; # login for smb shares on NAS
+  "smbpasswd.age".publicKeys = allKeys; # smb password database
   "users/joseph.age".publicKeys = allKeys;
   "ghToken.age".publicKeys = allKeys;
 }
