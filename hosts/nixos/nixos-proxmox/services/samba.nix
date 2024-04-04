@@ -70,7 +70,7 @@
   # you must add their password using smbpasswd -a <user> as root.
   services.samba = {
     enable = true;
-    packages = pkgs.samba4Full;
+    package = pkgs.samba4Full;
     securityType = "user";
     invalidUsers = [ "root" ];
     openFirewall = true;
