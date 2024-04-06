@@ -93,4 +93,8 @@
 
   security.pam.sshAgentAuth.enable = true; # enable password-less sudo (using SSH keys)
   security.pam.services.sudo.sshAgentAuth = true;
+
+  systemd = {
+    sysusers.enable = true;
+  };
 }
