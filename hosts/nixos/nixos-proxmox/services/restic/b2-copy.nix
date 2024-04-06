@@ -1,12 +1,10 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 let
   localPath = "/storage/restic";
 in
 {
-  age.secrets.rcloneRemoteDir = {
-    file = ../../../../../secrets/rcloneRemote.age;
-    owner = "restic";
-  };
+  imports = [./rcloneRemoteDir.nix]; # sets config.age.secrets.rcloneRemoteDir.path
+
   # age.secrets.rcloneConf # defined elsewhere
 
   services.restic.clone = {

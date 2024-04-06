@@ -111,6 +111,7 @@ in
         extraArgs = utils.escapeSystemdExecArgs cfg.extraRcloneArgs;
       in {
         LoadCredential = "rcloneConf:${cfg.rcloneConfFile}";
+        EnvironmentFile = lib.mkIf (cfg.remoteDirFile != null) cfg.remoteDirFile;
         ExecStart = "${cfg.package}/bin/rclone --config=\${CREDENTIALS_DIRECTORY}/rcloneConf sync ${cfg.dataDir} ${remote} ${extraArgs}";
         Type = "oneshot";
         User = "restic"; # TODO: allow configuation of user/group
@@ -124,8 +125,6 @@ in
         ProtectKernelModules = true;
         ProtectControlGroups = true;
         PrivateDevices = true;
-      } // lib.optionalAttrs (cfg.remoteDirFile != null) {
-        EnvironmentFile = cfg.remoteDirFile;
       };
     };
 

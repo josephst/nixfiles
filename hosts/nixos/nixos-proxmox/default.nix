@@ -32,21 +32,24 @@
     ./services/dnsmasq.nix
     ./services/netdata
     ./services/tailscale.nix
-    ## Media
+
+    ## Media & Sharing
     ./services/sabnzbd.nix
     ./services/plex.nix
     ./services/prowlarr.nix
     ./services/radarr.nix
     ./services/sonarr.nix
+    ./services/samba.nix
+
 
     ## Backup
     # ./services/rclone.nix
     # ./services/rsync.nix
-    ./services/samba.nix
     ./services/restic/b2-copy.nix
+    ./services/restic/b2-check.nix
     ./services/restic/restic-user.nix
     ./services/restic/local-storage.nix
-    ./services/restic/b2.nix
+    # ./services/restic/b2.nix
     # ./services/restic/exthdd.nix
     # ./services/restic/nas_maintenance.nix
 
