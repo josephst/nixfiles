@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -89,11 +89,12 @@ in
       after = [ "network.target" ];
       serviceConfig = let
         remote = if cfg.remoteDir != null then cfg.remoteDir else "$REMOTE";
+        extraArgs = utils.escapeSystemdExecArgs cfg.extraRcloneArgs;
       in {
         LoadCredential = "rcloneConf:${cfg.rcloneConfFile}";
-        ExecStart = "${cfg.package}/bin/rclone --config=$CREDENTIALS_DIRECTORY/rcloneConf sync -v ${cfg.dataDir} ${remote} ${concatStringsSep " " cfg.extraRcloneArgs}";
+        ExecStart = "${cfg.package}/bin/rclone --config=\${CREDENTIALS_DIRECTORY}/rcloneConf sync ${cfg.dataDir} ${remote} ${extraArgs}";
         Type = "oneshot";
-        User = "restic";
+        User = "restic"; # TODO: allow configuation of user/group
         Group = "restic";
 
         # Security hardening

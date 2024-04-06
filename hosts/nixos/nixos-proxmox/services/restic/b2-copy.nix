@@ -14,6 +14,6 @@ in
     dataDir = localPath;
     remoteDirFile = config.age.secrets.rcloneRemoteDir.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
-    extraRcloneArgs = [ "--transfers=16" "--b2-hard-delete --dry-run" ];
+    extraRcloneArgs = [ "--transfers=16" "--b2-hard-delete" "-v" "--dry-run" ];
   };
 }
