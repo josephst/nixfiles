@@ -14,6 +14,12 @@ in
     dataDir = localPath;
     remoteDirFile = config.age.secrets.rcloneRemoteDir.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
-    extraRcloneArgs = [ "--transfers=16" "--b2-hard-delete" "-v" "--dry-run" ];
+    extraRcloneArgs = [ "--transfers=16" "--b2-hard-delete" "-v" ];
+
+    timerConfig = {
+      OnCalendar = "06:00";
+      RandomizedDelaySec = "1h";
+      Persistent = true;
+    };
   };
 }

@@ -6,6 +6,7 @@ with lib;
 
 let
   cfg = config.services.restic.clone;
+  inherit (utils.systemdUtils.unitOptions) unitOption;
 in
 {
   meta.maintainers = [ maintainers.josephst ];
@@ -67,6 +68,24 @@ in
       default = "/etc/rclone.conf";
     };
 
+    timerConfig = mkOption {
+      type = types.nullOr (types.attrsOf unitOption);
+      default = {
+        OnCalendar = "daily";
+        Persistent = true;
+      };
+      description = lib.mdDoc ''
+        When to run rclone. See {manpage}`systemd.timer(5)` for
+        details. If null no timer is created and rclone will only
+        run when explicitly started.
+      '';
+      example = {
+        OnCalendar = "06:00";
+        RandomizedDelaySec = "1h";
+        Persistent = true;
+      };
+    };
+
     package = mkPackageOption pkgs "rclone" { };
   };
 
@@ -107,6 +126,13 @@ in
         PrivateDevices = true;
       } // lib.optionalAttrs (cfg.remoteDirFile != null) {
         EnvironmentFile = cfg.remoteDirFile;
+      };
+    };
+
+    systemd.timers = mkIf (cfg.timerConfig != null) {
+      rclone-copy = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = cfg.timerConfig;
       };
     };
 
