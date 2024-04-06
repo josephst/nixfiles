@@ -47,6 +47,7 @@ in
       croc # file sharing
       exiftool
       fd
+      gh
       hugo
       httpie
       just
