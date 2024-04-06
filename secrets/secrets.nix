@@ -22,7 +22,8 @@ in
 {
   "dnsApiToken.age".publicKeys = allKeys;
   "netdata_nixos_claim.age".publicKeys = allKeys;
-  "rclone/rclone.conf.age".publicKeys = allKeys;
+  "rclone.conf.age".publicKeys = allKeys;
+  "rcloneRemote.age".publicKeys = allKeys;
   "restic/b2.env.age".publicKeys = allKeys;
   "restic/localstorage.env.age".publicKeys = allKeys;
   "restic/localstorage.pass.age".publicKeys = allKeys;

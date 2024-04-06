@@ -33,7 +33,7 @@
     ./services/netdata
     ./services/tailscale.nix
     ## Media
-    ./services/sabnzbd
+    ./services/sabnzbd.nix
     ./services/plex.nix
     ./services/prowlarr.nix
     ./services/radarr.nix
@@ -43,10 +43,10 @@
     # ./services/rclone.nix
     # ./services/rsync.nix
     ./services/samba.nix
-    # ./services/restic/healthchecks.nix
+    ./services/restic/b2-copy.nix
     ./services/restic/restic-user.nix
     ./services/restic/local-storage.nix
-    # ./services/restic/b2.nix
+    ./services/restic/b2.nix
     # ./services/restic/exthdd.nix
     # ./services/restic/nas_maintenance.nix
 
@@ -110,7 +110,7 @@
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
-      fileSystems = [ "/" ];
+      fileSystems = [ "/" "/storage" ];
     };
   };
 

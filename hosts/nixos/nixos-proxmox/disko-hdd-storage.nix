@@ -2,8 +2,8 @@
   disko.devices = {
     disk = {
       # note: disko only supports single-drive BTRFS arrays,
-      # so after manual partitioning of second drive, run
-      # `btrfs balance start -v convert=raid1,soft /storage`
+      # so add second drive with `btrfs device add /dev/disk/by-id/XXXXXXXX /storage`,
+      # then run `btrfs balance start -v convert=raid1,soft /storage`
       # optionally with `--background`
       # `soft` means not to re-convert chunks that already have desired profile
       storage1 = {

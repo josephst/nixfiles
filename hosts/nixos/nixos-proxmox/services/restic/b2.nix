@@ -11,15 +11,17 @@ let
     "--read-data-subset 500M"
     "--with-cache"
   ];
+  localPath = "/storage/restic";
 in
 {
   services.restic.backups.b2 = {
     initialize = false;
     user = "restic";
+    # env file contains $RCLONE_REMOTE, HD_UUID, and RCLONE_CONFIG_B2_{TYPE,ACCOUNT,KEY,HARD_DELETE)} options
     environmentFile = config.age.secrets.resticb2env.path;
-    passwordFile = config.age.secrets.resticpass.path;
-    rcloneConfigFile = config.age.secrets.rcloneConf.path;
-    repository = "rclone:\$\{RCLONE_REMOTE\}";
+    # password of restic repo
+    passwordFile = config.age.secrets.restic-localstorage-pass.path;
+    repository = "rclone:$RCLONE_REMOTE";
     inherit pruneOpts;
     inherit checkOpts;
     timerConfig = {
@@ -29,7 +31,10 @@ in
     };
     backupPrepareCommand = ''
       ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
-      ${pkgs.rclone}/bin/rclone sync -v $RCLONE_LOCAL $RCLONE_REMOTE --transfers=16
+
+      # copy local backup to Backblaze B2
+      # (restic doesn't actually back up any additional files with this job, just syncs/checks/prunes)
+      ${pkgs.rclone}/bin/rclone sync -v ${localPath} $RCLONE_REMOTE --transfers=16
     '';
     backupCleanupCommand = ''
       output=$(journalctl --unit restic-backups-b2.service --since=yesterday --boot --no-pager | \

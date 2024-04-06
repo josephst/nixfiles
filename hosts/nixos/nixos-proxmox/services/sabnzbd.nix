@@ -22,11 +22,4 @@ in
     '';
     useACMEHost = fqdn;
   };
-
-  systemd.services.sabnzbd = {
-    after = [
-      "network.target"
-      "mnt-nas.automount"
-    ];
-  };
 }
