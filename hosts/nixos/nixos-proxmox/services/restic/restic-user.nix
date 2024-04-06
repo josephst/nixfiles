@@ -1,10 +1,8 @@
 { config, pkgs, ... }:
 {
   users.users.restic = {
-    isSystemUser = true;
     group = "restic";
-    # home = cfg.dataDir;
-    createHome = false;
+    createHome = true;
     uid = config.ids.uids.restic;
     extraGroups = [ "systemd-journal" ]; # to view journals and send to healthchecks.io
   };

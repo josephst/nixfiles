@@ -44,14 +44,11 @@
 
     ## Backup
     # ./services/rclone.nix
-    # ./services/rsync.nix
     ./services/restic/b2-copy.nix
     ./services/restic/b2-check.nix
     ./services/restic/restic-user.nix
     ./services/restic/local-storage.nix
-    # ./services/restic/b2.nix
-    # ./services/restic/exthdd.nix
-    # ./services/restic/nas_maintenance.nix
+    ./services/restic/restic-rest-server.nix
 
     ## Dashboard
     ./services/homepage

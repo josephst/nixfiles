@@ -138,7 +138,7 @@ in
     users.users.restic = {
       group = "restic";
       home = cfg.dataDir;
-      createHome = false;
+      createHome = true;
       uid = config.ids.uids.restic;
     };
 
