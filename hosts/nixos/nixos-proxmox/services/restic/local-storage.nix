@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   pruneOpts = [
     "--keep-daily 30"
@@ -11,6 +11,13 @@ let
     "--read-data-subset 5G"
     "--with-cache"
   ];
+
+  # healthcheckFinishScript = ''
+  #   # args: $1 is UUID, #2 is exit status (non-zero in case of failures)
+
+  #   output = $(systemctl status $1 -l -n 1000 | ${pkgs.coreutils}/bin/tail --bytes 100000)
+  #   ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 -o /dev/null "https://hc-ping.com/$1/$2" --data-raw $output
+  # '';
 in
 {
   # maintenance of the local restic repo(s) at /storage/restic
@@ -29,12 +36,22 @@ in
       RandomizedDelaySec = "1h";
     };
     backupPrepareCommand = ''
+      # preStart
       ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
     '';
-    backupCleanupCommand = ''
-      output=$(journalctl --unit restic-backups-localstorage.service --since=yesterday --boot --no-pager | \
-        ${pkgs.coreutils}/bin/tail --bytes 100000)
-      ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$?" --data-raw "$output"
-    '';
+  };
+
+  systemd.services."restic-backups-localstorage" = {
+    onSuccess = ["restic-notify-localstorage@success.service"];
+    onFailure = ["restic-notify-localstorage@failure.service"];
+  };
+
+  systemd.services."restic-notify-localstorage@" = {
+    serviceConfig = {
+      EnvironmentFile = config.age.secrets.restic-localstorage-env.path; # contains heathchecks.io UUID
+      User = "restic"; # to read env file
+    };
+    script = (import ./healthcheckScript.nix {inherit lib pkgs; });
+    scriptArgs = "$HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
   };
 }

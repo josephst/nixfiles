@@ -3,7 +3,9 @@ let
   localPath = "/storage/restic";
 in
 {
-  imports = [./rcloneRemoteDir.nix]; # sets config.age.secrets.rcloneRemoteDir.path
+  imports = [
+    ./rcloneRemoteDir.nix # sets config.age.secrets.rcloneRemoteDir.path
+  ];
 
   # age.secrets.rcloneConf # defined elsewhere
 

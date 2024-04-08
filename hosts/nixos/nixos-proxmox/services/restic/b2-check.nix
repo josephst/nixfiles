@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
 let
   pruneOpts = [
     "--keep-daily 30"
@@ -13,7 +13,9 @@ let
   ];
 in
 {
-  imports = [./rcloneRemoteDir.nix]; # sets config.age.secrets.rcloneRemoteDir.path
+  imports = [
+    ./rcloneRemoteDir.nix
+  ]; # sets config.age.secrets.rcloneRemoteDir.path
 
   # checks the repo on B2, no actual backing up performed
   services.restic.backups.b2 = {
@@ -25,10 +27,30 @@ in
     inherit pruneOpts;
     inherit checkOpts;
 
+    backupPrepareCommand = ''
+      # preStart
+      ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
+    '';
+
     timerConfig = {
       OnCalendar = "12:00";
       Persistent = true;
       RandomizedDelaySec = "1h";
     };
+  };
+
+  # TODO: refactor into a mkResticBackup script that's shared between LocalStorage and B2?
+  systemd.services."restic-backups-b2" = {
+    onSuccess = ["restic-notify-b2@success.service"];
+    onFailure = ["restic-notify-b2@failure.service"];
+  };
+
+  systemd.services."restic-notify-b2@" = {
+    serviceConfig = {
+      EnvironmentFile = config.age.secrets.resticb2env.path; # contains heathchecks.io UUID
+      User = "restic"; # to read env file
+    };
+    script = (import ./healthcheckScript.nix {inherit lib pkgs; });
+    scriptArgs = "$HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
   };
 }
