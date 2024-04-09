@@ -6,6 +6,7 @@
 }:
 let
   fqdn = config.networking.fqdn;
+  host_whitelist = "${config.networking.hostName},${fqdn}"; # comma-separated
 in
 {
   services.sabnzbd = {
@@ -21,5 +22,18 @@ in
       reverse_proxy http://localhost:8080
     '';
     useACMEHost = fqdn;
+  };
+
+  system.activationScripts.sabnzbd = {
+    text = ''
+      if [[ -e ${config.services.sabnzbd.configFile} ]]; then
+        # file exists, modify it
+        ${pkgs.gnused}/bin/sed 's/host_whitelist = .*/host_whitelist = ${host_whitelist}/g'
+      else
+        # create new file
+        echo "host_whitelist = ${host_whitelist}" > ${config.services.sabnzbd.configFile}
+        chown ${config.services.sabnzbd.user}:${config.services.sabnzbd.group} ${config.services.sabnzbd.configFile}
+      fi
+      '';
   };
 }

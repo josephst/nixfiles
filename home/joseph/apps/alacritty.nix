@@ -8,20 +8,20 @@
     settings = {
       shell = "${pkgs.fish}/bin/fish";
       env = {
-        TERM = "xterm-256color-italic";
+        TERM = "xterm-256color";
       };
       window = {
-        opacity = 0.9;
+        opacity = 1;
         dynamic_title = true;
         dynamic_padding = false;
         decorations = "buttonless";
         dimensions = {
           columns = 100;
-          lines = 85;
+          lines = 60;
         };
         padding = {
-          x = 25;
-          y = 20;
+          x = 15;
+          y = 10;
         };
         # option_as_alt = "Both"; # supported in v0.12
       };
