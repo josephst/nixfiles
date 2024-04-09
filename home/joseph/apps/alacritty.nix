@@ -7,18 +7,21 @@
     enable = true;
     settings = {
       shell = "${pkgs.fish}/bin/fish";
+      env = {
+        TERM = "xterm-256color-italic";
+      };
       window = {
-        opacity = 1;
+        opacity = 0.9;
         dynamic_title = true;
-        dynamic_padding = true;
-        decorations = "full";
+        dynamic_padding = false;
+        decorations = "buttonless";
         dimensions = {
-          lines = 0; # use recommended size
-          columns = 0;
+          columns = 100;
+          lines = 85;
         };
         padding = {
-          x = 5;
-          y = 5;
+          x = 25;
+          y = 20;
         };
         # option_as_alt = "Both"; # supported in v0.12
       };
@@ -96,7 +99,7 @@
             family = fontname;
             style = "Light";
           };
-          size = 12;
+          size = 14;
         };
       cursor.style = "Block";
       colors = {
