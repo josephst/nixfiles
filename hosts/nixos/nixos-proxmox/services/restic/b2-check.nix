@@ -21,6 +21,7 @@ in
   services.restic.backups.b2 = {
     initialize = false;
     user = "restic";
+    environmentFile = config.age.secrets.resticb2env.path;
     passwordFile = config.age.secrets.restic-localstorage-pass.path; # remote has same password as local
     repositoryFile = config.age.secrets.b2WithRclone.path;
     rcloneConfigFile = config.age.secrets.rcloneConf.path;

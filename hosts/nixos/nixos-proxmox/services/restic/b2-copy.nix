@@ -12,9 +12,10 @@ in
   services.restic.clone = {
     enable = true;
     dataDir = localPath;
-    remoteDirFile = config.age.secrets.rcloneRemoteDir.path;
+    environmentFile = config.age.secrets.rcloneRemoteDir.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
     extraRcloneArgs = [ "--transfers=16" "--b2-hard-delete" "-v" ];
+    pingHealthchecks = true;
 
     timerConfig = {
       OnCalendar = "06:00";

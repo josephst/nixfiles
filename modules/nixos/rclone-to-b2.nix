@@ -7,6 +7,14 @@ with lib;
 let
   cfg = config.services.restic.clone;
   inherit (utils.systemdUtils.unitOptions) unitOption;
+
+  stopScript = pkgs.writeShellScript "healthchecks" ''
+    OUTPUT=$(${pkgs.systemd}/bin/systemctl status "rclone-copy.service" -l -n 1000 | ${pkgs.coreutils}/bin/tail --bytes 100000)
+    HC_UUID=$1
+    EXIT_STATUS=''${2:-0} # two single quotes are the escape sequence here
+          
+    ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$EXIT_STATUS" --data-raw "$OUTPUT"
+  '';
 in
 {
   meta.maintainers = [ maintainers.josephst ];
@@ -30,7 +38,7 @@ in
       example = "b2:foobar/restic";
     };
 
-    remoteDirFile = mkOption {
+    environmentFile = mkOption {
       default = null;
       type = types.nullOr types.str;
       description = lib.mdDoc ''
@@ -39,10 +47,12 @@ in
         Using the usual systemd EnvironmentFile syntax.
 
         *Must* have key named "REMOTE"
+        May also have HC_UUID set to provide UUID for healthchecks.io
         
         Example file:
         ```
         REMOTE=b2:example/rclone
+        HC_UUID=<uuid>
         ```
 
         For this example, will need to make sure `b2` is a configured backend in rclone.conf
@@ -63,9 +73,15 @@ in
 
     rcloneConfFile = mkOption {
       type = types.str;
-      description = lib.mdDoc "Path to rclone.conf file (must be readable by same user as this service)";
+      description = lib.mdDoc "Path to `rclone.conf` file (must be readable by same user as this service)";
       example = "/var/run/agenix/rcloneConf";
       default = "/etc/rclone.conf";
+    };
+
+    pingHealthchecks = mkOption {
+      type = types.bool;
+      description = lib.mdDoc "Try to ping start/stop and send logs to healthchecks.io. Set HC_UUID as environment variable (cfg.environmentFile) to configure.";
+      default = false;
     };
 
     timerConfig = mkOption {
@@ -94,8 +110,8 @@ in
       { assertion = (config.services.restic.clone.dataDir != null);
         message = "services.restic.clone.dataDir must be a valid path";
       } {
-        assertion = (config.services.restic.clone.remoteDir == null) != (config.services.restic.clone.remoteDirFile == null);
-        message = "exactly one of remoteDir or remoteDirFile cannot be null";
+        assertion = (config.services.restic.clone.remoteDir == null) != (config.services.restic.clone.environmentFile == null);
+        message = "exactly one of remoteDir or environmentFile cannot be null";
       } {
         assertion = (config.services.restic.clone.rcloneConfFile != null);
         message = "must provide a Rclone config file";
@@ -111,8 +127,9 @@ in
         extraArgs = utils.escapeSystemdExecArgs cfg.extraRcloneArgs;
       in {
         LoadCredential = "rcloneConf:${cfg.rcloneConfFile}";
-        EnvironmentFile = lib.mkIf (cfg.remoteDirFile != null) cfg.remoteDirFile;
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/rclone --config=\${CREDENTIALS_DIRECTORY}/rcloneConf sync ${cfg.dataDir} ${remote} ${extraArgs}";
+
         Type = "oneshot";
         User = "restic"; # TODO: allow configuation of user/group
         Group = "restic";
@@ -125,6 +142,9 @@ in
         ProtectKernelModules = true;
         ProtectControlGroups = true;
         PrivateDevices = true;
+      } // lib.optionalAttrs cfg.pingHealthchecks {
+        ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${HC_UUID}/start"'';
+        ExecStopPost = "${stopScript} $HC_UUID $EXIT_STATUS";
       };
     };
 
