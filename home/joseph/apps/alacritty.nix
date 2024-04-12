@@ -16,8 +16,8 @@
         dynamic_padding = false;
         decorations = "buttonless";
         dimensions = {
-          columns = 100;
-          lines = 60;
+          columns = 110;
+          lines = 50;
         };
         padding = {
           x = 15;
@@ -99,7 +99,7 @@
             family = fontname;
             style = "Light";
           };
-          size = 14;
+          size = 12;
         };
       cursor.style = "Block";
       colors = {
