@@ -1,13 +1,13 @@
 { config, pkgs, ... }:
 let
-  port = toString 8081;
+  port = 8081;
   fqdn = config.networking.fqdn;
 in
 {
   services.restic.server = {
     enable = true;
     dataDir = "/storage/restic";
-    listenAddress = ":" + port;
+    listenAddress = port;
     extraFlags = [ "--no-auth" ]; # auth managed by tailscale
   };
 
