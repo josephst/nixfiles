@@ -12,7 +12,7 @@ let
     OUTPUT=$(${pkgs.systemd}/bin/systemctl status "rclone-copy.service" -l -n 1000 | ${pkgs.coreutils}/bin/tail --bytes 100000)
     HC_UUID=$1
     EXIT_STATUS=''${2:-0} # two single quotes are the escape sequence here
-          
+
     ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$EXIT_STATUS" --data-raw "$OUTPUT"
   '';
 in
@@ -20,12 +20,12 @@ in
   meta.maintainers = [ maintainers.josephst ];
 
   options.services.restic.clone = {
-    enable = mkEnableOption (lib.mdDoc "Sync Restic repos to B2 using Rclone (ie will also delete from remote)");
+    enable = mkEnableOption ("Sync Restic repos to B2 using Rclone (ie will also delete from remote)");
 
     dataDir = mkOption {
       default = "/var/lib/restic/";
       type = types.str;
-      description = lib.mdDoc "The local restic repository to be copied from.";
+      description = "The local restic repository to be copied from.";
     };
 
     # TODO:
@@ -34,21 +34,21 @@ in
     remoteDir = mkOption {
       default = null;
       type = types.nullOr types.str;
-      description = lib.mdDoc "The remote Rclone-supported backend to copy repository to";
+      description = "The remote Rclone-supported backend to copy repository to";
       example = "b2:foobar/restic";
     };
 
     environmentFile = mkOption {
       default = null;
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         Path to a file containing the name of a remote \
-        Rclone-supported backend to copy repository to. 
+        Rclone-supported backend to copy repository to.
         Using the usual systemd EnvironmentFile syntax.
 
         *Must* have key named "REMOTE"
         May also have HC_UUID set to provide UUID for healthchecks.io
-        
+
         Example file:
         ```
         REMOTE=b2:example/rclone
@@ -63,7 +63,7 @@ in
     extraRcloneArgs = mkOption {
       type = types.listOf types.str;
       default = [ "--transfers=16" "--b2-hard-delete" ];
-      description = lib.mdDoc ''
+      description = ''
         Extra arguments passed to rclone
       '';
       example = [
@@ -73,14 +73,14 @@ in
 
     rcloneConfFile = mkOption {
       type = types.str;
-      description = lib.mdDoc "Path to `rclone.conf` file (must be readable by same user as this service)";
+      description = "Path to `rclone.conf` file (must be readable by same user as this service)";
       example = "/var/run/agenix/rcloneConf";
       default = "/etc/rclone.conf";
     };
 
     pingHealthchecks = mkOption {
       type = types.bool;
-      description = lib.mdDoc "Try to ping start/stop and send logs to healthchecks.io. Set HC_UUID as environment variable (cfg.environmentFile) to configure.";
+      description = "Try to ping start/stop and send logs to healthchecks.io. Set HC_UUID as environment variable (cfg.environmentFile) to configure.";
       default = false;
     };
 
@@ -90,7 +90,7 @@ in
         OnCalendar = "daily";
         Persistent = true;
       };
-      description = lib.mdDoc ''
+      description = ''
         When to run rclone. See {manpage}`systemd.timer(5)` for
         details. If null no timer is created and rclone will only
         run when explicitly started.
