@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  port = 8081;
+  port = toString 8081;
   fqdn = config.networking.fqdn;
 in
 {
