@@ -35,6 +35,6 @@ in
         echo "host_whitelist = ${host_whitelist}" > ${config.services.sabnzbd.configFile}
         chown ${config.services.sabnzbd.user}:${config.services.sabnzbd.group} ${config.services.sabnzbd.configFile}
       fi
-      '';
+    '';
   };
 }

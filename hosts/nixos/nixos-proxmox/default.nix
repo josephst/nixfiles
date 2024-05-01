@@ -42,7 +42,6 @@
     ./services/sonarr.nix
     ./services/samba.nix
 
-
     ## Backup
     # ./services/rclone.nix
     ./services/restic/b2-copy.nix
@@ -102,7 +101,10 @@
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
-      fileSystems = [ "/" "/storage" ];
+      fileSystems = [
+        "/"
+        "/storage"
+      ];
     };
   };
 

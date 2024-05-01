@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -56,18 +62,22 @@ in
         ```
 
         For this example, will need to make sure `b2` is a configured backend in rclone.conf
-        '';
+      '';
       example = "/var/run/agenix/rcloneRemoteDir";
     };
 
     extraRcloneArgs = mkOption {
       type = types.listOf types.str;
-      default = [ "--transfers=16" "--b2-hard-delete" ];
+      default = [
+        "--transfers=16"
+        "--b2-hard-delete"
+      ];
       description = ''
         Extra arguments passed to rclone
       '';
       example = [
-        "--transfers=16" "--b2-hard-delete"
+        "--transfers=16"
+        "--b2-hard-delete"
       ];
     };
 
@@ -107,12 +117,17 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = (config.services.restic.clone.dataDir != null);
+      {
+        assertion = (config.services.restic.clone.dataDir != null);
         message = "services.restic.clone.dataDir must be a valid path";
-      } {
-        assertion = (config.services.restic.clone.remoteDir == null) != (config.services.restic.clone.environmentFile == null);
+      }
+      {
+        assertion =
+          (config.services.restic.clone.remoteDir == null)
+          != (config.services.restic.clone.environmentFile == null);
         message = "exactly one of remoteDir or environmentFile cannot be null";
-      } {
+      }
+      {
         assertion = (config.services.restic.clone.rcloneConfFile != null);
         message = "must provide a Rclone config file";
       }
@@ -122,30 +137,33 @@ in
       description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
       wants = [ "network.target" ];
       after = [ "network.target" ];
-      serviceConfig = let
-        remote = if cfg.remoteDir != null then cfg.remoteDir else "$REMOTE";
-        extraArgs = utils.escapeSystemdExecArgs cfg.extraRcloneArgs;
-      in {
-        LoadCredential = "rcloneConf:${cfg.rcloneConfFile}";
-        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${cfg.package}/bin/rclone --config=\${CREDENTIALS_DIRECTORY}/rcloneConf sync ${cfg.dataDir} ${remote} ${extraArgs}";
+      serviceConfig =
+        let
+          remote = if cfg.remoteDir != null then cfg.remoteDir else "$REMOTE";
+          extraArgs = utils.escapeSystemdExecArgs cfg.extraRcloneArgs;
+        in
+        {
+          LoadCredential = "rcloneConf:${cfg.rcloneConfFile}";
+          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+          ExecStart = "${cfg.package}/bin/rclone --config=\${CREDENTIALS_DIRECTORY}/rcloneConf sync ${cfg.dataDir} ${remote} ${extraArgs}";
 
-        Type = "oneshot";
-        User = "restic"; # TODO: allow configuation of user/group
-        Group = "restic";
+          Type = "oneshot";
+          User = "restic"; # TODO: allow configuation of user/group
+          Group = "restic";
 
-        # Security hardening
-        ReadWritePaths = [ cfg.dataDir ];
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-        PrivateDevices = true;
-      } // lib.optionalAttrs cfg.pingHealthchecks {
-        ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${HC_UUID}/start"'';
-        ExecStopPost = "${stopScript} $HC_UUID $EXIT_STATUS";
-      };
+          # Security hardening
+          ReadWritePaths = [ cfg.dataDir ];
+          PrivateTmp = true;
+          ProtectSystem = "strict";
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          PrivateDevices = true;
+        }
+        // lib.optionalAttrs cfg.pingHealthchecks {
+          ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${HC_UUID}/start"'';
+          ExecStopPost = "${stopScript} $HC_UUID $EXIT_STATUS";
+        };
     };
 
     systemd.timers = mkIf (cfg.timerConfig != null) {
