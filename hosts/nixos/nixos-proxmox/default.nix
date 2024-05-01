@@ -31,6 +31,7 @@
     # ./services/coredns
     ./services/dnsmasq.nix
     ./services/netdata
+    ./services/ollama.nix
     ./services/tailscale.nix
 
     ## Media & Sharing
