@@ -30,12 +30,14 @@ in
 
       # nix
       cachix
+      nix-init # for creating new packages
       nix-prefetch
       nix-update
       nixpkgs-fmt
       nixpkgs-hammering
       nixpkgs-review
       nil
+      nurl # for fetching src for packages
 
       # GPT
       llamaPackages.llama-cpp # from llama-cpp overlay
