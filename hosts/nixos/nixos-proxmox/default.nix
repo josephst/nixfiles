@@ -31,8 +31,11 @@
     # ./services/coredns
     ./services/dnsmasq.nix
     ./services/netdata
-    ./services/ollama.nix
     ./services/tailscale.nix
+
+    # LLM
+    ./services/ollama.nix
+    ./services/open-webui.nix
 
     ## Media & Sharing
     ./services/sabnzbd.nix
@@ -41,7 +44,6 @@
     ./services/radarr.nix
     ./services/sonarr.nix
     ./services/samba.nix
-
 
     ## Backup
     # ./services/rclone.nix
@@ -102,7 +104,10 @@
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
-      fileSystems = [ "/" "/storage" ];
+      fileSystems = [
+        "/"
+        "/storage"
+      ];
     };
   };
 
