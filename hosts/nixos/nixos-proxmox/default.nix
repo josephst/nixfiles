@@ -31,8 +31,11 @@
     # ./services/coredns
     ./services/dnsmasq.nix
     ./services/netdata
-    ./services/ollama.nix
     ./services/tailscale.nix
+
+    # LLM
+    ./services/ollama.nix
+    ./services/open-webui.nix
 
     ## Media & Sharing
     ./services/sabnzbd.nix
