@@ -22,7 +22,7 @@ in
       path = "/home/${user}/.config/gh/hosts.yml";
       owner = user;
     };
-  }
+  };
 
   ###########################
 
