@@ -1,6 +1,7 @@
 { pkgs, lib, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+  signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop";
 in
 {
   programs.git = {
@@ -8,13 +9,16 @@ in
     userEmail = "1269177+josephst@users.noreply.github.com";
     userName = "Joseph Stahl";
     signing = {
-      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop";
+      key = signingKey;
       signByDefault = true;
     };
     extraConfig = {
       credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
-      gpg.format = "ssh";
-      gpg.ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      gpg = {
+        format = "ssh";
+        ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+        ssh.allowedSignersFile = "~/.ssh/allowed_signers";
+      };
       init.defaultBranch = "main";
       push.autoSetupRemote = "true";
       pull.rebase = "true";
@@ -50,4 +54,8 @@ in
 
     package = if isDarwin then (pkgs.git.override { osxkeychainSupport = false; }) else pkgs.git;
   };
+
+  home.file.".ssh/allowed_signers".text = ''
+    1269177+josephst@users.noreply.github.com ${signingKey}
+  '';
 }
