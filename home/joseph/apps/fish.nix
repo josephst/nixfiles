@@ -41,6 +41,6 @@ in
     #       end
     #     end
     #   '';
-    loginShellInit = lib.mkIf isDarwin "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /nix/var/nix/profiles/default/bin /run/current-system/sw/bin";
+    # loginShellInit = lib.mkIf isDarwin "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /nix/var/nix/profiles/default/bin /run/current-system/sw/bin";
   };
 }

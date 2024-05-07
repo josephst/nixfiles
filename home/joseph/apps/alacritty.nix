@@ -6,7 +6,10 @@
     # the homebrew cask provides a nice app for Finder/ Spotlight
     enable = true;
     settings = {
-      shell = "${pkgs.fish}/bin/fish";
+      shell = {
+        program = "${pkgs.fish}/bin/fish";
+        args = [ "-l" ];
+      };
       env = {
         TERM = "xterm-256color";
       };

@@ -73,7 +73,6 @@ in
   };
 
   environment.loginShellInit = lib.mkIf (config.homebrew.enable) ''
-    # only works on Apple Silicon (since Homebrew installed to /opt)
     eval $(${brewPrefix}/brew shellenv)
   '';
 }
