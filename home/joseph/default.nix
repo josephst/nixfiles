@@ -35,6 +35,7 @@ in
       nix-update
       nixpkgs-fmt
       nixpkgs-hammering
+      nix-output-monitor
       nixpkgs-review
       nil
       nurl # for fetching src for packages
