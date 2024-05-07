@@ -72,7 +72,10 @@
 
   # programs.(fish|zsh).enable must be defined here *and* in home-manager section
   # otherwise, nix won't be added to path in fish shell
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    useBabelfish = true;
+  };
   programs.zsh.enable = true;
   programs.bash.enableCompletion = true;
 }

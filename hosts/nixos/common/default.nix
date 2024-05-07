@@ -80,10 +80,6 @@
     ssh = {
       startAgent = true;
     };
-    fish = {
-      # workaround for https://github.com/NixOS/nixpkgs/issues/173421
-      useBabelfish = true;
-    };
   };
 
   services = {
