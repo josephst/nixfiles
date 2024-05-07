@@ -14,11 +14,11 @@ in
       lib.filter (e: e.type == "rsa" || e.type == "ed25519") config.services.openssh.hostKeys
     );
 
-  age.secrets.joseph.file = ../../../secrets/users/joseph.age;
-
   age.secrets = {
+    joseph.file = ../../../secrets/users/joseph.age; # password
+
     "gh/hosts.yml" = {
-      file = "../../secrets/gh_hosts.yml.age";
+      file = ../../../secrets/gh_hosts.yml.age;
       path = "/home/${user}/.config/gh/hosts.yml";
       owner = user;
     };
