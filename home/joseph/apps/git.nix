@@ -14,7 +14,7 @@ in
     extraConfig = {
       credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
       gpg.format = "ssh";
-      gpg.ssh.program = lib.optionalString isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      gpg.ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       init.defaultBranch = "main";
       push.autoSetupRemote = "true";
       pull.rebase = "true";
