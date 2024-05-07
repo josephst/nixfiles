@@ -16,6 +16,14 @@ in
 
   age.secrets.joseph.file = ../../../secrets/users/joseph.age;
 
+  age.secrets = {
+    "gh/hosts.yml" = {
+      file = "../../secrets/gh_hosts.yml.age";
+      path = "/home/${user}/.config/gh/hosts.yml";
+      owner = user;
+    };
+  }
+
   ###########################
 
   # age.secrets."github-ssh-key" = {
