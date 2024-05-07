@@ -8,9 +8,8 @@ in
     userEmail = "1269177+josephst@users.noreply.github.com";
     userName = "Joseph Stahl";
     signing = {
-      # only sign on macOS for now (simplicity)
-      key = lib.optionalString isDarwin "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop";
-      signByDefault = isDarwin;
+      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop";
+      signByDefault = true;
     };
     extraConfig = {
       credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
