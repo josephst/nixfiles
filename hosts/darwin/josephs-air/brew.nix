@@ -1,3 +1,7 @@
+{lib, config, ...}:
+let
+  brewPrefix = config.homebrew.brewPrefix;
+in
 {
   homebrew = {
     enable = true;
@@ -67,4 +71,9 @@
       "Xcode" = 497799835;
     };
   };
+
+  environment.loginShellInit = lib.mkIf (config.homebrew.enable) ''
+    # only works on Apple Silicon (since Homebrew installed to /opt)
+    eval $(${brewPrefix}/brew shellenv)
+  '';
 }
