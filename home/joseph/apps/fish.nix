@@ -7,6 +7,7 @@ in
     enable = true;
     plugins = [ ];
     interactiveShellInit = ''
+      source ~/.config/op/plugins.sh #1password CLI
       if test "$TERM_PROGRAM" != "vscode"
         set ZELLIJ_AUTO_ATTACH true
       end
