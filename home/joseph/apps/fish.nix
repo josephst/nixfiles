@@ -6,6 +6,11 @@ in
   programs.fish = {
     enable = true;
     plugins = [ ];
+    interactiveShellInit = ''
+      if test "$TERM_PROGRAM" != "vscode"
+        set ZELLIJ_AUTO_ATTACH true
+      end
+    '';
     # interactiveShellInit =
     #   (
     #     if isDarwin then
