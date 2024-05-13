@@ -33,7 +33,7 @@ in
       nix-init # for creating new packages
       nix-prefetch
       nix-update
-      nixpkgs-fmt
+      nixfmt-rfc-style
       nixpkgs-hammering
       nix-output-monitor
       nixpkgs-review

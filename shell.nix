@@ -9,7 +9,7 @@
     NIX_CONFIG = "experimental-features = nix-command flakes";
     nativeBuildInputs = with pkgs; [
       agenix
-      alejandra
+      nixfmt-rfc-style
       bash
       curl
       git
