@@ -1,5 +1,5 @@
 # home manager config
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 in
@@ -98,19 +98,26 @@ in
       enable = true;
       settings = {
         command_timeout = 800;
+        line_break = {
+          disabled = true;
+        };
       };
     };
     zoxide.enable = true;
   };
 
-  programs.starship.settings = {
-    line_break = {
-      disabled = true;
-    };
-  };
-
   xdg = {
-    # todo: look into this option more
-    enable = false;
+    enable = true;
+    configFile = {
+      # put various config files here (".text = builtins.readFile "foobar" or .source = )
+    };
+
+    userDirs = {
+      enable = isLinux;
+      createDirectories = true;
+      extraConfig = {
+        XDG_SCREENSHOTS_DIR = "${config.xdg.userDirs.pictures}/Screenshots";
+      };
+    };
   };
 }
