@@ -21,7 +21,7 @@ in
         or with an accessible API endpoint.
       '';
 
-      package = mkPackageOption pkgs "open-webui" {};
+      package = mkPackageOption pkgs "open-webui" { };
 
       host = mkOption {
         type = types.str;
@@ -91,8 +91,6 @@ in
       };
     };
 
-    networking.firewall = lib.mkIf cfg.openFirewall{
-      allowedTCPPorts = [ cfg.port ];
-    };
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 }

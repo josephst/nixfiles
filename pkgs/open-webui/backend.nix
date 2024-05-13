@@ -61,7 +61,7 @@ let
       # opencv-python-headless
       # rapidocr-onnxruntime
 
-      (fpdf2.overridePythonAttrs(old: {
+      (fpdf2.overridePythonAttrs (old: {
         disabledTests = old.disabledTests ++ [
           "test_bidi_character" # tries to download file
           "test_bidi_conformance" # tries to download file
