@@ -67,7 +67,7 @@ in
       spoof-mac
       tldr # cheatsheets in terminal
       yt-dlp
-      ffmpeg_6
+      ffmpeg
 
       # languages
       nim
