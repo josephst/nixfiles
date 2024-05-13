@@ -30,6 +30,7 @@ in
 
       # nix
       cachix
+      hydra-check
       nix-init # for creating new packages
       nix-prefetch
       nix-update
@@ -58,7 +59,7 @@ in
       jq
       less
       ncdu
-      python311
+      python312
       rclone
       restic
       rsync
