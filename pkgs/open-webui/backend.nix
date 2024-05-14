@@ -74,13 +74,10 @@ let
 
       pyjwt
 
-      black
+      # black
       # langfuse
       youtube-transcript-api
-
-      # torch
-      # torchvision
-      # torchaudio
+      pytube
 
       # missing?
       beautifulsoup4

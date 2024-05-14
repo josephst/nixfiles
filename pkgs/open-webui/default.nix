@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 let
-  version = "v0.1.123"; # version tag
+  version = "v0.1.124"; # version tag
   pname = "open-webui";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-GWNh6PAFhFVJEEnbE+XtxKUnDhBdAA1OtEW4SeJPbfA=";
+    hash = "sha256-r3oZiN2UIhPAG+ZcsZrXD1OemJrWXXlZdKVhK3+VhhU=";
   };
 
   # backend acts as reverse proxy, sending requests to ollama
