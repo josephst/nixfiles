@@ -1,32 +1,30 @@
-# from https://github.com/nix-community/srvos/blob/main/nixos/server/default.nix
-
 # A default configuration that applies to all servers.
 # Common configuration across *all* the machines
 { pkgs, lib, ... }:
 {
 
-  imports = [ ../common ];
+  imports = [
+    ../common
+  ];
 
-  environment =
-    {
-      # List packages installed in system profile.
-      systemPackages = map lib.lowPrio [
-        pkgs.curl
-        pkgs.dnsutils
-        pkgs.gitMinimal
-        pkgs.htop
-        pkgs.jq
-        pkgs.tmux
-        pkgs.zellij
-      ];
-      # Print the URL instead on servers
-      variables.BROWSER = "echo";
-    }
-    // lib.optionalAttrs (lib.versionAtLeast (lib.versions.majorMinor lib.version) "24.05") {
-      # Don't install the /lib/ld-linux.so.2 and /lib64/ld-linux-x86-64.so.2
-      # stubs. Server users should know what they are doing.
-      stub-ld.enable = lib.mkDefault false;
-    };
+  environment = {
+    # List packages installed in system profile.
+    systemPackages = map lib.lowPrio [
+      pkgs.curl
+      pkgs.dnsutils
+      pkgs.gitMinimal
+      pkgs.htop
+      pkgs.jq
+      # pkgs.tmux
+      pkgs.zellij
+    ];
+    # Print the URL instead on servers
+    variables.BROWSER = "echo";
+  } // lib.optionalAttrs (lib.versionAtLeast (lib.versions.majorMinor lib.version) "24.05") {
+    # Don't install the /lib/ld-linux.so.2 and /lib64/ld-linux-x86-64.so.2
+    # stubs. Server users should know what they are doing.
+    stub-ld.enable = lib.mkDefault false;
+  };
 
   # Notice this also disables --help for some commands such es nixos-rebuild
   # documentation.enable = lib.mkDefault false;
@@ -46,10 +44,7 @@
   networking.hostName = lib.mkDefault "";
 
   # If the user is in @wheel they are trusted by default.
-  nix.settings.trusted-users = [
-    "root"
-    "@wheel"
-  ];
+  nix.settings.trusted-users = [ "root" "@wheel" ];
 
   security.sudo.wheelNeedsPassword = false;
 

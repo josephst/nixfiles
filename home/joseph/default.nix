@@ -1,109 +1,28 @@
 # home manager config
-{ pkgs, lib, config, ... }:
+{ pkgs, config, lib, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+  username = "joseph";
 in
 {
   imports = [
-    ./apps/alacritty.nix
-    ./apps/bash.nix
-    ./apps/bat.nix
-    ./apps/bottom.nix
-    ./apps/direnv.nix
-    ./apps/fish.nix
-    ./apps/fzf.nix
-    ./apps/git.nix
-    ./apps/lsd.nix
-    ./apps/neovim.nix
-    ./apps/nushell
-    ./apps/ssh.nix
-    ./apps/zellij.nix
-    ./apps/zsh.nix
+    ./features/cli
+    ./features/gui # this module will disable if config.myconfig.headless is true
   ];
 
+  # Home Manager configuration/ options
   home = {
-    username = "joseph";
-    homeDirectory = if isDarwin then "/Users/joseph" else "/home/joseph";
-    packages = with pkgs; [
-      # custom packages
-      recyclarr
+    inherit username;
+    homeDirectory = if isDarwin then "/Users/${username}" else "/home/${username}";
+    sessionPath = ["$HOME/.local/bin"];
 
-      # nix
-      cachix
-      hydra-check
-      nix-init # for creating new packages
-      nix-prefetch
-      nix-update
-      nixfmt-rfc-style
-      nixpkgs-hammering
-      nix-output-monitor
-      nixpkgs-review
-      nil
-      nurl # for fetching src for packages
-
-      # GPT
-      llamaPackages.llama-cpp # from llama-cpp overlay
-      python311Packages.huggingface-hub
-
-      # misc
-      age
-      bashInteractive
-      cmake
-      croc # file sharing
-      exiftool
-      fd
-      gh
-      hugo
-      httpie
-      just
-      jq
-      less
-      ncdu
-      python312
-      rclone
-      restic
-      rsync
-      silver-searcher
-      spoof-mac
-      tldr # cheatsheets in terminal
-      yt-dlp
-      ffmpeg
-
-      # languages
-      nim
-      nimble # package manager for nim
-      nodejs
-      cargo
-      rustc
-      zigpkgs.master
-
-      # python
-      python311Packages.poetry-core
-    ];
     stateVersion = "22.11";
+
     shellAliases = {
       top = "btm";
       copy = "rsync --archive --verbose --human-readable --partial --progress --modify-window=1"; # copy <source> <destination>
       cat = "bat --paging=never --style=plain,header";
     };
-  };
-
-  programs = {
-    atuin.enable = true;
-    gitui.enable = true;
-    lazygit.enable = true;
-    home-manager.enable = true;
-    ripgrep.enable = true;
-    starship = {
-      enable = true;
-      settings = {
-        command_timeout = 800;
-        line_break = {
-          disabled = true;
-        };
-      };
-    };
-    zoxide.enable = true;
   };
 
   xdg = {

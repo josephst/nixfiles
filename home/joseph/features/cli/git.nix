@@ -12,6 +12,13 @@ in
       key = signingKey;
       signByDefault = true;
     };
+    aliases = {
+      p = "pull --ff-only";
+      ff = "merge --ff-only";
+      graph = "log --decorate --oneline --graph";
+      pushall = "!git remote | xargs -L1 git push --all";
+      add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
+    };
     extraConfig = {
       credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
       gpg = {
@@ -20,7 +27,8 @@ in
         ssh.allowedSignersFile = "~/.ssh/allowed_signers";
       };
       init.defaultBranch = "main";
-      push.autoSetupRemote = "true";
+      # Automatically track remote branch
+      push.autoSetupRemote = true;
       pull.rebase = "true";
       rebase.autosquash = "true";
       # rebase.autostash = "true";
@@ -50,6 +58,7 @@ in
 
       # Nix-specific
       ".devenv"
+      ".direnv"
     ];
 
     package = if isDarwin then (pkgs.git.override { osxkeychainSupport = false; }) else pkgs.git;

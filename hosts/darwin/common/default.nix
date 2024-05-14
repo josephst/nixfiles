@@ -1,5 +1,5 @@
 # system-wide nix config (ie NOT home-manager stuff)
-{ inputs, pkgs, ... }:
+{ pkgs, ... }:
 {
   imports = [ ./secrets.nix ];
 

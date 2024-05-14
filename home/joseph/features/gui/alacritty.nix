@@ -1,6 +1,6 @@
-{ pkgs, config, ... }:
+{ pkgs, config, osConfig, lib, ... }:
 {
-  programs.alacritty = {
+  programs.alacritty = lib.mkIf (!osConfig.myconfig.headless) {
     # also declared as a homebrew cask
     # duplication is so that configuration can be done here, and
     # the homebrew cask provides a nice app for Finder/ Spotlight

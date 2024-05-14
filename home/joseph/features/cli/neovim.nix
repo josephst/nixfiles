@@ -10,7 +10,7 @@
   xdg.configFile."nvim".source = pkgs.fetchFromGitHub {
     owner = "AstroNvim";
     repo = "AstroNvim";
-    rev = "v3.9.0";
-    sha256 = "sha256-kFY6FBS5jmpzRks62PKJbAG8/uaOdeFJMt6snBJkzJM=";
+    rev = "v4.6.7";
+    hash = "sha256-jvQdFwE2eKe3pmTJtM/Sro0DMirS+QE17w8/CvpXRBo=";
   };
 }
