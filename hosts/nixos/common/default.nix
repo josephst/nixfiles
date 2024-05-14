@@ -19,6 +19,9 @@
     ssh = {
       startAgent = true;
     };
+    nix-ld = {
+      enable = true; # necessary for VSCode Server support
+    };
   };
 
   services = {
