@@ -31,7 +31,7 @@ in
       };
   };
 
-  nix.settings.extra-trusted-users = [ "joseph" ];
+  nix.settings.trusted-users = [ "joseph" ];
 
   home-manager.users.joseph = import ../home/joseph;
 }

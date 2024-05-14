@@ -44,7 +44,7 @@
   networking.hostName = lib.mkDefault "";
 
   # If the user is in @wheel they are trusted by default.
-  nix.settings.trusted-users = [ "root" "@wheel" ];
+  # nix.settings.trusted-users = [ "root" "@wheel" ];
 
   security.sudo.wheelNeedsPassword = false;
 
