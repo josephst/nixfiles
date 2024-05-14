@@ -93,7 +93,7 @@
       };
       font =
         let
-          fontname = "FiraCode Nerd Font Mono";
+          fontname = "Iosevka";
         in
         {
           normal = {
@@ -101,12 +101,12 @@
             style = "Regular";
           };
           bold = {
-            family = fontname;
+            # family = fontname;
             style = "Bold";
           };
           italic = {
-            family = fontname;
-            style = "Light";
+            # family = fontname;
+            style = "Bold Italic";
           };
           size = 12;
         };

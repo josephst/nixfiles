@@ -51,6 +51,7 @@
           "Hack"
         ];
       })
+      iosevka-bin
     ];
   };
 }
