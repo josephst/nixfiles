@@ -17,7 +17,7 @@
     ./ripgrep.nix # better grep
     ./ssh.nix
     ./starship.nix
-    ./zellij.nix
+    ./zellij
   ];
 
   home.packages = with pkgs; [

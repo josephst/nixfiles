@@ -7,7 +7,6 @@
   pkgs,
   ...
 }:
-with lib;
 {
   # sudoers
   security.sudo.extraRules = [

@@ -1,4 +1,4 @@
 { pkgs, ... }:
 {
-  imports = [ ./alacritty.nix ];
+  imports = [ ./alacritty ];
 }
