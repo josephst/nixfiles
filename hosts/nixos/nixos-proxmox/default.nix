@@ -58,6 +58,8 @@
     # ./services/uptime-kuma.nix
   ];
 
+  myconfig.headless = true; # headless mode
+
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
   };

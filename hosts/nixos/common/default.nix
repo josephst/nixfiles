@@ -1,4 +1,8 @@
 {pkgs, lib, ...}: {
+  imports = [
+    ./secrets.nix
+  ];
+
   hardware = {
     enableRedistributableFirmware = true;
     enableAllFirmware = true;

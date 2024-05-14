@@ -1,5 +1,4 @@
-{ config, lib, pkgs, ...}: {
-
+{
   # common
   headless = import ../common/headless.nix;
 
