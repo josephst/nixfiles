@@ -13,7 +13,7 @@ buildNpmPackage {
     CYPRESS_INSTALL_BINARY = 0;
   };
 
-  npmDepsHash = "sha256-JlrUHOWqGOHhWQH193yCUZbT+SyDCjYPANjsLkmCT1o=";
+  npmDepsHash = "sha256-uLp8QlPUR1dfchwu0IhJ8FFMMkm3V+FK2KBc41Un86g=";
 
   installPhase = ''
     runHook preInstall
