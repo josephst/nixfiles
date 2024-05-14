@@ -1,5 +1,10 @@
 # home manager config
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
   username = "joseph";
@@ -14,7 +19,7 @@ in
   home = {
     inherit username;
     homeDirectory = if isDarwin then "/Users/${username}" else "/home/${username}";
-    sessionPath = ["$HOME/.local/bin"];
+    sessionPath = [ "$HOME/.local/bin" ];
 
     stateVersion = "22.11";
 

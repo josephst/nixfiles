@@ -1,6 +1,7 @@
-{...}: {
+{ ... }:
+{
   programs = {
-      starship = {
+    starship = {
       enable = true;
       settings = {
         command_timeout = 800;

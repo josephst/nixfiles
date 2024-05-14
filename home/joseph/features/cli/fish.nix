@@ -11,6 +11,6 @@ in
         if test "$TERM_PROGRAM" != "vscode"
           set ZELLIJ_AUTO_ATTACH true
         end
-      '';
+    '';
   };
 }

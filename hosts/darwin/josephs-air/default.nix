@@ -1,4 +1,9 @@
-{ inputs, pkgs, config, ... }:
+{
+  inputs,
+  pkgs,
+  config,
+  ...
+}:
 let
   hostname = "Josephs-MacBook-Air";
   user = "joseph";

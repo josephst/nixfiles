@@ -1,7 +1,6 @@
-{pkgs, lib, ...}: {
-  imports = [
-    ./secrets.nix
-  ];
+{ pkgs, lib, ... }:
+{
+  imports = [ ./secrets.nix ];
 
   hardware = {
     enableRedistributableFirmware = true;

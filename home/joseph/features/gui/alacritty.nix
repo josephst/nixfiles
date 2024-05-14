@@ -1,4 +1,10 @@
-{ pkgs, config, osConfig, lib, ... }:
+{
+  pkgs,
+  config,
+  osConfig,
+  lib,
+  ...
+}:
 {
   programs.alacritty = lib.mkIf (!osConfig.myconfig.headless) {
     # also declared as a homebrew cask

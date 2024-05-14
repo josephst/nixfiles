@@ -1,5 +1,4 @@
-{pkgs, ...}: {
-  imports = [
-    ./alacritty.nix
-  ];
+{ pkgs, ... }:
+{
+  imports = [ ./alacritty.nix ];
 }
