@@ -6,7 +6,7 @@
 }:
 let
   # Based on https://unix.stackexchange.com/questions/16578/resizable-serial-console-window
-  resize = pkgs.writeScriptBin "resize" ''
+  resize = pkgs.writeShellScriptBin "resize" ''
     export PATH=${pkgs.coreutils}/bin
     if [ ! -t 0 ]; then
       # not a interactive...
@@ -30,6 +30,7 @@ let
   '';
 in
 {
+
   options = {
     # FIXME: we may move this setting upstream, once we collected some
     # experience across different vendors and hardware configuration.

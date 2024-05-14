@@ -1,4 +1,9 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  config,
+  ...
+}:
 let
   hostname = "Josephs-MacBook-Air";
   user = "joseph";
@@ -16,4 +21,6 @@ in
     search = [ "lan" ];
     knownNetworkServices = [ "WiFi" ];
   };
+
+  myconfig.headless = false;
 }

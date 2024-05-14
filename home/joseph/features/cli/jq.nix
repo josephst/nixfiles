@@ -1,6 +1,6 @@
 { ... }:
 {
-  programs.zsh = {
+  programs.jq = {
     enable = true;
   };
 }

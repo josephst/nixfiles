@@ -22,15 +22,15 @@
       max-jobs = lib.mkDefault "auto";
       trusted-users = [
         "root"
-        "joseph"
         "@wheel"
         "@staff"
       ];
+      warn-dirty = false;
       allowed-users = [ "*" ];
       # enabling sandbox prevents .NET from accessing /usr/bin/codesign
       # and stops binary signing from working
       # sandbox = true; # defaults to true on Linux, false for Darwin
-      sandbox = if pkgs.stdenv.isDarwin then false else true;
+      sandbox = if pkgs.stdenv.isDarwin then "relaxed" else true;
     };
     extraOptions = ''
       extra-nix-path = nixpkgs=flake:nixpkgs
@@ -46,7 +46,7 @@
   environment = {
     variables = {
       LANG = "en_US.UTF-8";
-      SHELL = "${pkgs.fish}/bin/fish";
+      SHELL = "fish";
       EDITOR = "nvim";
       VISUAL = "nvim";
     };
@@ -60,8 +60,8 @@
       file
       fish
       (git.override { osxkeychainSupport = false; })
-      gptfdisk
       mkpasswd
+      neovim
       openssh
       rclone
       vim
@@ -77,5 +77,4 @@
     useBabelfish = true;
   };
   programs.zsh.enable = true;
-  programs.bash.enableCompletion = true;
 }

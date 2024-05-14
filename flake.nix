@@ -95,6 +95,7 @@
       );
 
       nixosModules = import ./modules/nixos;
+      nix-darwinModules = import ./modules/darwin;
     in
     {
       inherit overlays;
@@ -115,11 +116,13 @@
           modules = [
             home-manager.darwinModules.home-manager
             agenix.darwinModules.default
+
             ./hosts/common
             ./hosts/darwin/common
             ./hosts/darwin/josephs-air
+
             ./users/joseph.nix
-          ];
+          ] ++ (builtins.attrValues nix-darwinModules);
           specialArgs = inputs;
         };
       };
@@ -131,9 +134,11 @@
           modules = [
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
+
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
             ./hosts/nixos/nixos-orbstack # host-specific
+
             ./users/joseph.nix
             ./users/root.nix
           ] ++ (builtins.attrValues nixosModules);
@@ -148,9 +153,11 @@
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             disko.nixosModules.disko
+
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
             ./hosts/nixos/nixos-proxmox # host-specific
+
             ./users/joseph.nix
             ./users/root.nix
           ] ++ (builtins.attrValues nixosModules);

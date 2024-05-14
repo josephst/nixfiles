@@ -1,5 +1,3 @@
-# from https://github.com/nix-community/srvos/blob/main/nixos/server/default.nix
-
 # A default configuration that applies to all servers.
 # Common configuration across *all* the machines
 { pkgs, lib, ... }:
@@ -16,7 +14,7 @@
         pkgs.gitMinimal
         pkgs.htop
         pkgs.jq
-        pkgs.tmux
+        # pkgs.tmux
         pkgs.zellij
       ];
       # Print the URL instead on servers
@@ -46,10 +44,7 @@
   networking.hostName = lib.mkDefault "";
 
   # If the user is in @wheel they are trusted by default.
-  nix.settings.trusted-users = [
-    "root"
-    "@wheel"
-  ];
+  # nix.settings.trusted-users = [ "root" "@wheel" ];
 
   security.sudo.wheelNeedsPassword = false;
 

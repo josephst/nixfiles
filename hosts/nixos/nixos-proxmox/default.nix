@@ -16,10 +16,10 @@
     ./disko-hdd-storage.nix # separate from other disko config to allow for adding drive w/o formatting existing drives
 
     # srvOS
+    ../common/srvos/server
     # ../mixins/cloud-init.nix
     ../mixins/nix-experimental.nix
     ../mixins/systemd-boot.nix
-    ../mixins/server.nix
     ../mixins/terminfo.nix
 
     # Secrets
@@ -57,6 +57,8 @@
     ./services/homepage
     # ./services/uptime-kuma.nix
   ];
+
+  myconfig.headless = true; # headless mode
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
