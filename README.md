@@ -27,6 +27,10 @@ This enables ssh login (get ip with `ip a`) to run the rest of the installer via
 
 Complete partitioning [per the NixOS instructions](https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning).
 
+If using Disko:
+1. Create a `disko-config.nix` file, based on template (or edit ie `./hosts/nixos/vm/disko.nix`) and copy to `/tmp/disko-config.nix` on the target machine
+2. Run `nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko /tmp/disk-config.nix` to partition and mount the disks. 
+
 Once partitoning is complete and the system is mounted to `/mnt`,
 we'll deviate from the installer and use `flake.nix` to install the system.
 
@@ -46,16 +50,17 @@ vim ~/.ssh/id_ed25519 # paste private key that is used to authenticate with Gith
 chmod 600 ~/.ssh/id_ed25519
 
 # Create new SSH keys for the system
-# A
 # when agenix runs, use /etc/agenixKey for initial install
+# TODO: fix these instructions (`/mnt/etc` doesn't yet exist)
 vim /mnt/etc/agenixKey
 chmod 600 /mnt/etc/agenixKey
 ln -s /mnt/etc/agenixKey /etc/agenixKey
 # after initial install, rekey secrets with the generated hostKey
 
-# once shell loaded, clone the repo to /mnt/etc/nixos
-git clone git@github.com:josephst/nixfiles.git /mnt/etc/nixos
-cd /mnt/etc/nixos
+# once shell loaded, clone the repo to /tmp/nixos
+cd ~ # either root or nixos, depending on who's logged in
+git clone https://github.com/josephst/nixfiles.git
+cd nixfiles
 
 # update flake
 nix --experimental-features 'flakes nix-command' flake update
@@ -64,7 +69,7 @@ nix --experimental-features 'flakes nix-command' flake update
 rm /mnt/etc/nixos/hosts/nixos/nixos-proxmox/hardware-configuration.nix
 
 # generate new config (ignore the generated configuration.nix)
-nixos-generate-config --root /mnt
+nixos-generate-config --root /mnt # if using disko, also include --no-filesystems
 mv /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/hosts/nixos/nixos-proxmox/
 rm /mnt/etc/nixos/configuration.nix
 
