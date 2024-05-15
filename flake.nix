@@ -179,7 +179,7 @@
             ./users/joseph.nix
             ./users/root.nix
           ] ++ (builtins.attrValues nixosModules);
-          specialAergs = inputs;
+          specialArgs = inputs;
         };
       };
 
