@@ -168,8 +168,8 @@
           system = "aarch64-linux";
           pkgs = legacyPackages.aarch64-linux;
           modules = [
-            home-manager.nixosMmodules.home-manager
-            agenix.nixosMmodules.default
+            home-manager.nixosModules.home-manager
+            agenix.nixosModules.default
             disko.nixosModules.disko
 
             ./hosts/common
