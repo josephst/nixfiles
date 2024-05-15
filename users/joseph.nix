@@ -21,6 +21,8 @@ in
       }
       // lib.optionalAttrs isLinux {
         hashedPasswordFile = config.age.secrets.joseph.path;
+        # hashedPasswordFile = ./path/to/secret # solves chicken/egg dilema - this file needs to already exist for Agenix to read it
+        # but doesn't exist until install is done. Uncomment for install, then replace comment.
         isNormalUser = true;
         createHome = true;
         shell = pkgs.fish;
