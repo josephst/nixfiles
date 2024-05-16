@@ -31,7 +31,7 @@
   systemd.network.enable = true;
   networking.useNetworkd = false; # manually configure networks
   systemd.network.networks."10-lan" = {
-    matchConfig.name = "ens160";
+    matchConfig.Name = "ens160";
     networkConfig.DHCP = "ipv4";
   };
 
