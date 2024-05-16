@@ -1,1 +1,1 @@
-{ headless = import ../common/headless.nix; }
+{ myconfig = import ../common/myconfig.nix; }
