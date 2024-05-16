@@ -4,16 +4,15 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.services.open-webui;
 in
 {
-  meta.maintainers = [ maintainers.josephst ];
+  meta.maintainers = [ lib.maintainers.josephst ];
 
   options = {
     services.open-webui = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         Open WebUI is an extensible, feature-rich, and user-friendly self-hosted WebUI designed to operate entirely offline.
         It supports various LLM runners, including Ollama and OpenAI-compatible APIs.
 
@@ -21,28 +20,28 @@ in
         or with an accessible API endpoint.
       '';
 
-      package = mkPackageOption pkgs "open-webui" { };
+      package = lib.mkPackageOption pkgs "open-webui" { };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "The host/domain under which Open WebUI is reachable";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8082; # 8080 conflicts with other services
         description = "The port for the Open WebUI service";
       };
 
-      ollamaUrl = mkOption {
-        type = types.nullOr types.str;
+      ollamaUrl = lib.mkOption {
+        type = with lib; types.nullOr types.str;
         default = null;
         description = "URL to an Ollama instance";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open firewall port for Open WebUI";
       };
@@ -51,7 +50,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.open-webui = {
       description = "Open WebUI service";
       wantedBy = [ "multi-user.target" ];

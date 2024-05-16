@@ -7,15 +7,14 @@
 let
   cfg = config.myconfig.headless;
 in
-with lib;
 {
-  meta.maintainers = [ maintainers.josephst ];
+  meta.maintainers = [ lib.maintainers.josephst ];
 
   options = {
-    myconfig.headless = mkOption {
+    myconfig.headless = lib.mkOption {
       description = "headless (don't install GUI apps)";
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
     };
   };
 

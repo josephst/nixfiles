@@ -6,8 +6,6 @@
   ...
 }:
 
-with lib;
-
 # TODO: support lists (from multiple locations, to multiple locations)
 
 let
@@ -23,30 +21,30 @@ let
   '';
 in
 {
-  meta.maintainers = [ maintainers.josephst ];
+  meta.maintainers = [ lib.maintainers.josephst ];
 
   options.services.restic.clone = {
-    enable = mkEnableOption ("Sync Restic repos to B2 using Rclone (ie will also delete from remote)");
+    enable = lib.mkEnableOption ("Sync Restic repos to B2 using Rclone (ie will also delete from remote)");
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       default = "/var/lib/restic/";
-      type = types.str;
+      type = lib.types.str;
       description = "The local restic repository to be copied from.";
     };
 
     # TODO:
     # appendOnly (with rclone copy?)
 
-    remoteDir = mkOption {
+    remoteDir = lib.mkOption {
       default = null;
-      type = types.nullOr types.str;
+      type = with lib.types; nullOr str;
       description = "The remote Rclone-supported backend to copy repository to";
       example = "b2:foobar/restic";
     };
 
-    environmentFile = mkOption {
+    environmentFile = lib.mkOption {
       default = null;
-      type = types.nullOr types.str;
+      type = with lib.types; nullOr str;
       description = ''
         Path to a file containing the name of a remote \
         Rclone-supported backend to copy repository to.
@@ -66,8 +64,8 @@ in
       example = "/var/run/agenix/rcloneRemoteDir";
     };
 
-    extraRcloneArgs = mkOption {
-      type = types.listOf types.str;
+    extraRcloneArgs = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [
         "--transfers=16"
         "--b2-hard-delete"
@@ -81,21 +79,21 @@ in
       ];
     };
 
-    rcloneConfFile = mkOption {
-      type = types.str;
+    rcloneConfFile = lib.mkOption {
+      type = lib.types.str;
       description = "Path to `rclone.conf` file (must be readable by same user as this service)";
       example = "/var/run/agenix/rcloneConf";
       default = "/etc/rclone.conf";
     };
 
-    pingHealthchecks = mkOption {
-      type = types.bool;
+    pingHealthchecks = lib.mkOption {
+      type = lib.types.bool;
       description = "Try to ping start/stop and send logs to healthchecks.io. Set HC_UUID as environment variable (cfg.environmentFile) to configure.";
       default = false;
     };
 
-    timerConfig = mkOption {
-      type = types.nullOr (types.attrsOf unitOption);
+    timerConfig = lib.mkOption {
+      type = with lib.types; nullOr (attrsOf unitOption);
       default = {
         OnCalendar = "daily";
         Persistent = true;
@@ -112,10 +110,10 @@ in
       };
     };
 
-    package = mkPackageOption pkgs "rclone" { };
+    package = lib.mkPackageOption pkgs "rclone" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = (config.services.restic.clone.dataDir != null);
@@ -166,7 +164,7 @@ in
         };
     };
 
-    systemd.timers = mkIf (cfg.timerConfig != null) {
+    systemd.timers = lib.mkIf (cfg.timerConfig != null) {
       rclone-copy = {
         wantedBy = [ "timers.target" ];
         timerConfig = cfg.timerConfig;
