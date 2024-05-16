@@ -25,6 +25,7 @@
   };
 
   virtualisation.vmware.guest.enable = true; # enable VM guest additions
+  virtualisation.vmware.guest.headless = true; # enabling Xserver support breaks on aarch64
 
   networking.hostName = "vmware-nixos"; # Define your hostname.
   # Pick only one of the below networking options.
