@@ -1,6 +1,6 @@
 {
   # common
-  headless = import ../common/headless.nix;
+  myconfig = import ../common/myconfig.nix;
 
   # nixos specific
   rcloneCopy = import ./rclone-to-b2.nix;

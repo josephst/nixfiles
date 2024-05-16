@@ -55,10 +55,6 @@
     rustc
     zigpkgs.master
 
-    # llm
-    llamaPackages.llama-cpp # from llama-cpp overlay
-    python3Packages.huggingface-hub
-
     cachix
     hydra-check
     hydra-check # check hydra for build status of a package

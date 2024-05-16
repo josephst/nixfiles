@@ -46,7 +46,7 @@
   environment = {
     variables = {
       LANG = "en_US.UTF-8";
-      SHELL = "fish";
+      # SHELL = "fish";
       EDITOR = "nvim";
       VISUAL = "nvim";
     };

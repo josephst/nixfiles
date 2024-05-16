@@ -58,10 +58,12 @@
     # ./services/uptime-kuma.nix
   ];
 
-  myconfig.headless = true; # headless mode
+  myconfig.gui.enable = false; # headless mode
+  myconfig.llm.enable = true;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 
   # Create the group for media stuff (plex, sabnzbd, etc)

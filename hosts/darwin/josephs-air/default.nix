@@ -22,5 +22,6 @@ in
     knownNetworkServices = [ "WiFi" ];
   };
 
-  myconfig.headless = false;
+  myconfig.gui.enable = true;
+  myconfig.llm.enable = true;
 }
