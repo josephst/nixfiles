@@ -18,11 +18,13 @@
     ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.efi.canTouchEfiVariables = true; # disable once installed
+  # boot.loader.efi.canTouchEfiVariables = true; # disable once installed
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
   };
+
+  virtualisation.vmware.guest.enable = true; # enable VM guest additions
 
   networking.hostName = "vmware-nixos"; # Define your hostname.
   # Pick only one of the below networking options.
