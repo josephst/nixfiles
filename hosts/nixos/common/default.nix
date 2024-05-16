@@ -25,6 +25,7 @@
   };
 
   services = {
+    openssh.enable = true;
     resolved.enable = lib.mkDefault true; # mkDefault lets it be overridden
   };
 
