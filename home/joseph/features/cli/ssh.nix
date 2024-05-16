@@ -14,6 +14,7 @@ in
 {
   programs.ssh = {
     enable = true;
+    includes = lib.optional (pkgs.stdenv.isDarwin) "~/.orbstack/ssh/config";
     matchBlocks =
       {
         "nixos nixos.josephstahl.com" = {
