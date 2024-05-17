@@ -1,5 +1,4 @@
-#! /usr/bin/env sh
-
+#! /usr/bin/env bash
 # args: $1 is UUID, $2 is exit status (non-zero in case of failures), $3 is unit name
 
 UUID=$1
