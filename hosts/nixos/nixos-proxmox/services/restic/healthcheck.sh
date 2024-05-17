@@ -1,6 +1,4 @@
-#! /usr/bin/env nix
-#! nix shell nixpkgs#bash nixpkgs#systemd nixpkgs#coreutils nixpkgs#curl --command bash
-# shellcheck shell=bash
+#! /usr/bin/env sh
 
 # args: $1 is UUID, $2 is exit status (non-zero in case of failures), $3 is unit name
 

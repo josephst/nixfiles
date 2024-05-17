@@ -54,7 +54,8 @@ in
       EnvironmentFile = config.age.secrets.restic-localstorage-env.path; # contains heathchecks.io UUID
       User = "restic"; # to read env file
     };
-    script = ./healthcheck.sh;
+    path = [ pkgs.systemd pkgs.coreutils pkgs.curl ];
+    script = "${./healthcheck.sh}";
     scriptArgs = "$HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
   };
 }
