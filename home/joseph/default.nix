@@ -21,6 +21,10 @@ in
     homeDirectory = if isDarwin then "/Users/${username}" else "/home/${username}";
     sessionPath = [ "$HOME/.local/bin" ];
 
+    sessionVariables = {
+      MANPAGER = "sh -c 'col -bx | bat -l man -p'";
+    };
+
     stateVersion = "22.11";
 
     shellAliases = {
