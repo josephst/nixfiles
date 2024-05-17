@@ -24,7 +24,9 @@ in
   meta.maintainers = [ lib.maintainers.josephst ];
 
   options.services.restic.clone = {
-    enable = lib.mkEnableOption ("Sync Restic repos to B2 using Rclone (ie will also delete from remote)");
+    enable = lib.mkEnableOption (
+      "Sync Restic repos to B2 using Rclone (ie will also delete from remote)"
+    );
 
     dataDir = lib.mkOption {
       default = "/var/lib/restic/";

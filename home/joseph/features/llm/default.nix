@@ -1,5 +1,4 @@
-{...}: {
-  imports = [
-    ./llama-cpp.nix
-  ];
+{ ... }:
+{
+  imports = [ ./llama-cpp.nix ];
 }

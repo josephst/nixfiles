@@ -12,9 +12,7 @@
     # the homebrew cask provides a nice app for Finder/ Spotlight
     enable = true;
     settings = {
-      import = [
-        "~/.config/alacritty/themes/catppuccin-frappe.toml"
-      ];
+      import = [ "~/.config/alacritty/themes/catppuccin-frappe.toml" ];
 
       shell = {
         program = "${pkgs.fish}/bin/fish";
