@@ -30,14 +30,15 @@
     diffsitter # better diff
     dog # better dig
     httpie # better curl
+    hub # Git wrapper that has better Github support
     hyperfine # command-line benchmarking
     just # command runner
     lazygit # git with TUI
     ncdu # TUI disk usage
-    tldr # cheatsheets in terminal
     rclone
     restic
     rsync
+    tldr # cheatsheets in terminal
 
     # development
     hugo

@@ -13,10 +13,12 @@ in
       signByDefault = true;
     };
     aliases = {
+      l = "log --pretty=oneline -n 50 --graph --abbrev-commit";
       p = "pull --ff-only";
       ff = "merge --ff-only";
       graph = "log --decorate --oneline --graph";
       pushall = "!git remote | xargs -L1 git push --all";
+      undo = "reset HEAD~1 --mixed";
       add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
     };
     extraConfig = {

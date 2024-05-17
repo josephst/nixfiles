@@ -97,7 +97,7 @@
       };
       font =
         let
-          fontname = "Iosevka";
+          fontname = "Iosevka Term";
         in
         {
           normal = {

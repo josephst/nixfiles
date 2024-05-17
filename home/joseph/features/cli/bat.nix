@@ -6,4 +6,6 @@
       theme = "Dracula";
     };
   };
+
+  home.shellAliases.cat = "bat --paging=never";
 }
