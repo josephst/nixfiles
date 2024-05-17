@@ -11,6 +11,7 @@
     ./fzf.nix
     ./gh.nix
     ./git.nix
+    ./helix.nix
     ./jq.nix # JSON pretty printer
     ./neovim.nix
     ./nushell
