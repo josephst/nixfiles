@@ -4,6 +4,10 @@
     enable = true;
     defaultEditor = true;
 
+    settings = {
+      theme = "catppuccin_frappe";
+    };
+
     languages.language-server = {
       nixd.command = "nixd";
     };
