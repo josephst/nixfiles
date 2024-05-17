@@ -13,6 +13,7 @@ in
   imports = [
     ./features/cli
     ./features/gui # this module will disable if config.myconfig.headless is true
+    ./features/llm
   ] ++ (builtins.attrValues (import ../../modules/home-manager/default.nix));
 
   # Home Manager configuration/ options
