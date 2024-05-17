@@ -55,8 +55,6 @@ in
       User = "restic"; # to read env file
       ExecStart = "${./healthcheck.sh} $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
     };
-    path = [ pkgs.bash pkgs.systemd pkgs.coreutils pkgs.curl ];
-    # script = "${./healthcheck.sh}";
-    # scriptArgs = "$HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
+    path = [ pkgs.bash pkgs.curl ];
   };
 }
