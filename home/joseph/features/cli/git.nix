@@ -1,7 +1,7 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, osConfig, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
-  signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop";
+  signingKey = osConfig.myconfig.gitSigningKey;
 in
 {
   programs.git = {
@@ -22,7 +22,7 @@ in
       add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
     };
     extraConfig = {
-      credential.helper = lib.optionalString isDarwin "/usr/local/bin/git-credential-manager";
+      credential.helper = lib.mkIf isDarwin "/usr/local/bin/git-credential-manager";
       gpg = {
         format = "ssh";
         ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
@@ -66,7 +66,9 @@ in
     package = if isDarwin then (pkgs.git.override { osxkeychainSupport = false; }) else pkgs.git;
   };
 
-  home.file.".ssh/allowed_signers".text = ''
-    1269177+josephst@users.noreply.github.com ${signingKey}
-  '';
+  home.file = lib.mkIf (signingKey != null) {
+    ".ssh/allowed_signers".text = ''
+      1269177+josephst@users.noreply.github.com ${signingKey}
+    '';
+  };
 }

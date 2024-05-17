@@ -28,10 +28,10 @@
     };
 
     # attic
-    attic = {
-      url = "github:zhaofengli/attic";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # attic = {
+    #   url = "github:zhaofengli/attic";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # deploy-rs
     deploy-rs = {
@@ -48,7 +48,7 @@
     # llama.cpp
     llama-cpp = {
       url = "github:ggerganov/llama.cpp";
-      # url = "github:josephst/llama.cpp/nix-darwin-xcrun";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # disko
@@ -67,7 +67,6 @@
       home-manager,
       darwin,
       agenix,
-      attic,
       deploy-rs,
       zig,
       llama-cpp,
