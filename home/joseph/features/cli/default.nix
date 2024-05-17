@@ -55,6 +55,7 @@
     nimble # package manager for nim
     nodejs
     rustc
+    shellcheck
     zigpkgs.master
 
     cachix

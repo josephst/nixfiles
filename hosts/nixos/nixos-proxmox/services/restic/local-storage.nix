@@ -54,7 +54,7 @@ in
       EnvironmentFile = config.age.secrets.restic-localstorage-env.path; # contains heathchecks.io UUID
       User = "restic"; # to read env file
     };
-    script = (import ./healthcheckScript.nix { inherit lib pkgs; });
+    script = ./healthcheck.sh;
     scriptArgs = "$HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
   };
 }
