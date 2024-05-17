@@ -4,7 +4,6 @@
     starship = {
       enable = true;
       settings = {
-        command_timeout = 600;
         line_break = {
           disabled = true;
         };
