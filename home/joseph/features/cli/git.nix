@@ -1,7 +1,6 @@
-{ pkgs, lib, osConfig, ... }:
+{ pkgs, lib, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
-  signingKey = osConfig.myconfig.gitSigningKey;
 in
 {
   programs.git = {
@@ -9,7 +8,6 @@ in
     userEmail = "1269177+josephst@users.noreply.github.com";
     userName = "Joseph Stahl";
     signing = {
-      key = signingKey;
       signByDefault = true;
     };
     aliases = {
@@ -26,7 +24,6 @@ in
       gpg = {
         format = "ssh";
         ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
-        ssh.allowedSignersFile = "~/.ssh/allowed_signers";
       };
       init.defaultBranch = "main";
       # Automatically track remote branch
@@ -64,11 +61,5 @@ in
     ];
 
     package = if isDarwin then (pkgs.git.override { osxkeychainSupport = false; }) else pkgs.git;
-  };
-
-  home.file = lib.mkIf (signingKey != null) {
-    ".ssh/allowed_signers".text = ''
-      1269177+josephst@users.noreply.github.com ${signingKey}
-    '';
   };
 }

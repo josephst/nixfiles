@@ -6,8 +6,6 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-staging.url = "github:nixos/nixpkgs/staging-next";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    # nixpkgs.url = "github:josephst/nixpkgs/whois-implicit-functions";
-    # nixpkgs-unstable.follows = "nixpkgs";
 
     # home-manager
     home-manager = {
@@ -62,21 +60,17 @@
     {
       self,
       nixpkgs,
-      nixpkgs-stable,
-      nixpkgs-staging,
       home-manager,
       darwin,
       agenix,
-      deploy-rs,
-      zig,
-      llama-cpp,
       disko,
+      ...
     # secrets
     }@inputs:
     let
       supportedSystems = [
         "x86_64-linux"
-        "x86_64-darwin"
+        # "x86_64-darwin"
         "aarch64-linux"
         "aarch64-darwin"
       ];
@@ -92,9 +86,6 @@
           config.allowUnfree = true;
         }
       );
-
-      nixosModules = import ./modules/nixos;
-      nix-darwinModules = import ./modules/darwin;
     in
     {
       inherit overlays;
@@ -115,13 +106,14 @@
           modules = [
             home-manager.darwinModules.home-manager
             agenix.darwinModules.default
+            ./modules/darwin
 
             ./hosts/common
             ./hosts/darwin/common
             ./hosts/darwin/josephs-air
 
             ./users/joseph.nix
-          ] ++ (builtins.attrValues nix-darwinModules);
+          ];
           specialArgs = inputs;
         };
       };
@@ -133,6 +125,7 @@
           modules = [
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
+            ./modules/nixos
 
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
@@ -140,7 +133,7 @@
 
             ./users/joseph.nix
             ./users/root.nix
-          ] ++ (builtins.attrValues nixosModules);
+          ];
           specialArgs = inputs;
         };
 
@@ -152,6 +145,7 @@
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             disko.nixosModules.disko
+            ./modules/nixos
 
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
@@ -159,7 +153,7 @@
 
             ./users/joseph.nix
             ./users/root.nix
-          ] ++ (builtins.attrValues nixosModules);
+          ];
           specialArgs = inputs;
         };
 
@@ -170,6 +164,7 @@
             home-manager.nixosModules.home-manager
             agenix.nixosModules.default
             disko.nixosModules.disko
+            ./modules/nixos
 
             ./hosts/common
             ./hosts/nixos/common
@@ -177,7 +172,7 @@
 
             ./users/joseph.nix
             ./users/root.nix
-          ] ++ (builtins.attrValues nixosModules);
+          ];
           specialArgs = inputs;
         };
       };

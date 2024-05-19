@@ -18,17 +18,6 @@
       type = lib.types.bool;
     };
 
-    # TODO: make these home-manager modules?
-    myconfig.sshUserKey = lib.mkOption {
-      description = "Public SSH key to use (to represent the user for ie authenticating to remote servers)";
-      default = null;
-      type = lib.types.nullOr lib.types.str;
-    };
-
-    myconfig.gitSigningKey = lib.mkOption {
-      description = "Public SSH key corresponding to key used to sign Git commits";
-      default = null;
-      type = lib.types.nullOr lib.types.str;
-    };
+    # TODO: myconfig.mainUser option, to set username
   };
 }

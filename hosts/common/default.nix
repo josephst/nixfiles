@@ -77,6 +77,4 @@
     useBabelfish = true;
   };
   programs.zsh.enable = true;
-
-  myconfig.gitSigningKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop"; # common across all systems
 }

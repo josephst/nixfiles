@@ -1,1 +1,5 @@
-{ myconfig = import ../common/myconfig.nix; }
+{
+  imports = [
+    ../common
+  ];
+}

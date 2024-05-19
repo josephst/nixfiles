@@ -60,7 +60,6 @@
 
   myconfig.gui.enable = false; # headless mode
   myconfig.llm.enable = true;
-  myconfig.sshUserKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICBTyMi+E14e8/droY9+Xg7ORNMMdgH1i6LsfDyKZSy4 joseph@nixos-proxmox";
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;

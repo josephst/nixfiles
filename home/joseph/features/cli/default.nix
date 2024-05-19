@@ -42,6 +42,7 @@
     tldr # cheatsheets in terminal
 
     # development
+    gh-dash
     hugo
 
     # media

@@ -6,7 +6,6 @@
 }:
 let
   hostname = "Josephs-MacBook-Air";
-  user = "joseph";
 in
 {
   # machine-specific config
@@ -24,5 +23,4 @@ in
 
   myconfig.gui.enable = true;
   myconfig.llm.enable = true;
-  myconfig.sshUserKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDuLA4wwwupvYW3UJTgOtcOUHwpmRR9gy/N+F6n11d5v joseph@macbook-air";
 }
