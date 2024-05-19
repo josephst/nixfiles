@@ -6,9 +6,7 @@
 }:
 let
   identityEnabled = config.myconfig.userSshKeys.identityFileText != null;
-  identityFile = lib.optionalString identityEnabled "${pkgs.writeText "sshPubKey" (
-    config.myconfig.userSshKeys.identityFileText
-  )}";
+  identityFile = "~/.ssh/identity.pub";
 in
 {
   programs.ssh = {
@@ -34,5 +32,10 @@ in
         identityFile = lib.mkIf identityEnabled identityFile;
       };
     };
+  };
+
+  home.file.".ssh/identity.pub" = {
+    enable = identityEnabled;
+    text = config.myconfig.userSshKeys.identityFileText;
   };
 }
