@@ -23,7 +23,7 @@
     ../mixins/terminfo.nix
 
     # Secrets
-    ./secrets.nix
+    ./secrets
 
     ## Services
     ./services/acme.nix

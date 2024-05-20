@@ -16,10 +16,7 @@ let
   # key is the hostname, value is the key
   #
   # these are unique per-system, to track which system is logging in to a particular server
-  keys = {
-    "Josephs-MacBook-Air" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDuLA4wwwupvYW3UJTgOtcOUHwpmRR9gy/N+F6n11d5v joseph@macbook-air";
-    "nixos" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICBTyMi+E14e8/droY9+Xg7ORNMMdgH1i6LsfDyKZSy4 joseph@nixos-proxmox";
-  };
+  keys = import ../../keys;
   # ssh key used for signing Git commits
   # this key is shared among all systems the user can log in to
   # as it does not matter which device the git commit is being signed by (more interested in which *user* is signing)
@@ -27,8 +24,8 @@ let
 
   hostName = osConfig.networking.hostName;
 
-  userKey = if lib.hasAttr hostName keys
-    then lib.getAttr hostName keys
+  userKey = if lib.hasAttr hostName keys.users.joseph
+    then lib.getAttr hostName keys.users.joseph
     else null;
 in
 {
@@ -36,17 +33,12 @@ in
     agenix.homeManagerModules.default
     ../../modules/home-manager
 
+    ./secrets
+
     ./features/cli
     ./features/gui # this module will disable if config.myconfig.headless is true
     ./features/llm
   ];
-
-  # new Agenix configuration which is *user-specific* (DISTINCT from the system Agenix config)
-  age = {
-    identityPaths = [
-      "${config.home.homeDirectory}/.ssh/agenix"
-    ] ++ options.age.identityPaths.default;
-  };
 
   myconfig.userSshKeys.identityFileText = userKey; # used in features/cli/ssh.nix
   myconfig.userSshKeys.gitSigningKey = gitSigningKey;

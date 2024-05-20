@@ -6,7 +6,7 @@
 }:
 {
   imports = [
-    ./secrets.nix
+    ./secrets
     ./nix.nix
     ./trusted-nix-caches.nix
     ./upgrade-diff.nix
