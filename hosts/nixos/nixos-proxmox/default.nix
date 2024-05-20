@@ -16,9 +16,7 @@
     ./disko-hdd-storage.nix # separate from other disko config to allow for adding drive w/o formatting existing drives
 
     # ../mixins/cloud-init.nix
-    ../mixins/nix-experimental.nix
     ../mixins/systemd-boot.nix
-    ../mixins/terminfo.nix
 
     # Secrets
     ./secrets
