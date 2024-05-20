@@ -2,53 +2,53 @@
 {
   # secrets specific to this device
   age.secrets.smb = {
-    file = ../../../secrets/smb.age;
+    file = ./smb.age;
     owner = "root";
     group = "root";
   };
   age.secrets.dnsApiToken = {
-    file = ../../../secrets/dnsApiToken.age;
+    file = ./dnsApiToken.age;
   };
   age.secrets.netdata_nixos_claim = {
-    file = ../../../secrets/netdata_nixos_claim.age;
+    file = ./netdata_nixos_claim.age;
   };
 
   age.secrets.resticb2env = {
     # contents:
     # RCLONE_REMOTE=<rclone path>
     # HC_UUID=<uuid for healthchecks>
-    file = ../../../secrets/restic/b2.env.age;
+    file = ./restic/b2.env.age;
   };
 
   age.secrets.rcloneConf = {
     # contents: rclone.conf file contents with NAS and B2 access info
-    file = ../../../secrets/rclone.conf.age;
+    file = ./rclone.conf.age;
     owner = "restic";
   };
 
   age.secrets.restic-localstorage-env = {
     # contents:
     # HC_UUID=<uuid for healthchecks>
-    file = ../../../secrets/restic/localstorage.env.age;
+    file = ./restic/localstorage.env.age;
   };
 
   age.secrets.restic-localstorage-pass = {
     # contents: password for restic repo
-    file = ../../../secrets/restic/localstorage.pass.age;
+    file = ./restic/localstorage.pass.age;
     owner = "restic";
   };
 
   # contents: HC_UUID=<uuid>
-  age.secrets.resticLanEnv.file = ../../../secrets/restic/nas.env.age;
+  age.secrets.resticLanEnv.file = ./restic/nas.env.age;
 
   # contents: repo password
   # age.secrets.resticpass = {
-  #   file = ../../../secrets/restic/nas.pass.age;
+  #   file = ./restic/nas.pass.age;
   #   owner = "restic";
   # };
 
   # contents: password for rsyncd
   age.secrets.rsyncd-secrets = {
-    file = ../../../secrets/rsyncd-secrets.age;
+    file = ./rsyncd-secrets.age;
   };
 }
