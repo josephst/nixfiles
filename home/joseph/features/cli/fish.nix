@@ -15,5 +15,9 @@ in
         eval (${lib.getExe pkgs.zellij} setup --generate-auto-start fish | string collect)
       end
     '';
+
+    shellAbbrs = {
+      agf = "ag --nobreak --nonumbers --noheading . | fzf"; # fuzzy search file contents
+    };
   };
 }

@@ -39,6 +39,7 @@
     rclone
     restic
     rsync
+    silver-searcher
     tldr # cheatsheets in terminal
 
     # development
