@@ -6,7 +6,7 @@
 }:
 {
   age.secrets.smbpasswd = {
-    file = ../../../../secrets/smbpasswd.age;
+    file = ../secrets/smbpasswd.age;
   };
 
   users.groups.media = { };
@@ -85,11 +85,11 @@
       fruit:aapl = yes
       fruit:encoding = native
       fruit:model = MacPro
-      fruit:posix_rename = yes 
+      fruit:posix_rename = yes
       fruit:veto_appledouble = no
       fruit:nfs_aces = no
-      fruit:wipe_intentionally_left_blank_rfork = yes 
-      fruit:delete_empty_adfiles = yes 
+      fruit:wipe_intentionally_left_blank_rfork = yes
+      fruit:delete_empty_adfiles = yes
 
       browseable = yes
       map to guest = bad user
