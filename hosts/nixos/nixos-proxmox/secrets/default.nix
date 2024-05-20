@@ -1,7 +1,4 @@
 { ... }:
-let
-  user = "joseph";
-in
 {
   # secrets specific to this device
   age.secrets.smb = {
@@ -54,24 +51,4 @@ in
   age.secrets.rsyncd-secrets = {
     file = ../../../secrets/rsyncd-secrets.age;
   };
-
-  ###########################
-
-  # age.secrets."github-ssh-key" = {
-  #   symlink = false;
-  #   path = "/home/${user}/.ssh/id_github";
-  #   file =  "${secrets}/github-ssh-key.age";
-  #   mode = "600";
-  #   owner = "${user}";
-  #   group = "wheel";
-  # };
-
-  # age.secrets."github-signing-key" = {
-  #   symlink = false;
-  #   path = "/home/${user}/.ssh/pgp_github.key";
-  #   file =  "${secrets}/github-signing-key.age";
-  #   mode = "600";
-  #   owner = "${user}";
-  #   group = "wheel";
-  # };
 }
