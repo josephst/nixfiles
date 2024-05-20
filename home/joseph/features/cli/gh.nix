@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, osConfig, ... }:
 {
   programs.gh = {
     enable = true;
@@ -8,4 +8,6 @@
       prompt = "enabled";
     };
   };
+
+  xdg.configFile."gh/hosts.yml".source = osConfig.age.secrets."gh/hosts.yml".path;
 }

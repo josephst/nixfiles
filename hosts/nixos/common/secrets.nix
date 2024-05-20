@@ -19,7 +19,6 @@ in
 
     "gh/hosts.yml" = {
       file = ../../../secrets/gh_hosts.yml.age;
-      path = "/home/${user}/.config/gh/hosts.yml";
       owner = user;
     };
   };
