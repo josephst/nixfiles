@@ -5,8 +5,6 @@ in
 {
   age.identityPaths =
     [
-      # make sure this key is copied from 1password prior to running agenix
-      "/home/${user}/.ssh/id_ed25519"
       # key to use for new installs, prior to generation of hostKeys
       "/etc/agenixKey"
     ] ++ options.age.identityPaths.default;

@@ -13,9 +13,11 @@ let
   # host keys (need these for BTRFS, where a user key in /home won't be mounted when secrets are trying to be decrypted)
   # stored in /etc/ssh/
   nixos-proxmox = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL4F2rodZ/DMzp2bblvV3LNTHtV89XOYATeHKIwzES0D root@nixos";
+  anacreon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGoGRrCCPe6oXw4FCfWgimXoUY2kxisYu3rUyl8F+ZrD root@anacreon";
   allKeys = [
     installerKey
     nixos-proxmox
+    anacreon
   ] ++ builtins.attrValues joseph;
 in
 {
@@ -33,7 +35,7 @@ in
   "smb.age".publicKeys = allKeys; # login for smb shares on NAS
   "smbpasswd.age".publicKeys = allKeys; # smb password database
   "users/joseph.age".publicKeys = allKeys;
-  "ghToken.age".publicKeys = builtins.attrValues joseph;
+  "ghToken.age".publicKeys = allKeys;
 }
 # `nix run github:ryantm/agenix -- --help` to run
 # to rekey: get ssh private key from 1password (export -> no password)

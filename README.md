@@ -61,6 +61,8 @@ chmod 600 ~/.ssh/id_ed25519
 vim /mnt/etc/agenixKey
 chmod 600 /mnt/etc/agenixKey
 ln -s /mnt/etc/agenixKey /etc/agenixKey
+
+# IMPORTANT!
 # after initial install, rekey secrets with the generated hostKey
 
 # once shell loaded, clone the repo to /tmp/nixos
