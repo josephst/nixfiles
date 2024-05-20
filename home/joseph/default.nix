@@ -45,7 +45,7 @@ in
   age = {
     identityPaths = [
       "~/.ssh/agenix"
-    ] ++ config.age.identityPaths;
+    ] ++ config.age.identityPaths.default;
   };
 
   myconfig.userSshKeys.identityFileText = userKey; # used in features/cli/ssh.nix
