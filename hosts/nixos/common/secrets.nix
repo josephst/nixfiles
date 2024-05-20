@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, options, ... }:
 let
   user = "joseph";
 in
@@ -9,18 +9,10 @@ in
       "/home/${user}/.ssh/id_ed25519"
       # key to use for new installs, prior to generation of hostKeys
       "/etc/agenixKey"
-    ]
-    ++ map (e: e.path) (
-      lib.filter (e: e.type == "rsa" || e.type == "ed25519") config.services.openssh.hostKeys
-    );
+    ] ++ options.age.identityPaths.default;
 
   age.secrets = {
     joseph.file = ../../../secrets/users/joseph.age; # password
-
-    "gh/hosts.yml" = {
-      file = ../../../secrets/gh_hosts.yml.age;
-      owner = user;
-    };
   };
 
   ###########################

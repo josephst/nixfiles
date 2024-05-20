@@ -3,7 +3,9 @@
   pkgs,
   config,
   osConfig,
+  options,
   lib,
+  agenix,
   ...
 }:
 let
@@ -31,12 +33,18 @@ let
 in
 {
   imports = [
+    agenix.homeManagerModules.default
     ../../modules/home-manager
 
     ./features/cli
     ./features/gui # this module will disable if config.myconfig.headless is true
     ./features/llm
   ];
+
+  # new Agenix configuration which is *user-specific* (DISTINCT from the system Agenix config)
+  age = {
+    # default options
+  };
 
   myconfig.userSshKeys.identityFileText = userKey; # used in features/cli/ssh.nix
   myconfig.userSshKeys.gitSigningKey = gitSigningKey;

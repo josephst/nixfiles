@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  inputs,
   ...
 }:
 let
@@ -37,4 +38,7 @@ in
   nix.settings.trusted-users = [ "joseph" ];
 
   home-manager.users.joseph = import ../home/joseph;
+  home-manager.extraSpecialArgs = {
+    agenix = inputs.agenix;
+  };
 }

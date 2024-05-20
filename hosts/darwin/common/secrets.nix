@@ -6,15 +6,6 @@ in
   # download from 1password
   age.identityPaths = [ "/Users/${user}/.ssh/id_ed25519" ];
 
-  # managed by 1password (1password CLI)
-  # age.secrets = {
-  #   "gh/hosts.yml" = {
-  #     file = "../../secrets/gh_hosts.yml.age";
-  #     path = "/Users/${user}/.config/gh/hosts.yml";
-  #     owner = user;
-  #   };
-  # }
-
   # age.secrets."syncthing-cert" = {
   #   symlink = true;
   #   path = "/Users/${user}/Library/Application Support/Syncthing/cert.pem";

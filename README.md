@@ -8,6 +8,11 @@ on your own system may break things! I'd recommend using this more for inspirati
 than exact instructions. 
 
 ## Mac
+### Generate host keys
+
+Run `sudo ssh-keygen -A` to generate default host keys (rsa, ecdsa, ed25519 according to documentation)
+if they do not already exist. 
+
 ### Install Nix
 
 [Follow the Zero to Nix](https://zero-to-nix.com/start/install) guide to install Nix on MacOS.

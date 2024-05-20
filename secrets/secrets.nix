@@ -34,7 +34,6 @@ in
   "smbpasswd.age".publicKeys = allKeys; # smb password database
   "users/joseph.age".publicKeys = allKeys;
   "ghToken.age".publicKeys = builtins.attrValues joseph;
-  "gh_hosts.yml.age".publicKeys = builtins.attrValues joseph;
 }
 # `nix run github:ryantm/agenix -- --help` to run
 # to rekey: get ssh private key from 1password (export -> no password)
