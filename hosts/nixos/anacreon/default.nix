@@ -29,17 +29,17 @@
     kernelPackages = pkgs.linuxPackages_latest;
   };
 
-  virtualisation.vmware.guest.enable = true; # enable VM guest additions
-  virtualisation.vmware.guest.headless = true; # enabling Xserver support breaks on aarch64
+  services.qemuGuest.enable = true;
+  myconfig.gui.enable = true;
 
-  networking.hostName = "vmware-nixos"; # Define your hostname.
+  networking.hostName = "anacreon"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   systemd.network.enable = true;
   networking.useNetworkd = false; # manually configure networks
   systemd.network.networks."10-lan" = {
-    matchConfig.Name = "ens160";
+    matchConfig.Name = "enp0s1";
     networkConfig.DHCP = "ipv4";
   };
 

@@ -28,16 +28,17 @@ This enables ssh login (get ip with `ip a`) to run the rest of the installer via
 Complete partitioning [per the NixOS instructions](https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning).
 
 If using Disko:
-1. Create a `disko-config.nix` file, based on template (or edit ie `./hosts/nixos/vm/disko.nix`) and copy to `/tmp/disko-config.nix` on the target machine
-2. Run `nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko /tmp/disk-config.nix` to partition and mount the disks. 
+1. Create a `disko-config.nix` file, based on template (or edit ie `./hosts/nixos/<hostname>/disko.nix`) and copy to `/tmp/disko-config.nix` on the target machine
+2. Run `nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko /tmp/disko-config.nix` to partition and mount the disks. 
 
 Once partitoning is complete and the system is mounted to `/mnt`,
 we'll deviate from the installer and use `flake.nix` to install the system.
 
 ```shell
 # install agenix to get secrets loaded
-nix-channel --add https://github.com/ryantm/agenix/archive/main.tar.gz agenix
-nix-channel --update
+# TODO: remove? not currently working, probably need to modify the ISO to include Agenix module
+# nix-channel --add https://github.com/ryantm/agenix/archive/main.tar.gz agenix
+# nix-channel --update
 
 # Open up a shell to get git:
 nix-shell -p git nixFlakes
@@ -64,9 +65,6 @@ cd nixfiles
 
 # update flake
 nix --experimental-features 'flakes nix-command' flake update
-
-# prepare for new hardware-configuration
-rm /mnt/etc/nixos/hosts/nixos/nixos-proxmox/hardware-configuration.nix
 
 # generate new config (ignore the generated configuration.nix)
 nixos-generate-config --root /mnt # if using disko, also include --no-filesystems

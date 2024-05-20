@@ -157,7 +157,8 @@
           specialArgs = inputs;
         };
 
-        vmware = nixpkgs.lib.nixosSystem {
+        # UTM virtual machine
+        anacreon = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           pkgs = legacyPackages.aarch64-linux;
           modules = [
@@ -168,7 +169,7 @@
 
             ./hosts/common
             ./hosts/nixos/common
-            ./hosts/nixos/vm
+            ./hosts/nixos/anacreon
 
             ./users/joseph.nix
             ./users/root.nix
