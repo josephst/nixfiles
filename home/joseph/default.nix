@@ -43,7 +43,7 @@ in
 
   # new Agenix configuration which is *user-specific* (DISTINCT from the system Agenix config)
   age = {
-    identityPath = [
+    identityPaths = [
       "~/.ssh/agenix"
     ] ++ config.age.identityPaths;
   };
