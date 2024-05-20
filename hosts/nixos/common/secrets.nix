@@ -1,17 +1,10 @@
 { config, lib, options, ... }:
-let
-  user = "joseph";
-in
 {
   age.identityPaths =
     [
       # key to use for new installs, prior to generation of hostKeys
       "/etc/agenixKey"
     ] ++ options.age.identityPaths.default;
-
-  age.secrets = {
-    joseph.file = ../../../secrets/users/joseph.age; # password
-  };
 
   ###########################
 
