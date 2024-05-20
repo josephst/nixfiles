@@ -43,7 +43,9 @@ in
 
   # new Agenix configuration which is *user-specific* (DISTINCT from the system Agenix config)
   age = {
-    # default options
+    identityPath = [
+      "~/.ssh/agenix"
+    ] ++ config.age.identityPaths;
   };
 
   myconfig.userSshKeys.identityFileText = userKey; # used in features/cli/ssh.nix
