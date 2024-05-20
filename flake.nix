@@ -149,6 +149,7 @@
 
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
+            ./hosts/nixos/mixins/systemd-boot.nix
             ./hosts/nixos/nixos-proxmox # host-specific
 
             ./users/joseph.nix
@@ -169,6 +170,7 @@
 
             ./hosts/common
             ./hosts/nixos/common
+            ./hosts/nixos/mixins/systemd-boot.nix
             ./hosts/nixos/anacreon
 
             ./users/joseph.nix
