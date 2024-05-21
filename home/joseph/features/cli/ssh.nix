@@ -6,7 +6,7 @@
 }:
 let
   identityEnabled = config.myconfig.userSshKeys.identityFileText != null;
-  identityFile = "~/.ssh/identity.pub";
+  identityFile = "~/.ssh/gitSigningKey.pub";
 in
 {
   programs.ssh = {
@@ -34,7 +34,7 @@ in
     };
   };
 
-  home.file.".ssh/identity.pub" = {
+  home.file.".ssh/gitSigningKey.pub" = {
     enable = identityEnabled;
     text = config.myconfig.userSshKeys.identityFileText;
   };
