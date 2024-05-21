@@ -1,8 +1,14 @@
-{ pkgs, lib, config, age, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  age,
+  ...
+}:
 {
   programs.gh = {
     enable = true;
-    extensions = [];
+    extensions = [ ];
     settings = {
       git_protocol = "ssh";
       prompt = "enabled";

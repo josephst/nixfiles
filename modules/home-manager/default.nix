@@ -1,5 +1,1 @@
-{
-  imports = [
-    ./user-ssh-keys.nix
-  ];
-}
+{ imports = [ ./user-ssh-keys.nix ]; }

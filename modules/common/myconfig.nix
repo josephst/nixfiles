@@ -1,7 +1,4 @@
-{
-  lib,
-  ...
-}:
+{ lib, ... }:
 {
   meta.maintainers = [ lib.maintainers.josephst ];
 

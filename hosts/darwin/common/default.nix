@@ -3,7 +3,7 @@
 {
   environment = {
     loginShell = "${pkgs.zsh}/bin/zsh -l";
-    systemPackages = [];
+    systemPackages = [ ];
   };
 
   # Make sure the nix daemon always runs

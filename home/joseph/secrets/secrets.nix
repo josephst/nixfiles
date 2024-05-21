@@ -1,5 +1,6 @@
 let
   keys = import ../../../keys;
-in {
+in
+{
   "gh_hosts.yml.age".publicKeys = builtins.attrValues keys.users.joseph;
 }

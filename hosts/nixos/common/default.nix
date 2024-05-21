@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   imports = [ ./secrets.nix ];
 
@@ -26,17 +31,19 @@
 
   environment = {
     # NixOS specific (shared with Darin = goes in ../../common/default.nix)
-    systemPackages = [
-      pkgs.cifs-utils
-      pkgs.tailscale
-      pkgs.wezterm.terminfo # this one does not need compilation
-      # avoid compiling desktop stuff when doing cross nixos
-    ] ++ lib.optionals (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) [
-      pkgs.termite.terminfo
-      # Too unstable
-      # pkgs.kitty.terminfo
-      pkgs.foot.terminfo
-    ];
+    systemPackages =
+      [
+        pkgs.cifs-utils
+        pkgs.tailscale
+        pkgs.wezterm.terminfo # this one does not need compilation
+        # avoid compiling desktop stuff when doing cross nixos
+      ]
+      ++ lib.optionals (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) [
+        pkgs.termite.terminfo
+        # Too unstable
+        # pkgs.kitty.terminfo
+        pkgs.foot.terminfo
+      ];
   };
 
   programs = {
@@ -87,12 +94,11 @@
   nix.daemonCPUSchedPolicy = lib.mkDefault "batch";
   nix.daemonIOSchedClass = lib.mkDefault "idle";
   nix.daemonIOSchedPriority = lib.mkDefault 7;
-  nix.settings.experimental-features =
-    [
-      # for container in builds support
-      "auto-allocate-uids"
-      "cgroups"
-    ];
+  nix.settings.experimental-features = [
+    # for container in builds support
+    "auto-allocate-uids"
+    "cgroups"
+  ];
   nix.settings.auto-allocate-uids = true;
 
   # SSH

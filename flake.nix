@@ -114,7 +114,9 @@
 
             ./users/joseph.nix
           ];
-          specialArgs = { inherit inputs; };
+          specialArgs = {
+            inherit inputs;
+          };
         };
       };
 
@@ -134,7 +136,9 @@
             ./users/joseph.nix
             ./users/root.nix
           ];
-          specialArgs = { inherit inputs; };
+          specialArgs = {
+            inherit inputs;
+          };
         };
 
         nixos = nixpkgs.lib.nixosSystem {
@@ -155,7 +159,9 @@
             ./users/joseph.nix
             ./users/root.nix
           ];
-          specialArgs = { inherit inputs; };
+          specialArgs = {
+            inherit inputs;
+          };
         };
 
         # UTM virtual machine
@@ -176,7 +182,9 @@
             ./users/joseph.nix
             ./users/root.nix
           ];
-          specialArgs = { inherit inputs; };
+          specialArgs = {
+            inherit inputs;
+          };
         };
       };
 

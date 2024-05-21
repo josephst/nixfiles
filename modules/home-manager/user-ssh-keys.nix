@@ -3,7 +3,7 @@ let
   cfg = config.myconfig.userSshKeys;
 in
 {
-  imports = [];
+  imports = [ ];
 
   options.myconfig.userSshKeys = {
     identityFileText = lib.mkOption {

@@ -24,9 +24,8 @@ let
 
   hostName = osConfig.networking.hostName;
 
-  userKey = if lib.hasAttr hostName keys.users.joseph
-    then lib.getAttr hostName keys.users.joseph
-    else null;
+  userKey =
+    if lib.hasAttr hostName keys.users.joseph then lib.getAttr hostName keys.users.joseph else null;
 in
 {
   imports = [

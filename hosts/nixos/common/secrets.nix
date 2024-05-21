@@ -1,10 +1,14 @@
-{ config, lib, options, ... }:
 {
-  age.identityPaths =
-    [
-      # key to use for new installs, prior to generation of hostKeys
-      "/etc/agenixKey"
-    ] ++ options.age.identityPaths.default;
+  config,
+  lib,
+  options,
+  ...
+}:
+{
+  age.identityPaths = [
+    # key to use for new installs, prior to generation of hostKeys
+    "/etc/agenixKey"
+  ] ++ options.age.identityPaths.default;
 
   ###########################
 

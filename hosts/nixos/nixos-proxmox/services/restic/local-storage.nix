@@ -55,7 +55,10 @@ in
       User = "restic"; # to read env file
       ExecStart = "${./healthcheck.sh} $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
     };
-    path = [ pkgs.bash pkgs.curl ]; # coreutils, findutils, gnugrep, gnused, systemd already included
+    path = [
+      pkgs.bash
+      pkgs.curl
+    ]; # coreutils, findutils, gnugrep, gnused, systemd already included
     # https://github.com/NixOS/nixpkgs/blob/31b67eb2d97c0671079458725700300c47d55c9e/nixos/lib/systemd-lib.nix#L440
   };
 }
