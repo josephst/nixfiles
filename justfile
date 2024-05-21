@@ -3,6 +3,9 @@ default:
 
 alias s := switch
 
+rekey:
+
+
 [macos]
 switch:
   darwin-rebuild switch --flake .

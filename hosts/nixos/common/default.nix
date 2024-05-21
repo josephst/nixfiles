@@ -2,10 +2,14 @@
   pkgs,
   lib,
   config,
+  options,
   ...
 }:
 {
-  imports = [ ./secrets.nix ];
+  age.identityPaths = [
+    # key to use for new installs, prior to generation of hostKeys
+    "/etc/agenixKey"
+  ] ++ options.age.identityPaths.default;
 
   hardware = {
     enableRedistributableFirmware = true;
