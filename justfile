@@ -4,7 +4,7 @@ default:
 alias s := switch
 
 rekey:
-
+  fd secrets.nix -x sh -c 'cd {//}; agenix -r' sh
 
 [macos]
 switch:
