@@ -18,6 +18,11 @@
     ./orbstack.nix
   ];
 
+  age.identityPaths = [
+    # since openssh isn't enabled on Orbstack, need to generate these with `sudo ssh-keygen -A` first
+    "/etc/ssh/ssh_host_ed25519_key.pub"
+  ];
+
   networking = {
     hostName = "nixos-orbstack"; # Define your hostname.
     domain = "josephstahl.com";
