@@ -4,8 +4,11 @@
   lib,
   ...
 }:
-{
-  programs.alacritty = lib.mkIf (osConfig.myconfig.gui.enable) {
+let
+  cfg = osConfig.myconfig.gui;
+in
+lib.mkIf (cfg.enable) {
+  programs.alacritty = {
     # also declared as a homebrew cask
     # duplication is so that configuration can be done here, and
     # the homebrew cask provides a nice app for Finder/ Spotlight
@@ -182,5 +185,7 @@
     };
   };
 
-  xdg.configFile."alacritty/themes".source = ./themes;
+  xdg.configFile = {
+    "alacritty/themes".source = ./themes;
+  };
 }

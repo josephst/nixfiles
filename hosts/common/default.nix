@@ -59,7 +59,7 @@
       deploy-rs.deploy-rs
       file
       fish
-      (git.override { osxkeychainSupport = false; })
+      git
       mkpasswd
       neovim
       openssh
@@ -72,9 +72,11 @@
 
   # programs.(fish|zsh).enable must be defined here *and* in home-manager section
   # otherwise, nix won't be added to path in fish shell
-  programs.fish = {
-    enable = true;
-    useBabelfish = true;
+  programs = {
+    fish = {
+      enable = true;
+      useBabelfish = true;
+    };
+    zsh.enable = true;
   };
-  programs.zsh.enable = true;
 }

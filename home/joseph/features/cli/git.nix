@@ -59,7 +59,5 @@ in
       ".devenv"
       ".direnv"
     ];
-
-    package = if isDarwin then (pkgs.git.override { osxkeychainSupport = false; }) else pkgs.git;
   };
 }

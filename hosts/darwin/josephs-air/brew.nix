@@ -5,32 +5,31 @@ in
 {
   homebrew = {
     enable = true;
+    global = {
+      # only update with `brew update` (or `just update`)
+      autoUpdate = false;
+    };
     onActivation = {
-      autoUpdate = true;
+      autoUpdate = false;
       upgrade = true;
-      cleanup = "uninstall";
+      cleanup = "zap";
     };
 
-    taps = [
-      "1password/tap"
-      "homebrew/bundle"
-      "homebrew/cask-fonts"
-      "homebrew/cask-versions"
-      "homebrew/services"
-    ];
+    taps = [];
 
     casks = [
       # dev tools
       "1password-cli"
       "1password"
       "alacritty"
+      "amethyst"
       "cyberduck"
       "git-credential-manager"
       "iterm2"
       "orbstack"
       "utm"
       "visual-studio-code"
-      "warp"
+      "wezterm"
 
       # utility
       "appcleaner"

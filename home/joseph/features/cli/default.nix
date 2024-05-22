@@ -18,6 +18,7 @@
     ./ripgrep.nix # better grep
     ./ssh.nix
     ./starship.nix
+    ./wezterm
     ./zellij
   ];
 
