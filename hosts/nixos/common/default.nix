@@ -2,15 +2,19 @@
   pkgs,
   lib,
   config,
+  options,
   ...
 }:
 {
-  imports = [ ./secrets.nix ];
-
   hardware = {
     enableRedistributableFirmware = true;
     enableAllFirmware = true;
   };
+
+  age.identityPaths = [
+    # key to use for new installs, prior to generation of hostKeys
+    "/etc/agenixKey"
+  ] ++ options.age.identityPaths.default;
 
   # Use systemd during boot as well on systems except:
   # - systems with raids as this currently require manual configuration (https://github.com/NixOS/nixpkgs/issues/210210)
