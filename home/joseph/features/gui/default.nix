@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   imports = [ ./alacritty ];
 }

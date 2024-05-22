@@ -3,6 +3,7 @@
   pkgs,
   config,
   osConfig,
+  options,
   lib,
   agenix,
   ...
