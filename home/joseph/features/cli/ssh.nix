@@ -6,7 +6,7 @@
 }:
 let
   identityEnabled = config.myconfig.userSshKeys.identityFileText != null;
-  identityFile = "~/.ssh/gitSigningKey.pub";
+  identityFile = "~/.ssh/identity.pub";
 in
 {
   programs.ssh = {
@@ -24,6 +24,10 @@ in
         user = "joseph";
         forwardAgent = true;
         identityFile = lib.mkIf identityEnabled identityFile;
+        extraOptions = {
+          RequestTTY = "yes";
+          RemoteCommand = "zellij attach ssh-zellij --create";
+        };
       };
       "proxmox proxmox.josephstahl.com" = {
         hostname = "proxmox";
@@ -34,7 +38,7 @@ in
     };
   };
 
-  home.file.".ssh/gitSigningKey.pub" = {
+  home.file.".ssh/identity.pub" = {
     enable = identityEnabled;
     text = config.myconfig.userSshKeys.identityFileText;
   };
