@@ -1,16 +1,15 @@
-{ pkgs, config, ... }:
+  { pkgs, config, ... }:
 let
   fqdn = config.networking.fqdn;
   address = [
     "/nixos.josephstahl.com/192.168.1.10"
-    "/nas.josephstahl.com/192.168.1.12"
     "/proxmox.josephstahl.com/192.168.1.7"
   ];
 in
 {
   services.dnsmasq = {
     enable = true;
-    resolveLocalQueries = false;
+    resolveLocalQueries = false; # let systemd-resolved act as cache for local queries
     settings = {
       listen-address = [ "192.168.1.10" ];
       interface = "enp6s18";
