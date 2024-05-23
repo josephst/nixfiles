@@ -26,7 +26,7 @@ in
         identityFile = lib.mkIf identityEnabled identityFile;
         extraOptions = {
           RequestTTY = "yes";
-          RemoteCommand = "zellij attach ssh-zellij --create";
+          RemoteCommand = "zellij attach -c";
         };
       };
       "proxmox proxmox.josephstahl.com" = {
