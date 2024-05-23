@@ -42,7 +42,8 @@
     networkConfig = {
       Address = "192.168.1.10/24";
       Gateway = "192.168.1.1";
-      DNS = " 192.168.1.10 1.1.1.1 8.8.8.8";
+      DNS = " 192.168.1.10";
+      # DNS = "1.1.1.1 8.8.8.8";
 
       # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
       IPv6AcceptRA = true;
