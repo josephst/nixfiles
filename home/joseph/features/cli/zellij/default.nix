@@ -3,7 +3,7 @@
   programs.zellij = {
     enable = true;
     settings = {
-      default_shell = "nu";
+      default_shell = "fish";
       theme = "catppuccin-frappe";
     };
     enableFishIntegration = false; # see manual settings in fish.nix

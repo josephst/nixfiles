@@ -16,10 +16,7 @@ in {
 
       config.color_scheme = 'Catppuccin Frappe'
       config.default_prog = {
-        '${pkgs.bash}/bin/bash',
-        '--login',
-        '-c',
-        '${pkgs.nushell}/bin/nu --login --interactive'
+        '${pkgs.fish}/bin/fish', '-l'
       }
 
       config.font = wezterm.font 'Iosevka Term'
