@@ -1,7 +1,4 @@
 { pkgs, ... }:
-let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin;
-in
 {
   programs.nushell = {
     enable = true;

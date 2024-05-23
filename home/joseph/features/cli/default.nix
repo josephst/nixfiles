@@ -79,10 +79,19 @@
   ];
 
   programs = {
-    atuin.enable = true;
+    atuin = {
+      enable = true;
+      settings = {
+        store_failed = false;
+        sync = {
+          records = true;
+        };
+      };
+    };
     lazygit.enable = true;
     home-manager.enable = true;
     nix-index.enable = true;
     zoxide.enable = true;
+    zsh.enable = true;
   };
 }

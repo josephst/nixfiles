@@ -62,9 +62,6 @@ in
 
   xdg = {
     enable = true;
-    configFile = {
-      # put various config files here (".text = builtins.readFile "foobar" or .source = )
-    };
 
     userDirs = {
       enable = isLinux;

@@ -18,6 +18,7 @@ in
         description = "Joseph Stahl";
         home = if isDarwin then "/Users/joseph" else "/home/joseph";
         openssh.authorizedKeys.keys = builtins.attrValues keys.users.joseph;
+        shell = if isDarwin then pkgs.zsh else pkgs.fish;
       }
       // lib.optionalAttrs isLinux {
         hashedPasswordFile = config.age.secrets.joseph.path;
@@ -25,7 +26,6 @@ in
         # but doesn't exist until install is done. Uncomment for install, then replace comment.
         isNormalUser = true;
         createHome = true;
-        shell = pkgs.fish;
         extraGroups = [
           "wheel"
           "media"
