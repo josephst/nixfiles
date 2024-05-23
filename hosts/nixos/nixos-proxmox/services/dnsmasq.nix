@@ -3,7 +3,7 @@ let
   fqdn = config.networking.fqdn;
   address = [
     "/nixos.josephstahl.com/192.168.1.10"
-    "/proxmox.josephstahl.com/192.168.1.7"
+    "/proxmox.josephstahl.com/192.168.1.8"
   ];
 in
 {
