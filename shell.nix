@@ -10,7 +10,7 @@
     nativeBuildInputs = with pkgs; [
       agenix
       nixfmt-rfc-style
-      bash
+      bashInteractive
       curl
       git
       home-manager

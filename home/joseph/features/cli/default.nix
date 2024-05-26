@@ -62,7 +62,6 @@
     zigpkgs.master
 
     cachix
-    hydra-check
     hydra-check # check hydra for build status of a package
     nh # Nice wrapper for NixOS and HM
     nix-init # generate nix package from a URL

@@ -30,7 +30,7 @@ Download and boot the minimal ISO from (unstable version).
 Run `sudo -i` to switch to root, then `passwd` to set a root password.
 This enables ssh login (get ip with `ip a`) to run the rest of the installer via ssh.
 
-Complete partitioning [per the NixOS instructions](https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning).
+Complete partitioning [per the NixOS instructions](https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning) or with Disko.
 
 If using Disko:
 1. Create a `disko-config.nix` file, based on template (or edit ie `./hosts/nixos/<hostname>/disko.nix`) and copy to `/tmp/disko-config.nix` on the target machine
@@ -40,13 +40,9 @@ Once partitoning is complete and the system is mounted to `/mnt`,
 we'll deviate from the installer and use `flake.nix` to install the system.
 
 ```shell
-# install agenix to get secrets loaded
-# TODO: remove? not currently working, probably need to modify the ISO to include Agenix module
-# nix-channel --add https://github.com/ryantm/agenix/archive/main.tar.gz agenix
-# nix-channel --update
 
-# Open up a shell to get git:
-nix-shell -p git nixFlakes
+# Open up a dev shell to get git:
+nix-shell
 
 # copy ssh keys over so that we can authenticate with github
 # alternatively, may make new keys with ssh-keygen and copy them to github
@@ -70,12 +66,12 @@ cd ~ # either root or nixos, depending on who's logged in
 git clone https://github.com/josephst/nixfiles.git
 cd nixfiles
 
-# update flake
+# OPTIONAL: update flake
 nix --experimental-features 'flakes nix-command' flake update
 
-# generate new config (ignore the generated configuration.nix)
-nixos-generate-config --root /mnt # if using disko, also include --no-filesystems
-mv /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/hosts/nixos/nixos-proxmox/
+# generate new config (ignore the generated configuration.nix) and copy to this repository
+nixos-generate-config --root /mnt # if using disko, also include `--no-filesystems`
+mv /mnt/etc/nixos/hardware-configuration.nix /path/to/this/repo
 rm /mnt/etc/nixos/configuration.nix
 
 # make sure we're in the right directory
@@ -84,22 +80,25 @@ git add --all # add the new hardware config
 git commit -m "update hardware config" # commit it
 git push # and push to github
 
-# needs more space to build (at least 4GB)
-mount -o remount,size=4G /run/user/0
-
 # install
-nixos-install --flake .#nixos -j 4
+nixos-install --flake .#HOSTNAME
 ```
+
+## Post-install
+Ensure that there's a key for Agenix at `/mnt/etc/agenixKey`.
+After the first boot of the system, copy the newly generated host keys to this repo,
+rekey Agenix, and delete the temporary `agenixKey` file. 
 
 ## NixOS: after setup
 
 ### Tailscale
 `tailscale up --ssh` to log in to Tailscale.
 
-Then, need to [update Google Domains with the Tailscale IP](https://domains.google.com).
+Update dynamic DNS records with the tailscale IP to ensure that other devices on the Tailnet
+can look up the Tailscale IP on public DNS servers
 
 ### Plex
-First time, access at [192.168.1.24:32400/web](192.168.1.24:32400/web) to get it set up, 
+First time, access at [192.168.1.xxx:32400/web](192.168.1.24:32400/web) to get it set up, 
 before trying to access via reverse proxy.
 
 ### Sabnabd

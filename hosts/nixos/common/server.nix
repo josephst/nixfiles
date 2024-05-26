@@ -26,7 +26,7 @@
       stub-ld.enable = lib.mkDefault false;
     };
 
-  # Notice this also disables --help for some commands such es nixos-rebuild
+  # Notice this also disables --help for some commands such as nixos-rebuild
   # documentation.enable = lib.mkDefault false;
   # documentation.info.enable = lib.mkDefault false;
   # documentation.man.enable = lib.mkDefault false;
