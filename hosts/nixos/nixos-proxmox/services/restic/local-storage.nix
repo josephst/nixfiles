@@ -41,6 +41,9 @@ in
     backupPrepareCommand = ''
       # preStart
       ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
+
+      # remove old locks
+      ${pkgs.restic}/bin/restic unlock
     '';
   };
 
