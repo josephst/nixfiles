@@ -7,7 +7,7 @@
 {
   services.ollama = {
     enable = true;
-    listenAddress = "0.0.0.0:11434"; # allow access via tailscale
+    host = "0.0.0.0"; # all address to allow access via tailscale (which also handles auth)
   };
 
   networking.firewall.allowedTCPPorts = [ 11434 ];
