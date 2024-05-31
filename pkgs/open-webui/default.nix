@@ -7,14 +7,14 @@
   nix-update-script
 }:
 let
-  version = "0.1.125";
+  version = "0.1.124";
   pname = "open-webui";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-t7bzsrphUKeg7AcM8KK4usecwGNnYCjtBI2Ad+bsrZI=";
+    hash = "sha256-r3oZiN2UIhPAG+ZcsZrXD1OemJrWXXlZdKVhK3+VhhU=";
   };
 
   # backend acts as reverse proxy, sending requests to ollama
@@ -25,7 +25,7 @@ let
     pname = "open-webui-frontend";
     inherit src version;
 
-    npmDepsHash = "sha256-s4u7ySIiobZJOy/oKhJKoHSaC9Eu6Doao9p2iWgbC88=";
+    npmDepsHash = "sha256-uLp8QlPUR1dfchwu0IhJ8FFMMkm3V+FK2KBc41Un86g=";
 
     env = {
       CYPRESS_INSTALL_BINARY = 0;
