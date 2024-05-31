@@ -49,6 +49,7 @@ let
       sentence-transformers
       pypdf
       docx2txt
+      python-pptx
       unstructured
       markdown
       pypandoc

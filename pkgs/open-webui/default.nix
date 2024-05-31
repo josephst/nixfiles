@@ -3,23 +3,43 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  buildNpmPackage,
+  nix-update-script
 }:
 let
-  version = "v0.1.124"; # version tag
+  version = "0.1.125";
   pname = "open-webui";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    hash = "sha256-r3oZiN2UIhPAG+ZcsZrXD1OemJrWXXlZdKVhK3+VhhU=";
+    rev = "v${version}";
+    hash = "sha256-t7bzsrphUKeg7AcM8KK4usecwGNnYCjtBI2Ad+bsrZI=";
   };
 
   # backend acts as reverse proxy, sending requests to ollama
   backend = pkgs.callPackage ./backend.nix { inherit src version; };
 
   # frontend is the static files
-  frontend = pkgs.callPackage ./frontend.nix { inherit src version; };
+  frontend = buildNpmPackage {
+    pname = "open-webui-frontend";
+    inherit src version;
+
+    npmDepsHash = "sha256-s4u7ySIiobZJOy/oKhJKoHSaC9Eu6Doao9p2iWgbC88=";
+
+    env = {
+      CYPRESS_INSTALL_BINARY = 0;
+    };
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/lib
+      mv ./build $out/lib
+
+      runHook postInstall
+    '';
+  };
 in
 stdenv.mkDerivation {
   inherit pname src version;
@@ -39,6 +59,11 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit (frontend) npmDeps; # make npmDeps visible to nix-update-script
+    updateScript = nix-update-script {};
+  };
 
   meta = with lib; {
     description = "User-friendly WebUI for LLMs (Formerly Ollama WebUI)";
