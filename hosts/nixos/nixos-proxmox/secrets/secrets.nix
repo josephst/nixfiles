@@ -2,7 +2,10 @@ let
   keys = import ../../../../keys;
 
   # include all `joseph` keys to allow me to rekey secrets with my user key
-  allKeys = builtins.attrValues keys.users.joseph ++ [ keys.hosts.nixos-proxmox keys.hosts.installerKey ];
+  allKeys = builtins.attrValues keys.users.joseph ++ [
+    keys.hosts.nixos-proxmox
+    keys.hosts.installerKey
+  ];
 in
 {
   "dnsApiToken.age".publicKeys = allKeys;

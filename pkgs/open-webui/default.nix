@@ -4,7 +4,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  nix-update-script
+  nix-update-script,
 }:
 let
   version = "0.1.124";
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit (frontend) npmDeps; # make npmDeps visible to nix-update-script
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -15,7 +15,7 @@ in
       cleanup = "zap";
     };
 
-    taps = [];
+    taps = [ ];
 
     casks = [
       # dev tools
