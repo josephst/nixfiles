@@ -24,10 +24,9 @@ in
         user = "joseph";
         forwardAgent = true;
         identityFile = lib.mkIf identityEnabled identityFile;
-        extraOptions = {
-          RequestTTY = "yes";
-          RemoteCommand = "zellij attach -c";
-        };
+        # extraOptions = {
+        #   RequestTTY = "yes";
+        # };
       };
       "proxmox proxmox.josephstahl.com" = {
         hostname = "proxmox";

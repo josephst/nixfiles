@@ -15,11 +15,7 @@
     ./hardware-configuration.nix
     ./disko.nix
 
-    ../common/srvos/common
-
-    ../mixins/nix-experimental.nix
     ../mixins/systemd-boot.nix
-    ../mixins/terminfo.nix
   ];
 
   # Use the systemd-boot EFI boot loader.

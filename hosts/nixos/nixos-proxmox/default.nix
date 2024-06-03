@@ -29,6 +29,9 @@
     ./services/netdata
     ./services/tailscale.nix
 
+    # Paperless
+    ./services/paperless.nix
+
     # LLM
     ./services/ollama.nix
     ./services/open-webui.nix
@@ -42,16 +45,15 @@
     ./services/samba.nix
 
     ## Backup
-    # ./services/rclone.nix
+    ./services/restic-server.nix
     ./services/restic/b2-copy.nix
-    ./services/restic/b2-check.nix
+    # ./services/restic/b2-check.nix # system-backup.nix also checks the B2 repo, no need to do it twice
     ./services/restic/restic-user.nix
     ./services/restic/local-storage.nix
-    ./services/restic/restic-rest-server.nix
+    ./services/restic/system-backup.nix
 
     ## Dashboard
     ./services/homepage
-    # ./services/uptime-kuma.nix
   ];
 
   myconfig.gui.enable = false; # headless mode

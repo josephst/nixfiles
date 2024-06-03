@@ -23,6 +23,7 @@ in
 #   ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 -o /dev/null "https://hc-ping.com/$1/$2" --data-raw $output
 # '';
 {
+
   # maintenance of the local restic repo(s) at /storage/restic
   services.restic.backups.localstorage = {
     initialize = false;

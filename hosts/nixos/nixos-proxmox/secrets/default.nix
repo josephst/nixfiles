@@ -38,14 +38,10 @@
     owner = "restic";
   };
 
-  # contents: HC_UUID=<uuid>
-  age.secrets.resticLanEnv.file = ./restic/nas.env.age;
-
-  # contents: repo password
-  # age.secrets.resticpass = {
-  #   file = ./restic/nas.pass.age;
-  #   owner = "restic";
-  # };
+  age.secrets.restic-systembackup-env = {
+    # contents: HC_UUID
+    file = ./restic/systembackup.env.age;
+  };
 
   # contents: password for rsyncd
   age.secrets.rsyncd-secrets = {
