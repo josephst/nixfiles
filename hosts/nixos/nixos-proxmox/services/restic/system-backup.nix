@@ -32,7 +32,8 @@ in
     paths = [
       # TODO: add to this as needed
       "/home"
-      "/var/lib/paperless"
+      "/var/lib/paperless"  # this backups paperless twice (as it includes the "/var/lib/paperless/backups" folder)`
+                            # but restic compression takes care of it
     ];
     exclude = [
       "/home/*/.cache"
@@ -49,6 +50,9 @@ in
 
     backupPrepareCommand = ''
       ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
+    '' + lib.optionalString config.services.paperless.enable ''
+      mkdir /var/lib/paperless/backups
+      ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -f -p
     '';
   };
 
