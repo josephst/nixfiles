@@ -33,8 +33,6 @@
       ${lib.getBin pkgs.samba}/bin/pdbedit \
         -i smbpasswd:${config.age.secrets.smbpasswd.path} \
         -e tdbsam:/var/lib/samba/private/passdb.tdb
-
-        # ${pkgs.tailscale}/bin/tailscale serve --bg --tcp 445 tcp://localhost:445
     '';
   };
 
