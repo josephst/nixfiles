@@ -32,8 +32,7 @@ in
     paths = [
       # TODO: add to this as needed
       "/home"
-      "/var/lib/paperless"  # this backups paperless twice (as it includes the "/var/lib/paperless/backups" folder)`
-                            # but restic compression takes care of it
+      "/var/lib/paperless/backups"
     ];
     exclude = [
       "/home/*/.cache"
