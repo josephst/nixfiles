@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  fqdn = config.networking.fqdn;
+  inherit (config.networking) fqdn;
   webRoot = pkgs.buildEnv {
     name = "webroot";
     paths = [

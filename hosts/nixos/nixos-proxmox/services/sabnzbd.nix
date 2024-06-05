@@ -5,7 +5,7 @@
   ...
 }:
 let
-  fqdn = config.networking.fqdn;
+  inherit (config.networking) fqdn;
   host_whitelist = "${config.networking.hostName},sabnzbd.${fqdn}"; # comma-separated
 in
 {

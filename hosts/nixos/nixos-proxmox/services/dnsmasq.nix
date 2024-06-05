@@ -1,6 +1,5 @@
 { pkgs, config, ... }:
 let
-  fqdn = config.networking.fqdn;
   address = [
     "/nixos.josephstahl.com/192.168.1.10"
     "/proxmox.josephstahl.com/192.168.1.8"
@@ -25,7 +24,7 @@ in
         "2606:4700:4700::1111"
         "2606:4700:4700::1001"
       ];
-      address = address;
+      inherit address;
       dnssec = true;
       conf-file = "${pkgs.dnsmasq}/share/dnsmasq/trust-anchors.conf";
     };

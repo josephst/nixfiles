@@ -1,11 +1,6 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ config, ... }:
 let
-  fqdn = config.networking.fqdn;
+  inherit (config.networking) fqdn;
 in
 {
   security.acme = {

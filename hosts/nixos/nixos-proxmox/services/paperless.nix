@@ -1,11 +1,6 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}:
+{ config, ... }:
 let
-  fqdn = config.networking.fqdn;
+  inherit (config.networking) fqdn;
 in
 {
   age.secrets.paperless-admin.file = ../secrets/paperless-admin.age;

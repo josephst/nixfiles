@@ -1,7 +1,4 @@
-{ pkgs, config, ... }:
-let
-  fqdn = config.networking.fqdn;
-in
+{ config, ... }:
 {
   services.caddy = {
     enable = true;

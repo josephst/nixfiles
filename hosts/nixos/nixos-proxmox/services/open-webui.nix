@@ -1,6 +1,6 @@
-{ pkgs, config, ... }:
+{ config, ... }:
 let
-  fqdn = config.networking.fqdn;
+  inherit (config.networking) fqdn;
 in
 {
   services.open-webui = {

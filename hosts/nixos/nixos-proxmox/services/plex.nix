@@ -1,7 +1,6 @@
 { pkgs, config, ... }:
 let
-  cfg = config.services.plex;
-  fqdn = config.networking.fqdn;
+  inherit (config.networking) fqdn;
 in
 {
   services.plex = {

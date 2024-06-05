@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   # secrets specific to this device
   age.secrets.smb = {
     file = ./smb.age;

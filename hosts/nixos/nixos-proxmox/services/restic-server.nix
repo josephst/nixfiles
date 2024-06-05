@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 let
   port = toString 8081;
-  fqdn = config.networking.fqdn;
+  inherit (config.networking) fqdn;
 in
 {
   services.restic.server = {
