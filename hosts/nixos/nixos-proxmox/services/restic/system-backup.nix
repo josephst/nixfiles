@@ -50,7 +50,7 @@ in
     backupPrepareCommand = ''
       ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
     '' + lib.optionalString config.services.paperless.enable ''
-      mkdir /var/lib/paperless/backups
+      mkdir -p /var/lib/paperless/backups
       ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -f -p
     '';
   };
