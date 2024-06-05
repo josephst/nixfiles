@@ -9,4 +9,5 @@
   # llama-cpp = inputs.llama-cpp.packages."${pkgs.system}".default;
   # recyclarr = pkgs.callPackage ./recyclarr {}; # merged into nixpkgs upstream
   open-webui = pkgs.callPackage ./open-webui { };
+  nixfmt-plus = pkgs.callPackage ./nixfmt-plus.nix {};
 }

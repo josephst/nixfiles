@@ -47,12 +47,14 @@ in
       RandomizedDelaySec = "1h";
     };
 
-    backupPrepareCommand = ''
-      ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
-    '' + lib.optionalString config.services.paperless.enable ''
-      mkdir -p /var/lib/paperless/backups
-      ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -f -p
-    '';
+    backupPrepareCommand =
+      ''
+        ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
+      ''
+      + lib.optionalString config.services.paperless.enable ''
+        mkdir -p /var/lib/paperless/backups
+        ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -f -p
+      '';
   };
 
   systemd.services."restic-backups-system-backup" = {
