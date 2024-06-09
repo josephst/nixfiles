@@ -105,5 +105,9 @@
     #     # });
     #   };
     # };
+    zig_0_12 = prev.zig_0_12.overrideAttrs (_: {
+      # workaround for https://github.com/NixOS/nixpkgs/issues/317055
+      strictDeps = !prev.stdenv.cc.isClang;
+    });
   };
 }
