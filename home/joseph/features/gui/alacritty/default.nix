@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   osConfig,
   lib,
   ...
@@ -8,7 +7,7 @@
 let
   cfg = osConfig.myconfig.gui;
 in
-lib.mkIf (cfg.enable) {
+lib.mkIf cfg.enable {
   programs.alacritty = {
     # also declared as a homebrew cask
     # duplication is so that configuration can be done here, and

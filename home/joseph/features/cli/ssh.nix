@@ -11,11 +11,11 @@ in
 {
   programs.ssh = {
     enable = true;
-    includes = lib.optional (pkgs.stdenv.isDarwin) "~/.orbstack/ssh/config";
+    includes = lib.optional pkgs.stdenv.isDarwin "~/.orbstack/ssh/config";
     matchBlocks = {
       "*" = {
         identityFile = lib.mkIf identityEnabled identityFile;
-        extraOptions = lib.optionalAttrs (pkgs.stdenv.isDarwin) {
+        extraOptions = lib.optionalAttrs pkgs.stdenv.isDarwin {
           IdentityAgent = ''"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"'';
         };
       };

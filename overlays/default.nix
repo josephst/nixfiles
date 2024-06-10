@@ -6,25 +6,25 @@
   deploy-rs = inputs.deploy-rs.overlays.default;
 
   additions =
-    final: prev:
+    final: _prev:
     # this adds custom pkgs in the same namespace as all other packages
     # (ie nixpkgs.recyclarr)
     import ../pkgs { pkgs = final; };
 
-  channels = final: prev: {
+  channels = final: _prev: {
     # this adds nixpkgs-unstable as an overlays, available as nixpkgs.unstable.foobar
     # doesn't do much now, since we're already following unstable
     unstable = import inputs.nixpkgs {
-      system = final.system;
+      inherit (final) system;
       config.allowUnfree = true;
     };
     stable = import inputs.nixpkgs-stable {
-      system = final.system;
+      inherit (final) system;
       config.allowUnfree = true;
     };
   };
 
-  security = final: prev: {
+  security = _final: _prev: {
     # for https://github.com/NixOS/nixpkgs/pull/300028, but causes HUGE rebuild
     # xz = prev.xz.overrideAttrs (old: {
     #   version = inputs.nixpkgs-staging.legacyPackages.${final.system}.xz.version;
@@ -44,11 +44,11 @@
     # and lib from the deploy-rs flake
     deploy-rs =
       let
-        pkgs = import inputs.nixpkgs { system = final.system; };
+        pkgs = import inputs.nixpkgs { inherit (final) system; };
       in
       {
-        deploy-rs = pkgs.deploy-rs;
-        lib = prev.deploy-rs.lib;
+        inherit (pkgs) deploy-rs;
+        inherit (prev.deploy-rs) lib;
       };
     # # override lego version (ACME certificates) with newest rev from github
     # # which supports google domains

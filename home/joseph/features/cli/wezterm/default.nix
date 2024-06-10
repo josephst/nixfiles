@@ -1,13 +1,4 @@
 { pkgs, config, ... }:
-let
-  # potential workaround for nushell in wezterm not loading env vars properly
-  wezterm-nushell = pkgs.writeShellScript "wezterm-nushell.sh" ''
-    source /etc/static/bashrc
-    source ${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh
-
-    exec ${pkgs.nushell}/bin/nu
-  '';
-in
 {
   programs.wezterm = {
     enable = true;

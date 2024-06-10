@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   programs.fzf = {
     enable = true;
     colors = {

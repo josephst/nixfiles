@@ -38,6 +38,6 @@ in
   home-manager.users.joseph = import ../home/joseph;
   home-manager.backupFileExtension = ".backup-pre-hm";
   home-manager.extraSpecialArgs = {
-    agenix = inputs.agenix;
+    inherit (inputs) agenix;
   };
 }
