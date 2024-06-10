@@ -19,8 +19,8 @@ in
           IdentityAgent = ''"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"'';
         };
       };
-      "nixos nixos.josephstahl.com" = {
-        hostname = "nixos";
+      "terminus terminus.josephstahl.com" = {
+        hostname = "terminus";
         user = "joseph";
         forwardAgent = true;
         identityFile = lib.mkIf identityEnabled identityFile;
