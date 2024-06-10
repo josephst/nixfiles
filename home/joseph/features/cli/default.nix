@@ -30,7 +30,7 @@
     croc # file sharing
     delta # git and diff viewer
     diffsitter # better diff
-    dog # better dig
+    dogdns # better dig
     httpie # better curl
     hub # Git wrapper that has better Github support
     hyperfine # command-line benchmarking

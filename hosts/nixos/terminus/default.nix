@@ -19,7 +19,8 @@
     ./services/acme.nix
     ./services/caddy.nix
     # ./services/coredns
-    ./services/dnsmasq.nix
+    # ./services/dnsmasq.nix
+    ./services/blocky.nix
     ./services/netdata
     ./services/tailscale.nix
 
@@ -62,10 +63,9 @@
   users.groups.media = { };
 
   networking = {
-    hostName = "terminus"; # Define your hostname. (managed by cloud-init)
+    hostName = "terminus";
     hostId = "e2dfd738"; # head -c 8 /etc/machine-id
     domain = "josephstahl.com";
-    # search = ["josephstahl.com" "taildbd4c.ts.net"];
 
     # networkmanager - disabled, use systemd-networkd instead
     networkmanager.enable = false; # Easiest to use and most distros use this by default.

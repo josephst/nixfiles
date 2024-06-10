@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 let
   address = [
     "/terminus.josephstahl.com/192.168.1.10"
