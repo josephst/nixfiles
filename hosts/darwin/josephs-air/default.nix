@@ -1,9 +1,4 @@
-{
-  inputs,
-  pkgs,
-  config,
-  ...
-}:
+_:
 let
   hostname = "Josephs-MacBook-Air";
 in

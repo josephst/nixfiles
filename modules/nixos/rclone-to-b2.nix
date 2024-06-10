@@ -24,9 +24,7 @@ in
   meta.maintainers = [ lib.maintainers.josephst ];
 
   options.services.restic.clone = {
-    enable = lib.mkEnableOption (
-      "Sync Restic repos to B2 using Rclone (ie will also delete from remote)"
-    );
+    enable = lib.mkEnableOption "Sync Restic repos to B2 using Rclone (ie will also delete from remote)";
 
     dataDir = lib.mkOption {
       default = "/var/lib/restic/";
@@ -118,7 +116,7 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = (config.services.restic.clone.dataDir != null);
+        assertion = config.services.restic.clone.dataDir != null;
         message = "services.restic.clone.dataDir must be a valid path";
       }
       {
@@ -128,7 +126,7 @@ in
         message = "exactly one of remoteDir or environmentFile cannot be null";
       }
       {
-        assertion = (config.services.restic.clone.rcloneConfFile != null);
+        assertion = config.services.restic.clone.rcloneConfFile != null;
         message = "must provide a Rclone config file";
       }
     ];
@@ -169,7 +167,7 @@ in
     systemd.timers = lib.mkIf (cfg.timerConfig != null) {
       rclone-copy = {
         wantedBy = [ "timers.target" ];
-        timerConfig = cfg.timerConfig;
+        inherit (cfg) timerConfig;
       };
     };
 

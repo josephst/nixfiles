@@ -1,6 +1,6 @@
 { lib, config, ... }:
 let
-  brewPrefix = config.homebrew.brewPrefix;
+  inherit (config.homebrew) brewPrefix;
 in
 {
   homebrew = {
@@ -71,7 +71,7 @@ in
     };
   };
 
-  environment.loginShellInit = lib.mkIf (config.homebrew.enable) ''
+  environment.loginShellInit = lib.mkIf config.homebrew.enable ''
     eval $(${brewPrefix}/brew shellenv)
   '';
 }

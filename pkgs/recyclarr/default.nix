@@ -3,8 +3,6 @@
   stdenv,
   fetchurl,
   makeWrapper,
-  autoPatchelfHook,
-  fixDarwinDylibNames,
   darwin,
   recyclarr,
   git,
@@ -32,23 +30,6 @@ let
       arm64-osx_hash = "sha256-zSHgLXRDB6UA7V0LFgLq9ChqB40IHIJJxRqAYyVFlB8=";
     }
     ."${arch}-${os}_hash";
-
-  libPath =
-    {
-      osx = "DYLD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          darwin.ICU
-          zlib
-        ]
-      }";
-      linux = "LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          icu
-          zlib
-        ]
-      }";
-    }
-    ."${os}";
 in
 stdenv.mkDerivation rec {
   pname = "recyclarr";

@@ -3,7 +3,6 @@
   pkgs,
   config,
   osConfig,
-  options,
   lib,
   agenix,
   ...
@@ -22,7 +21,7 @@ let
   # as it does not matter which device the git commit is being signed by (more interested in which *user* is signing)
   gitSigningKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop joseph-git-signing";
 
-  hostName = osConfig.networking.hostName;
+  inherit (osConfig.networking) hostName;
 
   userKey =
     if lib.hasAttr hostName keys.users.joseph then lib.getAttr hostName keys.users.joseph else null;

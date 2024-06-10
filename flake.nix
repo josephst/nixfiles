@@ -141,7 +141,7 @@
           };
         };
 
-        nixos = nixpkgs.lib.nixosSystem {
+        terminus = nixpkgs.lib.nixosSystem {
           # nixos-rebuild switch --flake .
           system = "x86_64-linux";
           pkgs = legacyPackages.x86_64-linux;
@@ -154,7 +154,7 @@
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
             ./hosts/nixos/mixins/systemd-boot.nix
-            ./hosts/nixos/nixos-proxmox # host-specific
+            ./hosts/nixos/terminus # host-specific
 
             ./users/joseph.nix
             ./users/root.nix
@@ -189,12 +189,12 @@
       };
 
       deploy.nodes = {
-        nixos = {
-          # override hostname with `nix run github:serokell/deploy-rs .#nixos -- --hostname 192.168.1.10`
+        terminus = {
+          # override hostname with `nix run github:serokell/deploy-rs .#terminus -- --hostname 192.168.1.10`
           # (if DNS not yet set up/ working)
-          hostname = "nixos.josephstahl.com";
+          hostname = "terminus.josephstahl.com";
           profiles.system = {
-            path = legacyPackages.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.nixos;
+            path = legacyPackages.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.terminus;
             sshUser = "root";
             magicRollback = true;
             remoteBuild = true; # since it may be cross-platform

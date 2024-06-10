@@ -36,4 +36,4 @@ gc age='7':
 # deploy to proxmox nixos VM
 # (use the binary from nixpkgs to allow for using binary cache instead of rebuilding)
 deploy:
-  nix run github:nixos/nixpkgs/nixpkgs-unstable#deploy-rs .#nixos
+  nix run github:nixos/nixpkgs/nixpkgs-unstable#deploy-rs .#terminus
