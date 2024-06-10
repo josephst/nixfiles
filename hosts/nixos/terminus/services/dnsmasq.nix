@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 let
   address = [
-    "/nixos.josephstahl.com/192.168.1.10"
+    "/terminus.josephstahl.com/192.168.1.10"
     "/proxmox.josephstahl.com/192.168.1.8"
   ];
 in
