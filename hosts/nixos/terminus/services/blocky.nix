@@ -47,6 +47,7 @@ in
         };
       };
       clientLookup.upstream = "192.168.1.1";
+      queryLog.type = "none";
       # blocking = {
       #   denylists = {
       #     ads = [
