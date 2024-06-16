@@ -6,6 +6,7 @@
     Josephs-MacBook-Air = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK4LUu5VYk6fVSjJoBXjvQc3VNTor4krhhezFg60/+iG root@Josephs-MacBook-Air";
     terminus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL4F2rodZ/DMzp2bblvV3LNTHtV89XOYATeHKIwzES0D root@nixos";
     anacreon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGoGRrCCPe6oXw4FCfWgimXoUY2kxisYu3rUyl8F+ZrD root@anacreon"; # VM on UTM (macbook air)
+    nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBL3m6s7bwvuODKtaS8C+DKKGxNkMyKaYoBQobT7bq8g root@nixos-orbstack";
   };
 
   users = {
