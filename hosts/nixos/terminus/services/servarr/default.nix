@@ -4,7 +4,7 @@
     ./plex.nix
     ./prowlarr.nix
     ./radarr.nix
-    ./servarr.nix
+    ./sabnzbd.nix
     ./sonarr.nix
   ];
 
