@@ -21,14 +21,17 @@
   };
 
   services.qemuGuest.enable = true;
-  myconfig.gui.enable = true;
+  myconfig = {
+    gui.enable = true;
+  };
 
   networking.hostName = "anacreon"; # Define your hostname.
+
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   systemd.network.enable = true;
-  networking.useNetworkd = false; # manually configure networks
+
   systemd.network.networks."10-lan" = {
     matchConfig.Name = "enp0s1";
     networkConfig.DHCP = "ipv4";

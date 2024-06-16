@@ -36,7 +36,7 @@
     '';
   };
 
-  # tmpfiles to create shares
+  # tmpfiles to create shares if not yet present
   systemd.tmpfiles.settings = {
     "10-samba-shares" = {
       "/storage/media" = {

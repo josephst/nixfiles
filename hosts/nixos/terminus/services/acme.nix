@@ -6,8 +6,8 @@ in
   security.acme = {
     acceptTerms = true;
     # TODO: hide email?
-    defaults.email = "josephst18+acme@outlook.com"; # can't be local DNS since nixos.josephstahl.com resolves to local IP on LAN
-    defaults.dnsResolver = "1.1.1.1:53";
+    defaults.email = "josephst18+acme@outlook.com";
+    defaults.dnsResolver = "1.1.1.1:53"; # can't be local DNS since nixos.josephstahl.com resolves to local IP on LAN
     certs."${fqdn}" = {
       domain = "*.${fqdn}";
       extraDomainNames = [ fqdn ];

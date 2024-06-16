@@ -3,12 +3,9 @@
   stdenv,
   fetchurl,
   makeWrapper,
-  darwin,
   recyclarr,
   git,
-  icu,
   testers,
-  zlib,
 }:
 let
   os = if stdenv.isDarwin then "osx" else "linux";

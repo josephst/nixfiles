@@ -18,8 +18,6 @@
     ## Services
     ./services/acme.nix
     ./services/caddy.nix
-    # ./services/coredns
-    # ./services/dnsmasq.nix
     ./services/blocky.nix
     ./services/netdata
     ./services/tailscale.nix
@@ -32,11 +30,7 @@
     ./services/open-webui.nix
 
     ## Media & Sharing
-    ./services/sabnzbd.nix
-    ./services/plex.nix
-    ./services/prowlarr.nix
-    ./services/radarr.nix
-    ./services/sonarr.nix
+    ./services/servarr
     ./services/samba.nix
 
     ## Backup
@@ -51,16 +45,17 @@
     ./services/homepage
   ];
 
-  myconfig.gui.enable = false; # headless mode
-  myconfig.llm.enable = true;
+  myconfig = {
+    gui.enable = false; # headless mode
+    llm.enable = true;
+  };
+
+  systemd.tmpfiles.rules = [ "d /storage - - - - -" ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
-
-  # Create the group for media stuff (plex, sabnzbd, etc)
-  users.groups.media = { };
 
   networking = {
     hostName = "terminus";
@@ -76,22 +71,6 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
-  # fileSystems."/mnt/nas" = {
-  #   device = "//192.168.1.12/public"; # NAS IP
-  #   fsType = "cifs";
-  #   options = [
-  #     "x-systemd.automount"
-  #     "noauto"
-  #     "x-systemd.idle-timeout=600"
-  #     "x-systemd.device-timeout=5s"
-  #     "x-systemd.mount-timeout=5s"
-  #     "gid=media"
-  #     "file_mode=0775"
-  #     "dir_mode=0775"
-  #     "credentials=${config.age.secrets.smb.path}"
-  #   ];
-  # };
 
   # List services that you want to enable:
   services = {
