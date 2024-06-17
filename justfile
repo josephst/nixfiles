@@ -3,9 +3,6 @@ default:
 
 alias s := switch
 
-rekey:
-  fd secrets.nix -x sh -c 'cd {//}; agenix -r' sh
-
 pkgs-update:
   nix run nixpkgs#nix-update -- open-webui --flake
 
