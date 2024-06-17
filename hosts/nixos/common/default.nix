@@ -14,6 +14,7 @@
   age.identityPaths = [
     # key to use for new installs, prior to generation of hostKeys
     "/etc/agenixKey"
+    "/etc/ssh/ssh_host_ed25519_key" # this is the default location, but orbstack doesn't have ssh enabled so we have to manually create key (ssh-keygen -A) and list it here
   ] ++ options.age.identityPaths.default;
 
   # Use systemd during boot as well on systems except:
