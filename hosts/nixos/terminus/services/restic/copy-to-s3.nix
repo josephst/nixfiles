@@ -34,7 +34,8 @@ in
   services.restic.backups.b2 = {
     initialize = false;
     user = "restic";
-    environmentFile = config.age.secrets.resticb2env.path; # HC_UUID, remainder of config in rcloneConfigFile
+    environmentFile = config.age.secrets.resticb2env.path;
+    repository = "sftp:backup@192.168.1.100:/backups/‹name›";
     passwordFile = config.age.secrets.restic-localstorage-pass.path; # remote has same password as local
     inherit pruneOpts;
     inherit checkOpts;

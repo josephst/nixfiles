@@ -27,10 +27,9 @@ _: {
     owner = "restic";
   };
 
-  age.secrets.restic-localstorage-env = {
-    # contents:
-    # HC_UUID=<uuid for healthchecks>
-    file = ./restic/localstorage.env.age;
+  age.secrets.rcloneRemoteDir = {
+    # contents: bucket to backup to
+    file = ./rcloneRemoteDir.age;
   };
 
   age.secrets.restic-localstorage-pass = {

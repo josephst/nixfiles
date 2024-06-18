@@ -6,8 +6,6 @@
   ...
 }:
 
-# TODO: support lists (from multiple locations, to multiple locations)
-
 let
   cfg = config.services.rclone-sync;
   inherit (utils.systemdUtils.unitOptions) unitOption;
@@ -31,24 +29,23 @@ in
       default = null;
       type = with lib.types; nullOr str;
       description = "The remote Rclone-supported backend to copy repository to";
-      example = "b2:foobar/restic";
+      example = "remote:bucketName/folderName";
     };
 
     environmentFile = lib.mkOption {
       default = null;
       type = with lib.types; nullOr str;
       description = ''
-        Path to a file containing the name of a remote \
-        Rclone-supported backend to copy repository to.
-        Using the usual systemd EnvironmentFile syntax.
-
-        *Must* have key named "REMOTE"
-        May also have HC_UUID set to provide UUID for healthchecks.io
+        Path to a file containing HC_UUID set to provide UUID for healthchecks.io
+        If using Rclone env_auth (ie environmental variables) to authenticate with remote,
+        they should also be configured here
 
         Example file:
         ```
-        REMOTE=b2:example/rclone
+        REMOTE=remote:bucketName/folderName
         HC_UUID=<uuid>
+        AWS_SECRET_KEY_ID=...
+        ...
         ```
 
         For this example, will need to make sure `b2` is a configured backend in rclone.conf
@@ -121,7 +118,7 @@ in
       }
       {
         assertion = config.services.rclone-sync.rcloneConfFile != null;
-        message = "must provide a Rclone config file";
+        message = "must provide a Rclone conf file";
       }
     ];
 
