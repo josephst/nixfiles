@@ -37,7 +37,6 @@
     ./services/restic-server.nix
     ./services/restic/copy-to-s3.nix
     ./services/restic/restic-user.nix
-    ./services/restic/local-storage.nix
     ./services/restic/system-backup.nix
 
     ## Dashboard
