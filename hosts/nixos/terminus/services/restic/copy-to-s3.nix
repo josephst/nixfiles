@@ -16,7 +16,7 @@ let
 in
 {
   # copy local Restic repo to S3-compatible repo
-  services.rsync-clone = {
+  services.rclone-sync = {
     enable = true;
     dataDir = localPath;
     environmentFile = config.age.secrets.resticb2env.path;
