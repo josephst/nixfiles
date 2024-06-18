@@ -9,25 +9,17 @@
 # TODO: support lists (from multiple locations, to multiple locations)
 
 let
-  cfg = config.services.restic.clone;
+  cfg = config.services.rclone-sync;
   inherit (utils.systemdUtils.unitOptions) unitOption;
-
-  stopScript = pkgs.writeShellScript "healthchecks" ''
-    OUTPUT=$(${pkgs.systemd}/bin/systemctl status "rclone-copy.service" -l -n 1000 | ${pkgs.coreutils}/bin/tail --bytes 100000)
-    HC_UUID=$1
-    EXIT_STATUS=''${2:-0} # two single quotes are the escape sequence here
-
-    ${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/$EXIT_STATUS" --data-raw "$OUTPUT"
-  '';
 in
 {
   meta.maintainers = [ lib.maintainers.josephst ];
 
-  options.services.restic.clone = {
+  options.services.rclone-sync = {
     enable = lib.mkEnableOption "Sync Restic repos to B2 using Rclone (ie will also delete from remote)";
 
     dataDir = lib.mkOption {
-      default = "/var/lib/restic/";
+      default = "/srv/restic/";
       type = lib.types.str;
       description = "The local restic repository to be copied from.";
     };
@@ -69,6 +61,7 @@ in
       default = [
         "--transfers=16"
         "--b2-hard-delete"
+        "--fast-list"
       ];
       description = ''
         Extra arguments passed to rclone
@@ -76,6 +69,7 @@ in
       example = [
         "--transfers=16"
         "--b2-hard-delete"
+        "--fast-list"
       ];
     };
 
@@ -116,22 +110,22 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = config.services.restic.clone.dataDir != null;
-        message = "services.restic.clone.dataDir must be a valid path";
+        assertion = config.services.rclone-sync.dataDir != null;
+        message = "services.rclone-sync.dataDir must be a valid path";
       }
       {
         assertion =
-          (config.services.restic.clone.remoteDir == null)
-          != (config.services.restic.clone.environmentFile == null);
+          (config.services.rclone-sync.remoteDir == null)
+          != (config.services.rclone-sync.environmentFile == null);
         message = "exactly one of remoteDir or environmentFile cannot be null";
       }
       {
-        assertion = config.services.restic.clone.rcloneConfFile != null;
+        assertion = config.services.rclone-sync.rcloneConfFile != null;
         message = "must provide a Rclone config file";
       }
     ];
 
-    systemd.services.rclone-copy = {
+    systemd.services.rclone-sync = {
       description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
       wants = [ "network.target" ];
       after = [ "network.target" ];
@@ -146,8 +140,6 @@ in
           ExecStart = "${cfg.package}/bin/rclone --config=\${CREDENTIALS_DIRECTORY}/rcloneConf sync ${cfg.dataDir} ${remote} ${extraArgs}";
 
           Type = "oneshot";
-          User = "restic"; # TODO: allow configuation of user/group
-          Group = "restic";
 
           # Security hardening
           ReadWritePaths = [ cfg.dataDir ];
@@ -160,24 +152,24 @@ in
         }
         // lib.optionalAttrs cfg.pingHealthchecks {
           ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${HC_UUID}/start"'';
-          ExecStopPost = "${stopScript} $HC_UUID $EXIT_STATUS";
+          onSuccess = [ "rclone-sync-notify@success.service" ];
+          onFailure = [ "rclone-sync-notify@failure.service" ];
         };
     };
 
+    systemd.services."rclone-sync-notify@" = lib.mkIf cfg.pingHealthchecks {
+      serviceConfig = {
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        User = "restic"; # to read env file
+        ExecStart = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
+      };
+    };
+
     systemd.timers = lib.mkIf (cfg.timerConfig != null) {
-      rclone-copy = {
+      rclone-sync = {
         wantedBy = [ "timers.target" ];
         inherit (cfg) timerConfig;
       };
     };
-
-    users.users.restic = {
-      group = "restic";
-      home = cfg.dataDir;
-      createHome = true;
-      uid = config.ids.uids.restic;
-    };
-
-    users.groups.restic.gid = config.ids.uids.restic;
   };
 }

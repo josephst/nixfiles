@@ -20,14 +20,12 @@ let
   ];
 in
 {
-  imports = [ ./rcloneRemoteDir.nix ];
-
+  # backup to the local HDD array
   services.restic.backups.system-backup = {
     initialize = false;
     passwordFile = config.age.secrets.restic-localstorage-pass.path; # Repository password
     environmentFile = config.age.secrets.restic-systembackup-env.path; # HC_UUID
-    repositoryFile = config.age.secrets.b2WithRclone.path; # Repository path
-    rcloneConfigFile = config.age.secrets.rcloneConf.path; # RClone config
+    repository = "/storage/restic";
 
     paths = [
       # TODO: add to this as needed
@@ -66,12 +64,7 @@ in
     serviceConfig = {
       EnvironmentFile = config.age.secrets.restic-systembackup-env.path; # contains heathchecks.io UUID
       User = "restic"; # to read env file
-      ExecStart = "${./healthcheck.sh} $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
+      ExecStart = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
     };
-    path = [
-      pkgs.bash
-      pkgs.curl
-    ]; # coreutils, findutils, gnugrep, gnused, systemd already included
-    # https://github.com/NixOS/nixpkgs/blob/31b67eb2d97c0671079458725700300c47d55c9e/nixos/lib/systemd-lib.nix#L440
   };
 }

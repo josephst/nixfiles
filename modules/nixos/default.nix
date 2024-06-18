@@ -1,7 +1,7 @@
 {
   imports = [
     ../common
-    ./rclone-to-b2.nix
+    ./rclone-sync.nix
     # ./open-webui.nix
   ];
 }

@@ -15,6 +15,8 @@ _: {
   age.secrets.resticb2env = {
     # contents:
     # RCLONE_REMOTE=<rclone path>
+    # AWS_ACCESS_KEY_ID=
+    # AWS_SECRET_ACCESS_KEY=
     # HC_UUID=<uuid for healthchecks>
     file = ./restic/b2.env.age;
   };
@@ -40,10 +42,5 @@ _: {
   age.secrets.restic-systembackup-env = {
     # contents: HC_UUID
     file = ./restic/systembackup.env.age;
-  };
-
-  # contents: password for rsyncd
-  age.secrets.rsyncd-secrets = {
-    file = ./rsyncd-secrets.age;
   };
 }

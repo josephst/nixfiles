@@ -12,13 +12,9 @@ in
   "netdata_nixos_claim.age".publicKeys = allKeys;
   "paperless-admin.age".publicKeys = allKeys;
   "rclone.conf.age".publicKeys = allKeys;
-  "rcloneRemote.age".publicKeys = allKeys;
-  "restic/b2WithRclone.age".publicKeys = allKeys;
   "restic/b2.env.age".publicKeys = allKeys;
-  "restic/localstorage.env.age".publicKeys = allKeys;
   "restic/localstorage.pass.age".publicKeys = allKeys;
   "restic/systembackup.env.age".publicKeys = allKeys;
-  "rsyncd-secrets.age".publicKeys = allKeys;
   "smb.age".publicKeys = allKeys; # login for smb shares on NAS
   "smbpasswd.age".publicKeys = allKeys; # smb password database
   "users/joseph.age".publicKeys = allKeys;

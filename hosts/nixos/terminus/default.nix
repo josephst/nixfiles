@@ -35,8 +35,7 @@
 
     ## Backup
     ./services/restic-server.nix
-    ./services/restic/b2-copy.nix
-    # ./services/restic/b2-check.nix # system-backup.nix also checks the B2 repo, no need to do it twice
+    ./services/restic/copy-to-s3.nix
     ./services/restic/restic-user.nix
     ./services/restic/local-storage.nix
     ./services/restic/system-backup.nix

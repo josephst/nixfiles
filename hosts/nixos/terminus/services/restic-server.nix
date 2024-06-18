@@ -11,6 +11,8 @@ in
     extraFlags = [ "--no-auth" ]; # auth managed by tailscale
   };
 
+  systemd.tmpfiles.rules = [ "d  ${config.services.restic.server.dataDir}  700 restic  restic  -" ];
+
   services.caddy.virtualHosts."restic.${fqdn}" = {
     extraConfig = ''
       reverse_proxy http://localhost:${port}
