@@ -124,7 +124,7 @@ in
 
     systemd.services.rclone-sync = let
         remote = if cfg.remoteDir != null then cfg.remoteDir else "$REMOTE";
-        extraArgs = utils.escapeSystemdExecArgs cfg.extraRcloneArgs;
+        extraArgs = lib.escapeShellArgs cfg.extraRcloneArgs;
       in {
       description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
       wants = [ "network.target" ];
@@ -155,7 +155,7 @@ in
           ${cfg.package}/bin/rclone
             --config ''$CREDENTIALS_DIRECTORY/rcloneConf
             --cache /var/cache/rclone-sync
-            sync ${cfg.dataDir} ${remote} ${lib.escapeShellArgs extraArgs}
+            sync ${cfg.dataDir} ${remote} ${extraArgs}
         '';
     };
 
