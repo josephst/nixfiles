@@ -122,22 +122,17 @@ in
       }
     ];
 
-    systemd.services.rclone-sync = {
+    systemd.services.rclone-sync = let
+        remote = if cfg.remoteDir != null then cfg.remoteDir else "$REMOTE";
+        extraArgs = utils.escapeSystemdExecArgs cfg.extraRcloneArgs;
+      in {
       description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
       wants = [ "network.target" ];
       after = [ "network.target" ];
       serviceConfig =
-        let
-          remote = if cfg.remoteDir != null then cfg.remoteDir else "$REMOTE";
-          extraArgs = utils.escapeSystemdExecArgs cfg.extraRcloneArgs;
-        in
         {
           LoadCredential = "rcloneConf:${cfg.rcloneConfFile}";
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-          ExecStart = "${cfg.package}/bin/rclone --config=\${CREDENTIALS_DIRECTORY}/rcloneConf sync ${cfg.dataDir} ${remote} ${extraArgs}";
-
-          Type = "oneshot";
-
           # Security hardening
           ReadWritePaths = [ cfg.dataDir ];
           PrivateTmp = true;
@@ -145,21 +140,33 @@ in
           ProtectKernelTunables = true;
           ProtectKernelModules = true;
           ProtectControlGroups = true;
+          ProtectHome = "read-only";
           PrivateDevices = true;
+          StateDirectory = "rclone-sync";
+          CacheDirectory = "rclone-sync";
         }
         // lib.optionalAttrs cfg.pingHealthchecks {
           ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${HC_UUID}/start"'';
           onSuccess = [ "rclone-sync-notify@success.service" ];
           onFailure = [ "rclone-sync-notify@failure.service" ];
         };
+
+        script = ''
+          ${cfg.package}/bin/rclone
+            --config ''$CREDENTIALS_DIRECTORY/rcloneConf
+            --cache /var/cache/rclone-sync
+            sync ${cfg.dataDir} ${remote} ${lib.escapeShellArgs extraArgs}
+        '';
     };
 
     systemd.services."rclone-sync-notify@" = lib.mkIf cfg.pingHealthchecks {
       serviceConfig = {
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         User = "restic"; # to read env file
-        ExecStart = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
       };
+      script = ''
+        ${pkgs.healthchecks-ping}/bin/healthchecks-ping "$HC_UUID" "$MONITOR_EXIT_STATUS" "$MONITOR_UNIT"
+      '';
     };
 
     systemd.timers = lib.mkIf (cfg.timerConfig != null) {

@@ -64,7 +64,7 @@ in
     serviceConfig = {
       EnvironmentFile = config.age.secrets.resticb2env.path; # contains heathchecks.io UUID
       User = "restic"; # to read env file
-      ExecStart = "${pkgs.healthcheck-ping}/bin/healthcheck-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
+      ExecStart = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
     };
   };
 }
