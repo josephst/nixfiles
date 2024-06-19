@@ -25,20 +25,15 @@ in
     # TODO:
     # appendOnly (with rclone copy?)
 
-    remoteDir = lib.mkOption {
-      default = null;
-      type = with lib.types; nullOr str;
-      description = "The remote Rclone-supported backend to copy repository to";
-      example = "remote:bucketName/folderName";
-    };
-
     environmentFile = lib.mkOption {
       default = null;
-      type = with lib.types; nullOr str;
+      type = with lib.types; str;
       description = ''
         Path to a file containing HC_UUID set to provide UUID for healthchecks.io
         If using Rclone env_auth (ie environmental variables) to authenticate with remote,
         they should also be configured here
+
+        Also set $REMOTE here to provide the remote (in Rclone syntax) and bucket/ folder name
 
         Example file:
         ```
@@ -111,19 +106,12 @@ in
         message = "services.rclone-sync.dataDir must be a valid path";
       }
       {
-        assertion =
-          (config.services.rclone-sync.remoteDir == null)
-          != (config.services.rclone-sync.environmentFile == null);
-        message = "exactly one of remoteDir or environmentFile cannot be null";
-      }
-      {
         assertion = config.services.rclone-sync.rcloneConfFile != null;
         message = "must provide a Rclone conf file";
       }
     ];
 
     systemd.services.rclone-sync = let
-        remote = if cfg.remoteDir != null then cfg.remoteDir else "$REMOTE";
         extraArgs = lib.escapeShellArgs cfg.extraRcloneArgs;
       in {
       description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
@@ -155,7 +143,7 @@ in
           ${cfg.package}/bin/rclone
             --config ''$CREDENTIALS_DIRECTORY/rcloneConf
             --cache /var/cache/rclone-sync
-            sync ${cfg.dataDir} ${remote} ${extraArgs}
+            sync ${cfg.dataDir} $REMOTE ${extraArgs}
         '';
     };
 
