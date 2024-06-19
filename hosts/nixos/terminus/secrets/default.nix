@@ -26,11 +26,6 @@ _: {
     file = ./rclone.conf.age;
   };
 
-  age.secrets.rcloneRemoteDir = {
-    # contents: bucket to backup to
-    file = ./rcloneRemoteDir.age;
-  };
-
   age.secrets.restic-localstorage-pass = {
     # contents: password for restic repo
     file = ./restic/localstorage.pass.age;
