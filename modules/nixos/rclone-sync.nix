@@ -140,9 +140,9 @@ in
         };
 
         script = ''
-          ${cfg.package}/bin/rclone
-            --config ''$CREDENTIALS_DIRECTORY/rcloneConf
-            --cache /var/cache/rclone-sync
+          ${cfg.package}/bin/rclone \
+            --config ''$CREDENTIALS_DIRECTORY/rcloneConf \
+            --cache /var/cache/rclone-sync \
             sync ${cfg.dataDir} $REMOTE ${extraArgs}
         '';
     };
