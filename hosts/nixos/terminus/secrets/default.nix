@@ -20,6 +20,7 @@ _: {
     # HC_UUID=<uuid for healthchecks>
     file = ./restic/b2.env.age;
   };
+  age.secrets.resticb2bucketname.file = ./restic/b2bucketname.age;
 
   age.secrets.rcloneConf = {
     # contents: rclone.conf file contents with NAS and B2 access info

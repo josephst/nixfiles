@@ -111,33 +111,33 @@ in
       }
     ];
 
-    systemd.services.rclone-sync = let
+    systemd.services.rclone-sync =
+      let
         extraArgs = lib.escapeShellArgs cfg.extraRcloneArgs;
-      in {
-      description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
-      wants = [ "network.target" ];
-      after = [ "network.target" ];
-      serviceConfig =
-        {
-          LoadCredential = "rcloneConf:${cfg.rcloneConfFile}";
-          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-          # Security hardening
-          ReadWritePaths = [ cfg.dataDir ];
-          PrivateTmp = true;
-          ProtectSystem = "strict";
-          ProtectKernelTunables = true;
-          ProtectKernelModules = true;
-          ProtectControlGroups = true;
-          ProtectHome = "read-only";
-          PrivateDevices = true;
-          StateDirectory = "rclone-sync";
-          CacheDirectory = "rclone-sync";
-        }
-        // lib.optionalAttrs cfg.pingHealthchecks {
-          ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${HC_UUID}/start"'';
-          onSuccess = [ "rclone-sync-notify@success.service" ];
-          onFailure = [ "rclone-sync-notify@failure.service" ];
-        };
+      in
+      {
+        description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
+        wants = [ "network.target" ];
+        after = [ "network.target" ];
+        serviceConfig =
+          {
+            LoadCredential = "rcloneConf:${cfg.rcloneConfFile}";
+            EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+            # Security hardening
+            ReadWritePaths = [ cfg.dataDir ];
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            ProtectHome = "read-only";
+            PrivateDevices = true;
+            StateDirectory = "rclone-sync";
+            CacheDirectory = "rclone-sync";
+          }
+          // lib.optionalAttrs cfg.pingHealthchecks {
+            ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${HC_UUID}/start"'';
+          };
 
         script = ''
           ${cfg.package}/bin/rclone \
@@ -145,7 +145,10 @@ in
             --cache /var/cache/rclone-sync \
             sync ${cfg.dataDir} $REMOTE ${extraArgs}
         '';
-    };
+
+        onSuccess = lib.optional cfg.pingHealthchecks "rclone-sync-notify@success.service";
+        onFailure = lib.optional cfg.pingHealthchecks "rclone-sync-notify@failure.service";
+      };
 
     systemd.services."rclone-sync-notify@" = lib.mkIf cfg.pingHealthchecks {
       serviceConfig = {

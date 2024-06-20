@@ -13,6 +13,7 @@ in
   "paperless-admin.age".publicKeys = allKeys;
   "rclone.conf.age".publicKeys = allKeys;
   "restic/b2.env.age".publicKeys = allKeys;
+  "restic/b2-bucketname.age".publicKeys = allKeys; # bucket name for restic (B2, using S3-compatible API)
   "restic/localstorage.pass.age".publicKeys = allKeys;
   "restic/systembackup.env.age".publicKeys = allKeys;
   "smb.age".publicKeys = allKeys; # login for smb shares on NAS

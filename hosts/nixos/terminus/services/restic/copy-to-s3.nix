@@ -35,7 +35,7 @@ in
     initialize = false;
     user = "restic";
     environmentFile = config.age.secrets.resticb2env.path;
-    repository = "sftp:backup@192.168.1.100:/backups/‹name›";
+    repositoryFile = config.age.secrets.resticb2bucketname.path; # using s3-compatible API on Backblaze B2
     passwordFile = config.age.secrets.restic-localstorage-pass.path; # remote has same password as local
     inherit pruneOpts;
     inherit checkOpts;
