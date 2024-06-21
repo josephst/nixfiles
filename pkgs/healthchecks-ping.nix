@@ -8,6 +8,8 @@ pkgs.writeShellApplication {
     curl
   ];
   text = ''
+    set -x ## DEBUGGING
+
     UUID=$1
     EXIT=''${2:-0}
     NAME=$3
