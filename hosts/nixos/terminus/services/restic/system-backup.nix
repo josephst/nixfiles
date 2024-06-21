@@ -20,12 +20,12 @@ let
   ];
 in
 {
-  # backup to B2
+  # backup to local repo (on HDD array), which is later copied to B2
   services.restic.backups.system-backup = {
     initialize = false;
     passwordFile = config.age.secrets.restic-localstorage-pass.path; # Repository password
     environmentFile = config.age.secrets.restic-systembackup-env.path; # HC_UUID
-    repositoryFile = config.age.secrets.resticb2bucketname-homelab.path;
+    repository = "rest:http://${config.services.restic.server.listenAddress}";
 
     paths = [
       # TODO: add to this as needed

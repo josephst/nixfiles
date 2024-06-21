@@ -15,8 +15,7 @@ let
   ];
 in
 {
-  # copy local Restic repo (holds backups from laptop and other devices,
-  # but NOT NixOS itself) to S3-compatible repo
+  # copy local Restic repo to S3-compatible repo
   services.rclone-sync = {
     enable = true;
     dataDir = localPath;

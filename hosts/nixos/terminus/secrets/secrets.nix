@@ -14,7 +14,6 @@ in
   "rclone.conf.age".publicKeys = allKeys;
   "restic/b2.env.age".publicKeys = allKeys;
   "restic/b2bucketname-homelab.age".publicKeys = allKeys; # bucket name for restic (B2, using S3-compatible API)
-  "restic/b2bucketname-resticserver.age".publicKeys = allKeys;
   "restic/localstorage.pass.age".publicKeys = allKeys;
   "restic/restic-server-maintenance.env.age".publicKeys = allKeys;
   "restic/systembackup.env.age".publicKeys = allKeys;
