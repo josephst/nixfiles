@@ -18,8 +18,6 @@ pkgs.writeShellApplication {
     OUTPUT=$(systemctl status "$NAME" -l -n 1000 | tail --bytes 100000)
     set -e
 
-    echo "$OUTPUT"
-
     curl -fsS -m 10 -v --retry 5 "https://hc-ping.com/''${UUID}/''${EXIT}" --data-raw "$OUTPUT"
   '';
 }
