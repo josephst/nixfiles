@@ -15,7 +15,8 @@ let
   ];
 in
 {
-  # copy local Restic repo to S3-compatible repo
+  # copy local Restic repo (holds backups from laptop and other devices,
+  # but NOT NixOS itself) to S3-compatible repo
   services.rclone-sync = {
     enable = true;
     dataDir = localPath;
@@ -33,7 +34,6 @@ in
   # checks the repo on B2, no actual backing up performed
   services.restic.backups.b2 = {
     initialize = false;
-    user = "restic";
     environmentFile = config.age.secrets.resticb2env.path;
     repositoryFile = config.age.secrets.resticb2bucketname.path; # using s3-compatible API on Backblaze B2
     passwordFile = config.age.secrets.restic-localstorage-pass.path; # remote has same password as local
