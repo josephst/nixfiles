@@ -20,7 +20,6 @@ pkgs.writeShellApplication {
 
     echo "$OUTPUT"
 
-    # curl -fsS -m 10 -v --retry 5 "https://hc-ping.com/''${UUID}/''${EXIT}" --data-raw "$OUTPUT"
-    curl -fsS -m 10 -v --retry 5 "https://hc-ping.com/''${UUID}/''${EXIT}"
+    curl -fsS -m 10 -v --retry 5 "https://hc-ping.com/''${UUID}/''${EXIT}" --data-raw "$OUTPUT"
   '';
 }
