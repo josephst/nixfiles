@@ -149,6 +149,8 @@ in
           ${cfg.package}/bin/rclone \
             --config ''$CREDENTIALS_DIRECTORY/rcloneConf \
             --cache-dir /var/cache/rclone-sync \
+            --missing-on-dst - \
+            --error - \
             sync ${cfg.dataDir} $REMOTE ${extraArgs}
         '';
 
