@@ -134,6 +134,7 @@ in
             PrivateDevices = true;
             StateDirectory = "rclone-sync";
             CacheDirectory = "rclone-sync";
+            CacheDirectoryMode = "0700";
           }
           // lib.optionalAttrs cfg.pingHealthchecks {
             ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${HC_UUID}/start"'';
