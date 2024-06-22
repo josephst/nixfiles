@@ -51,7 +51,7 @@ in
     extraRcloneArgs = lib.mkOption {
       type = with lib.types; listOf str;
       default = [
-        "--transfers=16"
+        "--transfers=32"
         "--b2-hard-delete"
         "--fast-list"
       ];
@@ -59,7 +59,7 @@ in
         Extra arguments passed to rclone
       '';
       example = [
-        "--transfers=16"
+        "--transfers=32"
         "--b2-hard-delete"
         "--fast-list"
       ];
