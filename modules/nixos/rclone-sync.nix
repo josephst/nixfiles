@@ -74,7 +74,10 @@ in
 
     pingHealthchecks = lib.mkOption {
       type = lib.types.bool;
-      description = "Try to ping start/stop and send logs to healthchecks.io. Set HC_UUID as environment variable (cfg.environmentFile) to configure.";
+      description = ''
+        Try to ping start/stop and send logs to healthchecks.io.
+        Set `RCLONE_HC_UUID` as environment variable (cfg.environmentFile) to configure.
+      '';
       default = false;
     };
 
@@ -121,8 +124,10 @@ in
         after = [ "network.target" ];
         serviceConfig =
           {
-            LoadCredential = "rcloneConf:${cfg.rcloneConfFile}";
-            EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+            LoadCredential = [
+              "rcloneConf:${cfg.rcloneConfFile}"
+            ];
+            EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
             # Security hardening
             ReadWritePaths = [ cfg.dataDir ];
             PrivateTmp = true;
@@ -137,7 +142,7 @@ in
             CacheDirectoryMode = "0700";
           }
           // lib.optionalAttrs cfg.pingHealthchecks {
-            ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${HC_UUID}/start"'';
+            ExecStartPre = ''-${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${RCLONE_HC_UUID}/start"'';
           };
 
         script = ''
@@ -157,7 +162,7 @@ in
         User = "restic"; # to read env file
       };
       script = ''
-        ${pkgs.healthchecks-ping}/bin/healthchecks-ping "$HC_UUID" "$MONITOR_EXIT_STATUS" "$MONITOR_UNIT"
+        ${pkgs.healthchecks-ping}/bin/healthchecks-ping "$RCLONE_HC_UUID" "$MONITOR_EXIT_STATUS" "$MONITOR_UNIT"
       '';
     };
 
