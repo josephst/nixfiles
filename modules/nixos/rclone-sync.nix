@@ -149,6 +149,7 @@ in
           ${cfg.package}/bin/rclone \
             --config ''$CREDENTIALS_DIRECTORY/rcloneConf \
             --cache-dir /var/cache/rclone-sync \
+            --log-systemd \
             sync ${cfg.dataDir} $REMOTE ${extraArgs}
         '';
 
