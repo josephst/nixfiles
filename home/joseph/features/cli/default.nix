@@ -81,7 +81,7 @@
     atuin = {
       enable = true;
       settings = {
-        store_failed = false;
+        store_failed = true;
         sync = {
           records = true;
         };

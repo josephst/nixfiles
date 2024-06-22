@@ -15,20 +15,17 @@ _: {
   age.secrets.resticb2env = {
     # contents:
     # RCLONE_REMOTE=<rclone path>
+    # AWS_ACCESS_KEY_ID=
+    # AWS_SECRET_ACCESS_KEY=
     # HC_UUID=<uuid for healthchecks>
     file = ./restic/b2.env.age;
   };
+  age.secrets.resticb2bucketname.file = ./restic/b2bucketname.age;
+  age.secrets.restic-localmaintenance-env.file = ./restic/restic-server-maintenance.env.age;
 
   age.secrets.rcloneConf = {
     # contents: rclone.conf file contents with NAS and B2 access info
     file = ./rclone.conf.age;
-    owner = "restic";
-  };
-
-  age.secrets.restic-localstorage-env = {
-    # contents:
-    # HC_UUID=<uuid for healthchecks>
-    file = ./restic/localstorage.env.age;
   };
 
   age.secrets.restic-localstorage-pass = {
@@ -40,10 +37,5 @@ _: {
   age.secrets.restic-systembackup-env = {
     # contents: HC_UUID
     file = ./restic/systembackup.env.age;
-  };
-
-  # contents: password for rsyncd
-  age.secrets.rsyncd-secrets = {
-    file = ./rsyncd-secrets.age;
   };
 }

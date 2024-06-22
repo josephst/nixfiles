@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
 let
+  localPath = "/storage/restic";
+
   pruneOpts = [
     "--keep-daily 30"
     "--keep-weekly 52"
@@ -13,16 +15,27 @@ let
   ];
 in
 {
-  imports = [ ./rcloneRemoteDir.nix ]; # sets config.age.secrets.rcloneRemoteDir.path
+  # copy local Restic repo to S3-compatible repo
+  services.rclone-sync = {
+    enable = true;
+    dataDir = localPath;
+    environmentFile = config.age.secrets.resticb2env.path;
+    rcloneConfFile = config.age.secrets.rcloneConf.path;
+    pingHealthchecks = true;
+
+    timerConfig = {
+      OnCalendar = "06:00";
+      RandomizedDelaySec = "1h";
+      Persistent = true;
+    };
+  };
 
   # checks the repo on B2, no actual backing up performed
   services.restic.backups.b2 = {
     initialize = false;
-    user = "restic";
-    environmentFile = config.age.secrets.resticb2env.path; # HC_UUID, remainder of config in rcloneConfigFile
+    environmentFile = config.age.secrets.resticb2env.path;
+    repositoryFile = config.age.secrets.resticb2bucketname.path; # using s3-compatible API on Backblaze B2
     passwordFile = config.age.secrets.restic-localstorage-pass.path; # remote has same password as local
-    repositoryFile = config.age.secrets.b2WithRclone.path;
-    rcloneConfigFile = config.age.secrets.rcloneConf.path;
     inherit pruneOpts;
     inherit checkOpts;
 
@@ -31,7 +44,7 @@ in
       ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
 
       # remove old locks
-      ${pkgs.restic}/bin/restic unlock
+      ${pkgs.restic}/bin/restic unlock || true
     '';
 
     timerConfig = {
@@ -41,7 +54,6 @@ in
     };
   };
 
-  # TODO: refactor into a mkResticBackup script that's shared between LocalStorage and B2?
   systemd.services."restic-backups-b2" = {
     onSuccess = [ "restic-notify-b2@success.service" ];
     onFailure = [ "restic-notify-b2@failure.service" ];
@@ -49,13 +61,9 @@ in
 
   systemd.services."restic-notify-b2@" = {
     serviceConfig = {
+      Type = "oneshot";
       EnvironmentFile = config.age.secrets.resticb2env.path; # contains heathchecks.io UUID
-      User = "restic"; # to read env file
-      ExecStart = "${./healthcheck.sh} $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
+      ExecStart = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
     };
-    path = [
-      pkgs.bash
-      pkgs.curl
-    ];
   };
 }
