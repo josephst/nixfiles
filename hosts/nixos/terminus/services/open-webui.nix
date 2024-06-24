@@ -7,6 +7,7 @@ in
     enable = true;
     openFirewall = true;
     host = "127.0.0.1";
+    port = 8082;
   };
 
   services.caddy.virtualHosts."open-webui.${domain}" = {
