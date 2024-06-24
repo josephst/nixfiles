@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.networking) fqdn;
+  inherit (config.networking) domain;
 in
 {
   age.secrets.paperless-admin.file = ../secrets/paperless-admin.age;
@@ -13,11 +13,11 @@ in
     };
   };
 
-  services.caddy.virtualHosts."paperless.${fqdn}" = {
+  services.caddy.virtualHosts."paperless.${domain}" = {
     extraConfig = ''
       reverse_proxy http://localhost:${toString config.services.paperless.port}
     '';
-    useACMEHost = fqdn;
+    useACMEHost = domain;
   };
 
   # Rclone: Sync OneDrive folder to consumption folder

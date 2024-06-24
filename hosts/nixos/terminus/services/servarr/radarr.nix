@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
 let
-  inherit (config.networking) fqdn;
+  inherit (config.networking) domain;
 in
 {
   services.radarr = {
@@ -9,11 +9,11 @@ in
     package = pkgs.unstable.radarr;
   };
 
-  services.caddy.virtualHosts."radarr.${fqdn}" = {
+  services.caddy.virtualHosts."radarr.${domain}" = {
     extraConfig = ''
       reverse_proxy http://localhost:7878
     '';
-    useACMEHost = fqdn;
+    useACMEHost = domain;
   };
 
   # Ensure that radarr waits for the downloads and media directories to be

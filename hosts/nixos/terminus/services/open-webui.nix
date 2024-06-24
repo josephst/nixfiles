@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.networking) fqdn;
+  inherit (config.networking) domain;
 in
 {
   services.open-webui = {
@@ -9,11 +9,11 @@ in
     host = "127.0.0.1";
   };
 
-  services.caddy.virtualHosts."open-webui.${fqdn}" = {
+  services.caddy.virtualHosts."open-webui.${domain}" = {
     extraConfig = ''
       reverse_proxy http://localhost:8082
       encode gzip
     '';
-    useACMEHost = fqdn;
+    useACMEHost = domain;
   };
 }

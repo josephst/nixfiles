@@ -5,8 +5,8 @@
   ...
 }:
 let
-  inherit (config.networking) fqdn;
-  host_whitelist = "${config.networking.hostName},sabnzbd.${fqdn}"; # comma-separated
+  inherit (config.networking) domain;
+  host_whitelist = "${config.networking.hostName},sabnzbd.${domain}"; # comma-separated
 in
 {
   services.sabnzbd = {
@@ -15,11 +15,11 @@ in
     package = pkgs.unstable.sabnzbd;
   };
 
-  services.caddy.virtualHosts."sabnzbd.${fqdn}" = {
+  services.caddy.virtualHosts."sabnzbd.${domain}" = {
     extraConfig = ''
       reverse_proxy http://localhost:8080
     '';
-    useACMEHost = fqdn;
+    useACMEHost = domain;
   };
 
   system.activationScripts.sabnzbd = {

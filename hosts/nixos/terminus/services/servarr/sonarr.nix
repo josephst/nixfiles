@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
 let
-  inherit (config.networking) fqdn;
+  inherit (config.networking) domain;
 in
 {
   services.sonarr = {
@@ -9,11 +9,11 @@ in
     package = pkgs.unstable.sonarr;
   };
 
-  services.caddy.virtualHosts."sonarr.${fqdn}" = {
+  services.caddy.virtualHosts."sonarr.${domain}" = {
     extraConfig = ''
       reverse_proxy http://localhost:8989
     '';
-    useACMEHost = fqdn;
+    useACMEHost = domain;
   };
 
   # Ensure that sonarr waits for the downloads and media directories to be

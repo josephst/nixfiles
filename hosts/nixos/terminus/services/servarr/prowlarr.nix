@@ -1,17 +1,17 @@
 { config, ... }:
 let
-  inherit (config.networking) fqdn;
+  inherit (config.networking) domain;
 in
 {
   services.prowlarr = {
     enable = true;
   };
 
-  services.caddy.virtualHosts."prowlarr.${fqdn}" = {
+  services.caddy.virtualHosts."prowlarr.${domain}" = {
     extraConfig = ''
       reverse_proxy http://localhost:9696
     '';
-    useACMEHost = fqdn;
+    useACMEHost = domain;
   };
 
   # system.activationScripts.prowlarr = {

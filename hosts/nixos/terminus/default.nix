@@ -58,7 +58,7 @@
   networking = {
     hostName = "terminus";
     hostId = "e2dfd738"; # head -c 8 /etc/machine-id
-    domain = "josephstahl.com";
+    domain = "homelab.josephstahl.com";
 
     # networkmanager - disabled, use systemd-networkd instead
     networkmanager.enable = false; # Easiest to use and most distros use this by default.

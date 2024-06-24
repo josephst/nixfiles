@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  inherit (config.networking) fqdn;
+  inherit (config.networking) domain;
   webRoot = pkgs.buildEnv {
     name = "webroot";
     paths = [
@@ -10,12 +10,12 @@ let
   };
 in
 {
-  services.caddy.virtualHosts."${fqdn}" = {
+  services.caddy.virtualHosts."${domain}" = {
     extraConfig = ''
       encode gzip
       file_server
       root * ${webRoot}
     '';
-    useACMEHost = fqdn;
+    useACMEHost = domain;
   };
 }

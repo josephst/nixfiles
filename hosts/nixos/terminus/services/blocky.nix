@@ -45,7 +45,7 @@ in
       customDNS = {
         mapping = {
           # also resolves all subdomains (don't need an explicit wildcard)
-          "${hostName}.${domain}" = "${ip}"; # this machine
+          "${domain}" = "${ip}"; # right now, single homelab machine handles all queries except Proxmox
           "proxmox.${domain}" = "192.168.1.8";
         };
       };
