@@ -4,12 +4,20 @@
     enable = true;
     defaultEditor = true;
 
+    extraPackages = with pkgs; [
+      nimlangserver
+      nixd
+      nixfmt-rfc-style
+      fish
+      zls
+    ];
+
     settings = {
       theme = "catppuccin_frappe";
     };
 
     languages.language-server = {
-      nixd.command = "${pkgs.nixd}/bin/nixd";
+      nixd.command = "nixd";
     };
 
     languages.language = [
@@ -18,13 +26,13 @@
         language-servers = [ "nixd" ];
         auto-format = true;
         formatter = {
-          command = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
+          command = "nixfmt";
         };
       }
       {
         name = "fish";
         auto-format = true;
-        formatter.command = "${pkgs.fish}/bin/fish_indent";
+        formatter.command = "fish_indent";
       }
     ];
   };
