@@ -9,7 +9,7 @@
     };
 
     languages.language-server = {
-      nixd.command = "nixd";
+      nixd.command = "${pkgs.nixd}/bin/nixd";
     };
 
     languages.language = [
@@ -19,7 +19,6 @@
         auto-format = true;
         formatter = {
           command = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
-          args = [ "<" ];
         };
       }
       {
