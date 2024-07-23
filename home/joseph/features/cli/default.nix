@@ -90,6 +90,7 @@
     lazygit.enable = true;
     home-manager.enable = true;
     nix-index.enable = true;
+    yazi.enable = true;
     zoxide.enable = true;
     zsh.enable = true;
   };
