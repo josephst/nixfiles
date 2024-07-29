@@ -64,6 +64,7 @@ in
             Description = "rclone sync timer (${remote})";
           };
           Timer = {
+            OnBootSec = "1h";
             OnUnitInactiveSec = "4h"; # runs every 4 hours after last sync finishes
             RandomizedDelaySec="1h"; # +/- 1hr
           };
