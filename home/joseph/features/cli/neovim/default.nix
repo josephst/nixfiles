@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.neovim = {
     enable = true;
     viAlias = true;
@@ -8,13 +9,15 @@
 
     plugins = with pkgs.vimPlugins; [
       nvim-lspconfig
-      (nvim-treesitter.withPlugins (p: with p; [
-        bash
-        c
-        nix
-        python
-        zig
-      ]))
+      (nvim-treesitter.withPlugins (
+        p: with p; [
+          bash
+          c
+          nix
+          python
+          zig
+        ]
+      ))
       plenary-nvim
       gruvbox-material
       mini-nvim

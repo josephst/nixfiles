@@ -124,9 +124,7 @@ in
         after = [ "network.target" ];
         serviceConfig =
           {
-            LoadCredential = [
-              "rcloneConf:${cfg.rcloneConfFile}"
-            ];
+            LoadCredential = [ "rcloneConf:${cfg.rcloneConfFile}" ];
             EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
             # Security hardening
             ReadWritePaths = [ cfg.dataDir ];
