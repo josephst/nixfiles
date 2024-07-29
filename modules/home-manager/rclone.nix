@@ -44,7 +44,7 @@ in
           IOSchedulingClass = "idle";
           Type = "oneshot";
         };
-        ExecStart = lib.contactStringsSep " " [
+        ExecStart = lib.concatStringsSep " " [
           "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'"
           lib.optional
           cfg.dryRun
