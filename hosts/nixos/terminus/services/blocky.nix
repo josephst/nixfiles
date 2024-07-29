@@ -1,7 +1,7 @@
 { config, ... }:
 let
   ip = "192.168.1.10"; # static IP address of this machine
-  inherit (config.networking) domain hostName;
+  inherit (config.networking) domain;
 in
 {
   services.blocky = {

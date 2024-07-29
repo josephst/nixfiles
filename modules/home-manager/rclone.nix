@@ -31,25 +31,27 @@ in
     };
   };
 
-  config = lib.mkIf (((lib.length cfg.remotes) > 0) && (pkgs.stdenv.hostPlatform.isLinux)) {
+  config = lib.mkIf (((lib.length cfg.remotes) > 0) && pkgs.stdenv.hostPlatform.isLinux) {
     systemd.user.tmpfiles.rules = map (remote: "D '${cfg.local}/${remote}' 0700 - - -") cfg.remotes;
 
-    systemd.user.services = builtins.listToAttrs (map (remote: {
-      name = "rclone-${remote}";
-      value = {
-        Unit = {
-          Description = "rclone sync service (${remote})";
+    systemd.user.services = builtins.listToAttrs (
+      map (remote: {
+        name = "rclone-${remote}";
+        value = {
+          Unit = {
+            Description = "rclone sync service (${remote})";
+          };
+          Service = {
+            CPUSchedulingPolicy = "idle";
+            IOSchedulingClass = "idle";
+            Type = "oneshot";
+          };
+          ExecStart = lib.concatStringsSep " " (
+            [ "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'" ]
+            ++ (lib.optional cfg.dryRun "--dry-run")
+          );
         };
-        Service = {
-          CPUSchedulingPolicy = "idle";
-          IOSchedulingClass = "idle";
-          Type = "oneshot";
-        };
-        ExecStart = lib.concatStringsSep " " [
-          "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'"
-          (lib.optionalString cfg.dryRun "--dry-run")
-        ];
-      };
-    }) cfg.remotes);
+      }) cfg.remotes
+    );
   };
 }
