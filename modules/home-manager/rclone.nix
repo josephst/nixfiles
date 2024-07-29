@@ -48,7 +48,7 @@ in
             Type = "oneshot";
             ExecStart = lib.concatStringsSep " " (
               [ "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'" ]
-              ++ [lib.escapeShellArgs cfg.extraArgs]
+              ++ [(lib.escapeShellArgs cfg.extraArgs)]
             );
           };
           Install.WantedBy = [ "default.target" ];
