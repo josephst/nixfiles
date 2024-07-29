@@ -55,5 +55,21 @@ in
         };
       }) cfg.remotes
     );
+
+    systemd.user.timers = builtins.listToAttrs (
+      map (remote: {
+        name = "rclone-${remote}";
+        value = {
+          Unit = {
+            Description = "rclone sync timer (${remote})";
+          };
+          Timer = {
+            OnUnitInactiveSec = "4h"; # runs every 4 hours after last sync finishes
+            RandomizedDelaySec="1h"; # +/- 1hr
+          };
+          Install.WantedBy = [ "timers.target" ];
+        };
+      }) cfg.remotes
+    );
   };
 }
