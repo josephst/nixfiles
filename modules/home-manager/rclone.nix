@@ -24,10 +24,11 @@ in
       default = "/home/${config.home.username}/rclone";
     };
 
-    dryRun = lib.mkOption {
-      description = "Rclone dry run";
-      type = lib.types.bool;
-      default = false;
+    extraArgs = lib.mkOption {
+      description = "Additional rclone arguments";
+      type = lib.types.listOf lib.types.str;
+      default = [];
+      example = [ "--dry-run" ];
     };
   };
 
@@ -47,7 +48,7 @@ in
             Type = "oneshot";
             ExecStart = lib.concatStringsSep " " (
               [ "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'" ]
-              ++ (lib.optional cfg.dryRun "--dry-run")
+              ++ [lib.escapeShellArgs cfg.extraArgs]
             );
           };
           Install.WantedBy = [ "default.target" ];
