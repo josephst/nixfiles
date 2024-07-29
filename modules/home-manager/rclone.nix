@@ -50,6 +50,7 @@ in
               ++ (lib.optional cfg.dryRun "--dry-run")
             );
           };
+          Install.WantedBy = [ "default.target" ];
         };
       }) cfg.remotes
     );
