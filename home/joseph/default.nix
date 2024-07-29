@@ -41,7 +41,6 @@ in
   myconfig.userSshKeys.identityFileText = userKey; # used in features/cli/ssh.nix
   myconfig.userSshKeys.gitSigningKey = gitSigningKey;
   myconfig.rclone.remotes = [ "onedrive" ]; # sync onedrive using rclone
-  myconfig.rclone.extraArgs = [ "--dry-run" ];
 
   # Home Manager configuration/ options
   home = {
