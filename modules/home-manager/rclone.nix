@@ -46,9 +46,7 @@ in
         };
         ExecStart = lib.concatStringsSep " " [
           "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'"
-          lib.optional
-          cfg.dryRun
-          "--dry-run"
+          (lib.optional cfg.dryRun "--dry-run")
         ];
       };
     }) cfg.remotes;
