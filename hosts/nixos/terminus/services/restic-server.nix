@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 let
   port = toString 8081;
   listenAddress = "127.0.0.1:${port}";

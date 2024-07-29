@@ -24,33 +24,53 @@ in
       default = "/home/${config.home.username}/rclone";
     };
 
-    dryRun = lib.mkOption {
-      description = "Rclone dry run";
-      type = lib.types.bool;
-      default = false;
+    extraArgs = lib.mkOption {
+      description = "Additional rclone arguments";
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "--dry-run" ];
     };
   };
 
-  config = lib.mkIf (((lib.length cfg.remotes) > 0) && (pkgs.stdenv.hostPlatform.isLinux)) {
+  config = lib.mkIf (((lib.length cfg.remotes) > 0) && pkgs.stdenv.hostPlatform.isLinux) {
     systemd.user.tmpfiles.rules = map (remote: "D '${cfg.local}/${remote}' 0700 - - -") cfg.remotes;
 
-    systemd.user.services = map (remote: {
-      "rclone-${remote}" = {
-        Unit = {
-          Description = "rclone sync service (${remote})";
+    systemd.user.services = builtins.listToAttrs (
+      map (remote: {
+        name = "rclone-${remote}";
+        value = {
+          Unit = {
+            Description = "rclone sync service (${remote})";
+          };
+          Service = {
+            CPUSchedulingPolicy = "idle";
+            IOSchedulingClass = "idle";
+            Type = "oneshot";
+            ExecStart = lib.concatStringsSep " " (
+              [ "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'" ]
+              ++ [ (lib.escapeShellArgs cfg.extraArgs) ]
+            );
+          };
+          Install.WantedBy = [ "default.target" ];
         };
-        Service = {
-          CPUSchedulingPolicy = "idle";
-          IOSchedulingClass = "idle";
-          Type = "oneshot";
+      }) cfg.remotes
+    );
+
+    systemd.user.timers = builtins.listToAttrs (
+      map (remote: {
+        name = "rclone-${remote}";
+        value = {
+          Unit = {
+            Description = "rclone sync timer (${remote})";
+          };
+          Timer = {
+            OnStartupSec = "1h";
+            OnUnitInactiveSec = "4h"; # runs every 4 hours after last sync finishes
+            RandomizedDelaySec = "1h"; # +/- 1hr
+          };
+          Install.WantedBy = [ "timers.target" ];
         };
-        ExecStart = lib.concatStringsSep " " [
-          "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'"
-          lib.optional
-          cfg.dryRun
-          "--dry-run"
-        ];
-      };
-    }) cfg.remotes;
+      }) cfg.remotes
+    );
   };
 }
