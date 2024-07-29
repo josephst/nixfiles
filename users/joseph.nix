@@ -30,6 +30,7 @@ in
           "wheel"
           "media"
         ]; # Enable ‘sudo’ for the user.
+        linger = true; # linger w/ systemd (starts user units at bootup, rather than login)
       };
   };
 
