@@ -27,7 +27,7 @@ in
     extraArgs = lib.mkOption {
       description = "Additional rclone arguments";
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       example = [ "--dry-run" ];
     };
   };
@@ -48,7 +48,7 @@ in
             Type = "oneshot";
             ExecStart = lib.concatStringsSep " " (
               [ "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'" ]
-              ++ [(lib.escapeShellArgs cfg.extraArgs)]
+              ++ [ (lib.escapeShellArgs cfg.extraArgs) ]
             );
           };
           Install.WantedBy = [ "default.target" ];
@@ -66,7 +66,7 @@ in
           Timer = {
             OnStartupSec = "1h";
             OnUnitInactiveSec = "4h"; # runs every 4 hours after last sync finishes
-            RandomizedDelaySec="1h"; # +/- 1hr
+            RandomizedDelaySec = "1h"; # +/- 1hr
           };
           Install.WantedBy = [ "timers.target" ];
         };
