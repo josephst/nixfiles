@@ -12,14 +12,14 @@ in
 
   options.myconfig.rclone = {
     remotes = lib.mkOption {
-      description = "List of remotes to clone (must be listed in `~/.config/rclone/rclone.conf`)";
+      description = "List of remotes to sync (must be listed in `~/.config/rclone/rclone.conf`)";
       type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "onedrive" ];
     };
 
     local = lib.mkOption {
-      description = "Local folder to copy remotes to";
+      description = "Local folder to sync remotes to (will delete files not in remote)";
       type = lib.types.str;
       default = "/home/${config.home.username}/rclone";
     };
@@ -47,7 +47,7 @@ in
             IOSchedulingClass = "idle";
             Type = "oneshot";
             ExecStart = lib.concatStringsSep " " (
-              [ "${pkgs.rclone}/bin/rclone copy '${remote}:' '${cfg.local}/${remote}'" ]
+              [ "${pkgs.rclone}/bin/rclone sync '${remote}:' '${cfg.local}/${remote}'" ]
               ++ [ (lib.escapeShellArgs cfg.extraArgs) ]
             );
           };
