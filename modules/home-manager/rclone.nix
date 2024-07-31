@@ -65,7 +65,7 @@ in
           };
           Timer = {
             OnStartupSec = "1h";
-            OnUnitInactiveSec = "4h"; # runs every 4 hours after last sync finishes
+            OnUnitInactiveSec = "24h";
             RandomizedDelaySec = "1h"; # +/- 1hr
           };
           Install.WantedBy = [ "timers.target" ];
