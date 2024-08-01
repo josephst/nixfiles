@@ -37,9 +37,9 @@ in
 
       # media
       "digikam"
+      "iina"
       "spotify"
       "steam"
-      "vlc"
 
       # communication
       "microsoft-teams"
