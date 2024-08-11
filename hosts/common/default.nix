@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }:
 {
@@ -13,9 +14,10 @@
     ./well-known-hosts.nix
   ];
 
-  nix = {
+  nix = let
+    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+  in {
     package = pkgs.nixVersions.latest;
-    # registry.nixpkgs.flake = inputs.nixpkgs;
     settings = {
       auto-optimise-store = true;
       cores = lib.mkDefault 0; # value of 0 = all available cores
@@ -32,8 +34,15 @@
       # sandbox = true; # defaults to true on Linux, false for Darwin
       sandbox = if pkgs.stdenv.isDarwin then "relaxed" else true;
     };
+
+    # Opinionated: make flake registry and nix path match flake inputs
+    registry.nixpkgs.flake = inputs.nixpkgs;
+    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+
+    # Opinionated: disable channels
+    # channel.enable = false;
+
     extraOptions = ''
-      extra-nix-path = nixpkgs=flake:nixpkgs
       !include ${config.age.secrets.ghToken.path}
     '';
   };
