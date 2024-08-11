@@ -19,7 +19,7 @@
   in {
     package = pkgs.nixVersions.latest;
     settings = {
-      auto-optimise-store = true;
+      auto-optimise-store = pkgs.stdenv.isLinux; # only optimize on NixOS
       cores = lib.mkDefault 0; # value of 0 = all available cores
       max-jobs = lib.mkDefault "auto";
       trusted-users = [
@@ -35,16 +35,19 @@
       sandbox = if pkgs.stdenv.isDarwin then "relaxed" else true;
     };
 
-    # Opinionated: make flake registry and nix path match flake inputs
+    # Opinionated: make flake registry match flake inputs
     registry.nixpkgs.flake = inputs.nixpkgs;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-
-    # Opinionated: disable channels
-    # channel.enable = false;
 
     extraOptions = ''
       !include ${config.age.secrets.ghToken.path}
     '';
+  } // lib.optionalAttrs (pkgs.stdenv.isLinux) {
+    # Opinionated: disable channels
+    channel.enable = false;
+    nixPath = [ "nixpkgs=/run/current-system/nixpkgs" ];
+  } // lib.optionalAttrs (pkgs.stdenv.isDarwin) {
+    nixPath = [ "nixpkgs=/run/current-system/sw/nixpkgs" ];
+    daemonIOLowPriority = false;
   };
 
   home-manager = {
