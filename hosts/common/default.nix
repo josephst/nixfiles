@@ -33,10 +33,13 @@
       # and stops binary signing from working
       # sandbox = true; # defaults to true on Linux, false for Darwin
       sandbox = if pkgs.stdenv.isDarwin then "relaxed" else true;
+      # Workaround for https://github.com/NixOS/nix/issues/9574
+      nix-path = config.nix.nixPath;
     };
 
     # Opinionated: make flake registry match flake inputs
     registry.nixpkgs.flake = inputs.nixpkgs;
+    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
 
     extraOptions = ''
       !include ${config.age.secrets.ghToken.path}
@@ -44,9 +47,7 @@
   } // lib.optionalAttrs (pkgs.stdenv.isLinux) {
     # Opinionated: disable channels
     channel.enable = false;
-    nixPath = [ "nixpkgs=/run/current-system/nixpkgs" ];
   } // lib.optionalAttrs (pkgs.stdenv.isDarwin) {
-    nixPath = [ "nixpkgs=/run/current-system/sw/nixpkgs" ];
     daemonIOLowPriority = false;
   };
 
