@@ -1,10 +1,48 @@
 # system-wide nix config (ie NOT home-manager stuff)
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   environment = {
     loginShell = "${pkgs.zsh}/bin/zsh -l";
-    systemPackages = [ ];
+    systemPackages = with pkgs; [
+      coreutils
+      findutils
+      gawk
+      git
+      gnugrep
+      gnused
+      gnutar
+      gnutls
+      ncurses
+      openssh
+    ];
+    systemPath = lib.mkBefore [
+      "/opt/homebrew/bin"
+      "/opt/homebrew/sbin"
+    ];
+    variables = {
+      SHELL = lib.getExe pkgs.zsh;
+    };
   };
+
+  homebrew = {
+    enable = true;
+    global = {
+      # only update with `brew update` (or `just update`)
+      autoUpdate = false;
+    };
+    onActivation = {
+      autoUpdate = true;
+      upgrade = true;
+      cleanup = "zap";
+    };
+    brews = [ "git" ];
+  };
+
+  programs.fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
+
+  programs.fish.enable = true;
+  programs.zsh.enable = true;
+  programs.bash.enable = true;
 
   # Make sure the nix daemon always runs
   services.nix-daemon.enable = true;

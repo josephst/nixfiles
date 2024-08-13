@@ -4,17 +4,6 @@ let
 in
 {
   homebrew = {
-    enable = true;
-    global = {
-      # only update with `brew update` (or `just update`)
-      autoUpdate = false;
-    };
-    onActivation = {
-      autoUpdate = false;
-      upgrade = true;
-      cleanup = "zap";
-    };
-
     taps = [ ];
 
     casks = [

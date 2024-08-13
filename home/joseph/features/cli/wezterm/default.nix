@@ -14,6 +14,10 @@
       config.initial_cols = 140
       config.initial_rows = 40
 
+      config.set_environment_variables = {
+        -- needed so that wezterm terminfo file is visible
+        TERMINFO_DIRS = '/run/current-system/sw/share/terminfo',
+      }
       config.term = 'wezterm'
 
       -- Returns a bool based on whether the host operating system's
@@ -58,11 +62,11 @@
         if type(cwd_uri) == 'userdata' then
           return {
             -- current working dir
-            -- cwd_uri.file_path,
+            cwd_uri.file_path,
             -- date/time
             wezterm.strftime('%a %b %-d %H:%M'),
             -- hostname
-            -- cwd_uri.host or wezterm.hostname()
+            cwd_uri.host or wezterm.hostname()
           }
         end
         return {}
