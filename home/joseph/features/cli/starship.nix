@@ -1,7 +1,7 @@
 _: {
   programs = {
     starship = {
-      enable = true;
+      enable = false;
       settings = {
         line_break = {
           disabled = true;
