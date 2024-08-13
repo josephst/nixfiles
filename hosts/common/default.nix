@@ -77,6 +77,7 @@
       neovim
       openssh
       rclone
+      wezterm.terminfo
       vim
       wget
       zsh
