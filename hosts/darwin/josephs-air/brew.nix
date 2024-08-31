@@ -19,6 +19,7 @@ in
       "utm"
       "visual-studio-code"
       "wezterm"
+      "zed"
 
       # utility
       "appcleaner"
