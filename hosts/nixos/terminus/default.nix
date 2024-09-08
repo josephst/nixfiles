@@ -73,7 +73,7 @@
   # List services that you want to enable:
   services = {
     qemuGuest.enable = true;
-    resolved.dnssec = "allow-downgrade";
+    resolved.dnssec = "false"; # causes lots of problems, even with allow-downgrade
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
