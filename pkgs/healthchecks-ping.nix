@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 pkgs.writeShellApplication {
   name = "healthchecks-ping";
@@ -20,4 +20,6 @@ pkgs.writeShellApplication {
 
     curl -fsS -m 10 -v --retry 5 "https://hc-ping.com/''${UUID}/''${EXIT}" --data-raw "$OUTPUT"
   '';
+
+  meta.platforms = [ lib.platforms.linux ];
 }
