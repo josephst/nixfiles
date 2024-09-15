@@ -1,10 +1,10 @@
-{ pkgs, ... }:
+{ writeShellApplication, deadnix, nixfmt-rfc-style, statix }:
 
 # based on nixfmt-plus by jnsgruk (https://github.com/jnsgruk/nixos-config/blob/main/pkgs/nixfmt-plus.nix)
 # Licensed under Apache-2.0
-pkgs.writeShellApplication {
+writeShellApplication {
   name = "nixfmt-plus";
-  runtimeInputs = with pkgs; [
+  runtimeInputs = [
     deadnix
     nixfmt-rfc-style
     statix

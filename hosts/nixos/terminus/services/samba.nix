@@ -61,47 +61,26 @@
   services.samba = {
     enable = true;
     package = pkgs.samba.override { enableMDNS = true; };
-    securityType = "user";
-    invalidUsers = [ "root" ];
-    openFirewall = true;
-    extraConfig = ''
-      # basic config
-      server string = nixos
-      server role = standalone server
-      disable netbios = yes
-      load printers = no
-      server min protocol = SMB3_00
+    settings = {
+      global = {
+        "invalid users" = ["root"];
+        "security" = "user";
+        "server string" = "%h";
+        "server role" = "standalone server";
+        "load printers" = "no";
+        "min receivefile size" = "16384";
+        "browseable" = "yes";
+        "map to guest" = "bad user";
+        "guest account" = "nobody";
 
-      # performance tweaks
-      use sendfile = yes
-      min receivefile size = 16384
+        "logging" = "systemd";
+        "max log size" = "10000";
 
-      # Mac-friendly options
-      fruit:copyfile = yes
-      vfs objects = fruit streams_xattr
-      fruit:metadata = stream
-      fruit:aapl = yes
-      fruit:encoding = native
-      fruit:model = MacPro
-      fruit:posix_rename = yes
-      fruit:veto_appledouble = no
-      fruit:nfs_aces = no
-      fruit:wipe_intentionally_left_blank_rfork = yes
-      fruit:delete_empty_adfiles = yes
-
-      browseable = yes
-      map to guest = bad user
-      guest account = nobody
-
-      logging = systemd
-      max log size = 10000
-
-      create mask = 0664
-      force create mode = 0664
-      directory mask = 0775
-      force directory mode = 0775
-    '';
-    shares = {
+        "create mask" = "0664";
+        "force create mode" = "0664";
+        "directory mask" = "0775";
+        "force directory mode" = "0775";
+      };
       public = {
         path = "/storage/homes/public";
         "public" = "yes";
@@ -117,6 +96,7 @@
         "force user" = "samba-guest";
       };
     };
+    openFirewall = true;
   };
 
   services.avahi = {

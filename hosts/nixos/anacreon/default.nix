@@ -67,8 +67,6 @@
     (with pkgs; [
       gnome-photos
       gnome-tour
-    ])
-    ++ (with pkgs.gnome; [
       cheese # webcam tool
       gnome-music
       gnome-terminal
@@ -91,8 +89,11 @@
   # services.printing.enable = true;
 
   # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # sound.enable = true; # no longer has any effect
+  hardware.pulseaudio.enable = false; # conflicts with pipewire
+  # rtkit is optional but recommended
+  security.rtkit.enable = true;
+  services.pipewire.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;

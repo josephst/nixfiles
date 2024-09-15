@@ -1,12 +1,11 @@
-{ pkgs, lib, ... }:
+{ writeShellApplication, coreutils, curl, lib, systemd, stdenv, ... }:
 
-pkgs.writeShellApplication {
+writeShellApplication {
   name = "healthchecks-ping";
-  runtimeInputs = with pkgs; [
-    systemd
+  runtimeInputs = [
     coreutils
     curl
-  ];
+  ] ++ lib.optional stdenv.isLinux systemd;
   text = ''
     set -x ## DEBUGGING
 
@@ -20,6 +19,4 @@ pkgs.writeShellApplication {
 
     curl -fsS -m 10 -v --retry 5 "https://hc-ping.com/''${UUID}/''${EXIT}" --data-raw "$OUTPUT"
   '';
-
-  meta.platforms = [ lib.platforms.linux ];
 }
