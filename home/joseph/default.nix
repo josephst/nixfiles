@@ -33,12 +33,12 @@ in
 
     ./secrets
 
-    ./features/cli
+    ./features/base
     ./features/gui # this module will disable if config.myconfig.headless is true
     ./features/llm
   ];
 
-  myconfig.userSshKeys.identityFileText = userKey; # used in features/cli/ssh.nix
+  myconfig.userSshKeys.identityFileText = userKey; # used in features/base/ssh.nix
   myconfig.userSshKeys.gitSigningKey = gitSigningKey;
   myconfig.rclone.remotes = [ "onedrive" ]; # sync onedrive using rclone
 
