@@ -38,7 +38,10 @@
     };
 
     # Opinionated: make flake registry match flake inputs
-    registry.nixpkgs.flake = inputs.nixpkgs;
+    registry.nixpkgs.to = {
+      type = "path";
+      path = inputs.nixpkgs;
+    };
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
 
     extraOptions = ''
