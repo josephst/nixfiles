@@ -40,7 +40,7 @@ in
 
       # productivity
       "raycast"
-      "rectangle"
+      # "rectangle"
       "stats"
     ];
 
