@@ -7,7 +7,6 @@
 let
   identityEnabled = config.myconfig.userSshKeys.identityFileText != null;
   identityFile = "~/.ssh/identity.pub";
-  githubPubkey = pkgs.writeText "github-ssh-pubkey" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC/tNsI1rgfZ5Xyhi2avPaWlipIENBIAT71CCLA62ISX";
 in
 {
   programs.ssh = {
