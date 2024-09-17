@@ -34,6 +34,11 @@ in
         forwardAgent = true;
         identityFile = lib.mkIf identityEnabled identityFile;
       };
+      "github.com" = {
+        user = "git";
+        identityFile = lib.mkIf identityEnabled identityFile;
+        identitiesOnly = lib.mkIf identityEnabled true;
+      };
     };
   };
 
