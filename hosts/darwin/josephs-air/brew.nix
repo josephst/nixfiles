@@ -23,7 +23,7 @@ in
 
       # utility
       "appcleaner"
-      "logi-options-plus"
+      "logi-options+"
 
       # media
       "digikam"
