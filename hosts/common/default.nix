@@ -14,9 +14,7 @@
     ./well-known-hosts.nix
   ];
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
+  nix = {
     package = pkgs.nixVersions.latest;
     settings = {
       auto-optimise-store = pkgs.stdenv.isLinux; # only optimize on NixOS
@@ -36,13 +34,6 @@
       # Workaround for https://github.com/NixOS/nix/issues/9574
       nix-path = config.nix.nixPath;
     };
-
-    # Opinionated: make flake registry match flake inputs
-    registry.nixpkgs.to = {
-      type = "path";
-      path = inputs.nixpkgs;
-    };
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
 
     extraOptions = ''
       !include ${config.age.secrets.ghToken.path}
