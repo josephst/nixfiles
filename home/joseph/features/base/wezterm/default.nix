@@ -3,7 +3,6 @@
   programs.wezterm = {
     enable = true;
     extraConfig = ''
-      local wezterm = require 'wezterm'
       local config = {}
 
       config.default_prog = {
