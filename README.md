@@ -41,7 +41,7 @@ we'll deviate from the installer and use `flake.nix` to install the system.
 
 ```shell
 
-# Open up a dev shell to get git:
+# Open up a shell to get git:
 nix-shell -p git
 
 # copy ssh keys over so that we can authenticate with github

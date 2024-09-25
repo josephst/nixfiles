@@ -12,7 +12,7 @@ in
   services.sabnzbd = {
     enable = true;
     group = "media";
-    package = pkgs.unstable.sabnzbd;
+    package = pkgs.sabnzbd;
   };
 
   services.caddy.virtualHosts."sabnzbd.${domain}" = {
@@ -30,6 +30,7 @@ in
         ${lib.getBin pkgs.gnused}/bin/sed -i 's/host_whitelist = .*/host_whitelist = ${host_whitelist}/g' ${config.services.sabnzbd.configFile}
       else
         # create new file
+        mkdir -p $(dirname ${config.services.sabnzbd.configFile})
         echo "host_whitelist = ${host_whitelist}" > ${config.services.sabnzbd.configFile}
         chown ${config.services.sabnzbd.user}:${config.services.sabnzbd.group} ${config.services.sabnzbd.configFile}
       fi

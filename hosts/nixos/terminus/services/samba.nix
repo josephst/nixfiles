@@ -21,7 +21,7 @@
     uid = 3000; # keep same UID between reinstalls
   };
 
-  # assign password to samba-guest
+  # assign password to joseph & samba-guest
   # The smbpasswd is generated via:
   # pdbedit -a -u <username>
   # pdbedit -L -w > /tmp/smbpasswd
