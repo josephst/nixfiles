@@ -13,6 +13,8 @@
     extraModulePackages = [ ];
   };
 
+  services.fwupd.enable = true;
+
   # swapDevices = [ { device = "/.swapvol/swapfile"; } ]; # disko takes care of this part
 
   systemd.network.networks."10-lan" = {
