@@ -19,7 +19,6 @@ in
   "restic/systembackup.env.age".publicKeys = allKeys;
   "smb.age".publicKeys = allKeys; # login for smb shares on NAS
   "smbpasswd.age".publicKeys = allKeys; # smb password database
-  "users/joseph.age".publicKeys = allKeys;
 }
 # `nix run github:ryantm/agenix -- --help` to run
 # to rekey: get ssh private key from 1password (export -> no password)

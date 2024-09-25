@@ -89,6 +89,8 @@ Ensure that there's a key for Agenix at `/mnt/etc/agenixKey`.
 After the first boot of the system, copy the newly generated host keys to this repo,
 rekey Agenix, and delete the temporary `agenixKey` file. 
 
+Also restore the user's private key to `~/.ssh/identity` (the public key should already be there)
+
 ## NixOS: after setup
 
 ### Tailscale
