@@ -7,13 +7,14 @@
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot = {
-    initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+    initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" "tpm_tis" ];
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
   };
 
   services.fwupd.enable = true;
+  security.tpm2.enable = true;
 
   # swapDevices = [ { device = "/.swapvol/swapfile"; } ]; # disko takes care of this part
 
