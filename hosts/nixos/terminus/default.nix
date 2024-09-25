@@ -11,6 +11,7 @@
 
     # ../mixins/cloud-init.nix
     ../mixins/systemd-boot.nix
+    ../mixins/lanzaboote.nix
 
     # Secrets
     ./secrets
