@@ -42,7 +42,7 @@ we'll deviate from the installer and use `flake.nix` to install the system.
 ```shell
 
 # Open up a dev shell to get git:
-nix-shell
+nix-shell -p git
 
 # copy ssh keys over so that we can authenticate with github
 # alternatively, may make new keys with ssh-keygen and copy them to github
@@ -53,7 +53,7 @@ chmod 600 ~/.ssh/id_ed25519
 
 # Create new SSH keys for the system
 # when agenix runs, use /etc/agenixKey for initial install
-# TODO: fix these instructions (`/mnt/etc` doesn't yet exist)
+mkdir -p /mnt/etc
 vim /mnt/etc/agenixKey
 chmod 600 /mnt/etc/agenixKey
 ln -s /mnt/etc/agenixKey /etc/agenixKey

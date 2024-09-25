@@ -8,7 +8,7 @@
       # `soft` means not to re-convert chunks that already have desired profile
       storage1 = {
         type = "disk";
-        device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1";
+        device = "/dev/disk/by-id/ata-ST4000VN008-2DR166_ZDHAG0Z7";
         content = {
           type = "gpt";
           partitions = {
@@ -16,7 +16,7 @@
               size = "100%";
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" ]; # Override existing partition
+                # extraArgs = [ "-f" ]; # Override existing partition
                 # Subvolumes must set a mountpoint in order to be mounted,
                 # unless their parent is mounted
                 subvolumes = {
