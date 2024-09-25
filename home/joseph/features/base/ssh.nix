@@ -36,8 +36,7 @@ in
       };
       "github.com" = {
         user = "git";
-        identityFile = [
-          lib.mkIf identityEnabled identityFile
+        identityFile = lib.optional identityEnabled identityFile ++ [
           "~/.ssh/identity" # only having pubkey here can cause issues
         ];
         identitiesOnly = lib.mkIf identityEnabled true;
