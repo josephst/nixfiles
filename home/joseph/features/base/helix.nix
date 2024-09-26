@@ -17,20 +17,38 @@
       theme = "catppuccin_frappe";
       editor = {
         line-number = "relative";
-        rulers = [ 80 120 ];
+        rulers = [
+          80
+          120
+        ];
         cursorline = true;
         auto-info = true;
         color-modes = true;
 
         lsp = {
           display-messages = true;
-          display-inlay-hints	= true;
+          display-inlay-hints = true;
         };
 
         statusline = {
-          left = ["mode" "spinner" "file-modification-indicator" "read-only-indicator"];
-          center = [ "version-control" "file-name"];
-          right = ["diagnostics" "selections" "position" "file-encoding" "file-line-ending" "file-type"];
+          left = [
+            "mode"
+            "spinner"
+            "file-modification-indicator"
+            "read-only-indicator"
+          ];
+          center = [
+            "version-control"
+            "file-name"
+          ];
+          right = [
+            "diagnostics"
+            "selections"
+            "position"
+            "file-encoding"
+            "file-line-ending"
+            "file-type"
+          ];
           separator = "│";
           mode = {
             normal = "NORMAL";

@@ -63,7 +63,7 @@
     package = pkgs.samba.override { enableMDNS = true; };
     settings = {
       global = {
-        "invalid users" = ["root"];
+        "invalid users" = [ "root" ];
         "security" = "user";
         "server string" = "%h";
         "server role" = "standalone server";

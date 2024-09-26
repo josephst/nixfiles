@@ -63,8 +63,9 @@
   };
 
   # Keep gnome install minimal
-  environment.gnome.excludePackages =
-    (with pkgs; [
+  environment.gnome.excludePackages = (
+    with pkgs;
+    [
       gnome-photos
       gnome-tour
       cheese # webcam tool
@@ -79,7 +80,8 @@
       iagno # go game
       hitori # sudoku game
       atomix # puzzle game
-    ]);
+    ]
+  );
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";

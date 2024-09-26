@@ -14,36 +14,39 @@
     ./well-known-hosts.nix
   ];
 
-  nix = {
-    package = pkgs.nixVersions.latest;
-    settings = {
-      auto-optimise-store = pkgs.stdenv.isLinux; # only optimize on NixOS
-      cores = lib.mkDefault 0; # value of 0 = all available cores
-      max-jobs = lib.mkDefault "auto";
-      trusted-users = [
-        "root"
-        "@wheel"
-        "@staff"
-      ];
-      warn-dirty = false;
-      allowed-users = [ "*" ];
-      # enabling sandbox prevents .NET from accessing /usr/bin/codesign
-      # and stops binary signing from working
-      # sandbox = true; # defaults to true on Linux, false for Darwin
-      sandbox = if pkgs.stdenv.isDarwin then "relaxed" else true;
-      # Workaround for https://github.com/NixOS/nix/issues/9574
-      nix-path = config.nix.nixPath;
-    };
+  nix =
+    {
+      package = pkgs.nixVersions.latest;
+      settings = {
+        auto-optimise-store = pkgs.stdenv.isLinux; # only optimize on NixOS
+        cores = lib.mkDefault 0; # value of 0 = all available cores
+        max-jobs = lib.mkDefault "auto";
+        trusted-users = [
+          "root"
+          "@wheel"
+          "@staff"
+        ];
+        warn-dirty = false;
+        allowed-users = [ "*" ];
+        # enabling sandbox prevents .NET from accessing /usr/bin/codesign
+        # and stops binary signing from working
+        # sandbox = true; # defaults to true on Linux, false for Darwin
+        sandbox = if pkgs.stdenv.isDarwin then "relaxed" else true;
+        # Workaround for https://github.com/NixOS/nix/issues/9574
+        nix-path = config.nix.nixPath;
+      };
 
-    extraOptions = ''
-      !include ${config.age.secrets.ghToken.path}
-    '';
-  } // lib.optionalAttrs (pkgs.stdenv.isLinux) {
-    # Opinionated: disable channels
-    channel.enable = false;
-  } // lib.optionalAttrs (pkgs.stdenv.isDarwin) {
-    daemonIOLowPriority = false;
-  };
+      extraOptions = ''
+        !include ${config.age.secrets.ghToken.path}
+      '';
+    }
+    // lib.optionalAttrs (pkgs.stdenv.isLinux) {
+      # Opinionated: disable channels
+      channel.enable = false;
+    }
+    // lib.optionalAttrs (pkgs.stdenv.isDarwin) {
+      daemonIOLowPriority = false;
+    };
 
   home-manager = {
     useGlobalPkgs = true;

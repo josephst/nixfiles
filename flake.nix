@@ -163,7 +163,6 @@
 
             ./hosts/common # nixOS and Darwin
             ./hosts/nixos/common # nixOS-specific
-            ./hosts/nixos/mixins/systemd-boot.nix
             ./hosts/nixos/terminus # host-specific
 
             ./users/joseph.nix

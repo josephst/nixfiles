@@ -36,7 +36,7 @@ in
       };
       "github.com" = {
         user = "git";
-        identityFile = lib.optionals identityEnabled  [
+        identityFile = lib.optionals identityEnabled [
           identityFile
           "~/.ssh/identity" # only having pubkey here can cause issues
         ];

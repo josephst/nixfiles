@@ -39,7 +39,6 @@
     systemPackages =
       [
         pkgs.cifs-utils
-        pkgs.sbctl
         pkgs.tailscale
         pkgs.wezterm.terminfo # this one does not need compilation
         # avoid compiling desktop stuff when doing cross nixos

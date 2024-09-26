@@ -125,6 +125,6 @@
       end)
 
       return config
-  '';
+    '';
   };
 }
