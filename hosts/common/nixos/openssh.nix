@@ -1,7 +1,4 @@
-{
-  ...
-}:
-{
+_: {
   services.openssh = {
     enable = true;
     settings = {
@@ -15,7 +12,7 @@
       # Allow X11 forwarding
       X11Forwarding = true;
       # Use key exchange algorithms recommended by `nixpkgs#ssh-audit`
-      settings.KexAlgorithms = [
+      KexAlgorithms = [
         "curve25519-sha256"
         "curve25519-sha256@libssh.org"
         "diffie-hellman-group16-sha512"

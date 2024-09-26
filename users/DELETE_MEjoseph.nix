@@ -2,7 +2,6 @@
   lib,
   pkgs,
   config,
-  inputs,
   ...
 }:
 let
@@ -37,8 +36,4 @@ in
   nix.settings.trusted-users = [ "joseph" ];
 
   home-manager.users.joseph = import ../home/joseph;
-  home-manager.backupFileExtension = ".backup-pre-hm";
-  home-manager.extraSpecialArgs = {
-    inherit (inputs) agenix;
-  };
 }

@@ -6,4 +6,7 @@ let
 in
 {
   "ghToken.age".publicKeys = all;
+  "paperless-admin.age".publicKeys = all;
+  "smbpasswd.age".publicKeys = all;
+  "dnsApiToken.age".publicKeys = all;
 }

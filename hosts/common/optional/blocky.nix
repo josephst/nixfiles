@@ -3,10 +3,10 @@
     enable = true;
     settings = {
       ports = {
-        # dns = [
-        #   "${ip}:53"
-        #   "127.0.0.1:53"
-        # ];
+        dns = [
+          "192.168.1.10:53"
+          "127.0.0.1:53"
+        ];
         http = 4000;
       };
       upstreams.groups.default = [

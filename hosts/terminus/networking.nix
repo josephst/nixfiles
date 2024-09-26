@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
+_: {
   networking = {
     hostName = "terminus";
     hostId = "e2dfd738"; # head -c 8 /etc/machine-id

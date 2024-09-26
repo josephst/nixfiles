@@ -7,7 +7,8 @@
   config,
   options,
   ...
-}: {
+}:
+{
   imports = [
     inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.default
@@ -24,6 +25,7 @@
     };
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = ".backup-pre-hm";
   };
 
   services = {
@@ -64,29 +66,31 @@
       EDITOR = "nvim";
       VISUAL = "nvim";
     };
-    systemPackages = [
-      pkgs.agenix
-      pkgs.bashInteractive
-      pkgs.git
-      pkgs.htop
-      pkgs.vim
-      pkgs.neovim
-      pkgs.nh
+    systemPackages =
+      [
+        pkgs.agenix
+        pkgs.bashInteractive
+        pkgs.git
+        pkgs.htop
+        pkgs.vim
+        pkgs.neovim
+        pkgs.nh
 
-      # hardware
-      pkgs.lshw
-      pkgs.pciutils
-      pkgs.smartmontools
+        # hardware
+        pkgs.lshw
+        pkgs.pciutils
+        pkgs.smartmontools
 
-      # misc
-      pkgs.wezterm.terminfo # this one does not need compilation
-      # avoid compiling desktop stuff when doing cross nixos
-    ] ++ lib.optionals (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) [
-      pkgs.termite.terminfo
-      # Too unstable
-      # pkgs.kitty.terminfo
-      pkgs.foot.terminfo
-    ];
+        # misc
+        pkgs.wezterm.terminfo # this one does not need compilation
+        # avoid compiling desktop stuff when doing cross nixos
+      ]
+      ++ lib.optionals (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) [
+        pkgs.termite.terminfo
+        # Too unstable
+        # pkgs.kitty.terminfo
+        pkgs.foot.terminfo
+      ];
   };
 
   # SERIAL

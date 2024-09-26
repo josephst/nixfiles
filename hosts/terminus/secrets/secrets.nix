@@ -17,7 +17,6 @@ in
   "restic/localstorage.pass.age".publicKeys = allKeys;
   "restic/restic-server-maintenance.env.age".publicKeys = allKeys;
   "restic/systembackup.env.age".publicKeys = allKeys;
-  "smb.age".publicKeys = allKeys; # login for smb shares on NAS
   "smbpasswd.age".publicKeys = allKeys; # smb password database
 }
 # `nix run github:ryantm/agenix -- --help` to run

@@ -1,13 +1,6 @@
 _: {
   # secrets specific to this device
-  age.secrets.smb = {
-    file = ./smb.age;
-    owner = "root";
-    group = "root";
-  };
-  age.secrets.dnsApiToken = {
-    file = ./dnsApiToken.age;
-  };
+
   age.secrets.netdata_nixos_claim = {
     file = ./netdata_nixos_claim.age;
   };

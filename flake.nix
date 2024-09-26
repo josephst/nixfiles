@@ -72,10 +72,6 @@
       home-manager,
       darwin,
       agenix,
-      deploy-rs,
-      disko,
-      hardware,
-      lanzaboote,
       ...
     # secrets
     }@inputs:
@@ -101,7 +97,7 @@
     in
     {
       overlays = import ./overlays { inherit inputs; };
-      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      packages = forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; });
       # `nix fmt`
       formatter = forAllSystems (system: self.packages.${system}.nixfmt-plus);
       nixosModules = import ./modules/nixos;
@@ -155,30 +151,30 @@
       #     };
       #   };
 
-        # terminus = nixpkgs.lib.nixosSystem {
-        #   # nixos-rebuild switch --flake .
-        #   system = "x86_64-linux";
-        #   pkgs = legacyPackages.x86_64-linux;
-        #   modules = [
-        #     home-manager.nixosModules.home-manager
-        #     agenix.nixosModules.default
-        #     disko.nixosModules.disko
-        #     lanzaboote.nixosModules.lanzaboote
-        #     ./modules/nixos
+      # terminus = nixpkgs.lib.nixosSystem {
+      #   # nixos-rebuild switch --flake .
+      #   system = "x86_64-linux";
+      #   pkgs = legacyPackages.x86_64-linux;
+      #   modules = [
+      #     home-manager.nixosModules.home-manager
+      #     agenix.nixosModules.default
+      #     disko.nixosModules.disko
+      #     lanzaboote.nixosModules.lanzaboote
+      #     ./modules/nixos
 
-        #     ./hosts/common # nixOS and Darwin
-        #     ./hosts/nixos/common # nixOS-specific
-        #     ./hosts/nixos/terminus # host-specific
+      #     ./hosts/common # nixOS and Darwin
+      #     ./hosts/nixos/common # nixOS-specific
+      #     ./hosts/nixos/terminus # host-specific
 
-        #     ./users/joseph.nix
-        #     ./users/root.nix
-        #   ];
-        #   specialArgs = {
-        #     inherit inputs;
-        #   };
-        # };
+      #     ./users/joseph.nix
+      #     ./users/root.nix
+      #   ];
+      #   specialArgs = {
+      #     inherit inputs;
+      #   };
+      # };
 
-        # UTM virtual machine
+      # UTM virtual machine
       #   anacreon = nixpkgs.lib.nixosSystem {
       #     system = "aarch64-linux";
       #     pkgs = legacyPackages.aarch64-linux;

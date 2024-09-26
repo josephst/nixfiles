@@ -1,6 +1,3 @@
-let
-  # inherit (config.networking) domain;
-in
 {
   services.open-webui = {
     enable = false; # TODO: reenable when no longer broken (0.3.21 is broken)

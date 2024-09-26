@@ -3,6 +3,10 @@ let
   inherit (config.networking) domain;
 in
 {
+  age.secrets.dnsApiToken = {
+    file = ../secrets/dnsApiToken.age;
+  };
+
   security.acme = {
     acceptTerms = true;
     # TODO: hide email?
