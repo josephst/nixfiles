@@ -4,7 +4,7 @@
   config,
   osConfig,
   lib,
-  agenix,
+  inputs,
   ...
 }:
 let
@@ -28,7 +28,7 @@ let
 in
 {
   imports = [
-    agenix.homeManagerModules.default
+    inputs.agenix.homeManagerModules.default
     ../../modules/home-manager
 
     ./secrets
