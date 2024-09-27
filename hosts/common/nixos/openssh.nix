@@ -1,4 +1,4 @@
-_: {
+{config, ...}: {
   services.openssh = {
     enable = true;
     settings = {
@@ -9,8 +9,8 @@ _: {
       StreamLocalBindUnlink = "yes";
       # Allow forwarding ports to everywhere
       GatewayPorts = "clientspecified";
-      # Allow X11 forwarding
-      X11Forwarding = true;
+      # Allow X11 forwarding on non-container images
+      X11Forwarding = !config.boot.isContainer;
       # Use key exchange algorithms recommended by `nixpkgs#ssh-audit`
       KexAlgorithms = [
         "curve25519-sha256"

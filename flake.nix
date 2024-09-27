@@ -106,7 +106,7 @@
       # NixOS configuration entrypoint
       nixosConfigurations = {
         terminus = mkNixos [ ./hosts/terminus ];
-        orbstack = mkNixos [ ./hosts/orbstack ];
+        nixos-orbstack = mkNixos [ ./hosts/orbstack ];
       };
 
       darwinConfigurations = {

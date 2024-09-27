@@ -14,6 +14,8 @@
     ../common/nixos/users/joseph.nix
   ];
 
+  nixpkgs.hostPlatform = "aarch64-linux";
+
   boot.initrd.systemd.enable = lib.mkForce false;
 
   security.sudo.wheelNeedsPassword = false;
