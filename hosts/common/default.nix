@@ -1,3 +1,4 @@
+# Settings shared among ALL NixOS and nix-darwin installations
 {
   pkgs,
   config,
