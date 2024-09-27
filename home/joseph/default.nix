@@ -5,6 +5,7 @@
   osConfig,
   lib,
   inputs,
+  outputs,
   ...
 }:
 let
@@ -29,18 +30,16 @@ in
 {
   imports = [
     inputs.agenix.homeManagerModules.default
-    ../../modules/home-manager
 
     ./secrets
-
     ./features/base
     ./features/gui # this module will disable if config.myconfig.headless is true
     ./features/llm
-  ];
+  ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   myconfig.userSshKeys.identityFileText = userKey; # used in features/base/ssh.nix
   myconfig.userSshKeys.gitSigningKey = gitSigningKey;
-  myconfig.rclone.remotes = [ "onedrive" ]; # sync onedrive using rclone
+  # myconfig.rclone.remotes = [ "onedrive" ]; # sync onedrive using rclone
 
   # Home Manager configuration/ options
   home = {

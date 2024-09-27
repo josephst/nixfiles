@@ -11,7 +11,7 @@
     ./lxd.nix
     ./orbstack.nix
     ../common/nixos
-    ../common/nixos/users/joseph.nix
+    ../../users/joseph.nix
   ];
 
   nixpkgs.hostPlatform = "aarch64-linux";

@@ -32,12 +32,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # attic
-    # attic = {
-    #   url = "github:zhaofengli/attic";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
     # deploy-rs
     deploy-rs = {
       url = "github:serokell/deploy-rs";
@@ -69,9 +63,7 @@
     {
       self,
       nixpkgs,
-      home-manager,
       darwin,
-      agenix,
       ...
     # secrets
     }@inputs:
@@ -101,6 +93,7 @@
       # `nix fmt`
       formatter = forAllSystems (system: self.packages.${system}.nixfmt-plus);
       nixosModules = import ./modules/nixos;
+      darwinModules = import ./modules/darwin;
       homeManagerModules = import ./modules/home-manager;
 
       # NixOS configuration entrypoint
@@ -112,91 +105,14 @@
       darwinConfigurations = {
         Josephs-MacBook-Air = darwin.lib.darwinSystem {
           # darwin-rebuild switch --flake .
-          system = "aarch64-darwin";
-          pkgs = outputs.packages.aarch64-darwin;
           modules = [
-            home-manager.darwinModules.home-manager
-            agenix.darwinModules.default
-
-            ./hosts/common
-            ./hosts/darwin/common
-            ./hosts/darwin/josephs-air
-
-            ./users/joseph.nix
+            ./hosts/josephs-macbook-air
           ];
           specialArgs = {
-            inherit inputs;
+            inherit inputs outputs;
           };
         };
       };
-
-      # nixosConfigurations = {
-      #   nixos-orbstack = nixpkgs.lib.nixosSystem {
-      #     system = "aarch64-linux";
-      #     pkgs = legacyPackages.aarch64-linux;
-      #     modules = [
-      #       home-manager.nixosModules.home-manager
-      #       agenix.nixosModules.default
-      #       ./modules/nixos
-
-      #       ./hosts/common # nixOS and Darwin
-      #       ./hosts/nixos/common # nixOS-specific
-      #       ./hosts/nixos/nixos-orbstack # host-specific
-
-      #       ./users/joseph.nix
-      #       ./users/root.nix
-      #     ];
-      #     specialArgs = {
-      #       inherit inputs;
-      #     };
-      #   };
-
-      # terminus = nixpkgs.lib.nixosSystem {
-      #   # nixos-rebuild switch --flake .
-      #   system = "x86_64-linux";
-      #   pkgs = legacyPackages.x86_64-linux;
-      #   modules = [
-      #     home-manager.nixosModules.home-manager
-      #     agenix.nixosModules.default
-      #     disko.nixosModules.disko
-      #     lanzaboote.nixosModules.lanzaboote
-      #     ./modules/nixos
-
-      #     ./hosts/common # nixOS and Darwin
-      #     ./hosts/nixos/common # nixOS-specific
-      #     ./hosts/nixos/terminus # host-specific
-
-      #     ./users/joseph.nix
-      #     ./users/root.nix
-      #   ];
-      #   specialArgs = {
-      #     inherit inputs;
-      #   };
-      # };
-
-      # UTM virtual machine
-      #   anacreon = nixpkgs.lib.nixosSystem {
-      #     system = "aarch64-linux";
-      #     pkgs = legacyPackages.aarch64-linux;
-      #     modules = [
-      #       home-manager.nixosModules.home-manager
-      #       agenix.nixosModules.default
-      #       disko.nixosModules.disko
-      #       ./modules/nixos
-
-      #       ./hosts/common
-      #       ./hosts/nixos/common
-      #       ./hosts/nixos/mixins/systemd-boot.nix
-      #       ./hosts/nixos/anacreon
-
-      #       ./users/joseph.nix
-      #       ./users/root.nix
-      #     ];
-      #     specialArgs = {
-      #       inherit inputs;
-      #     };
-      #   };
-      # };
 
       # deploy.nodes = {
       #   terminus = {

@@ -19,24 +19,8 @@
     ./systemd-initrd.nix
   ] ++ (builtins.attrValues outputs.nixosModules);
 
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    backupFileExtension = ".backup-pre-hm";
-  };
-
   services = {
     resolved.enable = lib.mkDefault true;
-  };
-
-  nixpkgs = {
-    overlays = builtins.attrValues outputs.overlays;
-    config = {
-      allowUnfree = true;
-    };
   };
 
   hardware.enableRedistributableFirmware = true;
@@ -68,12 +52,8 @@
     };
     systemPackages =
       [
-        pkgs.agenix
-        pkgs.bashInteractive
-        pkgs.git
+        # most are in ../common/default.nix
         pkgs.htop
-        pkgs.vim
-        pkgs.neovim
         pkgs.nh
 
         # hardware

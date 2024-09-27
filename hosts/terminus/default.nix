@@ -12,8 +12,8 @@
     ./disko-hdd-storage.nix # separate from other disko config to allow for adding drive w/o formatting existing drives
     ../common/optional/lanzaboote.nix
 
-    ../common/nixos
-    ../common/nixos/users/joseph.nix
+    ../common/nixos # shared among all NixOS installs
+    ../../users/joseph.nix # add a user to this machine
 
     # Services
     ../common/optional/acme.nix

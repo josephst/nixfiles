@@ -2,12 +2,31 @@
 {
   pkgs,
   config,
+  lib,
+  inputs,
+  outputs,
   ...
 }:
 {
   age.secrets.ghToken = {
     file = ./secrets/ghToken.age;
     mode = "0440";
+  };
+
+  nixpkgs = {
+    overlays = builtins.attrValues outputs.overlays;
+    config = {
+      allowUnfree = true;
+    };
+  };
+
+  home-manager = {
+    extraSpecialArgs = {
+      inherit inputs outputs;
+    };
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = ".backup-pre-hm";
   };
 
   nix = {
@@ -32,8 +51,8 @@
     variables = {
       LANG = "en_US.UTF-8";
       # SHELL = "fish";
-      EDITOR = "nvim";
-      VISUAL = "nvim";
+      EDITOR = lib.getExe pkgs.neovim;
+      VISUAL = lib.getExe pkgs.neovim;
     };
     systemPackages = with pkgs; [
       agenix
@@ -43,14 +62,22 @@
       curl
       deploy-rs.deploy-rs
       file
+      findutils
       fish
+      gawk
       git
+      gnugrep
+      gnused
+      gnutar
+      gnutls
+      home-manager
       mkpasswd
+      ncurses
       neovim
       openssh
       rclone
-      wezterm.terminfo
       vim
+      wezterm.terminfo
       wget
       zsh
     ];
@@ -59,10 +86,12 @@
   # programs.(fish|zsh).enable must be defined here *and* in home-manager section
   # otherwise, nix won't be added to path in fish shell
   programs = {
+    bash.enable = true;
     fish = {
       enable = true;
       useBabelfish = true;
     };
+    nix-index.enable = true;
     zsh.enable = true;
     ssh.knownHosts = {
       "github.com".hostNames = [ "github.com" ];

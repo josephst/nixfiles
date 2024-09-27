@@ -1,6 +1,4 @@
 {
-  imports = [
-    ./user-ssh-keys.nix
-    ./rclone.nix
-  ];
+  user-ssh-keys = import ./user-ssh-keys.nix;
+  rclone = import ./rclone.nix;
 }

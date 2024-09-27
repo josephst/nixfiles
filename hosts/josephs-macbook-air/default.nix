@@ -4,7 +4,13 @@ let
 in
 {
   # machine-specific config
-  imports = [ ./brew.nix ];
+  imports = [
+    ../common
+    ../common/darwin
+
+    ../../users/joseph.nix
+    ./brew.nix
+  ];
 
   networking = {
     # need to escape the single quote here
@@ -16,6 +22,11 @@ in
     knownNetworkServices = [ "WiFi" ];
   };
 
+  nixpkgs.hostPlatform = {
+    system = "aarch64-darwin";
+  };
+
+  # TODO: delete this section?
   myconfig.gui.enable = true;
   myconfig.llm.enable = true;
 }
