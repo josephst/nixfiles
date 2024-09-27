@@ -273,6 +273,21 @@
         "type": "github"
       }
     },
+    "hardware": {
+      "locked": {
+        "lastModified": 1727040444,
+        "narHash": "sha256-19FNN5QT9Z11ZUMfftRplyNN+2PgcHKb3oq8KMW/hDA=",
+        "owner": "nixos",
+        "repo": "nixos-hardware",
+        "rev": "d0cb432a9d28218df11cbd77d984a2a46caeb5ac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixos-hardware",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -471,6 +486,7 @@
         "darwin": "darwin_2",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
+        "hardware": "hardware",
         "home-manager": "home-manager_2",
         "lanzaboote": "lanzaboote",
         "llama-cpp": "llama-cpp",

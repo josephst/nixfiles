@@ -2,12 +2,12 @@
   lib,
   pkgs,
   config,
-  inputs,
   ...
 }:
 let
   inherit (pkgs.stdenv) isDarwin isLinux;
   keys = import ../keys;
+  ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
 {
   age.secrets.joseph.file = ./secrets/users/joseph.age;
@@ -26,19 +26,18 @@ in
         # but doesn't exist until install is done. Uncomment for install, then replace comment.
         isNormalUser = true;
         createHome = true;
-        extraGroups = [
+        extraGroups = ifTheyExist [
           "wheel"
           "media"
         ]; # Enable ‘sudo’ for the user.
         linger = true; # linger w/ systemd (starts user units at bootup, rather than login)
+        packages = [
+          pkgs.home-manager
+        ];
       };
   };
 
   nix.settings.trusted-users = [ "joseph" ];
 
   home-manager.users.joseph = import ../home/joseph;
-  home-manager.backupFileExtension = ".backup-pre-hm";
-  home-manager.extraSpecialArgs = {
-    inherit (inputs) agenix;
-  };
 }
