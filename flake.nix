@@ -85,7 +85,6 @@
             inherit inputs outputs;
           };
         };
-
     in
     {
       overlays = import ./overlays { inherit inputs; };
@@ -114,24 +113,25 @@
         };
       };
 
-      # deploy.nodes = {
-      #   terminus = {
-      #     # override hostname with `nix run github:serokell/deploy-rs .#terminus -- --hostname 192.168.1.10`
-      #     # (if DNS not yet set up/ working)
-      #     hostname = "terminus.josephstahl.com";
-      #     profiles.system = {
-      #       path = legacyPackages.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.terminus;
-      #       sshUser = "root";
-      #       magicRollback = true;
-      #       remoteBuild = true; # since it may be cross-platform
-      #     };
-      #   };
-      # };
+      deploy.nodes = {
+        terminus = {
+          # override hostname with `nix run github:serokell/deploy-rs .#terminus -- --hostname 192.168.1.10`
+          # (if DNS not yet set up/ working)
+          hostname = "terminus.josephstahl.com";
+          profiles.system = {
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.terminus;
+            sshUser = "joseph";
+            user = "root";
+            magicRollback = true;
+            remoteBuild = true; # since it may be cross-platform
+          };
+        };
+      };
 
       # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
 
       # `nix develop`
-      devShells = forAllSystems (system: import ./shell.nix nixpkgs.legacyPackages.${system});
+      devShells = forAllSystems (system: import ./shell.nix { pkgs = nixpkgs.legacyPackages.${system}; } );
     };
 
   # configure nix

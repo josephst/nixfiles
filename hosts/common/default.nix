@@ -86,12 +86,10 @@
   # programs.(fish|zsh).enable must be defined here *and* in home-manager section
   # otherwise, nix won't be added to path in fish shell
   programs = {
-    bash.enable = true;
     fish = {
       enable = true;
       useBabelfish = true;
     };
-    nix-index.enable = true;
     zsh.enable = true;
     ssh.knownHosts = {
       "github.com".hostNames = [ "github.com" ];

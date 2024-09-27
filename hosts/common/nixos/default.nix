@@ -45,10 +45,7 @@
   # always install these for all users on nixos systems
   environment = {
     variables = {
-      LANG = "en_US.UTF-8";
       # SHELL = "fish";
-      EDITOR = "nvim";
-      VISUAL = "nvim";
     };
     systemPackages =
       [
