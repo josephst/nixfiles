@@ -61,6 +61,10 @@ in
   xdg = {
     enable = true;
 
+    configFile."nixpkgs/config.nix".text = ''
+    { allowUnfree = true; }
+    '';
+
     userDirs = {
       enable = isLinux;
       createDirectories = true;
