@@ -12,9 +12,10 @@ in
 {
   services.caddy.virtualHosts."${domain}" = {
     extraConfig = ''
-      encode gzip
-      file_server
-      root * ${webRoot}
+      root * ${pkgs.compressDrvWeb webRoot {}}
+      file_server {
+        precompressed br gzip
+      }
     '';
     useACMEHost = domain;
   };
