@@ -28,6 +28,7 @@ in
       # media
       "digikam"
       "iina"
+      "shottr"
       "spotify"
       "steam"
 
