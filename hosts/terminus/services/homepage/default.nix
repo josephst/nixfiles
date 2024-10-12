@@ -19,4 +19,16 @@ in
     '';
     useACMEHost = domain;
   };
+
+  # reject all requests to subdomains that aren't explicity configured
+  services.caddy.virtualHosts."*.${domain}" = {
+    extraConfig = ''
+      handle {
+        # Unhandled domains fall through to here,
+        # but we don't want to accept their requests
+        abort
+      }
+    '';
+    useACMEHost = domain;
+  };
 }
