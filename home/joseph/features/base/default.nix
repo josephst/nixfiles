@@ -42,6 +42,7 @@
     rsync
     silver-searcher
     tldr # cheatsheets in terminal
+    typst # latex alternative for typesetting docs
 
     # development
     gh-dash
