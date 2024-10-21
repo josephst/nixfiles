@@ -12,7 +12,6 @@
       experimental-features = [
         "nix-command"
         "flakes"
-        "repl-flake"
         "auto-allocate-uids"
       ];
       warn-dirty = false;
