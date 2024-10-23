@@ -7,7 +7,7 @@ in {
     openFirewall = true;
 
     unifiPackage = pkgs.unifi8;
-    mongodbPackage = pkgs.mongodb-7_0;
+    mongodbPackage = pkgs.mongodb-ce; # pre-built binary
   };
 
   services.caddy.virtualHosts."unifi.${domain}" = {
