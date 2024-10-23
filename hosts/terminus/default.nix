@@ -22,6 +22,7 @@
     ../common/optional/netdata.nix
     ../common/optional/paperless.nix
     ../common/optional/tailscale.nix
+    ../common/optional/unifi.nix
     ../common/optional/vscode-server.nix
     ## LLM
     ../common/optional/ollama.nix

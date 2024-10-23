@@ -12,7 +12,7 @@ in
 {
   services.caddy.virtualHosts."${domain}" = {
     extraConfig = ''
-      root * ${pkgs.compressDrvWeb webRoot {}}
+      root * ${pkgs.compressDrvWeb webRoot { }}
       file_server {
         precompressed br gzip
       }
