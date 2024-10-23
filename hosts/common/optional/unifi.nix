@@ -14,6 +14,7 @@ in {
     extraConfig = ''
       reverse_proxy https://localhost:8443 {
         transport http {
+          tls
           tls_insecure_skip_verify # we don't verify the controller https cert
         }
         header_up - Authorization  # sets header to be passed to the controller

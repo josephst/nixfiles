@@ -17,7 +17,7 @@ in
 
   services.caddy.virtualHosts."sabnzbd.${domain}" = {
     extraConfig = ''
-      reverse_proxy http://localhost:8080
+      reverse_proxy http://localhost:8082
     '';
     useACMEHost = domain;
   };
