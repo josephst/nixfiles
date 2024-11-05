@@ -110,5 +110,5 @@
   systemd.services.systemd-resolved.stopIfChanged = false;
 
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2411.section.md
-  systemd.enableStrictShellChecks = true;
+  systemd.enableStrictShellChecks = false; # TODO: broken because of linger-users script
 }
