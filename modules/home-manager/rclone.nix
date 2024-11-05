@@ -39,6 +39,9 @@ in
       map (remote: {
         name = "rclone-${remote}";
         value = {
+          script = ''
+            ${pkgs.rclone}/bin/rclone sync '${remote}:' '${cfg.local}/${remote}' ${lib.escapeShellArgs cfg.extraArgs}
+          '';
           Unit = {
             Description = "rclone sync service (${remote})";
           };
@@ -46,10 +49,6 @@ in
             CPUSchedulingPolicy = "idle";
             IOSchedulingClass = "idle";
             Type = "oneshot";
-            ExecStart = lib.concatStringsSep " " (
-              [ "${pkgs.rclone}/bin/rclone sync '${remote}:' '${cfg.local}/${remote}'" ]
-              ++ [ (lib.escapeShellArgs cfg.extraArgs) ]
-            );
           };
           Install.WantedBy = [ "default.target" ];
         };

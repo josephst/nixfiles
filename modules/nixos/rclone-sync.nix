@@ -152,6 +152,8 @@ in
             sync ${cfg.dataDir} $REMOTE ${extraArgs}
         '';
 
+        preStart = lib.optional cfg.pingHealthchecks ''${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${RCLONE_HC_UUID}/start" || true'';
+
         onSuccess = lib.optional cfg.pingHealthchecks "rclone-sync-notify@success.service";
         onFailure = lib.optional cfg.pingHealthchecks "rclone-sync-notify@failure.service";
       };

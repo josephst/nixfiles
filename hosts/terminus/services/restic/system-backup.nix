@@ -64,7 +64,7 @@ in
     serviceConfig = {
       Type = "oneshot";
       EnvironmentFile = config.age.secrets.restic-systembackup-env.path; # contains heathchecks.io UUID
-      ExecStart = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
     };
+    script = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
   };
 }
