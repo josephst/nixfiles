@@ -11,7 +11,7 @@ in
       "1password-cli"
       "1password"
       "alacritty"
-      "amethyst"
+      # "amethyst"
       "cyberduck"
       "git-credential-manager"
       "iterm2"
@@ -47,7 +47,7 @@ in
 
     masApps = {
       "Amphetamine" = 937984704;
-      "Todoist" = 585829637;
+      # "Todoist" = 585829637;
       "Tailscale" = 1475387142;
       "Fantastical" = 975937182;
       # "Microsoft 365" = 1450038993;
