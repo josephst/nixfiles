@@ -13,6 +13,26 @@
       config.initial_cols = 140
       config.initial_rows = 40
 
+      config.leader = { key = 'a', mods = 'CTRL'}
+      config.keys = {
+        {
+          key = '|',
+          mods = 'LEADER|SHIFT',
+          action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
+        },
+        -- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
+        {
+          key = 'a',
+          mods = 'LEADER|CTRL',
+          action = wezterm.action.SendKey { key = 'a', mods = 'CTRL' },
+        },
+        -- Leader followed by Alt-F to maximize a pane
+        {
+          key = 'f',
+          mods = 'ALT',
+          action = wezterm.action.TogglePaneZoomState,
+        },
+      }
       config.set_environment_variables = {
         -- needed so that wezterm terminfo file is visible
         TERMINFO_DIRS = '/run/current-system/sw/share/terminfo',
