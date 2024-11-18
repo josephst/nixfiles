@@ -20,7 +20,10 @@
   ] ++ (builtins.attrValues outputs.nixosModules);
 
   services = {
-    resolved.enable = lib.mkDefault true;
+    resolved = {
+      enable = lib.mkDefault true;
+      dnsovertls = "opportunistic";
+    };
   };
 
   hardware.enableRedistributableFirmware = true;
