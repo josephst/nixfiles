@@ -3,10 +3,9 @@ _: {
     enable = true;
     settings = {
       default_shell = "fish";
-      theme = "catppuccin-frappe";
+      # theme = "catppuccin-frappe";
       default_layout = "default_layout";
     };
-    enableFishIntegration = false; # see manual settings in fish.nix
   };
 
   home.sessionVariables = {

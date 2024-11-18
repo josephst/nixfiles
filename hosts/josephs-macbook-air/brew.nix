@@ -26,7 +26,7 @@ in
       "logi-options+"
 
       # media
-      "digikam"
+      # "digikam"
       "iina"
       "shottr"
       "spotify"
