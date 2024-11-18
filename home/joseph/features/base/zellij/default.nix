@@ -13,6 +13,5 @@ _: {
     ZELLIJ_AUTO_ATTACH = "true";
   };
 
-  xdg.configFile."zellij/themes/catppuccin.kdl".source = ./catppuccin.kdl;
   xdg.configFile."zellij/layouts/default_layout.kdl".source = ./default_layout.kdl;
 }
