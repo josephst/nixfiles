@@ -18,6 +18,7 @@
         TERMINFO_DIRS = '/run/current-system/sw/share/terminfo',
       }
       config.term = 'wezterm'
+      config.enable_kitty_keyboard = true
 
       -- Returns a bool based on whether the host operating system's
       -- appearance is light or dark.
