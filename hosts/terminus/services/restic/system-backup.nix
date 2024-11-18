@@ -51,7 +51,7 @@ in
       ''
       + lib.optionalString config.services.paperless.enable ''
         mkdir -p /var/lib/paperless/backups
-        ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -f -p
+        ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -p --no-progress-bar
       '';
   };
 
