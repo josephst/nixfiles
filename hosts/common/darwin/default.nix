@@ -14,7 +14,6 @@
   ] ++ builtins.attrValues outputs.darwinModules;
 
   environment = {
-    loginShell = "${pkgs.zsh}/bin/zsh -l";
     shells = [
       pkgs.bashInteractive
       pkgs.fish
