@@ -28,12 +28,6 @@ in
         #   RequestTTY = "yes";
         # };
       };
-      "proxmox proxmox.josephstahl.com" = {
-        hostname = "proxmox";
-        user = "root";
-        forwardAgent = true;
-        identityFile = lib.mkIf identityEnabled identityFile;
-      };
       "github.com" = {
         user = "git";
         identityFile = lib.optionals identityEnabled [
