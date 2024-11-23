@@ -80,7 +80,9 @@
       mkNixos =
         modules:
         nixpkgs.lib.nixosSystem {
-          inherit modules;
+          modules = modules ++ [
+            ./hosts/common/nixos
+          ];
           specialArgs = {
             inherit inputs outputs;
           };
@@ -97,8 +99,8 @@
 
       # NixOS configuration entrypoint
       nixosConfigurations = {
-        terminus = mkNixos [ ./hosts/terminus ];
-        nixos-orbstack = mkNixos [ ./hosts/orbstack ];
+        terminus = mkNixos [ ./hosts/terminus ./users/joseph.nix ];
+        nixos-orbstack = mkNixos [ ./hosts/orbstack ./users/joseph.nix ];
       };
 
       darwinConfigurations = {
@@ -106,6 +108,7 @@
           # darwin-rebuild switch --flake .
           modules = [
             ./hosts/josephs-macbook-air
+            ./users/joseph.nix
           ];
           specialArgs = {
             inherit inputs outputs;

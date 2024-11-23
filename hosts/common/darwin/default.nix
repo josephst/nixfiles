@@ -11,6 +11,7 @@
   imports = [
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
+    ../default.nix
   ] ++ builtins.attrValues outputs.darwinModules;
 
   environment = {

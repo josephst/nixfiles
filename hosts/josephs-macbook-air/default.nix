@@ -5,10 +5,7 @@ in
 {
   # machine-specific config
   imports = [
-    ../common
     ../common/darwin
-
-    ../../users/joseph.nix
     ./brew.nix
   ];
 
