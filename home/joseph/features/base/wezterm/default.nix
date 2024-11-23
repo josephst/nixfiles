@@ -13,6 +13,16 @@
       config.initial_cols = 140
       config.initial_rows = 40
 
+      -- Visual bell
+      config.audible_bell = 'Disabled'
+      config.visual_bell = {
+        target = "CursorColor",
+        fade_in_function = "EaseIn",
+        fade_in_duration_ms = 150,
+        fade_out_function = "EaseOut",
+        fade_out_duration_ms = 300,
+      }
+
       config.leader = { key = 'a', mods = 'CTRL'}
       config.keys = {
         {
@@ -39,6 +49,13 @@
       }
       config.term = 'wezterm'
       config.enable_kitty_keyboard = true
+
+      -- SSH and domains
+      config.default_domain = 'local'
+      config.ssh_domains = wezterm.default_ssh_domains()
+      for _, dom in ipairs(config.ssh_domains) do
+        dom.assume_shell = 'Posix'
+      end
 
       -- Returns a bool based on whether the host operating system's
       -- appearance is light or dark.
