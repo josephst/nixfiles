@@ -88,6 +88,10 @@
         };
       };
     };
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
     thefuck.enable = true;
     lazygit.enable = true;
     home-manager.enable = true;
