@@ -122,23 +122,22 @@ in
         description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
         wants = [ "network.target" ];
         after = [ "network.target" ];
-        serviceConfig =
-          {
-            LoadCredential = [ "rcloneConf:${cfg.rcloneConfFile}" ];
-            EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-            # Security hardening
-            ReadWritePaths = [ cfg.dataDir ];
-            PrivateTmp = true;
-            ProtectSystem = "strict";
-            ProtectKernelTunables = true;
-            ProtectKernelModules = true;
-            ProtectControlGroups = true;
-            ProtectHome = "read-only";
-            PrivateDevices = true;
-            StateDirectory = "rclone-sync";
-            CacheDirectory = "rclone-sync";
-            CacheDirectoryMode = "0700";
-          };
+        serviceConfig = {
+          LoadCredential = [ "rcloneConf:${cfg.rcloneConfFile}" ];
+          EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+          # Security hardening
+          ReadWritePaths = [ cfg.dataDir ];
+          PrivateTmp = true;
+          ProtectSystem = "strict";
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectHome = "read-only";
+          PrivateDevices = true;
+          StateDirectory = "rclone-sync";
+          CacheDirectory = "rclone-sync";
+          CacheDirectoryMode = "0700";
+        };
 
         script = ''
           ${cfg.package}/bin/rclone \

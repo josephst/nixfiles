@@ -1,7 +1,8 @@
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
 let
   inherit (config.networking) domain;
-in {
+in
+{
   services.unifi = {
     enable = true;
     openFirewall = true;
