@@ -18,19 +18,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+        uses: DeterminateSystems/nix-installer-action@v16
       - name: Check Nixpkgs Inputs
         uses: DeterminateSystems/flake-checker-action@v9
       - name: Add Nix Cache
         uses: DeterminateSystems/magic-nix-cache-action@v8
-      - name: Update flake.lock
-        uses: DeterminateSystems/update-flake-lock@v24
-        id: update
+      # done with setup, now start updating
+      - run: nix flake update --commit-lock-file
+      - uses: peter-evans/create-pull-request@v7
         with:
-          pr-title: "Update flake.lock" # Title of PR to be created
-          pr-labels: |                  # Labels to be set on the PR
-            dependencies
-            automated
-      - name: Check the Flake
-        id: check
-        run: nix flake check
+          branch: update_flake_lock_action
+          delete_branch: true
+          title: Update flake inputs
+          sign-commits: true
