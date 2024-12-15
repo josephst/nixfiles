@@ -14,6 +14,8 @@ jobs:
   lockfile:
     name: Lockfile
     runs-on: ubuntu-latest
+    outputs:
+      pr-sha: ${{ steps.cpr.outputs.pull-request-head-sha }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -27,11 +29,30 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - run: nix flake update --commit-lock-file
       - uses: peter-evans/create-pull-request@v7
+        id: cpr
         with:
           branch: update_flake_lock_action
           delete-branch: true
           sign-commits: true
           title: Update flake.lock
+  checks:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-15]
+    name: Run flake checks & auto-merge if passing
+    runs-on: ${{ matrix.os }}
+    needs: lockfile
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.lockfile.outputs.pr-sha }}
+      - uses: DeterminateSystems/nix-installer-action@v16
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Check Nixpkgs Inputs
+        uses: DeterminateSystems/flake-checker-action@v9
+      - name: Run flake checks
+        run: |
+          nix flake check -L
       - run: gh pr merge update_flake_lock_action --auto --delete-branch --squash
         env:
           GH_TOKEN: ${{ github.token }}
