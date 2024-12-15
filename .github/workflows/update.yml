@@ -53,6 +53,11 @@ jobs:
       - name: Run flake checks
         run: |
           nix flake check -L
+  merge:
+    runs-on: "ubuntu-latest"
+    name: "Auto-merge after checks pass"
+    needs: [checks, lockfile]
+    steps:
       - run: gh pr merge update_flake_lock_action --auto --delete-branch --squash
         env:
           GH_TOKEN: ${{ github.token }}
