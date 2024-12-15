@@ -12,10 +12,11 @@ permissions:
 
 jobs:
   lockfile:
-    name: Lockfile
+    name: Update flake.lock
     runs-on: ubuntu-latest
     outputs:
       pr-sha: ${{ steps.cpr.outputs.pull-request-head-sha }}
+      pr-url: ${{ steps.cpr.outputs.pull-request-url }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -39,7 +40,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-15]
-    name: Run flake checks & auto-merge if passing
+    name: Flake checks
     runs-on: ${{ matrix.os }}
     needs: lockfile
     steps:
@@ -58,6 +59,8 @@ jobs:
     name: "Auto-merge after checks pass"
     needs: [checks, lockfile]
     steps:
-      - run: gh pr merge update_flake_lock_action --auto --delete-branch --squash
+      - name: Checkout main branch again
+        uses: actions/checkout@v4
+      - run: gh pr merge ${{ needs.lockfile.outputs.pr-url }} --auto --delete-branch --squash
         env:
           GH_TOKEN: ${{ github.token }}
