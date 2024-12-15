@@ -1,0 +1,14 @@
+name: check
+on: push:
+  branches:
+    - update_flake_lock_action
+jobs:
+  check:
+    name: Run flake checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v27
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: |
+          nix flake check -L

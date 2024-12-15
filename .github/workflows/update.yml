@@ -34,5 +34,4 @@ jobs:
           delete-branch: true
           sign-commits: true
           title: Update flake.lock
-      # check and auto-merge if successful
-      - run: nix flake check
+      - run: gh pr merge --auto
