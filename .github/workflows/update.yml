@@ -31,6 +31,8 @@ jobs:
       - uses: peter-evans/create-pull-request@v7
         with:
           branch: update_flake_lock_action
-          delete_branch: true
-          title: Update flake.lock
+          delete-branch: true
           sign-commits: true
+          title: Update flake.lock
+      # check and auto-merge if successful
+      - run: nix flake check
