@@ -1,10 +1,9 @@
 name: check
 
 on:
-  push:
+  pull_request:
     branches:
-      - update_flake_lock_action
-      - main
+      - "update_flake_lock_action"
 jobs:
   check:
     name: Run flake checks
