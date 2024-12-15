@@ -30,6 +30,7 @@ in
 {
   imports = [
     inputs.agenix.homeManagerModules.default
+    inputs.nix-index-database.hmModules.nix-index
 
     ./secrets
     ./features/base

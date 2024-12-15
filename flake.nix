@@ -56,6 +56,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     hardware.url = "github:nixos/nixos-hardware";
   };
 
@@ -99,8 +104,14 @@
 
       # NixOS configuration entrypoint
       nixosConfigurations = {
-        terminus = mkNixos [ ./hosts/terminus ./users/joseph.nix ];
-        nixos-orbstack = mkNixos [ ./hosts/orbstack ./users/joseph.nix ];
+        terminus = mkNixos [
+          ./hosts/terminus
+          ./users/joseph.nix
+        ];
+        nixos-orbstack = mkNixos [
+          ./hosts/orbstack
+          ./users/joseph.nix
+        ];
       };
 
       darwinConfigurations = {
