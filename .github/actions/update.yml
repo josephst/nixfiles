@@ -1,0 +1,36 @@
+name: Update Flake
+
+on:
+  workflow_dispatch: # allows manual triggering
+  schedule:
+    - cron: '00 5 * * 6' # runs weekly on Saturday at 05:00
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+
+jobs:
+  lockfile:
+    name: Lockfile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - name: Check Nixpkgs Inputs
+        uses: DeterminateSystems/flake-checker-action@v9
+      - name: Add Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Update flake.lock
+        uses: DeterminateSystems/update-flake-lock@v24
+        id: update
+        with:
+          pr-title: "Update flake.lock" # Title of PR to be created
+          pr-labels: |                  # Labels to be set on the PR
+            dependencies
+            automated
+      - name: Check the Flake
+        id: check
+        run: nix flake check
