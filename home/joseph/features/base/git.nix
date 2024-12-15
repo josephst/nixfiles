@@ -28,8 +28,9 @@ in
       init.defaultBranch = "main";
       # Automatically track remote branch
       push.autoSetupRemote = true;
-      pull.rebase = "true";
-      rebase.autosquash = "true";
+      fetch.prune = true;
+      pull.rebase = true;
+      rebase.autosquash = true;
       # rebase.autostash = "true";
       # delta options
       delta.navigate = true;
