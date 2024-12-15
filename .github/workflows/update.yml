@@ -19,8 +19,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v16
-      - name: Check Nixpkgs Inputs
-        uses: DeterminateSystems/flake-checker-action@v9
       - name: Add Nix Cache
         uses: DeterminateSystems/magic-nix-cache-action@v8
       # done with setup, now start updating
