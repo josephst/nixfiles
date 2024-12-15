@@ -33,3 +33,5 @@ jobs:
           sign-commits: true
           title: Update flake.lock
       - run: gh pr merge --auto -d
+        env:
+          GH_TOKEN: ${{ github.token }}
