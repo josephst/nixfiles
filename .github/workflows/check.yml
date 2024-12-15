@@ -1,7 +1,9 @@
 name: check
-on: push:
-  branches:
-    - update_flake_lock_action
+
+on:
+  push:
+    branches:
+      - update_flake_lock_action
 jobs:
   check:
     name: Run flake checks
