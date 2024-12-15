@@ -32,6 +32,6 @@ jobs:
           delete-branch: true
           sign-commits: true
           title: Update flake.lock
-      - run: gh pr merge --auto -d
+      - run: gh pr merge update_flake_lock_action --auto -d
         env:
           GH_TOKEN: ${{ github.token }}
