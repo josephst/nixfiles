@@ -3,7 +3,7 @@ name: check
 on:
   pull_request:
     branches:
-      - "update_flake_lock_action"
+      - "main"
 jobs:
   check:
     strategy:
