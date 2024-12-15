@@ -1,9 +1,9 @@
 name: check
 
 on:
-  pull_request:
+  push:
     branches:
-      - "main"
+      - "update_flake_lock_action"
 jobs:
   check:
     strategy:
