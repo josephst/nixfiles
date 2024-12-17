@@ -11,6 +11,7 @@ in
     extraComponents = [
       "esphome"
       "google_translate"
+      "met"
     ];
     config = {
       frontend = {};
@@ -30,6 +31,7 @@ in
   };
 
   networking.firewall.allowedTCPPorts = lib.mkIf config.services.home-assistant.enable [
+    1400 # sonos
     8989 # wemo
   ];
 
