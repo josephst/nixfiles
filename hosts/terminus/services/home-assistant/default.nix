@@ -3,7 +3,9 @@ let
   inherit (config.networking) domain;
 in
 {
-  imports = [];
+  imports = [
+    ./zwave.nix
+  ];
 
   services.home-assistant = {
     enable  = true;
@@ -42,6 +44,7 @@ in
         ];
       };
       sonos = {};
+      zwave_js = {};
     };
   };
 

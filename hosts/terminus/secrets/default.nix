@@ -31,4 +31,8 @@ _: {
     # contents: HC_UUID
     file = ./restic/systembackup.env.age;
   };
+
+  age.secrets.zwave-js-keys = {
+    file = ./zwave-js-keys.json.age;
+  };
 }
