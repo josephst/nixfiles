@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  recyclarr,
-  git,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, recyclarr
+, git
+, testers
+,
 }:
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -16,8 +16,7 @@ let
       aarch64-linux = "arm64";
       x86_64-darwin = "x64";
       aarch64-darwin = "arm64";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash =
     {
@@ -25,8 +24,7 @@ let
       arm64-linux_hash = "sha256-9Gyk09zAGzahP8FCGxj037vaK8h++3M5R2Qqop99Gs4=";
       x64-osx_hash = "sha256-c87eOZBz+RtbIi+dlXKKVMyPI8JqYDuiaL4xOkDRFn0=";
       arm64-osx_hash = "sha256-zSHgLXRDB6UA7V0LFgLq9ChqB40IHIJJxRqAYyVFlB8=";
-    }
-    ."${arch}-${os}_hash";
+    }."${arch}-${os}_hash";
 in
 stdenv.mkDerivation rec {
   pname = "recyclarr";

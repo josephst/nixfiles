@@ -1,11 +1,10 @@
 # Settings shared among ALL NixOS and nix-darwin installations
-{
-  pkgs,
-  config,
-  lib,
-  inputs,
-  outputs,
-  ...
+{ pkgs
+, config
+, lib
+, inputs
+, outputs
+, ...
 }:
 {
   age.secrets.ghToken = {

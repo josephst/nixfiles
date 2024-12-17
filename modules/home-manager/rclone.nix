@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.myconfig.rclone;
@@ -36,40 +35,44 @@ in
     systemd.user.tmpfiles.rules = map (remote: "D '${cfg.local}/${remote}' 0700 - - -") cfg.remotes;
 
     systemd.user.services = builtins.listToAttrs (
-      map (remote: {
-        name = "rclone-${remote}";
-        value = {
-          script = ''
-            ${pkgs.rclone}/bin/rclone sync '${remote}:' '${cfg.local}/${remote}' ${lib.escapeShellArgs cfg.extraArgs}
-          '';
-          Unit = {
-            Description = "rclone sync service (${remote})";
+      map
+        (remote: {
+          name = "rclone-${remote}";
+          value = {
+            script = ''
+              ${pkgs.rclone}/bin/rclone sync '${remote}:' '${cfg.local}/${remote}' ${lib.escapeShellArgs cfg.extraArgs}
+            '';
+            Unit = {
+              Description = "rclone sync service (${remote})";
+            };
+            Service = {
+              CPUSchedulingPolicy = "idle";
+              IOSchedulingClass = "idle";
+              Type = "oneshot";
+            };
+            Install.WantedBy = [ "default.target" ];
           };
-          Service = {
-            CPUSchedulingPolicy = "idle";
-            IOSchedulingClass = "idle";
-            Type = "oneshot";
-          };
-          Install.WantedBy = [ "default.target" ];
-        };
-      }) cfg.remotes
+        })
+        cfg.remotes
     );
 
     systemd.user.timers = builtins.listToAttrs (
-      map (remote: {
-        name = "rclone-${remote}";
-        value = {
-          Unit = {
-            Description = "rclone sync timer (${remote})";
+      map
+        (remote: {
+          name = "rclone-${remote}";
+          value = {
+            Unit = {
+              Description = "rclone sync timer (${remote})";
+            };
+            Timer = {
+              OnStartupSec = "1h";
+              OnUnitInactiveSec = "24h";
+              RandomizedDelaySec = "1h"; # +/- 1hr
+            };
+            Install.WantedBy = [ "timers.target" ];
           };
-          Timer = {
-            OnStartupSec = "1h";
-            OnUnitInactiveSec = "24h";
-            RandomizedDelaySec = "1h"; # +/- 1hr
-          };
-          Install.WantedBy = [ "timers.target" ];
-        };
-      }) cfg.remotes
+        })
+        cfg.remotes
     );
   };
 }

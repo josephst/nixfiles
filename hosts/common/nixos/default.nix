@@ -1,12 +1,11 @@
 # This file (and the global directory) holds config used on all hosts
-{
-  inputs,
-  outputs,
-  pkgs,
-  lib,
-  config,
-  options,
-  ...
+{ inputs
+, outputs
+, pkgs
+, lib
+, config
+, options
+, ...
 }:
 {
   imports = [

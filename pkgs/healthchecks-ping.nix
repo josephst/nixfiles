@@ -1,11 +1,10 @@
-{
-  writeShellApplication,
-  coreutils,
-  curl,
-  lib,
-  systemd,
-  stdenv,
-  ...
+{ writeShellApplication
+, coreutils
+, curl
+, lib
+, systemd
+, stdenv
+, ...
 }:
 
 writeShellApplication {

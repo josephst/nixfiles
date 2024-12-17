@@ -1,11 +1,10 @@
 # This file is here as a placeholder, it will hold darwin-specific configuration
 # shared accross all nix-darwin machines
-{
-  inputs,
-  outputs,
-  pkgs,
-  lib,
-  ...
+{ inputs
+, outputs
+, pkgs
+, lib
+, ...
 }:
 {
   imports = [

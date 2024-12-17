@@ -1,8 +1,7 @@
-{
-  pkgs,
-  osConfig,
-  lib,
-  ...
+{ pkgs
+, osConfig
+, lib
+, ...
 }:
 let
   cfg = osConfig.myconfig.gui;

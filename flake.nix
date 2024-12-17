@@ -70,13 +70,12 @@
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      darwin,
-      treefmt-nix,
-      ...
-    # secrets
+    { self
+    , nixpkgs
+    , darwin
+    , treefmt-nix
+    , ...
+      # secrets
     }@inputs:
     let
       inherit (self) outputs;
