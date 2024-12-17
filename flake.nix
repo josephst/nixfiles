@@ -61,6 +61,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     hardware.url = "github:nixos/nixos-hardware";
   };
 
@@ -69,6 +74,7 @@
       self,
       nixpkgs,
       darwin,
+      treefmt-nix,
       ...
     # secrets
     }@inputs:
@@ -92,12 +98,15 @@
             inherit inputs outputs;
           };
         };
+
+      treefmtEval = forAllSystems (system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix);
     in
     {
       overlays = import ./overlays { inherit inputs; };
       packages = forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; });
       # `nix fmt`
-      formatter = forAllSystems (system: self.packages.${system}.nixfmt-plus);
+      inherit treefmtEval;
+      formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
       nixosModules = import ./modules/nixos;
       darwinModules = import ./modules/darwin;
       homeManagerModules = import ./modules/home-manager;
