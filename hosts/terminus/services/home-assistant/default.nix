@@ -18,6 +18,7 @@ in
       "homekit_controller"
       "met"
       "plex"
+      "zwave_js"
     ];
     config = {
       # store these outside of configuration.yaml so that they can be edited
@@ -44,7 +45,6 @@ in
         ];
       };
       sonos = {};
-      zwave_js = {};
     };
   };
 
