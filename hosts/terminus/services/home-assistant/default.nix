@@ -7,6 +7,11 @@ in
 
   services.home-assistant = {
     enable  = true;
+    configWritable = true; # will be over-written each time the service starts, but helps w/ rapid iteration
+    extraComponents = [
+      "esphome"
+      "google_translate"
+    ];
     config = {
       frontend = {};
       default_config = {};
@@ -20,6 +25,7 @@ in
       wemo = {
         discovery = true;
       };
+      sonos = {};
     };
   };
 
