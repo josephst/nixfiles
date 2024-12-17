@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
   inherit (config.networking) domain;
 in
@@ -23,7 +23,11 @@ in
     };
   };
 
-  services.caddy.virtualHosts."home.${domain}" = {
+  networking.firewall.allowedTCPPorts = lib.mkIf config.services.home-assistant.enable [
+    8989 # wemo
+  ];
+
+  services.caddy.virtualHosts."home.${domain}" = lib.mkIf config.services.home-assistant.enable {
     extraConfig = ''
       reverse_proxy localhost:8123
     '';
