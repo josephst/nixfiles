@@ -13,7 +13,7 @@
     ../common/optional/lanzaboote.nix
 
     # Services
-    ./home-assistant
+    ./services/home-assistant
     ../common/optional/acme.nix
     ../common/optional/blocky.nix
     ../common/optional/caddy.nix
