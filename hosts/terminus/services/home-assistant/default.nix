@@ -21,13 +21,6 @@ in
       frontend = {};
       cast = {};
       default_config = {};
-      homeassistant = {
-        name = "Home";
-        latitude = "!secret latitude";
-        longitude = "!secret longitude";
-        elevation = "!secret elevation";
-        time_zone = "America/New_York";
-      };
       homekit = {};
       http = {
         use_x_forwarded_for = true;
