@@ -17,7 +17,9 @@ in
           "::1"
         ];
       };
-      wemo = {};
+      wemo = {
+        discovery = true;
+      };
     };
   };
 
