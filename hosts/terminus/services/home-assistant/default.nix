@@ -7,15 +7,19 @@ in
 
   services.home-assistant = {
     enable  = true;
+    openFirewall = true;
     configWritable = true; # will be over-written each time the service starts, but helps w/ rapid iteration
     extraComponents = [
       "esphome"
       "google_translate"
-      "met"
     ];
     config = {
       frontend = {};
       default_config = {};
+      homekit = {};
+      homekit_controller = {};
+      met = {};
+      plex = {};
       http = {
         use_x_forwarded_for = true;
         trusted_proxies = [
@@ -23,9 +27,7 @@ in
           "::1"
         ];
       };
-      wemo = {
-        discovery = true;
-      };
+      wemo = {};
       sonos = {};
     };
   };
