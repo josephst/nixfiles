@@ -14,6 +14,8 @@
     };
   };
 
+  networking.firewall.allowedTCPPorts = [ 8091 3000 ];
+
   virtualisation.podman = {
     enable = true;
     dockerCompat = true;
