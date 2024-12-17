@@ -12,14 +12,14 @@ in
     extraComponents = [
       "esphome"
       "google_translate"
+      "met"
+      "plex"
+      "homekit_controller"
     ];
     config = {
       frontend = {};
       default_config = {};
       homekit = {};
-      homekit_controller = {};
-      met = {};
-      plex = {};
       http = {
         use_x_forwarded_for = true;
         trusted_proxies = [
@@ -27,7 +27,13 @@ in
           "::1"
         ];
       };
-      wemo = {};
+      wemo = {
+        static = [
+          "192.168.1.130"
+          "192.168.1.131"
+          "192.168.1.132"
+        ];
+      };
       sonos = {};
     };
   };
