@@ -8,7 +8,6 @@ in
   services.home-assistant = {
     enable  = true;
     openFirewall = true;
-    configWritable = true; # will be over-written each time the service starts, but helps w/ rapid iteration
     extraComponents = [
       "cast"
       "esphome"
@@ -18,8 +17,6 @@ in
       "plex"
     ];
     config = {
-      frontend = {};
-      cast = {};
       default_config = {};
       homekit = {};
       http = {
