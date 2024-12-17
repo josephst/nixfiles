@@ -10,11 +10,12 @@ in
     openFirewall = true;
     configWritable = true; # will be over-written each time the service starts, but helps w/ rapid iteration
     extraComponents = [
+      "cast"
       "esphome"
       "google_translate"
+      "homekit_controller"
       "met"
       "plex"
-      "homekit_controller"
     ];
     config = {
       frontend = {};
