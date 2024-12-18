@@ -18,6 +18,7 @@ in
   "restic/restic-server-maintenance.env.age".publicKeys = allKeys;
   "restic/systembackup.env.age".publicKeys = allKeys;
   "smbpasswd.age".publicKeys = allKeys; # smb password database
+  "zwave-js-keys.json.age".publicKeys = allKeys;
 }
 # `nix run github:ryantm/agenix -- --help` to run
 # to rekey: get ssh private key from 1password (export -> no password)

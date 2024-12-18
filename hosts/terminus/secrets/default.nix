@@ -31,4 +31,10 @@ _: {
     # contents: HC_UUID
     file = ./restic/systembackup.env.age;
   };
+
+  age.secrets.zwave-js-keys = {
+    file = ./zwave-js-keys.json.age;
+    # TODO: use systemd's LoadCredential so that this file doesn't need to be globally readable
+    mode = "774"; # needs to be readable by user zwave-js, but this is created by systemd's DynamicUser
+  };
 }
