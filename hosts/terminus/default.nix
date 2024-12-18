@@ -5,6 +5,9 @@
 {
   imports = [
     inputs.disko.nixosModules.disko
+
+    inputs.srvos.nixosModules.server
+
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./networking.nix

@@ -10,6 +10,10 @@
   imports = [
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
+    inputs.srvos.darwinModules.common
+    inputs.srvos.darwinModules.mixins-terminfo
+    inputs.srvos.darwinModules.mixins-nix-experimental
+    inputs.srvos.darwinModules.mixins-trusted-nix-caches
     ../default.nix
   ] ++ builtins.attrValues outputs.darwinModules;
 
@@ -75,10 +79,6 @@
       };
     };
     settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
       warn-dirty = false;
     };
   };

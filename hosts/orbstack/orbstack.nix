@@ -30,6 +30,9 @@
   # disable sshd
   services.openssh.enable = lib.mkForce false;
 
+  # agenix
+  age.identityPaths = map (builtins.getAttr "path") config.services.openssh.hostKeys;
+
   # systemd
   systemd.services."systemd-oomd".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-userdbd".serviceConfig.WatchdogSec = 0;
