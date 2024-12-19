@@ -22,6 +22,7 @@ in
       "met"
       "plex"
       "sonos"
+      "smartrent"
       "zwave_js"
     ];
     config = {
