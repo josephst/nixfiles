@@ -12,12 +12,16 @@ in
     openFirewall = true;
 
     extraComponents = [
+      "default_config"
+
       "cast"
       "esphome"
       "google_translate"
       "homekit_controller"
+      "homekit"
       "met"
       "plex"
+      "sonos"
       "zwave_js"
     ];
     config = {
@@ -26,8 +30,6 @@ in
       automation = "!include automations.yaml";
       scene = "!include scenes.yaml";
 
-      default_config = {};
-      homekit = {};
       http = {
         use_x_forwarded_for = true;
         trusted_proxies = [
