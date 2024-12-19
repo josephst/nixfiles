@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   inherit (config.networking) domain;
 in
@@ -48,6 +48,10 @@ in
       };
       sonos = {};
     };
+
+    customComponents = [
+      pkgs.homeassistant-smartrent
+    ];
   };
 
   networking.firewall.allowedTCPPorts = lib.mkIf config.services.home-assistant.enable [
