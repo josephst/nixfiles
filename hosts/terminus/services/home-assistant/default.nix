@@ -22,7 +22,6 @@ in
       "met"
       "plex"
       "sonos"
-      "smartrent"
       "zwave_js"
     ];
     config = {
@@ -58,6 +57,7 @@ in
   networking.firewall.allowedTCPPorts = lib.mkIf config.services.home-assistant.enable [
     1400 # sonos
     8989 # wemo
+    21063 # homekit bridge
   ];
 
   systemd.services.home-assistant.preStart = ''
