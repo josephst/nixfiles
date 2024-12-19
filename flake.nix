@@ -106,8 +106,6 @@
     {
       overlays = import ./overlays { inherit inputs; };
       packages = forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; });
-      # `nix fmt`
-      inherit treefmtEval;
       formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
       nixosModules = import ./modules/nixos;
       darwinModules = import ./modules/darwin;
