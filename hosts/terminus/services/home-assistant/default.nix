@@ -8,7 +8,7 @@ in
   ];
 
   services.home-assistant = {
-    enable  = true;
+    enable = true;
     openFirewall = true;
 
     extraComponents = [
@@ -46,11 +46,11 @@ in
           "192.168.1.134"
         ];
       };
-      sonos = {};
+      sonos = { };
     };
 
     customComponents = [
-      pkgs.homeassistant-smartrent
+      (pkgs.callPackage ../../../../pkgs/homeassistant-smartrent.nix { })
     ];
   };
 

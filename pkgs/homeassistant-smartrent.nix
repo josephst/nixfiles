@@ -1,7 +1,7 @@
 { lib
 , buildHomeAssistantComponent
 , fetchFromGitHub
-, smartrent-py
+, home-assistant
 }:
 
 buildHomeAssistantComponent rec {
@@ -18,7 +18,7 @@ buildHomeAssistantComponent rec {
 
   dependencies = [
     # python requirements, as specified in manifest.json
-    smartrent-py
+    (home-assistant.python.pkgs.callPackage ./smartrent-py.nix { })
   ];
 
   meta = with lib; {

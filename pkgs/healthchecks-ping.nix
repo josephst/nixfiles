@@ -13,6 +13,7 @@ writeShellApplication {
     coreutils
     curl
   ] ++ lib.optional stdenv.isLinux systemd;
+  # TODO: is there a better way to only build this on linux systems?
   text = ''
     set -x ## DEBUGGING
 

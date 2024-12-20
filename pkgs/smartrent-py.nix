@@ -2,14 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 
-# runtime
+  # runtime
 , websockets
 , aiohttp
 
-# build
+  # build
 , setuptools
 , poetry-core
-, poetry
 }:
 
 buildPythonPackage rec {
@@ -28,10 +27,10 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-      substituteInPlace pyproject.toml \
-      --replace poetry.masonry.api poetry.core.masonry.api \
-      --replace "poetry>=" "poetry-core>="
-    '';
+    substituteInPlace pyproject.toml \
+    --replace poetry.masonry.api poetry.core.masonry.api \
+    --replace "poetry>=" "poetry-core>="
+  '';
 
   build-system = [
     poetry-core
