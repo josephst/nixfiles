@@ -58,6 +58,7 @@ in
     1400 # sonos
     8989 # wemo
     21063 # homekit bridge
+    21064 # homekit bridge
   ];
 
   systemd.services.home-assistant.preStart = ''
