@@ -55,6 +55,8 @@ in
 
     shellAliases = {
       copy = "rsync --archive --verbose --human-readable --partial --progress --modify-window=1"; # copy <source> <destination>
+
+      external-ip = "dog +short myip.opendns.com @resolver1.opendns.com";
     };
   };
 
