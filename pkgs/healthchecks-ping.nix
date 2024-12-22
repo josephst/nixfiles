@@ -15,7 +15,7 @@ writeShellApplication {
     EXIT=''${2:-0}
     NAME=$3
 
-    OUTPUT=$(systemctl status "$NAME" -l -n 1000 | tail --bytes 100000)
+    OUTPUT=$(journalctl -u "$NAME" --since=yesterday --no-pager | tail --bytes 100000)
 
     curl -fsS -m 10 -v --retry 5 "https://hc-ping.com/''${UUID}/''${EXIT}" --data-raw "$OUTPUT"
   '';
