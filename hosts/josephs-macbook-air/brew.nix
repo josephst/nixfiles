@@ -43,12 +43,13 @@ in
       "raycast"
       # "rectangle"
       "stats"
+      "tailscale"
     ];
 
     masApps = {
       "Amphetamine" = 937984704;
       # "Todoist" = 585829637;
-      "Tailscale" = 1475387142;
+      # "Tailscale" = 1475387142;
       "Fantastical" = 975937182;
       # "Microsoft 365" = 1450038993;
       "1Password for Safari" = 1569813296;

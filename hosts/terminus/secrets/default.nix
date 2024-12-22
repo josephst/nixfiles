@@ -1,9 +1,6 @@
 _: {
   # secrets specific to this device
-
-  age.secrets.netdata_nixos_claim = {
-    file = ./netdata_nixos_claim.age;
-  };
+  # TODO: move out of this file and back into the services that use them
 
   age.secrets.resticb2env = {
     # contents:
@@ -30,11 +27,5 @@ _: {
   age.secrets.restic-systembackup-env = {
     # contents: HC_UUID
     file = ./restic/systembackup.env.age;
-  };
-
-  age.secrets.zwave-js-keys = {
-    file = ./zwave-js-keys.json.age;
-    # TODO: use systemd's LoadCredential so that this file doesn't need to be globally readable
-    mode = "774"; # needs to be readable by user zwave-js, but this is created by systemd's DynamicUser
   };
 }

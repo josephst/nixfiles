@@ -5,7 +5,6 @@
 {
   imports = [
     inputs.disko.nixosModules.disko
-
     inputs.srvos.nixosModules.server
 
     # Include the results of the hardware scan.
@@ -13,26 +12,29 @@
     ./networking.nix
     ./disko.nix
     ./disko-hdd-storage.nix # separate from other disko config to allow for adding drive w/o formatting existing drives
-    ../common/optional/lanzaboote.nix
+
+    # Mixins
+    ../common/nixos/optional/lanzaboote.nix
+    ../common/nixos/optional/tailscale.nix
+    ../common/nixos/optional/avahi.nix
 
     # Services
     ./services/home-assistant
-    ../common/optional/acme.nix
-    ../common/optional/blocky.nix
-    ../common/optional/caddy.nix
-    ../common/optional/netdata.nix
-    ../common/optional/paperless.nix
-    ../common/optional/tailscale.nix
-    ../common/optional/unifi.nix
-    ../common/optional/vscode-server.nix
+    ./services/acme.nix
+    ./services/blocky.nix
+    ./services/caddy.nix
+    ./services/netdata.nix
+    ./services/paperless.nix
+    ./services/unifi.nix
+    ./services/vscode-server.nix
     ## LLM
-    ../common/optional/ollama.nix
-    ../common/optional/open-webui.nix
+    ./services/ollama.nix
+    ./services/open-webui.nix
     ## Media & Sharing
-    ../common/optional/servarr
-    ../common/optional/samba.nix
+    ./services/servarr
+    ./services/samba.nix
     ## Backup
-    ../common/optional/restic-server.nix
+    ./services/restic-server.nix
 
     # Specific to this host
     ## Secrets

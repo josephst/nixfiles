@@ -42,7 +42,7 @@ in
           };
         }
       ];
-      "scene desc" = [];
+      "scene desc" = [ ];
 
       http = {
         use_x_forwarded_for = true;
@@ -75,7 +75,7 @@ in
     21064 # homekit bridge
   ];
 
-  systemd.tmpfiles.rules = [
+  systemd.tmpfiles.rules = lib.mkIf config.services.home-assistant.enable [
     "f  ${config.services.home-assistant.configDir}/automations.yaml  - hass  hass"
     "f  ${config.services.home-assistant.configDir}/scenes.yaml       - hass  hass"
   ];
