@@ -27,8 +27,22 @@ in
     config = {
       # store these outside of configuration.yaml so that they can be edited
       # via web interface
-      automation = "!include automations.yaml";
-      scene = "!include scenes.yaml";
+      "automation ui" = "!include automations.yaml";
+      "scene ui" = "!include scenes.yaml";
+      "automation desc" = [
+        {
+          alias = "Backup Home Assistant every night at 3 AM";
+          trigger = {
+            platform = "time";
+            at = "03:00:00";
+          };
+          action = {
+            alias = "Create backup now";
+            service = "backup.create";
+          };
+        }
+      ];
+      "scene desc" = [];
 
       http = {
         use_x_forwarded_for = true;
