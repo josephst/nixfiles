@@ -75,9 +75,10 @@ in
     21064 # homekit bridge
   ];
 
-  systemd.services.home-assistant.preStart = ''
-    touch ${config.services.home-assistant.configDir}/{automations,scenes}.yaml
-  '';
+  systemd.tmpfiles.rules = [
+    "f  ${config.services.home-assistant.configDir}/automations.yaml  - hass  hass"
+    "f  ${config.services.home-assistant.configDir}/scenes.yaml       - hass  hass"
+  ];
 
   services.caddy.virtualHosts."home.${domain}" = lib.mkIf config.services.home-assistant.enable {
     extraConfig = ''
