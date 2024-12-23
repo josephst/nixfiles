@@ -65,7 +65,7 @@ in
     };
 
     customComponents = [
-      (pkgs.callPackage customComponents.smartrent {})
+      (pkgs.callPackage customComponents.smartrent { })
     ];
   };
 

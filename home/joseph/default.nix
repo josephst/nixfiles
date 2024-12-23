@@ -1,4 +1,3 @@
-# home manager config
 { pkgs
 , config
 , osConfig
@@ -16,6 +15,7 @@ let
   #
   # these are unique per-system, to track which system is logging in to a particular server
   keys = import ../../keys;
+
   # ssh key used for signing Git commits
   # this key is shared among all systems the user can log in to
   # as it does not matter which device the git commit is being signed by (more interested in which *user* is signing)
@@ -41,6 +41,11 @@ in
   myconfig.userSshKeys.gitSigningKey = gitSigningKey;
   # myconfig.rclone.remotes = [ "onedrive" ]; # sync onedrive using rclone
 
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 30d";
+  };
+
   # Home Manager configuration/ options
   home = {
     inherit username;
@@ -54,18 +59,14 @@ in
     stateVersion = "22.11";
 
     shellAliases = {
+      dig = "dog";
       copy = "rsync --archive --verbose --human-readable --partial --progress --modify-window=1"; # copy <source> <destination>
-
       external-ip = "dog +short myip.opendns.com @resolver1.opendns.com";
     };
   };
 
   xdg = {
     enable = true;
-
-    configFile."nixpkgs/config.nix".text = ''
-      { allowUnfree = true; }
-    '';
 
     userDirs = {
       enable = isLinux;

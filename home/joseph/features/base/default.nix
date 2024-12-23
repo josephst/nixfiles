@@ -23,8 +23,6 @@
   ];
 
   home.packages = with pkgs; [
-    comma # Install and run programs by sticking a , before them
-
     age # encryption
     bc # calculator
     croc # file sharing
@@ -63,12 +61,10 @@
     zigpkgs.master
 
     cachix
+    comma # Install and run programs by sticking a , before them
     hydra-check # check hydra for build status of a package
-    nh # Nice wrapper for NixOS and HM
     nix-init # generate nix package from a URL
     nix-output-monitor
-    nix-prefetch
-    nix-tree
     nix-update
     nixd # Nix LSP
     nixfmt-rfc-style # nix formatter
