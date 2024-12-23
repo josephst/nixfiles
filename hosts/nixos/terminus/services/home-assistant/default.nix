@@ -87,4 +87,8 @@ in
     '';
     useACMEHost = domain;
   };
+
+  services.restic.backups.system-backup.paths = [
+    "/var/lib/hass"
+  ];
 }

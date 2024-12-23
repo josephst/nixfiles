@@ -40,9 +40,7 @@
     ## Secrets
     ./secrets
     ## Backups
-    ./services/restic/copy-to-s3.nix
-    ./services/restic/restic-user.nix
-    ./services/restic/system-backup.nix
+    ./services/restic
     ## Dashboard
     ./services/homepage
   ];

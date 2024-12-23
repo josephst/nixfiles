@@ -11,6 +11,8 @@ in
     extraFlags = [ "--no-auth" ]; # auth managed by tailscale
   };
 
+  users.users.restic.extraGroups = [ "systemd-journal" ]; # to view journals and send to healthchecks.io
+
   services.caddy.virtualHosts = lib.mkIf config.services.restic.server.enable {
     "restic.${domain}" = {
       extraConfig = ''

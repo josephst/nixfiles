@@ -27,9 +27,7 @@ in
     repository = "rest:http://${config.services.restic.server.listenAddress}";
 
     paths = [
-      # TODO: add to this as needed
       "/home"
-      "/var/lib/paperless/backups"
     ];
     exclude = [
       "/home/*/.cache"
