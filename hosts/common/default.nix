@@ -35,9 +35,13 @@
   };
 
   environment = {
+    shells = [
+      pkgs.bashInteractive
+      pkgs.fish
+      pkgs.zsh
+    ];
     variables = {
       LANG = "en_US.UTF-8";
-      # SHELL = "fish";
       EDITOR = lib.getExe pkgs.neovim;
       VISUAL = lib.getExe pkgs.neovim;
     };
@@ -45,6 +49,7 @@
       agenix
       bashInteractive
       binutils
+      bottom
       coreutils
       curl
       deploy-rs.deploy-rs
@@ -57,8 +62,10 @@
       gnused
       gnutar
       gnutls
+      helix
       home-manager
       mkpasswd
+      nix
       ncurses
       neovim
       openssh

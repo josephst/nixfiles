@@ -1,0 +1,3 @@
+{
+  smartrent = ./homeassistant-smartrent.nix;
+}

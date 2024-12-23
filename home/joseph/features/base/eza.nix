@@ -8,5 +8,4 @@ _: {
       "--header"
     ];
   };
-  home.shellAliases.lt = "eza --tree --level=2 --long --icons --git";
 }

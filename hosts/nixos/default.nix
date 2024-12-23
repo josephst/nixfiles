@@ -1,4 +1,4 @@
-# This file (and the global directory) holds config used on all hosts
+# This file holds config used on all NixOS hosts
 { inputs
 , outputs
 , pkgs
@@ -13,7 +13,7 @@
     inputs.srvos.nixosModules.mixins-nix-experimental
     inputs.srvos.nixosModules.mixins-trusted-nix-caches
     inputs.srvos.nixosModules.mixins-terminfo
-    ../default.nix
+    ../common/default.nix
   ] ++ (builtins.attrValues outputs.nixosModules);
 
   services = {

@@ -5,7 +5,6 @@ in
 {
   # machine-specific config
   imports = [
-    ../common/darwin
     ./brew.nix
   ];
 

@@ -31,7 +31,6 @@ in
       fetch.prune = true;
       pull.rebase = true;
       rebase.autosquash = true;
-      # rebase.autostash = "true";
       # delta options
       delta.navigate = true;
       merge.conflictstyle = "zdiff3";

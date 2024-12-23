@@ -12,6 +12,11 @@ in
 
     shellAbbrs = {
       agf = "ag --nobreak --nonumbers --noheading . | fzf"; # fuzzy search file contents
+      ls = "eza";
+      ll = "exa -l";
+      la = "eza -a";
+      lt = "eza --tree";
+      lla = "eza -la";
     };
   };
 }

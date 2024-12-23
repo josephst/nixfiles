@@ -4,6 +4,7 @@
 , outputs
 , pkgs
 , lib
+, config
 , ...
 }:
 {
@@ -14,21 +15,12 @@
     inputs.srvos.darwinModules.mixins-terminfo
     inputs.srvos.darwinModules.mixins-nix-experimental
     inputs.srvos.darwinModules.mixins-trusted-nix-caches
-    ../default.nix
+    ../common/default.nix
   ] ++ builtins.attrValues outputs.darwinModules;
 
   environment = {
-    shells = [
-      pkgs.bashInteractive
-      pkgs.fish
-      pkgs.zsh
-    ];
     systemPackages = [
       # most are in ../common/default.nix
-    ];
-    systemPath = lib.mkBefore [
-      "/opt/homebrew/bin"
-      "/opt/homebrew/sbin"
     ];
     variables = {
       SHELL = lib.getExe pkgs.zsh;

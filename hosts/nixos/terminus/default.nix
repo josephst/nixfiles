@@ -14,9 +14,9 @@
     ./disko-hdd-storage.nix # separate from other disko config to allow for adding drive w/o formatting existing drives
 
     # Mixins
-    ../common/nixos/optional/lanzaboote.nix
-    ../common/nixos/optional/tailscale.nix
-    ../common/nixos/optional/avahi.nix
+    ../optional/lanzaboote.nix
+    ../optional/tailscale.nix
+    ../optional/avahi.nix
 
     # Services
     ./services/home-assistant
