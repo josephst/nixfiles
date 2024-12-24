@@ -18,7 +18,6 @@ in
       la = "eza -a";
       lt = "eza --tree";
       lla = "eza -la";
-      man = "batman";
       webshare = "python -m http.server 8080";
     };
   };
