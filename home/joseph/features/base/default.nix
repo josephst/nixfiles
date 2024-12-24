@@ -35,6 +35,7 @@
     just # command runner
     lazygit # git with TUI
     ncdu # TUI disk usage
+    python3
     rclone
     restic
     rsync
@@ -55,6 +56,7 @@
     cargo
     nim
     nimble # package manager for nim
+    nixpkgs-manual # always handy to have documentation available
     nodejs
     rustc
     shellcheck
