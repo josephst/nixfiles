@@ -71,15 +71,6 @@ in
       default = "/etc/rclone.conf";
     };
 
-    pingHealthchecks = lib.mkOption {
-      type = lib.types.bool;
-      description = ''
-        Try to ping start/stop and send logs to healthchecks.io.
-        Set `RCLONE_HC_UUID` as environment variable (cfg.environmentFile) to configure.
-      '';
-      default = false;
-    };
-
     timerConfig = lib.mkOption {
       type = with lib.types; nullOr (attrsOf unitOption);
       default = {
@@ -140,21 +131,13 @@ in
 
         script = ''
           ${cfg.package}/bin/rclone \
-            --config ''$CREDENTIALS_DIRECTORY/rcloneConf \
+            --config "$CREDENTIALS_DIRECTORY/rcloneConf" \
             --cache-dir /var/cache/rclone-sync \
             --missing-on-dst - \
             --error - \
-            sync ${cfg.dataDir} $REMOTE ${extraArgs}
+            sync "${cfg.dataDir}" "$REMOTE" "${extraArgs}"
         '';
       };
-
-    systemd.services."rclone-sync-notify@" = lib.mkIf cfg.pingHealthchecks {
-      serviceConfig = {
-        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        User = "restic"; # to read env file
-      };
-
-    };
 
     systemd.timers = lib.mkIf (cfg.timerConfig != null) {
       rclone-sync = {

@@ -18,6 +18,8 @@ let
   ];
 in
 {
+  age.secrets.restic-localstorage-pass.file = ../../secrets/restic/localstorage.pass.age;
+
   # backup to local repo (on HDD array), which is later copied to B2
   services.restic.backups.system-backup = {
     initialize = false;
@@ -33,9 +35,6 @@ in
       ".git"
     ];
 
-    # TODO:
-    # healthchecksFile = ...
-
     inherit pruneOpts;
     inherit checkOpts;
     timerConfig = {
@@ -48,5 +47,10 @@ in
       mkdir -p /var/lib/paperless/backups
       ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -p --no-progress-bar
     '';
+  };
+
+  services.healthchecks-ping.system-backup = {
+    urlFile = config.age.secrets.restic-systembackup-env.path;
+    unitName = "restic-backups-system-backup";
   };
 }

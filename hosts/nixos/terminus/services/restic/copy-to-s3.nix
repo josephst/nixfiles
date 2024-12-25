@@ -15,13 +15,20 @@ let
   ];
 in
 {
+  age.secrets.resticb2env.file = ../../secrets/restic/b2.env.age;
+  age.secrets.resticb2bucketname.file = ../../secrets/restic/b2bucketname.age;
+  age.secrets.rcloneConf.file = ../../secrets/rclone.conf.age;
+  age.secrets.rclone-sync.file = ../../secrets/restic/rclone-sync.env.age;
+  age.secrets.restic-localstorage-pass.file = ../../secrets/restic/localstorage.pass.age;
+  age.secrets.restic-systembackup-env.file = ../../secrets/restic/systembackup.env.age;
+
+
   # copy local Restic repo to S3-compatible repo
   services.rclone-sync = {
     enable = true;
     dataDir = localPath;
-    environmentFile = config.age.secrets.resticb2env.path;
+    environmentFile = config.age.secrets.rclone-sync.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
-    pingHealthchecks = true;
 
     timerConfig = {
       OnCalendar = "06:00";
@@ -39,9 +46,6 @@ in
     inherit pruneOpts;
     inherit checkOpts;
 
-    # TODO:
-    # healthchecksFile = ...
-
     backupPrepareCommand = ''
       # remove old locks
       ${pkgs.restic}/bin/restic unlock || true
@@ -52,5 +56,15 @@ in
       Persistent = true;
       RandomizedDelaySec = "1h";
     };
+  };
+
+  services.healthchecks-ping.b2-check = {
+    urlFile = config.age.secrets.resticb2env.path;
+    unitName = "restic-backups-b2";
+  };
+
+  services.healthchecks-ping.rclone-sync = {
+    urlFile = config.age.secrets.rclone-sync.path;
+    unitName = "rclone-sync";
   };
 }

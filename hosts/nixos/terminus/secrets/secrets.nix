@@ -1,5 +1,5 @@
 let
-  keys = import ../../../keys;
+  keys = import ../../../../keys;
 
   # include all `joseph` keys to allow me to rekey secrets with my user key
   allKeys = builtins.attrValues keys.users.joseph ++ [
@@ -16,7 +16,8 @@ in
   "restic/b2bucketname.age".publicKeys = allKeys; # bucket name for restic (B2, using S3-compatible API)
   "restic/localstorage.pass.age".publicKeys = allKeys;
   "restic/restic-server-maintenance.env.age".publicKeys = allKeys;
-  "restic/systembackup.env.age".publicKeys = allKeys;
+  "restic/rclone-sync.env.age".publicKeys = allKeys;
+  # "restic/systembackup.env.age".publicKeys = allKeys;
   "smbpasswd.age".publicKeys = allKeys; # smb password database
   "zwave-js-keys.json.age".publicKeys = allKeys;
 }

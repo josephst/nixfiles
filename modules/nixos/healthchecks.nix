@@ -1,9 +1,9 @@
 # report a service's success/failure to healthchecks.io
-# this creates a systemd template unit for each service that reports to healthchecks.io
-# each template is instantiated with the action (start, success, failure)
+# each template is instantiated with the name of the unit being reported on and the action (start, success, failure)
+# example: healthchecks-ping@restic-backups-system-backup:start, ...
 { config, lib, pkgs, ... }:
 {
-  options.services.healthchecks-reporter = lib.mkOption {
+  options.services.healthchecks-ping = lib.mkOption {
     description = ''
       Send pings to healthchecks.io when services start/stop/fail.
     '';
@@ -20,6 +20,7 @@
             ...
             ```
           '';
+          default = null;
           example = "/var/run/agenix/healthchecks";
         };
         url = lib.mkOption {
@@ -27,42 +28,74 @@
           description = ''
             URL to send start/stop/fail messages to.
           '';
+          default = null;
           example = "https://hc-ping.com/12345678-1234-1234-1234-1234567890ab";
+        };
+        unitName = lib.mkOption {
+          description = ''
+            Name of the unit to add Wants/OnSuccess/OnFailure dependencies to.
+          '';
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "restic-backups-system-backup";
         };
       };
     }));
     default = { };
   };
 
-  config = {
-    assertions = lib.mapAttrsToList
-      (n: v: {
-        assertion = (v.urlFile == null) != (v.url == null);
-        message = "services.healthchecks.${n}: exactly one of url or urlFile should be set";
-      })
-      config.services.healthchecks-reporter;
+  config =
+    let
+      cfg = lib.filterAttrs (_: v: v.urlFile != null || v.url != null) config.services.healthchecks-ping;
+      urlFiles = lib.mapAttrsToList
+        (n: v: {
+          name = n;
+          path = if v.url != null then (pkgs.writeText "healthchecks-${n}" "HC_URL=${v.url}") else v.urlFile;
+        })
+        cfg;
+    in
+    {
+      assertions = lib.mapAttrsToList
+        (n: v: {
+          assertion = (v.urlFile == null) != (v.url == null);
+          message = "services.healthchecks.${n}: exactly one of url or urlFile should be set";
+        })
+        cfg;
 
-    systemd.services = lib.mapAttrs'
-      (name: val: {
-        "healthcheck-ping-${name}@" = {
-          description = "Pings healthcheck (%i)";
-          serviceConfig = {
-            Type = "oneshot";
-            EnvironmentFile = if (val.urlFile == null) then pkgs.writeText "healthchecks-${name}" "HC_URL=${val.url}" else val.urlFile;
+      systemd.services = lib.mkMerge [
+        (lib.mapAttrs'
+          (name: val: lib.nameValuePair
+            val.unitName
+            {
+              wants = [ "healthchecks-ping@${name}:start.service" ];
+              onSuccess = [ "healthchecks-ping@${name}:success.service" ];
+              onFailure = [ "healthchecks-ping@${name}:failure.service" ];
+            }
+          )
+          (lib.filterAttrs (_: v: v.unitName != null) cfg))
+        {
+          "healthchecks-ping@" = {
+            description = "Pings healthchecks.io (%i)";
+            serviceConfig = {
+              Type = "oneshot";
+              LoadCredential = builtins.map ({ name, path }: "${name}:${path}") urlFiles;
+            };
+            scriptArgs = "%i"; # name:action
+            script = ''
+              # set -x # for debugging
+              IFS=':' read -r name action <<< "$1"
+
+              # read the value of HC_URL from the file (file may contain other variables too)
+              url=$(grep -oP "^HC_URL=\K.+" "$CREDENTIALS_DIRECTORY/$name")
+
+              if [ "$action" = "success" ]; then
+                ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url"
+              else
+                ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url/$action"
+              fi
+            '';
           };
-          scriptArgs = "%i";
-          script = ''
-            # set -x # for debugging
-
-            IFS=':' read -r action <<< "$1"
-            if [ "$action" = "success" ]; then
-              ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$HC_URL"
-            else
-              ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$HC_URL/$action"
-            fi
-          '';
-        };
-      })
-      config.services.healthchecks-reporter;
-  };
+        }
+      ];
+    };
 }

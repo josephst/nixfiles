@@ -37,8 +37,6 @@
     ./services/restic-server.nix
 
     # Specific to this host
-    ## Secrets
-    ./secrets
     ## Backups
     ./services/restic
     ## Dashboard
