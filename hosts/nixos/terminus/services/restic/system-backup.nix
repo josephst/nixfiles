@@ -1,5 +1,4 @@
 { config
-, pkgs
 , lib
 , ...
 }:
@@ -34,6 +33,9 @@ in
       ".git"
     ];
 
+    # TODO:
+    # healthchecksFile = ...
+
     inherit pruneOpts;
     inherit checkOpts;
     timerConfig = {
@@ -42,26 +44,9 @@ in
       RandomizedDelaySec = "1h";
     };
 
-    backupPrepareCommand =
-      ''
-        ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
-      ''
-      + lib.optionalString config.services.paperless.enable ''
-        mkdir -p /var/lib/paperless/backups
-        ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -p --no-progress-bar
-      '';
-  };
-
-  systemd.services."restic-backups-system-backup" = {
-    onSuccess = [ "restic-notify-system-backup@success.service" ];
-    onFailure = [ "restic-notify-system-backup@failure.service" ];
-  };
-
-  systemd.services."restic-notify-system-backup@" = {
-    serviceConfig = {
-      Type = "oneshot";
-      EnvironmentFile = config.age.secrets.restic-systembackup-env.path; # contains heathchecks.io UUID
-    };
-    script = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
+    backupPrepareCommand = lib.optionalString config.services.paperless.enable ''
+      mkdir -p /var/lib/paperless/backups
+      ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -p --no-progress-bar
+    '';
   };
 }

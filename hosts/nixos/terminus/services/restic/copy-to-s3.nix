@@ -39,10 +39,10 @@ in
     inherit pruneOpts;
     inherit checkOpts;
 
-    backupPrepareCommand = ''
-      # preStart
-      ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
+    # TODO:
+    # healthchecksFile = ...
 
+    backupPrepareCommand = ''
       # remove old locks
       ${pkgs.restic}/bin/restic unlock || true
     '';
@@ -52,18 +52,5 @@ in
       Persistent = true;
       RandomizedDelaySec = "1h";
     };
-  };
-
-  systemd.services."restic-backups-b2" = {
-    onSuccess = [ "restic-notify-b2@success.service" ];
-    onFailure = [ "restic-notify-b2@failure.service" ];
-  };
-
-  systemd.services."restic-notify-b2@" = {
-    serviceConfig = {
-      Type = "oneshot";
-      EnvironmentFile = config.age.secrets.resticb2env.path; # contains heathchecks.io UUID
-    };
-    script = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
   };
 }

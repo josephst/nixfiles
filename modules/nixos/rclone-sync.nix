@@ -146,11 +146,6 @@ in
             --error - \
             sync ${cfg.dataDir} $REMOTE ${extraArgs}
         '';
-
-        preStart = lib.mkIf cfg.pingHealthchecks ''${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${RCLONE_HC_UUID}/start" || true'';
-
-        onSuccess = lib.optional cfg.pingHealthchecks "rclone-sync-notify@success.service";
-        onFailure = lib.optional cfg.pingHealthchecks "rclone-sync-notify@failure.service";
       };
 
     systemd.services."rclone-sync-notify@" = lib.mkIf cfg.pingHealthchecks {
@@ -158,9 +153,7 @@ in
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         User = "restic"; # to read env file
       };
-      script = ''
-        ${pkgs.healthchecks-ping}/bin/healthchecks-ping "$RCLONE_HC_UUID" "$MONITOR_EXIT_STATUS" "$MONITOR_UNIT"
-      '';
+
     };
 
     systemd.timers = lib.mkIf (cfg.timerConfig != null) {
