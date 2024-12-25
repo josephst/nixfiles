@@ -69,7 +69,7 @@
             {
               wants = [ "healthchecks-ping@${name}:start.service" ];
               onSuccess = [ "healthchecks-ping@${name}:success.service" ];
-              onFailure = [ "healthchecks-ping@${name}:failure.service" ];
+              onFailure = [ "healthchecks-ping@${name}:fail.service" ];
             }
           )
           (lib.filterAttrs (_: v: v.unitName != null) cfg))

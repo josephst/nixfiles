@@ -135,7 +135,7 @@ in
             --cache-dir /var/cache/rclone-sync \
             --missing-on-dst - \
             --error - \
-            sync "${cfg.dataDir}" "$REMOTE" "${extraArgs}"
+            sync "${cfg.dataDir}" "$REMOTE" ${extraArgs}
         '';
       };
 
