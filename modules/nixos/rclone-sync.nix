@@ -73,10 +73,7 @@ in
 
     timerConfig = lib.mkOption {
       type = with lib.types; nullOr (attrsOf unitOption);
-      default = {
-        OnCalendar = "daily";
-        Persistent = true;
-      };
+      default = null;
       description = ''
         When to run rclone. See {manpage}`systemd.timer(5)` for
         details. If null no timer is created and rclone will only
@@ -113,6 +110,7 @@ in
         wants = [ "network.target" ];
         after = [ "network.target" ];
         serviceConfig = {
+          Type = "oneshot";
           LoadCredential = [ "rcloneConf:${cfg.rcloneConfFile}" ];
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           # Security hardening
