@@ -2,6 +2,15 @@
 # each template is instantiated with the name of the unit being reported on and the action (start, success, failure)
 # example: healthchecks-ping@restic-backups-system-backup:start, ...
 { config, lib, pkgs, ... }:
+let
+  cfg = lib.filterAttrs (_: v: v.urlFile != null || v.url != null) config.services.healthchecks-ping;
+  urlFiles = lib.mapAttrsToList
+    (n: v: {
+      name = n;
+      path = if v.url != null then (pkgs.writeText "healthchecks-${n}" "HC_URL=${v.url}") else v.urlFile;
+    })
+    cfg;
+in
 {
   options.services.healthchecks-ping = lib.mkOption {
     description = ''
@@ -44,58 +53,46 @@
     default = { };
   };
 
-  config =
-    let
-      cfg = lib.filterAttrs (_: v: v.urlFile != null || v.url != null) config.services.healthchecks-ping;
-      urlFiles = lib.mapAttrsToList
-        (n: v: {
-          name = n;
-          path = if v.url != null then (pkgs.writeText "healthchecks-${n}" "HC_URL=${v.url}") else v.urlFile;
-        })
-        cfg;
-    in
-    {
-      assertions = lib.mapAttrsToList
-        (n: v: {
-          assertion = (v.urlFile == null) != (v.url == null);
-          message = "services.healthchecks.${n}: exactly one of url or urlFile should be set";
-        })
-        cfg;
+  config = lib.mkIf (cfg != { }) {
+    assertions = lib.mapAttrsToList
+      (n: v: {
+        assertion = (v.urlFile == null) != (v.url == null);
+        message = "services.healthchecks.${n}: exactly one of url or urlFile should be set";
+      })
+      cfg;
 
-      systemd.services = lib.mkMerge [
-        (lib.mapAttrs'
-          (name: val: lib.nameValuePair
-            val.unitName
-            {
-              wants = [ "healthchecks-ping@${name}:start.service" ];
-              onSuccess = [ "healthchecks-ping@${name}:success.service" ];
-              onFailure = [ "healthchecks-ping@${name}:fail.service" ];
-            }
-          )
-          (lib.filterAttrs (_: v: v.unitName != null) cfg))
+    systemd.services = lib.mapAttrs'
+      (name: val: lib.nameValuePair
+        val.unitName
         {
-          "healthchecks-ping@" = {
-            description = "Pings healthchecks.io (%i)";
-            serviceConfig = {
-              Type = "oneshot";
-              LoadCredential = builtins.map ({ name, path }: "${name}:${path}") urlFiles;
-            };
-            scriptArgs = "%i"; # name:action
-            script = ''
-              # set -x # for debugging
-              IFS=':' read -r name action <<< "$1"
-
-              # read the value of HC_URL from the file (file may contain other variables too)
-              url=$(grep -oP "^HC_URL=\K.+" "$CREDENTIALS_DIRECTORY/$name")
-
-              if [ "$action" = "success" ]; then
-                ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url"
-              else
-                ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url/$action"
-              fi
-            '';
-          };
+          wants = [ "healthchecks-ping@${name}:start.service" ];
+          onSuccess = [ "healthchecks-ping@${name}:success.service" ];
+          onFailure = [ "healthchecks-ping@${name}:fail.service" ];
         }
-      ];
+      )
+      (lib.filterAttrs (_: v: v.unitName != null) cfg) //
+    {
+      "healthchecks-ping@" = {
+        description = "Pings healthchecks.io (%i)";
+        serviceConfig = {
+          Type = "oneshot";
+          LoadCredential = builtins.map ({ name, path }: "${name}:${path}") urlFiles;
+        };
+        scriptArgs = "%i"; # name:action
+        script = ''
+          # set -x # for debugging
+          IFS=':' read -r name action <<< "$1"
+
+          # read the value of HC_URL from the file (file may contain other variables too)
+          url=$(grep -oP "^HC_URL=\K.+" "$CREDENTIALS_DIRECTORY/$name")
+
+          if [ "$action" = "success" ]; then
+            ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url"
+          else
+            ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url/$action"
+          fi
+        '';
+      };
     };
+  };
 }

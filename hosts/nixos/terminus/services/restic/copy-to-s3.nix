@@ -59,7 +59,7 @@ in
     timerConfig = null; # no automatic run; instead, triggered after rclone-sync finishes
   };
 
-  systemd.services.rclone-sync.onSuccess = ["restic-backups-b2.service"];
+  systemd.services.rclone-sync.onSuccess = [ "restic-backups-b2.service" ];
 
   services.healthchecks-ping.b2-check = {
     urlFile = config.age.secrets.resticb2env.path;
