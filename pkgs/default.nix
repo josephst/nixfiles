@@ -5,6 +5,5 @@
 }:
 {
   # recyclarr = pkgs.callPackage ./recyclarr { };
-  healthchecks-ping = pkgs.callPackage ./healthchecks-ping.nix { };
   smartrent-py = pkgs.python3.pkgs.callPackage ./smartrent-py.nix { };
 }

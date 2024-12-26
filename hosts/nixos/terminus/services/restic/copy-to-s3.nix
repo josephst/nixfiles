@@ -15,13 +15,20 @@ let
   ];
 in
 {
+  age.secrets.resticb2env.file = ../../secrets/restic/b2.env.age;
+  age.secrets.resticb2bucketname.file = ../../secrets/restic/b2bucketname.age;
+  age.secrets.rcloneConf.file = ../../secrets/rclone.conf.age;
+  age.secrets.rclone-sync.file = ../../secrets/restic/rclone-sync.env.age;
+  age.secrets.restic-localstorage-pass.file = ../../secrets/restic/localstorage.pass.age;
+  age.secrets.restic-systembackup-env.file = ../../secrets/restic/systembackup.env.age;
+
+
   # copy local Restic repo to S3-compatible repo
   services.rclone-sync = {
     enable = true;
     dataDir = localPath;
-    environmentFile = config.age.secrets.resticb2env.path;
+    environmentFile = config.age.secrets.rclone-sync.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
-    pingHealthchecks = true;
 
     timerConfig = {
       OnCalendar = "06:00";
@@ -40,30 +47,27 @@ in
     inherit checkOpts;
 
     backupPrepareCommand = ''
-      # preStart
-      ${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/$HC_UUID/start"
-
       # remove old locks
       ${pkgs.restic}/bin/restic unlock || true
     '';
 
-    timerConfig = {
-      OnCalendar = "12:00";
-      Persistent = true;
-      RandomizedDelaySec = "1h";
-    };
+    # timerConfig = {
+    #   OnCalendar = "12:00";
+    #   Persistent = true;
+    #   RandomizedDelaySec = "1h";
+    # };
+    timerConfig = null; # no automatic run; instead, triggered after rclone-sync finishes
   };
 
-  systemd.services."restic-backups-b2" = {
-    onSuccess = [ "restic-notify-b2@success.service" ];
-    onFailure = [ "restic-notify-b2@failure.service" ];
+  systemd.services.rclone-sync.onSuccess = [ config.systemd.services.restic-backups-b2.name ];
+
+  services.healthchecks-ping.b2-check = {
+    urlFile = config.age.secrets.resticb2env.path;
+    unitName = "restic-backups-b2";
   };
 
-  systemd.services."restic-notify-b2@" = {
-    serviceConfig = {
-      Type = "oneshot";
-      EnvironmentFile = config.age.secrets.resticb2env.path; # contains heathchecks.io UUID
-    };
-    script = "${pkgs.healthchecks-ping}/bin/healthchecks-ping $HC_UUID $MONITOR_EXIT_STATUS $MONITOR_UNIT";
+  services.healthchecks-ping.rclone-sync = {
+    urlFile = config.age.secrets.rclone-sync.path;
+    unitName = "rclone-sync";
   };
 }

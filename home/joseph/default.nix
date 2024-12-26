@@ -54,7 +54,7 @@ in
 
     sessionVariables = {
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
-      MANROFFOPT="-c";
+      MANROFFOPT = "-c";
     };
 
     stateVersion = "22.11";

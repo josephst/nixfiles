@@ -71,21 +71,9 @@ in
       default = "/etc/rclone.conf";
     };
 
-    pingHealthchecks = lib.mkOption {
-      type = lib.types.bool;
-      description = ''
-        Try to ping start/stop and send logs to healthchecks.io.
-        Set `RCLONE_HC_UUID` as environment variable (cfg.environmentFile) to configure.
-      '';
-      default = false;
-    };
-
     timerConfig = lib.mkOption {
       type = with lib.types; nullOr (attrsOf unitOption);
-      default = {
-        OnCalendar = "daily";
-        Persistent = true;
-      };
+      default = null;
       description = ''
         When to run rclone. See {manpage}`systemd.timer(5)` for
         details. If null no timer is created and rclone will only
@@ -122,6 +110,7 @@ in
         wants = [ "network.target" ];
         after = [ "network.target" ];
         serviceConfig = {
+          Type = "oneshot";
           LoadCredential = [ "rcloneConf:${cfg.rcloneConfFile}" ];
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           # Security hardening
@@ -140,28 +129,13 @@ in
 
         script = ''
           ${cfg.package}/bin/rclone \
-            --config ''$CREDENTIALS_DIRECTORY/rcloneConf \
+            --config "$CREDENTIALS_DIRECTORY/rcloneConf" \
             --cache-dir /var/cache/rclone-sync \
             --missing-on-dst - \
             --error - \
-            sync ${cfg.dataDir} $REMOTE ${extraArgs}
+            sync "${cfg.dataDir}" "$REMOTE" ${extraArgs}
         '';
-
-        preStart = lib.mkIf cfg.pingHealthchecks ''${pkgs.curl}/bin/curl -m 10 --retry 5 "https://hc-ping.com/''${RCLONE_HC_UUID}/start" || true'';
-
-        onSuccess = lib.optional cfg.pingHealthchecks "rclone-sync-notify@success.service";
-        onFailure = lib.optional cfg.pingHealthchecks "rclone-sync-notify@failure.service";
       };
-
-    systemd.services."rclone-sync-notify@" = lib.mkIf cfg.pingHealthchecks {
-      serviceConfig = {
-        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        User = "restic"; # to read env file
-      };
-      script = ''
-        ${pkgs.healthchecks-ping}/bin/healthchecks-ping "$RCLONE_HC_UUID" "$MONITOR_EXIT_STATUS" "$MONITOR_UNIT"
-      '';
-    };
 
     systemd.timers = lib.mkIf (cfg.timerConfig != null) {
       rclone-sync = {
