@@ -9,7 +9,7 @@ in
     enable = true;
     passwordFile = config.age.secrets.paperless-admin.path;
     settings = {
-      PAPERLESS_FILENAME_FORMAT = "{created_year}/{correspondent}/{created} {title}";
+      PAPERLESS_FILENAME_FORMAT = "{{ created_year }}/{{ correspondent }}/{{ created }} {{ title }}";
     };
   };
 
