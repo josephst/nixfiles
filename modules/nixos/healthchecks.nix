@@ -6,7 +6,7 @@ let
   cfg = lib.filterAttrs (_: v: v.urlFile != null || v.url != null) config.services.healthchecks-ping;
   urlFiles = lib.mapAttrsToList
   (n: v: {
-    name = n;
+    name = (if v.unitName != null then v.unitName else n);
     path = if v.url != null then (pkgs.writeText "healthchecks-${n}" "HC_URL=${v.url}") else v.urlFile;
   })
   cfg;
@@ -72,9 +72,9 @@ in
           (name: val: lib.nameValuePair
             val.unitName
             {
-              wants = [ "healthchecks-ping@${name}:start.service" ];
-              onSuccess = [ "healthchecks-ping@${name}:success.service" ];
-              onFailure = [ "healthchecks-ping@${name}:fail.service" ];
+              wants = [ "healthchecks-ping@${val.unitName}:start.service" ];
+              onSuccess = [ "healthchecks-ping@${val.unitName}:success.service" ];
+              onFailure = [ "healthchecks-ping@${val.unitName}:fail.service" ];
             }
           )
           (lib.filterAttrs (_: v: v.unitName != null) cfg))
@@ -86,15 +86,21 @@ in
               LoadCredential = builtins.map ({ name, path }: "${name}:${path}") urlFiles;
             };
             scriptArgs = "%i"; # name:action
+            # TODO: simplify when systemd v257 is available (journalctl has -I flag for latest invocation)
+            # https://github.com/systemd/systemd/releases/tag/v257
             script = ''
-              set -x # for debugging
+              # set -x # for debugging
               IFS=':' read -r name action <<< "$1"
 
               # read the value of HC_URL from the file (file may contain other variables too)
               url=$(grep -oP "^HC_URL=\K.+" "$CREDENTIALS_DIRECTORY/$name")
 
               if [ "$action" = "success" ]; then
+                logs=$(journalctl _SYSTEMD_INVOCATION_ID="$(systemctl show -p InvocationID --value $name.service)")
                 ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-raw "$logs" "$url"
+              elif [ "$action" = "fail" ]; then
+                logs=$(journalctl _SYSTEMD_INVOCATION_ID="$(systemctl show -p InvocationID --value $name.service)")
+                ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-raw "$logs" "$url/fail"
               else
                 ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url/$action"
               fi
