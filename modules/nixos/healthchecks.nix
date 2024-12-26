@@ -84,6 +84,31 @@ in
             serviceConfig = {
               Type = "oneshot";
               LoadCredential = builtins.map ({ name, path }: "${name}:${path}") urlFiles;
+              # Hardening
+              # DynamicUser = true; # disabled, because call to `systemctl show` requires root privileges
+              ProtectSystem = "strict";
+              ProtectHome = "read-only";
+              PrivateTmp = true;
+              RestrictSUIDSGID = true;
+              PrivateDevices = true;		# Only allow access to pseudo-devices (eg: null, random, zero) in separate namespace
+              PrivateUsers = true;
+              SupplementaryGroups = "systemd-journal"; # Allow access to journal
+              ProtectClock = true;
+              ProtectControlGroups = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectProc = "invisible";
+              RestrictAddressFamilies = [
+                "AF_UNIX"
+                "AF_INET"
+                "AF_INET6"
+              ];
+              RestrictNamespaces = true;
+              RestrictRealtime = true;
+              SystemCallArchitectures="native";
+              SystemCallFilter="@system-service";
+              SystemCallErrorNumber="EPERM";
             };
             scriptArgs = "%i"; # name:action
             # TODO: simplify when systemd v257 is available (journalctl has -I flag for latest invocation)
