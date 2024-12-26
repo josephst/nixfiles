@@ -6,6 +6,7 @@
   imports = [
     inputs.disko.nixosModules.disko
     inputs.srvos.nixosModules.server
+    inputs.srvos.nixosModules.mixins-mdns
 
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -16,7 +17,6 @@
     # Mixins
     ../optional/lanzaboote.nix
     ../optional/tailscale.nix
-    ../optional/avahi.nix
 
     # Services
     ./services/home-assistant
