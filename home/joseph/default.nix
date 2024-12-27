@@ -76,5 +76,11 @@ in
         XDG_SCREENSHOTS_DIR = "${config.xdg.userDirs.pictures}/Screenshots";
       };
     };
+
+    configFile = {
+      "ghostty/config".text = ''
+        command = "${pkgs.fish}/bin/fish -l"
+      '';
+    };
   };
 }
