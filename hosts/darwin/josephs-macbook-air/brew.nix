@@ -13,6 +13,7 @@ in
       "alacritty"
       # "amethyst"
       "cyberduck"
+      "ghostty"
       "git-credential-manager"
       "iterm2"
       "orbstack"
