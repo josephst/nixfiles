@@ -69,6 +69,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+    };
+
     hardware.url = "github:nixos/nixos-hardware";
   };
 

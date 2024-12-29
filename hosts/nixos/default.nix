@@ -31,6 +31,8 @@
     pkgs.htop
     pkgs.nh
 
+    inputs.ghostty.packages.${pkgs.system}.default
+
     # hardware
     pkgs.lshw
     pkgs.usbutils
