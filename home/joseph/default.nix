@@ -80,6 +80,8 @@ in
     configFile = {
       "ghostty/config".text = ''
         command = "${pkgs.fish}/bin/fish -l"
+
+        theme = dark:catppuccin-frappe,light:catppuccin-latte
       '';
     };
   };
