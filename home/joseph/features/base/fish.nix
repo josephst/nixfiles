@@ -11,7 +11,6 @@ in
     '';
 
     shellAbbrs = {
-      agf = "ag --nobreak --nonumbers --noheading . | fzf"; # fuzzy search file contents
       cat = "bat"; # better cat
       ls = "eza";
       ll = "exa -l";
