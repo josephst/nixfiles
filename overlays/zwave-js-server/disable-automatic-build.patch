@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 2645d50..c5674f1 100644
+--- a/package.json
++++ b/package.json
+@@ -38,7 +38,6 @@
+     "test": "prettier --check src && tsc --noEmit && npm run lint && tsx src/test/integration.ts",
+     "build": "tsc -p .",
+     "postbuild": "esm2cjs --in dist-esm --out dist-cjs -l error -t node18",
+-    "prepare": "npm run build",
+     "prepublishOnly": "rm -rf dist-* && npm run build"
+   },
+   "author": "",
