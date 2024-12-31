@@ -2,6 +2,10 @@
 let
   inherit (config.networking) domain;
 in {
+  networking.firewall.allowedTCPPorts = [
+    1883 # MQTT
+    8083 # Zigbee2MQTT
+  ];
   # ZIGBEE2MQTT
   age.secrets."hass/zigbee2mqtt.secret" = {
     file = ../../secrets/hass/zigbee2mqtt.secret.age;
@@ -25,7 +29,6 @@ in {
       frontend.port = 8083;
     };
   };
-  networking.firewall.allowedTCPPorts = [ 8083 ]; # frontend port
   systemd.services."zigbee2mqtt.service".requires = [ "mosquitto.service" ];
   systemd.services."zigbee2mqtt.service".after = [ "mosquitto.service" ];
 
@@ -71,5 +74,4 @@ in {
       };
     }];
   };
-  networking.firewall.allowedTCPPorts = [ 1883 ]; # MQTT port
 }
