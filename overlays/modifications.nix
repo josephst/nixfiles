@@ -9,7 +9,6 @@ final: prev: {
     # copy package-lock.json to the patches dir
     # update the npmDepsHash with `nix run nixpkgs#prefetch-npm-deps package-lock.json`
     patches = (old.patches or [ ]) ++ [
-      ./zwave-js-server/disable-automatic-build.patch
       ./zwave-js-server/logging-unknown-type.patch
     ];
     postPatch = ''
