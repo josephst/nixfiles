@@ -34,7 +34,7 @@ in {
 
   services.caddy.virtualHosts."zigbee.${domain}" = {
     extraConfig = ''
-      reverse_proxy http://localhost:${toString 8083}
+      reverse_proxy http://127.0.0.1:${toString 8083}
     '';
     useACMEHost = domain;
   };
