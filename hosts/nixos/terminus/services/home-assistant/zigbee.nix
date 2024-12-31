@@ -1,4 +1,7 @@
-{ config, ... }: {
+{ config, ... }:
+let
+  inherit (config.networking) domain;
+in {
   # ZIGBEE2MQTT
   age.secrets."hass/zigbee2mqtt.secret" = {
     file = ../../secrets/hass/zigbee2mqtt.secret.age;
@@ -19,10 +22,18 @@
       serial = {
         port = "/dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_a80856583b1fef1184a64ad0639e525b-if00-port0";
       };
+      frontend.port = 8083;
     };
   };
   systemd.services."zigbee2mqtt.service".requires = [ "mosquitto.service" ];
   systemd.services."zigbee2mqtt.service".after = [ "mosquitto.service" ];
+
+  services.caddy.virtualHosts."zigbee.${domain}" = {
+    extraConfig = ''
+      reverse_proxy http://localhost:${toString 8083}
+    '';
+    useACMEHost = domain;
+  };
 
 
   # MOSQUITTO
