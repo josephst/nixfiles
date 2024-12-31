@@ -25,6 +25,7 @@ in {
       frontend.port = 8083;
     };
   };
+  networking.firewall.allowedTCPPorts = [ 8083 ]; # frontend port
   systemd.services."zigbee2mqtt.service".requires = [ "mosquitto.service" ];
   systemd.services."zigbee2mqtt.service".after = [ "mosquitto.service" ];
 
