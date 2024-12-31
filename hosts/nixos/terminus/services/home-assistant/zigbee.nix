@@ -17,7 +17,7 @@
         # with contents `password: mqtt_password`
       };
       serial = {
-        # port = "/dev/ttyACM0"; # TODO: change me!
+        port = "/dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_a80856583b1fef1184a64ad0639e525b-if00-port0";
       };
     };
   };
