@@ -6,6 +6,7 @@ in
 {
   imports = [
     ./zwave.nix
+    ./zigbee.nix
   ];
 
   services.home-assistant = {
@@ -24,6 +25,7 @@ in
       "plex"
       "sonos"
       "zwave_js"
+      "mqtt"
     ];
     config = {
       # store these outside of configuration.yaml so that they can be edited

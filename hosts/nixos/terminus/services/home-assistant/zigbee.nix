@@ -1,0 +1,63 @@
+{ config, ... }: {
+  # ZIGBEE2MQTT
+  age.secrets."hass/zigbee2mqtt.secret" = {
+    file = ../../secrets/hass/zigbee2mqtt.secret.age;
+    path = "/var/lib/zigbee2mqtt/secret.yaml";
+    owner = "${config.systemd.services.zigbee2mqtt.serviceConfig.User}";
+    group = "${config.systemd.services.zigbee2mqtt.serviceConfig.Group}";
+  };
+  services.zigbee2mqtt = {
+    enable = true;
+    settings = {
+      permit_join = false; # TODO: turn off after all devices joined
+      mqtt = {
+        server = "mqtt://localhost:1883";
+        user = "zigbee2mqtt";
+        password = "!secret password"; # expects a secret file at /var/lib/zigbee2mqtt/secret.yaml,
+        # with contents `password: mqtt_password`
+      };
+      serial = {
+        # port = "/dev/ttyACM0"; # TODO: change me!
+      };
+    };
+  };
+  systemd.services."zigbee2mqtt.service".requires = [ "mosquitto.service" ];
+  systemd.services."zigbee2mqtt.service".after = [ "mosquitto.service" ];
+
+
+  # MOSQUITTO
+  age.secrets."hass/zigbee2mqtt.pass" = {
+    file = ../../secrets/hass/zigbee2mqtt.pass.age;
+  };
+
+  age.secrets."hass/hass.pass" = {
+    file = ../../secrets/hass/hass.pass.age;
+  };
+
+  services.mosquitto = {
+    enable = true;
+    listeners = [{
+      # address = "0.0.0.0"; # 0.0.0.0 is the default
+      settings.allow_anonymous = true;
+      omitPasswordAuth = false;
+      acl = [ "topic readwrite #" ];
+
+      users.hass = {
+        acl = [
+          "readwrite #"
+        ];
+        passwordFile = config.age.secrets."hass/hass.pass".path;
+      };
+
+      users."${config.services.zigbee2mqtt.settings.mqtt.user}" = {
+        acl = [
+          "readwrite #"
+        ];
+        passwordFile = config.age.secrets."hass/zigbee2mqtt.pass".path;
+        # expects a secret file containing plaintext password
+        # this is the same password referred to by services.zigbee2mqtt.settings.mqtt.password (just in a different format)
+      };
+    }];
+  };
+  networking.firewall.allowedTCPPorts = [ 1883 ]; # MQTT port
+}
