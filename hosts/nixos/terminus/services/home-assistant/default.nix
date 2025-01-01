@@ -47,6 +47,10 @@ in
       ];
       "scene desc" = [ ];
 
+      homeassistant = {
+        packages = "!include_dir_named ${./packages}";
+      };
+
       http = {
         use_x_forwarded_for = true;
         trusted_proxies = [
