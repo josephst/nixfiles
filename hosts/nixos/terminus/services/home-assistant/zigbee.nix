@@ -4,12 +4,11 @@ let
 in {
   networking.firewall.allowedTCPPorts = [
     1883 # MQTT
-    8083 # Zigbee2MQTT
   ];
   # ZIGBEE2MQTT
-  age.secrets."hass/zigbee2mqtt.secret" = {
+  age.secrets."hass/zigbee2mqtt.secret.yaml" = {
+    # the file must end in .yaml
     file = ../../secrets/hass/zigbee2mqtt.secret.age;
-    path = "/var/lib/zigbee2mqtt/secret.yaml";
     owner = "${config.systemd.services.zigbee2mqtt.serviceConfig.User}";
     group = "${config.systemd.services.zigbee2mqtt.serviceConfig.Group}";
   };
@@ -18,15 +17,21 @@ in {
     settings = {
       permit_join = false; # TODO: turn off after all devices joined
       mqtt = {
-        server = "mqtt://localhost:1883";
+        # base_topic = "zigbee2mqtt"; # default
+        # server = "mqtt://localhost"; # default
         user = "zigbee2mqtt";
-        password = "!secret password"; # expects a secret file at /var/lib/zigbee2mqtt/secret.yaml,
+        password = "!${config.age.secrets."hass/zigbee2mqtt.secret.yaml".path} password"; # expects a secret file at /var/lib/zigbee2mqtt/secret.yaml,
         # with contents `password: mqtt_password`
       };
       serial = {
+        adapter = "ember"; # necessary for Sonoff Zigbee Dongle-E
         port = "/dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_a80856583b1fef1184a64ad0639e525b-if00-port0";
       };
-      frontend.port = 8083;
+      frontend = {
+        port = 8083;
+        url = "https://zigbee.${domain}";
+      };
+      advanced.network_key = "!${config.age.secrets."hass/zigbee2mqtt.secret.yaml".path} network_key";
     };
   };
   systemd.services."zigbee2mqtt.service".requires = [ "mosquitto.service" ];
@@ -34,10 +39,14 @@ in {
 
   services.caddy.virtualHosts."zigbee.${domain}" = {
     extraConfig = ''
-      reverse_proxy http://127.0.0.1:${toString 8083}
+      reverse_proxy http://127.0.0.1:${toString config.services.zigbee2mqtt.settings.frontend.port}
     '';
     useACMEHost = domain;
   };
+
+  services.restic.backups.system-backup.paths = [
+    "/var/lib/zigbee2mqtt/"
+  ];
 
 
   # MOSQUITTO
