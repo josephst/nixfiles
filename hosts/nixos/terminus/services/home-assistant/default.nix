@@ -32,6 +32,7 @@ in
       # via web interface
       "automation ui" = "!include automations.yaml";
       "scene ui" = "!include scenes.yaml";
+      "script" = "!include scripts.yaml";
       "automation desc" = [
         {
           alias = "Backup Home Assistant every night at 3 AM";
