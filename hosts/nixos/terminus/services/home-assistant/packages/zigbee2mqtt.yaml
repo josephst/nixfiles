@@ -1,0 +1,125 @@
+# Input number for joining time remaining (in minutes)
+input_number:
+    zigbee2mqtt_join_minutes:
+        name: 'Zigbee2MQTT join minutes'
+        initial: 2
+        min: 1
+        max: 5
+        step: 1
+        mode: slider
+
+# Input text to input Zigbee2MQTT friendly_name for scripts
+input_text:
+    zigbee2mqtt_new_name:
+        name: Zigbee2MQTT New Name
+        initial: ''
+        icon: 'mdi:moon-new'
+
+# Input select for choosing Zigbee2MQTT devices
+input_select:
+    zigbee2mqtt_old_name_select:
+        name: Zigbee2MQTT Old Name
+        icon: 'mdi:moon-full'
+        options:
+            - Initial Option
+    zigbee2mqtt_remove_select:
+        name: Zigbee2MQTT Remove
+        icon: 'mdi:trash-can'
+        options:
+            - Initial Option
+
+# Input boolean to set the force remove flag for devices
+input_boolean:
+    zigbee2mqtt_force_remove:
+        name: Zigbee2MQTT Force Remove
+        initial: false
+        icon: mdi:alert-remove
+
+# Scripts for renaming & removing devices
+script:
+    zigbee2mqtt_rename:
+        alias: Zigbee2MQTT Rename
+        icon: 'mdi:pencil'
+        sequence:
+            service: mqtt.publish
+            data_template:
+                topic: zigbee2mqtt/bridge/request/device/rename
+                payload_template: >-
+                    {
+                      "from": "{{ states('input_select.zigbee2mqtt_old_name_select') }}",
+                      "to": "{{ states('input_text.zigbee2mqtt_new_name') }}"
+                    }
+    zigbee2mqtt_remove:
+        alias: Zigbee2MQTT Remove
+        icon: 'mdi:trash-can'
+        sequence:
+            service: mqtt.publish
+            data_template:
+                topic: zigbee2mqtt/bridge/request/device/remove
+                payload_template: >-
+                    {
+                      "id": "{{ states('input_select.zigbee2mqtt_remove_select') }}",
+                      "force": {{ is_state('input_boolean.zigbee2mqtt_force_remove', 'on') }}
+                    }
+
+automation:
+    - id: 'zigbee2mqtt_create_notification_on_successful_interview'
+      alias: Zigbee Device Joined Notification
+      trigger:
+          platform: mqtt
+          topic: 'zigbee2mqtt/bridge/event'
+      condition:
+          condition: template
+          value_template: '{{trigger.payload_json.type == "device_interview" and trigger.payload_json.data.status == "successful" and trigger.payload_json.data.supported}}'
+      action:
+          - service: persistent_notification.create
+            data_template:
+                title: Device joined the Zigbee2MQTT network
+                message: 'Name: {{trigger.payload_json.data.friendly_name}},
+                    Vendor: {{trigger.payload_json.data.definition.vendor}},
+                    Model: {{trigger.payload_json.data.definition.model}},
+                    Description: {{trigger.payload_json.data.definition.description}}'
+
+    - id: 'zigbee2mqtt_update_devices_list'
+      alias: Update Zigbee Devices List
+      description: ''
+      trigger:
+          - platform: mqtt
+            topic: zigbee2mqtt/bridge/event
+          - platform: mqtt
+            topic: zigbee2mqtt/bridge/response/device/rename
+          - platform: homeassistant
+            event: start
+      condition: []
+      action:
+          - delay:
+                hours: 0
+                minutes: 0
+                seconds: 1
+                milliseconds: 0
+          - service: input_select.set_options
+            metadata: {}
+            data:
+                options: |
+                    {%- set find_integration = 'mqtt' %}
+                     {%- set devices = states | map(attribute='entity_id') | map('device_id') | unique | reject('eq',None) | list %}
+                     {%- set ns = namespace(entities = []) %}
+                     {%- for device in devices if device_attr(device, 'identifiers') %}
+                       {%- set ids = device_attr(device, 'identifiers') | list | first %}
+                       {%- if ids and ids | length == 2 and ids[0] == find_integration and "zigbee2mqtt" in ids[1] %}
+                         {% set names = device_attr(device, 'name').split('\n') | list %}
+                         {%- set ns.entities = ns.entities + names %}
+                       {%- endif %}
+                     {%- endfor %}
+                     {{ ns.entities}}
+            target:
+                entity_id:
+                    - input_select.zigbee2mqtt_old_name_select
+                    - input_select.zigbee2mqtt_remove_select
+          - service: input_text.set_value
+            metadata: {}
+            data:
+                value: ''
+            target:
+                entity_id: input_text.zigbee2mqtt_new_name
+      mode: single
