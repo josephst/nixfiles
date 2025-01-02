@@ -26,6 +26,8 @@ in
       "sonos"
       "zwave_js"
       "mqtt"
+      "androidtvremote2"
+      "zha" # not used, but causes error if missing
     ];
     config = {
       # store these outside of configuration.yaml so that they can be edited
