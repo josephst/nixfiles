@@ -26,7 +26,7 @@ in
       "sonos"
       "zwave_js"
       "mqtt"
-      "androidtvremote2"
+      "androidtv_remote"
       "zha" # not used, but causes error if missing
     ];
     config = {
