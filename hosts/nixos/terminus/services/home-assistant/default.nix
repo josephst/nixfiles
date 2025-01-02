@@ -27,6 +27,7 @@ in
       "zwave_js"
       "mqtt"
       "recorder"
+      "history"
       "androidtv_remote"
       "zha" # not used, but causes error if missing
     ];
