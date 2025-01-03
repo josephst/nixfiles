@@ -1,7 +1,8 @@
 { config, ... }:
 let
   inherit (config.networking) domain;
-in {
+in
+{
   networking.firewall.allowedTCPPorts = [
     1883 # MQTT
   ];

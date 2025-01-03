@@ -14,30 +14,30 @@ in
     openFirewall = true;
 
     extraComponents = [
-      "default_config"
-
+      "androidtv_remote"
+      "apple_tv"
       "cast"
       "esphome"
       "google_translate"
       "homekit_controller"
       "homekit"
+      "isal"
       "met"
+      "mqtt"
       "plex"
       "sonos"
-      "zwave_js"
-      "mqtt"
-      "recorder"
-      "history"
-      "androidtv_remote"
       "zha" # not used, but causes error if missing
+      "zwave_js"
     ];
     config = {
+      default_config = { };
       # store these outside of configuration.yaml so that they can be edited
       # via web interface
       "automation ui" = "!include automations.yaml";
       "scene ui" = "!include scenes.yaml";
-      "script" = "!include scripts.yaml";
-      "automation desc" = [
+      "script ui" = "!include scripts.yaml";
+
+      "automation nixos" = [
         {
           alias = "Backup Home Assistant every night at 3 AM";
           trigger = {
@@ -50,7 +50,7 @@ in
           };
         }
       ];
-      "scene desc" = [ ];
+      "scene nixos" = [ ];
 
       homeassistant = {
         packages = "!include_dir_named ${./packages}";
@@ -73,6 +73,11 @@ in
         ];
       };
       sonos = { };
+      recorder = {
+        purge_keep_days = 30;
+        db_url = "sqlite:///${config.services.home-assistant.configDir}/home-assistant_v2.db";
+      };
+      # history = { };
     };
 
     customComponents = [
