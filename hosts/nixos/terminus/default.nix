@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, lib, ... }:
 {
   imports = [
     inputs.disko.nixosModules.disko
@@ -68,6 +68,15 @@
     };
     smartd.enable = true;
     tailscale.useRoutingFeatures = "both"; # enable IP forwarding for tailscale exit node
+    networkd-dispatcher = {
+      enable = true;
+      rules."50-tailscale" = {
+        onState = ["routable"];
+        script = ''
+          ${lib.getExe pkgs.ethtool} -K eth0 rx-udp-gro-forwarding on rx-gro-list off
+        '';
+      };
+    };
   };
 
   # This value determines the NixOS release from which the default
