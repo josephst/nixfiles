@@ -23,6 +23,10 @@
     };
   };
 
+  networking = {
+    nftables.enable = lib.mkDefault true; # iptables
+  };
+
   hardware.enableRedistributableFirmware = true;
 
   # always install these for all users on nixos systems
