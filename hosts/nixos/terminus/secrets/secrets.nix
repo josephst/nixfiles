@@ -24,6 +24,7 @@ in
   "hass/zigbee2mqtt.pass.age".publicKeys = allKeys;
   "hass/hass.pass.age".publicKeys = allKeys;
   "hass/zigbee2mqtt.secret.age".publicKeys = allKeys;
+  "hass/secrets.yaml.age".publicKeys = allKeys;
 }
 # `nix run github:ryantm/agenix -- --help` to run
 # to rekey: get ssh private key from 1password (export -> no password)
