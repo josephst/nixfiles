@@ -9,9 +9,9 @@ in
     ./zigbee.nix
   ];
 
-  age.secrets."secrets.yaml" = {
+  age.secrets."hass/secrets.yaml" = {
     file = ../../secrets/hass/secrets.yaml.age;
-    path = config.services.home-assistant.configDir;
+    path = "${config.services.home-assistant.configDir}/secrets.yaml";
     group = "hass";
     mode = "660";
   };
@@ -65,8 +65,8 @@ in
         time_zone = "America/New_York";
         temperature_unit = "F";
         name = "Home";
-        latitude = "!secrets latitude";
-        longitude = "!secrets longitude";
+        latitude = "!secret latitude";
+        longitude = "!secret longitude";
       };
 
       http = {
