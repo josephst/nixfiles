@@ -16,7 +16,7 @@ in
   services.zigbee2mqtt = {
     enable = true;
     settings = {
-      permit_join = false; # TODO: turn off after all devices joined
+      permit_join = false;
       mqtt = {
         # base_topic = "zigbee2mqtt"; # default
         # server = "mqtt://localhost"; # default
@@ -32,7 +32,16 @@ in
         port = 8083;
         url = "https://zigbee.${domain}";
       };
-      advanced.network_key = "!${config.age.secrets."hass/zigbee2mqtt.secret.yaml".path} network_key";
+      advanced = {
+        homeassistant_legacy_entity_attributes = false;
+        homeassistant_legacy_triggers = false;
+        legacy_api = false;
+        legacy_availability_payload = false;
+        network_key = "!${config.age.secrets."hass/zigbee2mqtt.secret.yaml".path} network_key";
+      };
+      device_options = {
+        legacy = false;
+      };
     };
   };
   systemd.services."zigbee2mqtt.service".requires = [ "mosquitto.service" ];
