@@ -78,6 +78,7 @@
       helix
       home-manager
       mkpasswd
+      nh
       nix
       ncurses
       neovim

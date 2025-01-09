@@ -33,7 +33,6 @@
   environment.systemPackages = [
     # most are in ../common/default.nix
     pkgs.htop
-    pkgs.nh
 
     inputs.ghostty.packages.${pkgs.system}.default
 
