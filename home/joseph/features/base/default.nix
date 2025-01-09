@@ -65,6 +65,7 @@
     comma # Install and run programs by sticking a , before them
     hydra-check # check hydra for build status of a package
     nix-init # generate nix package from a URL
+    nix-inspect
     nix-output-monitor
     nix-update
     nixd # Nix LSP
