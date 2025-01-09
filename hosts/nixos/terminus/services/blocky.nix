@@ -60,4 +60,6 @@
   };
   networking.firewall.allowedTCPPorts = [ 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];
+
+  systemd.services.blocky.after = [ "network.target" ];
 }
