@@ -61,7 +61,7 @@ in
 
       homeassistant = {
         packages = "!include_dir_named ${./packages}";
-        unit_system = "imperial";
+        unit_system = "us_customary";
         time_zone = "America/New_York";
         temperature_unit = "F";
         name = "Home";
