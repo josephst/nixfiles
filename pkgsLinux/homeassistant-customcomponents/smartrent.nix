@@ -6,15 +6,15 @@
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "ZacharyThomas";
+  owner = "ZacheryThomas";
   domain = "smartrent";
-  version = "0.4.7";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "ZacheryThomas";
     repo = "homeassistant-smartrent";
     rev = "v${version}";
-    hash = "sha256-FIfTrbIGP7FztvifI9wVLtepQZKwd70xImncmoYGu6k=";
+    hash = "sha256-Tma5XlKzaN0GaEJnrnrcorz1I28OjI57MzvWWSqfFzY=";
   };
 
   dependencies = [
@@ -22,6 +22,8 @@ buildHomeAssistantComponent rec {
     (home-assistant.python.pkgs.callPackage ../../pkgs/smartrent-py.nix { })
   ];
 
+  # manual updates: `cd` to pkgsLinux directory and run
+  # `nix-update hass-smartrent`
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
