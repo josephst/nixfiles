@@ -11,6 +11,7 @@ in
     settings = {
       PAPERLESS_FILENAME_FORMAT = "{{ created_year }}/{{ correspondent }}/{{ created }} {{ title }}";
     };
+    exporter.enable = true;
   };
 
   services.caddy.virtualHosts."paperless.${domain}" = {
