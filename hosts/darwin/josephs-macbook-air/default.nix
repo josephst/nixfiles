@@ -22,6 +22,8 @@ in
     system = "aarch64-darwin";
   };
 
+  services.openssh.enable = false; # TODO: delete once https://github.com/ryantm/agenix/pull/307 merged
+
   # TODO: delete this section?
   myconfig.gui.enable = true;
   myconfig.llm.enable = true;

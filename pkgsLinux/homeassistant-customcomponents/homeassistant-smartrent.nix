@@ -2,6 +2,7 @@
 , buildHomeAssistantComponent
 , fetchFromGitHub
 , home-assistant
+, nix-update-script
 }:
 
 buildHomeAssistantComponent rec {
@@ -18,8 +19,10 @@ buildHomeAssistantComponent rec {
 
   dependencies = [
     # python requirements, as specified in manifest.json
-    (home-assistant.python.pkgs.callPackage ../smartrent-py.nix { })
+    (home-assistant.python.pkgs.callPackage ../../pkgs/smartrent-py.nix { })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     # changelog, description, homepage, license, maintainers

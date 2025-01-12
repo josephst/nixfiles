@@ -93,6 +93,7 @@
         "aarch64-darwin"
       ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      forLinuxSystems = nixpkgs.lib.genAttrs (builtins.filter (nixpkgs.lib.hasSuffix "linux") supportedSystems);
 
       mkNixos =
         modules:
@@ -109,7 +110,10 @@
     in
     {
       overlays = import ./overlays { inherit inputs; };
-      packages = forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; });
+      packages = nixpkgs.lib.attrsets.recursiveUpdate
+        (forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }))
+        (forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
+      # legacyPackages = forAllSystems (system: import ./legacyPackages { pkgs = nixpkgs.legacyPackages.${system}; });
       formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
       nixosModules = import ./modules/nixos;
       darwinModules = import ./modules/darwin;

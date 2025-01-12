@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 let
   inherit (config.networking) domain;
-  customComponents = import ../../../../../pkgs/homeassistant-customcomponents;
 in
 {
   imports = [
@@ -90,7 +89,7 @@ in
     };
 
     customComponents = [
-      (pkgs.callPackage customComponents.smartrent { })
+      pkgs.home-assistant-custom-components.smartrent
     ];
   };
 

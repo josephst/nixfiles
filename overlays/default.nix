@@ -5,7 +5,7 @@
   llama-cpp = inputs.llama-cpp.overlays.default;
   deploy-rs = inputs.deploy-rs.overlays.default;
 
-  channels = final: _prev: {
+  channels = final: prev: {
     # this adds nixpkgs-unstable as an overlays, available as nixpkgs.unstable.foobar
     # doesn't do much now, since we're already following unstable
     unstable = import inputs.nixpkgs {
@@ -18,7 +18,7 @@
     };
   };
 
-  security = _final: _prev: {
+  security = final: prev: {
     # for https://github.com/NixOS/nixpkgs/pull/300028, but causes HUGE rebuild
     # xz = prev.xz.overrideAttrs (old: {
     #   version = inputs.nixpkgs-staging.legacyPackages.${final.system}.xz.version;
