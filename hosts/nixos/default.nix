@@ -27,6 +27,8 @@
     nftables.enable = lib.mkDefault true; # iptables
   };
 
+  system.rebuild.enableNg = true; # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md
+
   hardware.enableRedistributableFirmware = true;
 
   # always install these for all users on nixos systems

@@ -76,15 +76,11 @@ in
           "::1"
         ];
       };
-      wemo = {
-        static = [
-          "192.168.1.130"
-          "192.168.1.131"
-          "192.168.1.132"
-          "192.168.1.133"
-          "192.168.1.134"
-        ];
-      };
+      # wemo = {
+      #   static = [
+      #     "192.168.1.132" # living room lamp (now added via homekit device)
+      #   ];
+      # };
       sonos = { };
       recorder = {
         purge_keep_days = 30;
