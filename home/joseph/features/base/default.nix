@@ -64,6 +64,7 @@
     cachix
     comma # Install and run programs by sticking a , before them
     hydra-check # check hydra for build status of a package
+    nil # also a Nix language server
     nix-init # generate nix package from a URL
     nix-inspect
     nix-output-monitor
