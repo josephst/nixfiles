@@ -4,7 +4,8 @@ default:
 alias s := switch
 
 pkgs-update:
-  nix run nixpkgs#nix-update -- open-webui --flake
+  nix run nixpkgs#nix-update -- smartrent-py --flake
+  nix run nixpkgs#nix-update -- hass-smartrent --flake --system aarch64-linux
 
 [macos]
 switch:
