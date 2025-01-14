@@ -28,6 +28,7 @@ in
         extraGroups = ifTheyExist [
           "wheel"
           "media"
+          "podman"
         ]; # Enable ‘sudo’ for the user.
         linger = true; # linger w/ systemd (starts user units at bootup, rather than login)
         packages = [

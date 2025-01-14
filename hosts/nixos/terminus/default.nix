@@ -19,10 +19,11 @@
     ../optional/tailscale.nix
 
     # Services
-    ./services/home-assistant
     ./services/acme.nix
     ./services/blocky.nix
     ./services/caddy.nix
+    ./services/hoarder.nix
+    ./services/home-assistant
     ./services/netdata.nix
     ./services/paperless.nix
     ./services/unifi.nix
@@ -76,6 +77,18 @@
           ${lib.getExe pkgs.ethtool} -K eth0 rx-udp-gro-forwarding on rx-gro-list off
         '';
       };
+    };
+  };
+
+  virtualisation = {
+    containers.enable = true;
+    oci-containers.backend = "podman";
+    podman = {
+      enable = true;
+      # Create a `docker` alias for podman, to use it as a drop-in replacement
+      dockerCompat = true;
+      # Required for containers under podman-compose to be able to talk to each other.
+      defaultNetwork.settings.dns_enabled = true;
     };
   };
 
