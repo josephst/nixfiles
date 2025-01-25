@@ -86,6 +86,11 @@ in
         db_url = "sqlite:///${config.services.home-assistant.configDir}/home-assistant_v2.db";
       };
       # history = { };
+      rest_command = {
+        healthchecks = {
+          url = "!secret healthchecks";
+        };
+      };
     };
 
     customComponents = [
