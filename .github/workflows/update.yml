@@ -23,7 +23,7 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v16
       - name: Add Nix Cache
-        uses: DeterminateSystems/magic-nix-cache-action@v8
+        uses: DeterminateSystems/magic-nix-cache-action@v9
       # done with setup, now start updating
       - run: |
           git config user.name "github-actions[bot]"
