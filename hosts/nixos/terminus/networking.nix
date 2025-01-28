@@ -22,6 +22,7 @@ _: {
           DNS = [
             "192.168.1.10"
             "::1"
+            "2606:4700:4700::1111" # in case self-hosted DNS fails, use Cloudflare
           ];
           MulticastDNS = true;
           # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
