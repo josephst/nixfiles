@@ -21,9 +21,6 @@ in
       description = "The local restic repository to be copied from.";
     };
 
-    # TODO:
-    # appendOnly (with rclone copy?)
-
     environmentFile = lib.mkOption {
       default = null;
       type = with lib.types; str;
