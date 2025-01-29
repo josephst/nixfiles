@@ -111,20 +111,19 @@ in
             SystemCallErrorNumber = "EPERM";
           };
           scriptArgs = "%i"; # name:action
-          # TODO: simplify when systemd v257 is available (journalctl has -I flag for latest invocation)
-          # https://github.com/systemd/systemd/releases/tag/v257
+          # requires systemd v257 (journalctl has -I flag for latest invocation)
           script = ''
             # set -x # for debugging
             IFS=':' read -r name action <<< "$1"
 
             # read the value of HC_URL from the file (file may contain other variables too)
-            url=$(grep -oP "^HC_URL=\K.+" "$CREDENTIALS_DIRECTORY/$name")
+            url=$(awk -F= '/^HC_URL=/ {print $2}' "$CREDENTIALS_DIRECTORY/$name")
 
             if [ "$action" = "success" ]; then
-              logs=$(journalctl _SYSTEMD_INVOCATION_ID="$(systemctl show -p InvocationID --value $name.service)")
+              logs=$(journalctl -I -u "$name.service" --no-pager)
               ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-raw "$logs" "$url"
             elif [ "$action" = "fail" ]; then
-              logs=$(journalctl _SYSTEMD_INVOCATION_ID="$(systemctl show -p InvocationID --value $name.service)")
+              logs=$(journalctl -I -u "$name.service" --no-pager)
               ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-raw "$logs" "$url/fail"
             else
               ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url/$action"
