@@ -25,10 +25,15 @@
   # pdbedit -a -u <username>
   # pdbedit -L -w > /tmp/smbpasswd
   # https://www.samba.org/samba/docs/current/man-html/pdbedit.8.html
-  #
-  # TODO: convert to systemd pre-start unitfile?
-  system.activationScripts.sambaUserSetup = {
-    text = ''
+  systemd.services.samba-setup = {
+    description = "Import Samba passwords";
+    wantedBy = [ "smbd.service" ];
+    before = [ "smbd.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
       ${lib.getBin pkgs.samba}/bin/pdbedit \
         -i smbpasswd:${config.age.secrets.smbpasswd.path} \
         -e tdbsam:/var/lib/samba/private/passdb.tdb
