@@ -35,6 +35,7 @@ in
 
       # communication
       "microsoft-teams"
+      "netnewswire"
       "zoom"
 
       # AI
