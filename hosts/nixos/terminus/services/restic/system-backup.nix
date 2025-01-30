@@ -33,6 +33,7 @@ in
     exclude = [
       "/home/*/.cache"
       ".git"
+      "*.gguf" # exclude models
     ];
 
     inherit pruneOpts;
