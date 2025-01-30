@@ -117,7 +117,7 @@ in
             IFS=':' read -r name action <<< "$1"
 
             # read the value of HC_URL from the file (file may contain other variables too)
-            url=$(awk -F= '/^HC_URL=/ {print $2}' "$CREDENTIALS_DIRECTORY/$name")
+            url=$(grep -oP "^HC_URL=\K.+" "$CREDENTIALS_DIRECTORY/$name")
 
             if [ "$action" = "success" ]; then
               logs=$(journalctl -I -u "$name.service" --no-pager)
