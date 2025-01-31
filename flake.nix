@@ -129,6 +129,10 @@
           ./hosts/nixos/orbstack
           ./users/joseph.nix
         ];
+        vmware = mkNixos [
+          ./hosts/nixos/vmware
+          ./users/joseph.nix
+        ];
       };
 
       darwinConfigurations = {

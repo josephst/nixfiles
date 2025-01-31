@@ -45,6 +45,7 @@
     # development
     gh-dash
     hugo
+    zola
 
     # media
     ffmpeg

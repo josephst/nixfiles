@@ -2,16 +2,16 @@
 
 🔔 [Read a blog post about this repository](https://josephstahl.com/nix-for-macos-and-a-homelab-server/)
 
-> This is my own dotfiles repo and is customized to my own preferences - 
+> This is my own dotfiles repo and is customized to my own preferences -
 although I try to keep everything working properly, use any part of this repo
 on your own system may break things! I'd recommend using this more for inspiration
-than exact instructions. 
+than exact instructions.
 
 ## Mac
 ### Generate host keys
 
 Run `sudo ssh-keygen -A` to generate default host keys (rsa, ecdsa, ed25519 according to documentation)
-if they do not already exist. 
+if they do not already exist.
 
 ### Install Nix
 
@@ -25,71 +25,56 @@ if they do not already exist.
 
 ## NixOS
 
-Download and boot the minimal ISO from (unstable version).
+Installation of NixOS is done with [nixos-anywhere](https://github.com/nix-community/nixos-anywhere) to allow for unattended/ remote setups.
 
-Run `sudo -i` to switch to root, then `passwd` to set a root password.
-This enables ssh login (get ip with `ip a`) to run the rest of the installer via ssh.
+If a system is already defined in `flake.nix` (such as `terminus` or `vmware`), make sure the NixOS installer is running on that system.
+Set a password for the `nixos` user on the installer (`passwd`), then get the IP address (`ip a`).
+The rest of the install process is handled remotely, using SSH.
 
-Complete partitioning [per the NixOS instructions](https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning) or with Disko.
+Ensure that disk setup is correctly configured with `disko`.
+For examples, see [`disko.nix`](./hosts/nixos/vmware/disko.nix).
+If re-installing to a system that already has a defined `hardware-configuration.nix`, run the following:
 
-If using Disko:
-1. Create a `disko-config.nix` file, based on template (or edit ie `./hosts/nixos/<hostname>/disko.nix`) and copy to `/tmp/disko-config.nix` on the target machine
-2. Run `nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko /tmp/disko-config.nix` to partition and mount the disks. 
-
-Once partitoning is complete and the system is mounted to `/mnt`,
-we'll deviate from the installer and use `flake.nix` to install the system.
-
-```shell
-
-# Open up a shell to get git:
-nix-shell -p git
-
-# copy ssh keys over so that we can authenticate with github
-# alternatively, may make new keys with ssh-keygen and copy them to github
-# not necessary if cloning a public repo
-mkdir ~/.ssh
-vim ~/.ssh/id_ed25519 # paste private key that is used to authenticate with Github (stored in 1password)
-chmod 600 ~/.ssh/id_ed25519
-
-# Create new SSH keys for the system
-# when agenix runs, use /etc/agenixKey for initial install
-mkdir -p /mnt/etc
-vim /mnt/etc/agenixKey
-chmod 600 /mnt/etc/agenixKey
-ln -s /mnt/etc/agenixKey /etc/agenixKey
-
-# IMPORTANT!
-# after initial install, rekey secrets with the generated hostKey
-
-# once shell loaded, clone the repo to /tmp/nixos
-cd ~ # either root or nixos, depending on who's logged in
-git clone https://github.com/josephst/nixfiles.git
-cd nixfiles
-
-# OPTIONAL: update flake
-nix --experimental-features 'flakes nix-command' flake update
-
-# generate new config (ignore the generated configuration.nix) and copy to this repository
-nixos-generate-config --root /mnt # if using disko, also include `--no-filesystems`
-mv /mnt/etc/nixos/hardware-configuration.nix /path/to/this/repo
-rm /mnt/etc/nixos/configuration.nix
-
-# make sure we're in the right directory
-cd /mnt/etc/nixos
-git add --all # add the new hardware config
-git commit -m "update hardware config" # commit it
-git push # and push to github
-
-# install
-nixos-install --flake .#HOSTNAME
+```
+nix run github:nix-community/nixos-anywhere -- --flake .#vmware --target-host nixos@<IP ADDRESS> --build-on-remote
 ```
 
-## Post-install
-Ensure that there's a key for Agenix at `/mnt/etc/agenixKey`.
-After the first boot of the system, copy the newly generated host keys to this repo,
-rekey Agenix, and delete the temporary `agenixKey` file. 
+`--build-on-remote` is necessary in case of cross-architechture builds.
+If there's not a `hardware-configuration.nix` file yet created, then run with the `--generate-hardware-config` flag:
 
-Also restore the user's private key to `~/.ssh/identity` (the public key should already be there)
+```
+nix run github:nix-community/nixos-anywhere -- --generate-hardware-config nixos-generate-config ./hosts/nixos/vmware/hardware-configuration.nix --flake .#vmware --target-host nixos@<IP ADDRESS> --build-on-remote --ssh-option "IdentitiesOnly=yes"
+```
+
+If using Agenix, add `--copy-host-keys` to the arguments above.
+This copies the files at `/etc/ssh/ssh_host_*` to `/mnt/` so that they're available on the new system.
+This takes care of the host keys, but user-specific keys (`/home/$USER/.ssh/*`) are also necessary to decrypt secrets if using the Agenix home-manager module.
+As the new system is not yet installed, a new key must be generated on the system running `nixos-anywhere`
+and copied over.
+Use 1Password, or `ssh-keygen -t ed25519`, to generate the new key, then create a directory structure for it and copy the keys to this directory:
+
+```bash
+temp=$(mktemp -d) # or `set temp $(mktemp -d)` if using Fish shell
+install -d -m755 "$temp/home/<user>/.ssh"
+
+# get private key from 1password, or copy the generated key if using `ssh-keygen`
+op read "op://Private/<hash>/private key" > "$temp/home/<user>/.ssh/id_ed25519"
+op read "op://Private/<hash>/public key" > "$temp/home/<user>/.ssh/id_ed25519.pub"
+
+# set correct permissions on keys
+chmod 600 $temp/home/user/.ssh/id_ed25519*
+```
+
+Make sure to re-key secrets with the new key(s) prior to running `nixos-anywhere`.
+Then, run `nixos-anywhere` with `--extra-files "$temp"` in addition to the above flags.
+
+> Note that this will set ownership on these files to `root` when copied by `nixos-anywhere`.
+> To work around this, include a `systemd.tmpfiles.rules` section in the user configuration to give ownership of the `~/.ssh` directory.
+```nix
+  systemd.tmpfiles.rules = [
+    "d /home/joseph/.ssh 0700 joseph joseph -"
+  ];
+```
 
 ## NixOS: after setup
 
@@ -100,7 +85,7 @@ Update dynamic DNS records with the tailscale IP to ensure that other devices on
 can look up the Tailscale IP on public DNS servers
 
 ### Plex
-First time, access at [192.168.1.xxx:32400/web](192.168.1.24:32400/web) to get it set up, 
+First time, access at [192.168.1.xxx:32400/web](192.168.1.24:32400/web) to get it set up,
 before trying to access via reverse proxy.
 
 ### Sabnabd

@@ -36,6 +36,10 @@ in
       };
   };
 
+  systemd.tmpfiles.rules = [
+    "d /home/joseph/.ssh 0700 joseph joseph -"
+  ];
+
   nix.settings.trusted-users = [ "joseph" ];
 
   home-manager.users.joseph = import ../home/joseph;

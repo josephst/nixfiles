@@ -24,7 +24,7 @@
   };
 
   networking = {
-    nftables.enable = lib.mkDefault true; # iptables
+    nftables.enable = lib.mkDefault true;
   };
 
   system.rebuild.enableNg = true; # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md
