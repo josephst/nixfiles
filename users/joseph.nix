@@ -37,7 +37,9 @@ in
   };
 
   systemd.tmpfiles.rules = [
-    "d /home/joseph/.ssh 0700 joseph joseph -"
+    "d /home/joseph/.ssh 0700 joseph users -"
+    "f /home/joseph/.ssh/id_ed25519 0600 joseph users -"
+    "f /home/joseph/.ssh/id_ed25519.pub 0600 joseph users -"
   ];
 
   nix.settings.trusted-users = [ "joseph" ];
