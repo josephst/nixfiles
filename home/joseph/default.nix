@@ -1,10 +1,11 @@
-{ pkgs
-, config
-, osConfig
-, lib
-, inputs
-, outputs
-, ...
+{
+  pkgs,
+  config,
+  osConfig,
+  lib,
+  inputs,
+  outputs,
+  ...
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
@@ -85,4 +86,8 @@ in
       '';
     };
   };
+
+  # link nixpkgs-manual for quick reference
+  home.file."Documents/nixpkgs-manual.html".source =
+    "${pkgs.nixpkgs-manual}/share/doc/nixpkgs/manual.html";
 }
