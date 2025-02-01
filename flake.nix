@@ -93,7 +93,9 @@
         "aarch64-darwin"
       ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      forLinuxSystems = nixpkgs.lib.genAttrs (builtins.filter (nixpkgs.lib.hasSuffix "linux") supportedSystems);
+      forLinuxSystems = nixpkgs.lib.genAttrs (
+        builtins.filter (nixpkgs.lib.hasSuffix "linux") supportedSystems
+      );
 
       mkNixos =
         modules:
@@ -106,12 +108,16 @@
           };
         };
 
-      treefmtEval = forAllSystems (system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix);
+      treefmtEval = forAllSystems (
+        system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix
+      );
     in
     {
       overlays = import ./overlays { inherit inputs; };
       packages = nixpkgs.lib.attrsets.recursiveUpdate
-        (forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }))
+        (forAllSystems (
+          system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }
+        ))
         (forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
       # legacyPackages = forAllSystems (system: import ./legacyPackages { pkgs = nixpkgs.legacyPackages.${system}; });
       formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);

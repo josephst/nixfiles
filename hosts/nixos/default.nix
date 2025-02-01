@@ -1,10 +1,9 @@
 # This file holds config used on all NixOS hosts
-{
-  inputs,
-  outputs,
-  pkgs,
-  lib,
-  ...
+{ inputs
+, outputs
+, pkgs
+, lib
+, ...
 }:
 {
   imports = [

@@ -1,14 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-
-  # runtime
-, websockets
+, # runtime
+  websockets
 , aiohttp
-
-  # build
-, setuptools
+, # build
+  setuptools
 , poetry-core
+,
 }:
 
 buildPythonPackage rec {

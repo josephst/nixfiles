@@ -22,7 +22,6 @@ in
   age.secrets.restic-localstorage-pass.file = ../../secrets/restic/localstorage.pass.age;
   age.secrets.restic-systembackup-env.file = ../../secrets/restic/systembackup.env.age;
 
-
   # copy local Restic repo to S3-compatible repo
   services.rclone-sync = {
     enable = true;

@@ -32,19 +32,22 @@
     extraOptions = ''
       !include ${config.age.secrets.ghToken.path}
     '';
-    gc = {
-      automatic = true;
-      options = "--delete-older-than 30d";
-    } // lib.mkIf pkgs.stdenv.isDarwin {
-      interval = {
-        Weekday = 0;
-        Hour = 2;
-        Minute = 0;
+    gc =
+      {
+        automatic = true;
+        options = "--delete-older-than 30d";
+      }
+      // lib.mkIf pkgs.stdenv.isDarwin {
+        interval = {
+          Weekday = 0;
+          Hour = 2;
+          Minute = 0;
+        };
+      }
+      // lib.mkIf (!pkgs.stdenv.isDarwin) {
+        dates = "weekly";
+        randomizedDelaySec = "1800";
       };
-    } // lib.mkIf (!pkgs.stdenv.isDarwin) {
-      dates = "weekly";
-      randomizedDelaySec = "1800";
-    };
   };
 
   environment = {

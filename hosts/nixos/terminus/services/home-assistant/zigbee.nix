@@ -58,7 +58,6 @@ in
     "/var/lib/zigbee2mqtt/"
   ];
 
-
   # MOSQUITTO
   age.secrets."hass/zigbee2mqtt.pass" = {
     file = ../../secrets/hass/zigbee2mqtt.pass.age;
@@ -70,27 +69,29 @@ in
 
   services.mosquitto = {
     enable = true;
-    listeners = [{
-      # address = "0.0.0.0"; # 0.0.0.0 is the default
-      settings.allow_anonymous = true;
-      omitPasswordAuth = false;
-      acl = [ "topic readwrite #" ];
+    listeners = [
+      {
+        # address = "0.0.0.0"; # 0.0.0.0 is the default
+        settings.allow_anonymous = true;
+        omitPasswordAuth = false;
+        acl = [ "topic readwrite #" ];
 
-      users.hass = {
-        acl = [
-          "readwrite #"
-        ];
-        passwordFile = config.age.secrets."hass/hass.pass".path;
-      };
+        users.hass = {
+          acl = [
+            "readwrite #"
+          ];
+          passwordFile = config.age.secrets."hass/hass.pass".path;
+        };
 
-      users."${config.services.zigbee2mqtt.settings.mqtt.user}" = {
-        acl = [
-          "readwrite #"
-        ];
-        passwordFile = config.age.secrets."hass/zigbee2mqtt.pass".path;
-        # expects a secret file containing plaintext password
-        # this is the same password referred to by services.zigbee2mqtt.settings.mqtt.password (just in a different format)
-      };
-    }];
+        users."${config.services.zigbee2mqtt.settings.mqtt.user}" = {
+          acl = [
+            "readwrite #"
+          ];
+          passwordFile = config.age.secrets."hass/zigbee2mqtt.pass".path;
+          # expects a secret file containing plaintext password
+          # this is the same password referred to by services.zigbee2mqtt.settings.mqtt.password (just in a different format)
+        };
+      }
+    ];
   };
 }

@@ -1,7 +1,11 @@
 # report a service's success/failure to healthchecks.io
 # each template is instantiated with the name of the unit being reported on and the action (start, success, failure)
 # example: healthchecks-ping@restic-backups-system-backup:start, ...
-{ config, lib, pkgs, ... }:
+{ config
+, lib
+, pkgs
+, ...
+}:
 let
   cfg = lib.filterAttrs (_: v: v.urlFile != null || v.url != null) config.services.healthchecks-ping;
   urlFiles = lib.mapAttrsToList
@@ -16,66 +20,69 @@ in
     description = ''
       Send pings to healthchecks.io when services start/stop/fail.
     '';
-    type = lib.types.attrsOf (lib.types.submodule (_: {
-      options = {
-        urlFile = lib.mkOption {
-          type = lib.types.nullOr lib.types.path;
-          description = ''
-            Read the healthcheck URL from a file.
-            Must be in the EnvironmentFile format, with name HC_URL.
-            Additional variables can be set in the same file.
-            ```
-            HC_URL=https://hc-ping.com/12345678-1234-1234-1234-1234567890ab
-            ...
-            ```
-          '';
-          default = null;
-          example = "/var/run/agenix/healthchecks";
+    type = lib.types.attrsOf (
+      lib.types.submodule (_: {
+        options = {
+          urlFile = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
+            description = ''
+              Read the healthcheck URL from a file.
+              Must be in the EnvironmentFile format, with name HC_URL.
+              Additional variables can be set in the same file.
+              ```
+              HC_URL=https://hc-ping.com/12345678-1234-1234-1234-1234567890ab
+              ...
+              ```
+            '';
+            default = null;
+            example = "/var/run/agenix/healthchecks";
+          };
+          url = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            description = ''
+              URL to send start/stop/fail messages to.
+            '';
+            default = null;
+            example = "https://hc-ping.com/12345678-1234-1234-1234-1234567890ab";
+          };
+          unitName = lib.mkOption {
+            description = ''
+              Name of the unit to add Wants/OnSuccess/OnFailure dependencies to.
+            '';
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            example = "restic-backups-system-backup";
+          };
         };
-        url = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          description = ''
-            URL to send start/stop/fail messages to.
-          '';
-          default = null;
-          example = "https://hc-ping.com/12345678-1234-1234-1234-1234567890ab";
-        };
-        unitName = lib.mkOption {
-          description = ''
-            Name of the unit to add Wants/OnSuccess/OnFailure dependencies to.
-          '';
-          type = lib.types.nullOr lib.types.str;
-          default = null;
-          example = "restic-backups-system-backup";
-        };
-      };
-    }));
+      })
+    );
     default = { };
   };
 
   config = lib.mkIf (cfg != { }) {
-    assertions = lib.mapAttrsToList
-      (n: v: {
-        assertion = (v.urlFile == null) != (v.url == null);
-        message = "services.healthchecks.${n}: exactly one of url or urlFile should be set";
-      })
-      cfg
-    ++ lib.mapAttrsToList
-      (n: v: {
-        assertion = config.systemd.services ? "${v.unitName}";
-        message = "services.healthchecks.${n}: unitName ${v.unitName} does not correspond to a configured systemd unit";
-      })
-      (lib.filterAttrs (_: v: v.unitName != null) cfg);
+    assertions =
+      lib.mapAttrsToList
+        (n: v: {
+          assertion = (v.urlFile == null) != (v.url == null);
+          message = "services.healthchecks.${n}: exactly one of url or urlFile should be set";
+        })
+        cfg
+      ++ lib.mapAttrsToList
+        (n: v: {
+          assertion = config.systemd.services ? "${v.unitName}";
+          message = "services.healthchecks.${n}: unitName ${v.unitName} does not correspond to a configured systemd unit";
+        })
+        (lib.filterAttrs (_: v: v.unitName != null) cfg);
 
     systemd.services = lib.mkMerge [
       (lib.mapAttrs'
-        (_name: val: lib.nameValuePair
-          val.unitName
-          {
-            wants = [ "healthchecks-ping@${val.unitName}:start.service" ];
-            onSuccess = [ "healthchecks-ping@${val.unitName}:success.service" ];
-            onFailure = [ "healthchecks-ping@${val.unitName}:fail.service" ];
-          }
+        (
+          _name: val:
+            lib.nameValuePair val.unitName {
+              wants = [ "healthchecks-ping@${val.unitName}:start.service" ];
+              onSuccess = [ "healthchecks-ping@${val.unitName}:success.service" ];
+              onFailure = [ "healthchecks-ping@${val.unitName}:fail.service" ];
+            }
         )
         (lib.filterAttrs (_: v: v.unitName != null) cfg))
       {

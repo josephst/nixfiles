@@ -1,11 +1,10 @@
-{
-  pkgs,
-  config,
-  osConfig,
-  lib,
-  inputs,
-  outputs,
-  ...
+{ pkgs
+, config
+, osConfig
+, lib
+, inputs
+, outputs
+, ...
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;

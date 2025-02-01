@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , home-assistant
 , nix-update-script
+,
 }:
 
 buildHomeAssistantComponent rec {
