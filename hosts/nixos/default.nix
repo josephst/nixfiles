@@ -1,9 +1,10 @@
 # This file holds config used on all NixOS hosts
-{ inputs
-, outputs
-, pkgs
-, lib
-, ...
+{
+  inputs,
+  outputs,
+  pkgs,
+  lib,
+  ...
 }:
 {
   imports = [
@@ -47,4 +48,12 @@
 
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2411.section.md
   systemd.enableStrictShellChecks = false; # TODO: broken because of linger-users script
+
+  # TODO: move to the `users/joseph` file
+  # currently causing problems, since systemd option doesn't exist on macOS
+  systemd.tmpfiles.rules = [
+    "d /home/joseph/.ssh 0700 joseph users -"
+    "f /home/joseph/.ssh/id_ed25519 0600 joseph users -"
+    "f /home/joseph/.ssh/id_ed25519.pub 0600 joseph users -"
+  ];
 }
