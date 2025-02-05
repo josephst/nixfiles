@@ -36,6 +36,7 @@ in
       "mqtt"
       "plex"
       "sonos"
+      "wemo"
       "zha" # not used, but causes error if missing
       "zwave_js"
     ];
