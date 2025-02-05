@@ -20,9 +20,9 @@ _: {
           Address = "192.168.1.10/24";
           Gateway = "192.168.1.1";
           DNS = [
-            "192.168.1.10"
+            "127.0.0.1" # blocky listening here
             "::1"
-            "2606:4700:4700::1111" # in case self-hosted DNS fails, use Cloudflare
+            # "2606:4700:4700::1111" # in case self-hosted DNS fails, use Cloudflare
           ];
           MulticastDNS = true;
           # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)

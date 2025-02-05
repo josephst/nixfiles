@@ -4,7 +4,6 @@
     settings = {
       ports = {
         dns = [
-          "192.168.1.10:53"
           "127.0.0.1:53"
           "[::1]:53"
         ];
@@ -41,7 +40,8 @@
       customDNS = {
         mapping = {
           # also resolves all subdomains (don't need an explicit wildcard)
-          "terminus.josephstahl.com" = "192.168.1.10"; # right now, single homelab machine handles all queries except Proxmox
+          "terminus.josephstahl.com" = "192.168.1.10"; # right now, single homelab machine handles all queries
+          "homelab.josephstahl.com" = "192.168.1.10";
         };
       };
       clientLookup.upstream = "192.168.1.1";

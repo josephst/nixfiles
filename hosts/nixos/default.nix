@@ -20,6 +20,10 @@
     resolved = {
       enable = lib.mkDefault true;
       dnsovertls = "opportunistic";
+      extraConfig = ''
+        DNSStubListenerExtra=192.168.1.10
+        # Cache=no # not necessary; systemd will not cache responses from host-local IP address (such as 127.0.0.1)
+      '';
     };
   };
 
