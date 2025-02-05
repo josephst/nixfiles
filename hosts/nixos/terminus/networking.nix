@@ -29,7 +29,9 @@ _: {
           IPv6AcceptRA = true;
         };
         domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
-        linkConfig.RequiredForOnline = "yes";
+        linkConfig = {
+          RequiredForOnline = "yes";
+        };
         dhcpV6Config = {
           UseDNS = false; # don't listen to the ipv6 DNS advertisements from DHCP server, use our own
         };
