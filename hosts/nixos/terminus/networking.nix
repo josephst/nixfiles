@@ -16,6 +16,7 @@ _: {
     networks = {
       "10-lan" = {
         matchConfig.Name = "enp5s0";
+        DHCP = "no";
         networkConfig = {
           Address = "192.168.1.10/24";
           Gateway = "192.168.1.1";
@@ -25,14 +26,12 @@ _: {
             # "2606:4700:4700::1111" # in case self-hosted DNS fails, use Cloudflare
           ];
           MulticastDNS = true;
-          # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
-          IPv6AcceptRA = true;
         };
         domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
         linkConfig = {
           RequiredForOnline = "yes";
         };
-        dhcpV6Config = {
+        ipv6AcceptRAConfig = {
           UseDNS = false; # don't listen to the ipv6 DNS advertisements from DHCP server, use our own
         };
       };
