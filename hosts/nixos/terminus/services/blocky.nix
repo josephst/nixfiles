@@ -61,9 +61,14 @@
   networking.firewall.allowedTCPPorts = [ 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];
 
-  systemd.services.blocky.after = [ "network.target" ];
-  systemd.services.blocky.serviceConfig = {
-    AmbientCapabilities = [ "CAP_NET_RAW" ]; # to bind 192.168.1.10 even if not yet assigned to the interface
-    CapabilityBoundingSet = [ "CAP_NET_RAW" ];
+  systemd.services.blocky = {
+    after = [ "network.target" ];
+    startLimitBurst = 10;
+    startLimitIntervalSec = 60;
+    serviceConfig = {
+      AmbientCapabilities = [ "CAP_NET_RAW" ]; # to bind 192.168.1.10 even if not yet assigned to the interface
+      CapabilityBoundingSet = [ "CAP_NET_RAW" ];
+      RestartSec = "5s";
+    };
   };
 }
