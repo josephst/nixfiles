@@ -41,6 +41,7 @@
     pkgs.htop
 
     inputs.ghostty.packages.${pkgs.system}.default
+    inputs.isd.packages.${pkgs.system}.default
 
     # hardware
     pkgs.lshw

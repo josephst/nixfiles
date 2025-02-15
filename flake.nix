@@ -69,9 +69,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
-    };
+    ghostty.url = "github:ghostty-org/ghostty";
+
+    isd.url = "github:isd-project/isd";
 
     hardware.url = "github:nixos/nixos-hardware";
   };
