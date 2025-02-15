@@ -25,6 +25,10 @@ buildPythonPackage rec {
     aiohttp
   ];
 
+  pythonRelaxDeps = [
+    "websockets"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
     --replace poetry.masonry.api poetry.core.masonry.api \
