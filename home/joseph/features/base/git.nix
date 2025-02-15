@@ -9,6 +9,7 @@ in
     userName = "Joseph Stahl";
     signing = {
       signByDefault = true;
+      format = "ssh";
     };
     aliases = {
       l = "log --pretty=oneline -n 50 --graph --abbrev-commit";
@@ -22,7 +23,6 @@ in
     extraConfig = {
       credential.helper = lib.mkIf isDarwin "/usr/local/bin/git-credential-manager";
       gpg = {
-        format = "ssh";
         ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       };
       init.defaultBranch = "main";
