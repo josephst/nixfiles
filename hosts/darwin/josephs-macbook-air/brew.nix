@@ -16,6 +16,7 @@ in
       "ghostty"
       "git-credential-manager"
       "iterm2"
+      "obsidian"
       "orbstack"
       "utm"
       "visual-studio-code"
