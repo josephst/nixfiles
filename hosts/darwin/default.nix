@@ -54,14 +54,10 @@
 
   programs.fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
 
-  # Make sure the nix daemon always runs
-  services.nix-daemon.enable = true;
-
   security.pam.enableSudoTouchIdAuth = true;
 
   nix = {
     gc = {
-      user = "root";
       automatic = true;
     };
     settings = {

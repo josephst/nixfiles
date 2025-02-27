@@ -6,6 +6,10 @@ _: {
       # theme = "catppuccin-frappe";
       default_layout = "default_layout";
     };
+
+    enableBashIntegration = false;
+    enableFishIntegration = false;
+    enableZshIntegration = false;
   };
 
   home.sessionVariables = {
