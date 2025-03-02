@@ -27,15 +27,39 @@ in
       };
       init.defaultBranch = "main";
       # Automatically track remote branch
-      push.autoSetupRemote = true;
-      fetch.prune = true;
-      pull.rebase = true;
+      push = {
+        autoSetupRemote = true;
+        default = "simple";
+        followTags = true;
+      };
+      fetch = {
+        prune = true;
+        pruneTags = true;
+        all = true;
+      };
+      rebase = {
+        autoSquash = true;
+        autoStash = true;
+        updateRefs = true;
+      };
+      pull = {
+        rebase = true;
+      };
+      brach.sort = "-committerdate";
       rebase.autosquash = true;
       # delta options
       delta.navigate = true;
       merge.conflictstyle = "zdiff3";
-      diff.colorMoved = "default";
-      rerere.enabled = true;
+      diff = {
+        colorMoved = "plain";
+        algorithm = "histogram";
+        renames = "true";
+      };
+      rerere = {
+        enabled = true;
+        autoupdate = true;
+      };
+      help.autocorrect = "prompt";
     } // lib.optionalAttrs isLinux { credential.credentialStore = "cache"; };
     delta = {
       enable = true;
