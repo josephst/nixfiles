@@ -29,6 +29,7 @@
     ./services/caddy.nix
     ./services/netdata.nix
     ./services/paperless.nix
+    ./services/steam.nix
     ./services/unifi.nix
     ./services/vscode-server.nix
     ## LLM
