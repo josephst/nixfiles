@@ -58,8 +58,6 @@
     ];
     variables = {
       LANG = "en_US.UTF-8";
-      EDITOR = lib.getExe pkgs.neovim;
-      VISUAL = lib.getExe pkgs.neovim;
     };
     systemPackages = with pkgs; [
       agenix

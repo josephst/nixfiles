@@ -55,6 +55,7 @@ in
     sessionVariables = {
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
       MANROFFOPT = "-c";
+      EDITOR = "micro";
     };
 
     stateVersion = "22.11";
