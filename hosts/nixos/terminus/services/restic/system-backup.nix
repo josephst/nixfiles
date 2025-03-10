@@ -36,6 +36,8 @@ in
       "*.gguf" # exclude models
     ];
 
+    extraBackupArgs = [ "--cleanup-cache" ];
+
     inherit pruneOpts;
     inherit checkOpts;
     timerConfig = {
@@ -43,11 +45,6 @@ in
       Persistent = true;
       RandomizedDelaySec = "1h";
     };
-
-    backupPrepareCommand = lib.optionalString config.services.paperless.enable ''
-      mkdir -p /var/lib/paperless/backups
-      ${config.services.paperless.dataDir}/paperless-manage document_exporter /var/lib/paperless/backups -d -p --no-progress-bar
-    '';
   };
 
   services.healthchecks-ping.system-backup = {

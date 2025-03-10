@@ -11,7 +11,7 @@ in
     settings = {
       PAPERLESS_FILENAME_FORMAT = "{{ created_year }}/{{ correspondent }}/{{ created }} {{ title }}";
     };
-    exporter.enable = true;
+    exporter.enable = true; # defaults to running at 1:30 AM
   };
 
   services.caddy.virtualHosts."paperless.${domain}" = {
