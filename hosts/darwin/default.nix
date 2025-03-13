@@ -10,11 +10,9 @@
   imports = [
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
-    inputs.srvos.darwinModules.common
-    inputs.srvos.darwinModules.mixins-terminfo
-    inputs.srvos.darwinModules.mixins-nix-experimental
-    inputs.srvos.darwinModules.mixins-trusted-nix-caches
-    ../common/default.nix
+    # ../common/default.nix
+    #
+    #
   ] ++ builtins.attrValues outputs.darwinModules;
 
   environment = {
@@ -22,7 +20,6 @@
       # most are in ../common/default.nix
     ];
     variables = {
-      SHELL = lib.getExe pkgs.zsh;
       SSH_AUTH_SOCK = "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     };
   };

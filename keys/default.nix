@@ -18,4 +18,9 @@
       vmware = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFCYQoSo3TdxLk4Augirkcbqefx2QQHh/543GDYfMODx joseph@vmware";
     };
   };
+
+  # it does not matter which device the git commit is being signed by (more interested in which *user* is signing)
+  signing = {
+    joseph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxKQtKkR7jkse0KMDvVZvwvNwT0gUkQ7At7Mcs9GEop joseph-git-signing";
+  };
 }

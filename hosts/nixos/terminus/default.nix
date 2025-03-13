@@ -2,25 +2,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 { pkgs
-, inputs
 , lib
 , ...
 }:
 {
   imports = [
-    inputs.disko.nixosModules.disko
-    inputs.srvos.nixosModules.server
-    inputs.srvos.nixosModules.mixins-mdns
-
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./networking.nix
     ./disko.nix
     ./disko-hdd-storage.nix # separate from other disko config to allow for adding drive w/o formatting existing drives
-
-    # Mixins
-    ../optional/lanzaboote.nix
-    ../optional/tailscale.nix
 
     # Services
     ./services/home-assistant
@@ -34,25 +24,17 @@
     ./services/vscode-server.nix
     ## LLM
     ./services/ollama.nix
-    ./services/open-webui.nix
     ## Media & Sharing
     ./services/servarr
     ./services/samba.nix
     ## Backup
     ./services/restic-server.nix
 
-    # Specific to this host
     ## Backups
     ./services/restic
     ## Dashboard
     ./services/homepage
   ];
-
-  myconfig = {
-    # TODO: remove these modules?
-    gui.enable = false; # headless mode
-    llm.enable = true;
-  };
 
   systemd.tmpfiles.rules = [ "d /storage - - - - -" ];
 
@@ -71,8 +53,6 @@
         "/storage"
       ];
     };
-    smartd.enable = true;
-    tailscale.useRoutingFeatures = "both"; # enable IP forwarding for tailscale exit node
     networkd-dispatcher = {
       enable = true;
       rules."50-tailscale" = {
