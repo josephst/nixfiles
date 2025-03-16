@@ -37,6 +37,7 @@
       pkgs.git
       pkgs.nix-output-monitor
       pkgs.wezterm.terminfo
+      pkgs.ghostty.terminfo
     ] ++ lib.optionals isInstall [
       inputs.isd.packages.${pkgs.system}.default # interactive systemd
       pkgs.agenix
