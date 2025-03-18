@@ -38,6 +38,7 @@
   systemd.tmpfiles.rules = [ "d /storage - - - - -" ];
 
   boot = {
+    plymouth.enable = false;
     kernelPackages = pkgs.linuxPackages_latest;
     binfmt.emulatedSystems = [ "aarch64-linux" ];
   };

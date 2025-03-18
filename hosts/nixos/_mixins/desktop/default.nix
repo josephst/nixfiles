@@ -11,7 +11,7 @@
     ./features
   ] ++ lib.optional (builtins.pathExists (./. + "/${desktop}")) ./${desktop};
 
-  boot.plymouth.enable = true;
+  boot.plymouth.enable = lib.mkDefault true;
 
   services = {
     dbus.enable = true;
