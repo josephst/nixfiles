@@ -1,18 +1,17 @@
 # modified from https://github.com/wimpysworld/nix-config (MIT)
-{
-  inputs,
-  outputs,
-  stateVersion,
-  ...
+{ inputs
+, outputs
+, stateVersion
+, ...
 }:
 {
   # Helper function for generating NixOS configs
   mkNixos =
-    {
-      hostname,
-      username ? "joseph",
-      desktop ? null,
-      platform ? "x86_64-linux",
+    { hostname
+    , username ? "joseph"
+    , desktop ? null
+    , platform ? "x86_64-linux"
+    ,
     }:
     let
       isISO = builtins.substring 0 4 hostname == "iso-";
@@ -51,11 +50,11 @@
     };
 
   mkDarwin =
-    {
-      desktop ? "aqua",
-      hostname,
-      username ? "joseph",
-      platform ? "aarch64-darwin",
+    { desktop ? "aqua"
+    , hostname
+    , username ? "joseph"
+    , platform ? "aarch64-darwin"
+    ,
     }:
     let
       isISO = false;

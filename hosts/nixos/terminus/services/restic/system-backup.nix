@@ -1,5 +1,4 @@
 { config
-, lib
 , ...
 }:
 # ROLE: to back up this machine to B2 storage using Restic

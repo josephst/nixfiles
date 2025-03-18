@@ -9,6 +9,7 @@ let
     ];
     text = builtins.readFile ./${name}.sh;
   };
-in {
+in
+{
   home.packages = [ shellApplication ];
 }

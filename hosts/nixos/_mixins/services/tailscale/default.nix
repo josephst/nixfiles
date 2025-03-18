@@ -1,11 +1,10 @@
-{
-  config,
-  hostname,
-  isWorkstation,
-  lib,
-  pkgs,
-  username,
-  ...
+{ config
+, hostname
+, isWorkstation
+, lib
+, pkgs
+, username
+, ...
 }:
 let
   # Declare which hosts have Tailscale enabled.

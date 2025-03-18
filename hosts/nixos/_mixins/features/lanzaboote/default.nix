@@ -1,6 +1,5 @@
 { lib
 , pkgs
-, inputs
 , hostname
 , ...
 }:
@@ -8,7 +7,8 @@ let
   installOn = [
     "terminus"
   ];
-in lib.mkIf (builtins.elem hostname installOn) {
+in
+lib.mkIf (builtins.elem hostname installOn) {
   boot = {
     loader = {
       efi.canTouchEfiVariables = false;

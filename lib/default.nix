@@ -1,9 +1,8 @@
 # from https://github.com/wimpysworld/nix-config (MIT License)
-{
-  inputs,
-  outputs,
-  stateVersion,
-  ...
+{ inputs
+, outputs
+, stateVersion
+, ...
 }:
 let
   helpers = import ./helpers.nix { inherit inputs outputs stateVersion; };

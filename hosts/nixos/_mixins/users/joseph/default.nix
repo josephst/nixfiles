@@ -1,7 +1,8 @@
-{config, ...}:
+{ config, ... }:
 let
   keys = import ../../../../../keys;
-in {
+in
+{
   age.secrets.joseph.file = ../../../../../secrets/users/joseph.age;
 
   users.users.joseph = {

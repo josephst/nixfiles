@@ -1,10 +1,9 @@
-{
-  config,
-  hostname,
-  isWorkstation,
-  lib,
-  username,
-  ...
+{ config
+, hostname
+, isWorkstation
+, lib
+, username
+, ...
 }:
 let
   unmanagedInterfaces =
@@ -14,8 +13,9 @@ let
   trustedInterfaces =
     lib.optionals config.services.tailscale.enable [ "tailscale0" ];
 
-  fallbackDns = ["1.1.1.1#one.one.one.one"];
-in {
+  fallbackDns = [ "1.1.1.1#one.one.one.one" ];
+in
+{
   imports = lib.optional (builtins.pathExists (./. + "/${hostname}.nix")) ./${hostname}.nix;
 
   networking = {

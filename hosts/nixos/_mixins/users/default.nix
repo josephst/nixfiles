@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  username,
-  ...
+{ lib
+, pkgs
+, username
+, ...
 }:
 {
   imports = [ ./root ] ++ lib.optional (builtins.pathExists (./. + "/${username}")) ./${username};

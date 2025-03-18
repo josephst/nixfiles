@@ -1,8 +1,12 @@
-{ config, lib, pkgs, ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
-in {
+in
+{
   programs = {
     gh = {
       enable = true;
