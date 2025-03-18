@@ -20,9 +20,5 @@ lib.mkIf (lib.elem "${hostname}" installOn) {
     pkgs.gnome-remote-desktop
   ];
 
-  services.xrdp = {
-    enable = true;
-    defaultWindowManager = "gnome-remote-desktop";
-    openFirewall = true;
-  };
+  # services.gnome.gnome-remote-desktop.enable = true; # enabled by default if gnome is enabled
 }

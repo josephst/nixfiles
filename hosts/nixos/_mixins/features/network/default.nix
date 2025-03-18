@@ -24,7 +24,7 @@ in
       inherit trustedInterfaces;
     };
     hostName = hostname;
-    domain = "homelab.josephstahl.com";
+    domain = lib.mkDefault "homelab.josephstahl.com";
     networkmanager = lib.mkIf isWorkstation {
       # Use resolved for DNS resolution; tailscale MagicDNS requires it
       dns = "systemd-resolved";
