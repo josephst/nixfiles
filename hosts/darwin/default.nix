@@ -3,35 +3,37 @@
 { inputs
 , outputs
 , pkgs
+, lib
+, platform
+, hostname
 , ...
 }:
 {
   imports = [
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
-    # ../common/default.nix
-    #
-    #
+    inputs.nix-index-database.darwinModules.nix-index
+
+    ./${hostname}
+    ./_mixins/desktop
+    ./_mixins/features
+    ./_mixins/scripts
+    ./_mixins/users
   ] ++ builtins.attrValues outputs.darwinModules;
 
   environment = {
     systemPackages = [
-      # most are in ../common/default.nix
+      pkgs.agenix
+      pkgs.git
+      pkgs.nix-output-monitor
+      pkgs.nvd
     ];
     variables = {
+      EDITOR = "micro";
+      SYSTEMD_EDITOR = "micro";
+      VISUAL = "micro";
       SSH_AUTH_SOCK = "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     };
-  };
-
-  fonts = {
-    packages = with pkgs; [
-      source-code-pro
-      font-awesome
-      nerd-fonts.fira-code
-      nerd-fonts.hack
-      nerd-fonts.zed-mono
-      iosevka-bin
-    ];
   };
 
   homebrew = {
@@ -48,9 +50,10 @@
     brews = [ "git" ];
   };
 
-  programs.fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
-
   security.pam.services.sudo_local.touchIdAuth = true;
+
+  networking.hostName = hostname;
+  networking.computerName = hostname;
 
   nix = {
     gc = {
@@ -59,6 +62,22 @@
     settings = {
       warn-dirty = false;
     };
+  };
+
+  nixpkgs = {
+    overlays = builtins.attrValues outputs.overlays;
+    config = {
+      allowUnfree = true;
+    };
+    hostPlatform = lib.mkDefault "${platform}";
+  };
+
+  programs = {
+    fish = {
+      enable = true;
+      loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
+    };
+    nix-index-database.comma.enable = true;
   };
 
   system = {
