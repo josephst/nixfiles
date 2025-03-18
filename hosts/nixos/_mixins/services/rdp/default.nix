@@ -23,6 +23,7 @@ lib.mkIf (lib.elem "${hostname}" installOn) {
   # services.gnome.gnome-remote-desktop.enable = true; # enabled by default if gnome is enabled
 
   systemd.services."gnome-remote-desktop".wantedBy = [ "graphical.target" ];
+  systemd.services."gnome-remote-desktop-configuration".wantedBy = [ "graphical.target" ];
 
   networking.firewall.allowedTCPPorts = [
     3389
