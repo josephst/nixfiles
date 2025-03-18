@@ -3,7 +3,6 @@
 , username
 , lib
 , inputs
-, outputs
 , options
 , ...
 }:
@@ -32,7 +31,7 @@ in
     ./_mixins/scripts
     ./_mixins/services
     ./_mixins/users
-  ] ++ (builtins.attrValues outputs.homeManagerModules);
+  ];
 
   nix = {
     gc = {
@@ -51,7 +50,11 @@ in
     inherit username;
     # inherit stateVersion;
     stateVersion = "22.11";
-    homeDirectory = if isDarwin then "/Users/${username}" else "/home/${username}";
+    homeDirectory =
+      if isDarwin then
+        "/Users/${username}"
+      else
+        "/home/${username}";
 
     sessionVariables = {
       EDITOR = "micro";
@@ -123,16 +126,14 @@ in
       # link nixpkgs-manual for quick reference
       "Documents/nixpkgs-manual.html".source = "${pkgs.nixpkgs-manual}/share/doc/nixpkgs/manual.html";
 
-      ".ssh/allowed_signers" = {
+      ".ssh/allowed_signers" = lib.mkIf (gitSigningKey != null && config.programs.git.userEmail != null) {
         text = "${config.programs.git.userEmail} ${gitSigningKey}";
-        enable = gitSigningKey != null;
       };
     };
   };
 
   xdg = {
     enable = true;
-
     userDirs = {
       enable = isLinux;
       createDirectories = true;

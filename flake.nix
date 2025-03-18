@@ -7,14 +7,12 @@
     nixpkgs-staging.url = "github:nixos/nixpkgs/staging-next";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    # home-manager
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # nix-darwin
-    darwin = {
+    nix-darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -102,7 +100,6 @@
         (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
       formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
       nixosModules = import ./modules/nixos;
-      homeManagerModules = import ./modules/home-manager;
 
       # NixOS configuration entrypoint
       nixosConfigurations = {
@@ -110,13 +107,13 @@
           hostname = "terminus";
           desktop = "gnome";
         };
-        # orbstack = helper.mkNixos {
-        #   hostname = "orbstack";
-        # };
-        # vmware = helper.mkNixos {
-        #   hostname = "vmware";
-        #   desktop = "gnome";
-        # };
+        orbstack = helper.mkNixos {
+          hostname = "orbstack";
+        };
+        vmware = helper.mkNixos {
+          hostname = "vmware";
+          desktop = "gnome";
+        };
       };
 
       darwinConfigurations = {

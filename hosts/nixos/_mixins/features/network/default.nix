@@ -20,7 +20,7 @@ in
 
   networking = {
     firewall = {
-      enable = true;
+      enable = lib.mkDefault true;
       inherit trustedInterfaces;
     };
     hostName = hostname;

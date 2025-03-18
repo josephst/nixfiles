@@ -6,6 +6,10 @@
 , lib
 , platform
 , hostname
+, username
+, stateVersion
+, isWorkstation
+, isInstall
 , ...
 }:
 {
@@ -19,7 +23,7 @@
     ./_mixins/features
     ./_mixins/scripts
     ./_mixins/users
-  ] ++ builtins.attrValues outputs.darwinModules;
+  ];
 
   environment = {
     systemPackages = [
@@ -78,6 +82,15 @@
       loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
     };
     nix-index-database.comma.enable = true;
+  };
+
+  home-manager = {
+    extraSpecialArgs = {
+      inherit inputs outputs hostname username stateVersion isWorkstation isInstall;
+    };
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = ".backup-pre-hm";
   };
 
   system = {

@@ -18,7 +18,7 @@
   services.logrotate.enable = true;
 
   # resolv.conf: NixOS doesn't use systemd-resolved
-  services.resolved.enable = false;
+  services.resolved.enable = lib.mkForce false;
   environment.etc."resolv.conf".source = "/opt/orbstack-guest/etc/resolv.conf";
 
   # faster DHCP - OrbStack uses SLAAC exclusively

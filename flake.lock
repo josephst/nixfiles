@@ -487,6 +487,26 @@
         "type": "github"
       }
     },
+    "nix-darwin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1742165923,
+        "narHash": "sha256-WKzuVsHXjuxYjS9KxKdpoPWpT37LofyS5llSssEw058=",
+        "owner": "lnl7",
+        "repo": "nix-darwin",
+        "rev": "95eac71bf52b271523d0ca81dbbeb3182990fc24",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lnl7",
+        "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
     "nix-filter": {
       "locked": {
         "lastModified": 1731533336,
@@ -740,7 +760,6 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "darwin": "darwin_2",
         "deploy-rs": "deploy-rs",
         "disko": "disko",
         "ghostty": "ghostty",
@@ -748,6 +767,7 @@
         "isd": "isd",
         "lanzaboote": "lanzaboote",
         "llama-cpp": "llama-cpp",
+        "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
