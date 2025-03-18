@@ -42,7 +42,7 @@ lib.mkIf (lib.elem "${hostname}" installOn) {
         mkdir -p ${sslCert} || true
         ${lib.getExe pkgs.openssl} req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj /C=US/ST=NONE/L=NONE/O=GNOME/CN=gnome.org -out ${sslCert}/tls.crt -keyout ${sslCert}/tls.key
         chown root:gnome-remote-desktop ${sslCert}/tls.crt ${sslCert}/tls.key
-        chmod 440${sslCert}/tls.crt ${sslCert}/tls.key
+        chmod 440 ${sslCert}/tls.crt ${sslCert}/tls.key
       fi
     '';
 
