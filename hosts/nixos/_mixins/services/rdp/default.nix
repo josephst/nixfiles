@@ -24,6 +24,13 @@ lib.mkIf (lib.elem "${hostname}" installOn) {
 
   systemd.services."gnome-remote-desktop".wantedBy = [ "graphical.target" ];
 
+  networking.firewall.allowedTCPPorts = [
+    3389
+  ];
+  networking.firewall.allowedUDPPorts = [
+    3389
+  ];
+
   # systemd.services."gnome-remote-desktop" = {
   #   # a translation of upstream systemd service
   #   enable = true;
