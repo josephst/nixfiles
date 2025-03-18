@@ -22,32 +22,32 @@ lib.mkIf (lib.elem "${hostname}" installOn) {
 
   # services.gnome.gnome-remote-desktop.enable = true; # enabled by default if gnome is enabled
 
-  systemd.services."gnome-remote-desktop-nixos" = {
-    # a translation of upstream systemd service
-    enable = true;
-    description = "GNOME Remote Desktop";
+  # systemd.services."gnome-remote-desktop" = {
+  #   # a translation of upstream systemd service
+  #   enable = true;
+  #   description = "GNOME Remote Desktop";
 
-    serviceConfig = {
-      Type = "dbus";
-      BusName = "org.gnome.RemoteDesktop";
-      Restart = "on-failure";
-      User = "gnome-remote-desktop";
-      ExecStart="${pkgs.gnome-remote-desktop}/libexec/gnome-remote-desktop-daemon --system";
-    };
+  #   serviceConfig = {
+  #     Type = "dbus";
+  #     BusName = "org.gnome.RemoteDesktop";
+  #     Restart = "on-failure";
+  #     User = "gnome-remote-desktop";
+  #     ExecStart="${pkgs.gnome-remote-desktop}/libexec/gnome-remote-desktop-daemon --system";
+  #   };
 
-    preStart = let
-      sslCert = "~/.local/share/gnome-remote-desktop";
-    in ''
-      if [ ! -s ${sslCert}/tls.crt -o ! -s ${sslCert}/tls.key ]; then
-        mkdir -p ${sslCert} || true
-        ${lib.getExe pkgs.openssl} req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj /C=US/ST=NONE/L=NONE/O=GNOME/CN=gnome.org -out ${sslCert}/tls.crt -keyout ${sslCert}/tls.key
-        chown root:gnome-remote-desktop ${sslCert}/tls.crt ${sslCert}/tls.key
-        chmod 440 ${sslCert}/tls.crt ${sslCert}/tls.key
-      fi
-    '';
+  #   preStart = let
+  #     sslCert = "~/.local/share/gnome-remote-desktop";
+  #   in ''
+  #     if [ ! -s ${sslCert}/tls.crt -o ! -s ${sslCert}/tls.key ]; then
+  #       mkdir -p ${sslCert} || true
+  #       ${lib.getExe pkgs.openssl} req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj /C=US/ST=NONE/L=NONE/O=GNOME/CN=gnome.org -out ${sslCert}/tls.crt -keyout ${sslCert}/tls.key
+  #       chown root:gnome-remote-desktop ${sslCert}/tls.crt ${sslCert}/tls.key
+  #       chmod 440 ${sslCert}/tls.crt ${sslCert}/tls.key
+  #     fi
+  #   '';
 
-    wantedBy = [ "graphical.target" ];
-  };
+  #   wantedBy = [ "graphical.target" ];
+  # };
 
   # Disable the GNOME3/GDM auto-suspend feature that cannot be disabled in GUI!
   # If no user is logged in, the machine will power down after 20 minutes.
