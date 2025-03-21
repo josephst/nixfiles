@@ -1,0 +1,8 @@
+{ ... }:
+{
+  imports = [
+    ./homebrew
+  ];
+
+  environment.systemPackages = [ ];
+}

@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (config.networking) domain;
+  domain = "homelab.josephstahl.com";
 in
 {
   age.secrets.dnsApiToken = {

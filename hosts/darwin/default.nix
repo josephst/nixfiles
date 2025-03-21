@@ -4,57 +4,46 @@
 , outputs
 , pkgs
 , lib
+, platform
+, hostname
+, username
+, stateVersion
+, isWorkstation
+, isInstall
 , ...
 }:
 {
   imports = [
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
-    inputs.srvos.darwinModules.common
-    inputs.srvos.darwinModules.mixins-terminfo
-    inputs.srvos.darwinModules.mixins-nix-experimental
-    inputs.srvos.darwinModules.mixins-trusted-nix-caches
-    ../common/default.nix
-  ] ++ builtins.attrValues outputs.darwinModules;
+    inputs.nix-index-database.darwinModules.nix-index
+
+    ./${hostname}
+    ./_mixins/desktop
+    ./_mixins/features
+    ./_mixins/scripts
+    ./_mixins/users
+  ];
 
   environment = {
     systemPackages = [
-      # most are in ../common/default.nix
+      pkgs.agenix
+      pkgs.git
+      pkgs.nix-output-monitor
+      pkgs.nvd
     ];
     variables = {
-      SHELL = lib.getExe pkgs.zsh;
+      EDITOR = "micro";
+      SYSTEMD_EDITOR = "micro";
+      VISUAL = "micro";
       SSH_AUTH_SOCK = "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     };
   };
 
-  fonts = {
-    packages = with pkgs; [
-      source-code-pro
-      font-awesome
-      nerd-fonts.fira-code
-      nerd-fonts.hack
-      nerd-fonts.zed-mono
-      iosevka-bin
-    ];
-  };
-
-  homebrew = {
-    enable = true;
-    global = {
-      # only update with `brew update` (or `just update`)
-      autoUpdate = false;
-    };
-    onActivation = {
-      autoUpdate = true;
-      upgrade = true;
-      cleanup = "zap";
-    };
-    brews = [ "git" ];
-  };
-
-  programs.fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
-
   security.pam.services.sudo_local.touchIdAuth = true;
+
+  networking.hostName = hostname;
+  networking.computerName = hostname;
 
   nix = {
     gc = {
@@ -62,7 +51,34 @@
     };
     settings = {
       warn-dirty = false;
+      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "@admin" ];
     };
+  };
+
+  nixpkgs = {
+    overlays = builtins.attrValues outputs.overlays;
+    config = {
+      allowUnfree = true;
+    };
+    hostPlatform = lib.mkDefault "${platform}";
+  };
+
+  programs = {
+    fish = {
+      enable = true;
+      loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
+    };
+    nix-index-database.comma.enable = true;
+  };
+
+  home-manager = {
+    extraSpecialArgs = {
+      inherit inputs outputs hostname stateVersion username isWorkstation isInstall;
+    };
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = ".backup-pre-hm";
   };
 
   system = {

@@ -7,14 +7,12 @@
     nixpkgs-staging.url = "github:nixos/nixpkgs/staging-next";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    # home-manager
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # nix-darwin
-    darwin = {
+    nix-darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -73,85 +71,54 @@
 
     isd.url = "github:isd-project/isd";
 
-    hardware.url = "github:nixos/nixos-hardware";
+    nixos-hardware.url = "github:nixos/nixos-hardware";
   };
 
   outputs =
     { self
     , nixpkgs
-    , darwin
     , treefmt-nix
     , ...
       # secrets
     }@inputs:
     let
       inherit (self) outputs;
-      supportedSystems = [
-        "x86_64-linux"
-        # "x86_64-darwin"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      forLinuxSystems = nixpkgs.lib.genAttrs (
-        builtins.filter (nixpkgs.lib.hasSuffix "linux") supportedSystems
-      );
 
-      mkNixos =
-        modules:
-        nixpkgs.lib.nixosSystem {
-          modules = modules ++ [
-            ./hosts/nixos
-          ];
-          specialArgs = {
-            inherit inputs outputs;
-          };
-        };
+      stateVersion = "24.11";
+      helper = import ./lib { inherit inputs outputs stateVersion; };
 
-      treefmtEval = forAllSystems (
+      treefmtEval = helper.forAllSystems (
         system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix
       );
     in
     {
       overlays = import ./overlays { inherit inputs; };
       packages = nixpkgs.lib.attrsets.recursiveUpdate
-        (forAllSystems (
+        (helper.forAllSystems (
           system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }
         ))
-        (forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
-      # legacyPackages = forAllSystems (system: import ./legacyPackages { pkgs = nixpkgs.legacyPackages.${system}; });
-      formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
+        (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
+      formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
       nixosModules = import ./modules/nixos;
-      darwinModules = import ./modules/darwin;
-      homeManagerModules = import ./modules/home-manager;
 
       # NixOS configuration entrypoint
       nixosConfigurations = {
-        terminus = mkNixos [
-          ./hosts/nixos/terminus
-          ./users/joseph.nix
-        ];
-        nixos-orbstack = mkNixos [
-          ./hosts/nixos/orbstack
-          ./users/joseph.nix
-        ];
-        vmware = mkNixos [
-          ./hosts/nixos/vmware
-          ./users/joseph.nix
-        ];
+        terminus = helper.mkNixos {
+          hostname = "terminus";
+          # desktop = "gnome";
+        };
+        orbstack = helper.mkNixos {
+          hostname = "orbstack";
+        };
+        vmware = helper.mkNixos {
+          hostname = "vmware";
+          desktop = "gnome";
+        };
       };
 
       darwinConfigurations = {
-        Josephs-MacBook-Air = darwin.lib.darwinSystem {
-          # darwin-rebuild switch --flake .
-          modules = [
-            ./hosts/darwin/default.nix
-            ./hosts/darwin/josephs-macbook-air
-            ./users/joseph.nix
-          ];
-          specialArgs = {
-            inherit inputs outputs;
-          };
+        Josephs-MacBook-Air = helper.mkDarwin {
+          hostname = "Josephs-MacBook-Air";
         };
       };
 
@@ -170,10 +137,8 @@
         };
       };
 
-      # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-
       # `nix develop`
-      devShells = forAllSystems (system: import ./shell.nix { pkgs = nixpkgs.legacyPackages.${system}; });
+      devShells = helper.forAllSystems (system: import ./shell.nix { pkgs = nixpkgs.legacyPackages.${system}; });
     };
 
   # configure nix

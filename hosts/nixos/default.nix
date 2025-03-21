@@ -1,63 +1,140 @@
 # This file holds config used on all NixOS hosts
 { inputs
 , outputs
+, config
+, hostname
+, isWorkstation
+, isInstall
 , pkgs
+, platform
 , lib
+, modulesPath
+, username
+, stateVersion
 , ...
 }:
 {
   imports = [
+    inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.default
-    inputs.srvos.nixosModules.common
-    inputs.srvos.nixosModules.mixins-nix-experimental
-    inputs.srvos.nixosModules.mixins-trusted-nix-caches
-    inputs.srvos.nixosModules.mixins-terminfo
-    ../common/default.nix
-  ] ++ (builtins.attrValues outputs.nixosModules);
+    inputs.lanzaboote.nixosModules.lanzaboote
+    inputs.nix-index-database.nixosModules.nix-index
+    (modulesPath + "/installer/scan/not-detected.nix")
 
-  services = {
-    resolved = {
-      enable = lib.mkDefault true;
-      dnsovertls = "opportunistic";
-      extraConfig = ''
-        DNSStubListenerExtra=192.168.1.10
-        # Cache=no # not necessary; systemd will not cache responses from host-local IP address (such as 127.0.0.1)
-      '';
+    ./${hostname}
+    ./_mixins/services
+    ./_mixins/features
+    ./_mixins/users
+  ] ++ (builtins.attrValues outputs.nixosModules)
+  ++ lib.optional isWorkstation ./_mixins/desktop;
+
+  # always install these for all users on nixos systems
+  environment = {
+    systemPackages = [
+      pkgs.deploy-rs.deploy-rs
+      pkgs.htop
+      pkgs.git
+      pkgs.nix-output-monitor
+      pkgs.wezterm.terminfo
+      pkgs.ghostty.terminfo
+    ] ++ lib.optionals isInstall [
+      inputs.isd.packages.${pkgs.system}.default # interactive systemd
+      pkgs.agenix
+      pkgs.nvd
+      pkgs.rsync
+
+      # hardware
+      pkgs.nvme-cli
+      pkgs.lshw
+      pkgs.usbutils
+      pkgs.pciutils
+      pkgs.smartmontools
+    ];
+
+    variables = {
+      EDITOR = "micro";
+      SYSTEMD_EDITOR = "micro";
+      VISUAL = "micro";
     };
   };
 
-  networking = {
-    nftables.enable = lib.mkDefault true;
+  age = {
+    secrets.ghToken = {
+      file = ../../secrets/ghToken.age;
+      mode = "0440";
+    };
   };
 
-  system.rebuild.enableNg = true; # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md
+  nix = {
+    channel.enable = false;
+    settings = {
+      connect-timeout = lib.mkDefault 5;
+      experimental-features = [ "nix-command" "flakes" ]
+        ++ lib.optional (lib.versionOlder (lib.versions.majorMinor config.nix.package.version) "2.22") "repl-flake";
+      trusted-users = [ "@wheel" ];
+      log-lines = lib.mkDefault 25;
+      builders-use-substitutes = true;
+      cores = 0;
+    };
+    extraOptions = ''
+      !include ${config.age.secrets.ghToken.path}
+    '';
+  };
 
-  hardware.enableRedistributableFirmware = true;
+  nixpkgs = {
+    overlays = builtins.attrValues outputs.overlays;
+    config = {
+      allowUnfree = true;
+    };
+    hostPlatform = lib.mkDefault "${platform}";
+  };
 
-  # always install these for all users on nixos systems
-  environment.systemPackages = [
-    # most are in ../common/default.nix
-    pkgs.htop
+  programs = {
+    _1password.enable = true;
+    command-not-found.enable = false;
+    fish = {
+      enable = true;
+      useBabelfish = true;
+      shellAliases = {
+        nano = "micro";
+      };
+    };
+    nh = {
+      clean = {
+        enable = true;
+        extraArgs = "--keep-since 14d --keep 10";
+      };
+      enable = true;
+      flake = "/home/${username}/dev/nixfiles";
+    };
+    nix-index-database.comma.enable = isInstall;
+    nix-ld = lib.mkIf isInstall {
+      enable = true;
+    };
+  };
 
-    inputs.ghostty.packages.${pkgs.system}.default
-    inputs.isd.packages.${pkgs.system}.default
+  home-manager = {
+    extraSpecialArgs = {
+      inherit inputs outputs hostname username stateVersion isWorkstation isInstall;
+    };
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = ".backup-pre-hm";
+  };
 
-    # hardware
-    pkgs.lshw
-    pkgs.usbutils
-    pkgs.pciutils
-    pkgs.smartmontools
-  ];
+  services = lib.mkIf isInstall {
+    fwupd.enable = true;
+    hardware.bolt.enable = true;
+    smartd.enable = true;
+  };
 
-  # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2411.section.md
-  systemd.enableStrictShellChecks = false; # TODO: broken because of linger-users script
+  systemd = {
+    extraConfig = "DefaultTimeoutStopSec=10s";
+  };
 
-  # TODO: move to the `users/joseph` file
-  # currently causing problems, since systemd option doesn't exist on macOS
-  systemd.tmpfiles.rules = [
-    "d /home/joseph/.ssh 0700 joseph users -"
-    "f /home/joseph/.ssh/id_ed25519 0600 joseph users -"
-    "f /home/joseph/.ssh/id_ed25519.pub 0600 joseph users -"
-  ];
+  system = {
+    inherit stateVersion;
+    rebuild.enableNg = true; # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md
+  };
 }
