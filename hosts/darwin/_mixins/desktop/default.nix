@@ -1,9 +1,9 @@
-{ pkgs, ... }:
+{ ... }:
 {
   imports = [
     ./apps
     ./features
   ];
 
-  environment.systemPackages = [];
+  environment.systemPackages = [ ];
 }

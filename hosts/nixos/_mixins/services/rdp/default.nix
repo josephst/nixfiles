@@ -1,9 +1,8 @@
-{
-  hostname,
-  desktop,
-  lib,
-  pkgs,
-  ...
+{ hostname
+, desktop
+, lib
+, pkgs
+, ...
 }:
 let
   installOn = [
@@ -12,8 +11,10 @@ let
 in
 lib.mkIf (lib.elem "${hostname}" installOn) {
   assertions = [
-    { assertion = desktop == "gnome";
-      message = "RDP is only configured on GNOME desktop."; }
+    {
+      assertion = desktop == "gnome";
+      message = "RDP is only configured on GNOME desktop.";
+    }
   ];
 
   environment.systemPackages = [

@@ -28,6 +28,7 @@ in
           ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
           ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
         };
+        user.signingKey = lib.mkIf config.home.file.".ssh/identity.pub".enable "~/.ssh/identity.pub";
       };
     };
   };

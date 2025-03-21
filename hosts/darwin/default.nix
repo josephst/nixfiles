@@ -40,20 +40,6 @@
     };
   };
 
-  homebrew = {
-    enable = true;
-    global = {
-      # only update with `brew update` (or `just update`)
-      autoUpdate = false;
-    };
-    onActivation = {
-      autoUpdate = true;
-      upgrade = true;
-      cleanup = "zap";
-    };
-    brews = [ "git" ];
-  };
-
   security.pam.services.sudo_local.touchIdAuth = true;
 
   networking.hostName = hostname;
@@ -65,6 +51,8 @@
     };
     settings = {
       warn-dirty = false;
+      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "@admin" ];
     };
   };
 

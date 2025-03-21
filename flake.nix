@@ -105,7 +105,7 @@
       nixosConfigurations = {
         terminus = helper.mkNixos {
           hostname = "terminus";
-          desktop = "gnome";
+          # desktop = "gnome";
         };
         orbstack = helper.mkNixos {
           hostname = "orbstack";

@@ -1,4 +1,4 @@
-{ ... }:
+_:
 let
   keys = import ../../../../../keys;
 in

@@ -72,6 +72,7 @@
       connect-timeout = lib.mkDefault 5;
       experimental-features = [ "nix-command" "flakes" ]
         ++ lib.optional (lib.versionOlder (lib.versions.majorMinor config.nix.package.version) "2.22") "repl-flake";
+      trusted-users = [ "@wheel" ];
       log-lines = lib.mkDefault 25;
       builders-use-substitutes = true;
       cores = 0;
