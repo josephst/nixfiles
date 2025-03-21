@@ -4,6 +4,7 @@
 , lib
 , inputs
 , options
+, stateVersion
 , ...
 }:
 let
@@ -48,8 +49,7 @@ in
   # Home Manager configuration/ options
   home = {
     inherit username;
-    # inherit stateVersion;
-    stateVersion = "22.11";
+    inherit stateVersion;
     homeDirectory =
       if isDarwin then
         "/Users/${username}"

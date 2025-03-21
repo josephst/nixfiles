@@ -84,7 +84,7 @@
     let
       inherit (self) outputs;
 
-      stateVersion = "22.11"; # TODO: bring up to latest version, *carefully!*
+      stateVersion = "24.11";
       helper = import ./lib { inherit inputs outputs stateVersion; };
 
       treefmtEval = helper.forAllSystems (

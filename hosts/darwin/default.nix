@@ -7,7 +7,6 @@
 , platform
 , hostname
 , username
-, stateVersion
 , isWorkstation
 , isInstall
 , ...
@@ -74,7 +73,7 @@
 
   home-manager = {
     extraSpecialArgs = {
-      inherit inputs outputs hostname username stateVersion isWorkstation isInstall;
+      inherit inputs outputs hostname username isWorkstation isInstall;
     };
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -82,7 +81,7 @@
   };
 
   system = {
-    stateVersion = 4; # nix-darwin stateVersion
+    stateVersion = 6; # nix-darwin stateVersion
     defaults = {
       # Don't show recent applications in the dock
       dock.show-recents = false;

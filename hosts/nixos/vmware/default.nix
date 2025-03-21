@@ -12,7 +12,4 @@
   ];
 
   virtualisation.vmware.guest.enable = true;
-
-  system.stateVersion = lib.mkForce "25.05";
-  # TODO: inherit stateVersion
 }
