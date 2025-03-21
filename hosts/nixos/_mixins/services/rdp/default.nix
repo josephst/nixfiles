@@ -9,7 +9,7 @@ let
     "terminus"
   ];
 in
-lib.mkIf (lib.elem "${hostname}" installOn) {
+lib.mkIf (lib.elem "${hostname}" installOn && desktop != null) {
   assertions = [
     {
       assertion = desktop == "gnome";
