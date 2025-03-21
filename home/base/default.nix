@@ -84,7 +84,6 @@
         };
       };
     };
-    thefuck.enable = true;
     lazygit.enable = true;
     home-manager.enable = true;
     jq.enable = true;

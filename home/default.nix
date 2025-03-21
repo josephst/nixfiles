@@ -48,8 +48,7 @@ in
 
   # Home Manager configuration/ options
   home = {
-    inherit username;
-    inherit stateVersion;
+    inherit username stateVersion;
     homeDirectory =
       if isDarwin then
         "/Users/${username}"

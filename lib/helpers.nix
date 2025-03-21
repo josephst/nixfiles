@@ -71,6 +71,7 @@
           hostname
           platform
           username
+          stateVersion
           isInstall
           isISO
           isLaptop

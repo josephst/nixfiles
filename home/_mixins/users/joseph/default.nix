@@ -29,7 +29,8 @@ in
           ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
           ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
         };
-        user.signingKey = keys.signing.joseph;
+        # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
+        user.signingKey = "key::${keys.signing.joseph}";
       };
     };
   };
