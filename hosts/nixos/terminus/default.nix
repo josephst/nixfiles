@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 { pkgs
 , lib
+, inputs
 , ...
 }:
 {
@@ -11,6 +12,7 @@
     ./hardware-configuration.nix
     ./disko.nix
     ./disko-hdd-storage.nix # separate from other disko config to allow for adding drive w/o formatting existing drives
+    ./networking.nix
 
     # Services
     ./services/home-assistant
@@ -33,6 +35,8 @@
     ./services/restic
     ## Dashboard
     ./services/homepage
+
+    inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
   systemd.tmpfiles.rules = [ "d /storage - - - - -" ];
@@ -41,7 +45,18 @@
     plymouth.enable = false;
     kernelPackages = pkgs.linuxPackages_latest;
     binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+    loader = {
+      efi.canTouchEfiVariables = false;
+      systemd-boot.enable = lib.mkForce false;
+    };
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/var/lib/sbctl";
+    };
   };
+
+  environment.systemPackages = [ pkgs.sbctl ];
 
   # List services that you want to enable:
   services = {

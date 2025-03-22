@@ -8,16 +8,11 @@
   # Helper function for generating NixOS configs
   mkNixos =
     { hostname
-    , username ? "joseph"
-    , desktop ? null
     , platform ? "x86_64-linux"
     ,
     }:
     let
       isISO = builtins.substring 0 4 hostname == "iso-";
-      isInstall = !isISO;
-      isLaptop = hostname != "terminus";
-      isWorkstation = builtins.isString desktop; # enable GUI features
       tailNet = "taildbd4c.ts.net";
     in
     inputs.nixpkgs.lib.nixosSystem {
@@ -25,34 +20,25 @@
         inherit
           inputs
           outputs
-          desktop
           hostname
           platform
-          username
           stateVersion
-          isInstall
           isISO
-          isLaptop
-          isWorkstation
           tailNet
           ;
       };
       # If the hostname starts with "iso-", generate an ISO image
       modules =
         let
-          cd-dvd =
-            if (desktop == null) then
-              inputs.nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
-            else
-              inputs.nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares.nix";
+          cd-dvd = inputs.nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares.nix";
         in
-        [ ../hosts/nixos ] ++ inputs.nixpkgs.lib.optionals isISO [ cd-dvd ];
+        builtins.attrValues outputs.nixosModules ++ [
+          ../hosts/nixos/${hostname}
+        ] ++ inputs.nixpkgs.lib.optionals isISO [ cd-dvd ];
     };
 
   mkDarwin =
-    { desktop ? "aqua"
-    , hostname
-    , username ? "joseph"
+    { hostname
     , platform ? "aarch64-darwin"
     ,
     }:
@@ -67,10 +53,8 @@
         inherit
           inputs
           outputs
-          desktop
           hostname
           platform
-          username
           stateVersion
           isInstall
           isISO
@@ -78,7 +62,7 @@
           isWorkstation
           ;
       };
-      modules = [ ../hosts/darwin ];
+      modules = [ ../hosts/darwin/${hostname} ];
     };
 
   forAllSystems = inputs.nixpkgs.lib.genAttrs [

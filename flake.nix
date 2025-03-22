@@ -83,6 +83,8 @@
     }@inputs:
     let
       inherit (self) outputs;
+      overlays = import ./overlays { inherit inputs; };
+      nixosModules = import ./modules/nixos;
 
       stateVersion = "24.11";
       helper = import ./lib { inherit inputs outputs stateVersion; };
@@ -92,27 +94,27 @@
       );
     in
     {
-      overlays = import ./overlays { inherit inputs; };
+      inherit overlays nixosModules;
       packages = nixpkgs.lib.attrsets.recursiveUpdate
         (helper.forAllSystems (
           system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }
         ))
         (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
       formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
-      nixosModules = import ./modules/nixos;
 
       # NixOS configuration entrypoint
       nixosConfigurations = {
         terminus = helper.mkNixos {
           hostname = "terminus";
-          # desktop = "gnome";
+          platform = "x86_64-linux";
         };
         orbstack = helper.mkNixos {
           hostname = "orbstack";
+          platform = "aarch64-linux";
         };
         vmware = helper.mkNixos {
           hostname = "vmware";
-          desktop = "gnome";
+          platform = "aarch64-linux";
         };
       };
 

@@ -11,5 +11,7 @@
     ./disko.nix
   ];
 
+  myConfig.gnome.enable = true;
+
   virtualisation.vmware.guest.enable = true;
 }

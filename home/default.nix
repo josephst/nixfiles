@@ -4,11 +4,11 @@
 , lib
 , inputs
 , options
-, stateVersion
 , ...
 }:
 let
   inherit (pkgs.stdenv) isDarwin isLinux;
+  stateVersion = lib.mkDefault "24.11"; # home-manager stateVersion
 
   # list of keys which can be used for key-based SSH authentication when logging in to another system
   # key is the hostname, value is the key

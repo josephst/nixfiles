@@ -1,8 +1,7 @@
+# sane networking defaults
 { config
 , hostname
-, isWorkstation
 , lib
-, username
 , ...
 }:
 let
@@ -16,8 +15,6 @@ let
   fallbackDns = [ "1.1.1.1#one.one.one.one" ];
 in
 {
-  imports = lib.optional (builtins.pathExists (./. + "/${hostname}.nix")) ./${hostname}.nix;
-
   networking = {
     firewall = {
       enable = lib.mkDefault true;
@@ -25,7 +22,7 @@ in
     };
     hostName = hostname;
     domain = lib.mkDefault "homelab.josephstahl.com";
-    networkmanager = lib.mkIf isWorkstation {
+    networkmanager = lib.mkIf config.myConfig.gnome.enable {
       # Use resolved for DNS resolution; tailscale MagicDNS requires it
       dns = "systemd-resolved";
       enable = true;
@@ -49,7 +46,7 @@ in
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  users.users.${username}.extraGroups = lib.optionals config.networking.networkmanager.enable [
+  users.users.${config.myConfig.user}.extraGroups = lib.optionals config.networking.networkmanager.enable [
     "networkmanager"
   ];
 }
