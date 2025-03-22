@@ -6,6 +6,7 @@
 }:
 {
   # Helper function for generating NixOS configs
+  # TODO: find a way to make hostname part of myConfig nixosModule
   mkNixos =
     { hostname
     , platform ? "x86_64-linux"

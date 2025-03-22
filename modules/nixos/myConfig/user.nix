@@ -1,4 +1,4 @@
-{ inputs, config, lib, pkgs, ... }:
+{ inputs, config, lib, pkgs, hostname, ... }:
 
 let
   cfg = config.myConfig;
@@ -23,7 +23,7 @@ in
     home-manager = lib.mkIf cfg.home-manager.enable {
       useGlobalPkgs = lib.mkDefault true;
       useUserPackages = lib.mkDefault true;
-      extraSpecialArgs = { inherit inputs; };
+      extraSpecialArgs = { inherit inputs hostname; username = cfg.user; };
       backupFileExtension = ".backup-pre-hm";
       # sharedModules = builtins.attrValues outputs.homeManagerModules; # TODO: not sure what this does
       users."${cfg.user}" = import cfg.home-manager.home;
