@@ -96,6 +96,7 @@ in
         pkgs.dnsutils
         pkgs.ghostty.terminfo
         pkgs.git
+        pkgs.micro
         pkgs.htop
         pkgs.nix-output-monitor
         pkgs.wezterm.terminfo

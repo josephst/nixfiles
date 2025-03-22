@@ -11,7 +11,7 @@ in
       type = lib.types.str;
     };
     home-manager = {
-      enable = lib.mkEnableOption "home-manager";
+      enable = lib.mkEnableOption "home-manager"  // { default = true; };
       home = lib.mkOption {
         default = ../../../home;
         type = lib.types.path;
