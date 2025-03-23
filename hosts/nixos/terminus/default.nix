@@ -39,6 +39,10 @@
     inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
+  myConfig = {
+    tailscale.enable = true;
+  };
+
   systemd.tmpfiles.rules = [ "d /storage - - - - -" ];
 
   boot = {
