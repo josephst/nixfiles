@@ -32,8 +32,6 @@
     extraModulePackages = [ ];
   };
 
-  environment.systemPackages = [ pkgs.sbctl ];
-
   services.fwupd.enable = true;
   security.tpm2.enable = true;
 
