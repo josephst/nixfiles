@@ -23,7 +23,11 @@ in
     home-manager = lib.mkIf cfg.home-manager.enable {
       useGlobalPkgs = lib.mkDefault true;
       useUserPackages = lib.mkDefault true;
-      extraSpecialArgs = { inherit inputs; username = cfg.user; };
+      extraSpecialArgs = {
+        inherit inputs;
+        username = cfg.user;
+        hostname = cfg.hostname;
+      };
       backupFileExtension = ".backup-pre-hm";
       # sharedModules = builtins.attrValues outputs.homeManagerModules; # TODO: not sure what this does
       users."${cfg.user}" = import cfg.home-manager.home;
