@@ -81,5 +81,8 @@
         '';
       };
     };
+    tailscale = {
+      extraSetFlags = [ "--advertise-exit-node" ];
+    };
   };
 }

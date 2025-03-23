@@ -19,7 +19,7 @@ in
       # - https://tailscale.com/blog/caddy
       permitCertUid = lib.mkIf config.services.caddy.enable config.services.caddy.user;
       openFirewall = true;
-      useRoutingFeatures = "both";
+      useRoutingFeatures = lib.mkDefault "both";
     };
   };
 }
