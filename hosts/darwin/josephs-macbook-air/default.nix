@@ -1,4 +1,4 @@
-{pkgs, lib, config, inputs, outputs, ...}:
+{ pkgs, lib, config, inputs, outputs, ... }:
 let
   keys = import ../../../keys;
 in
@@ -82,6 +82,7 @@ in
     extraSpecialArgs = {
       inherit inputs outputs;
       username = "joseph";
+      hostname = config.networking.hostName;
     };
     useGlobalPkgs = true;
     useUserPackages = true;

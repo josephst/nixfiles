@@ -1,4 +1,4 @@
-{ inputs, config, lib, pkgs, hostname, ... }:
+{ inputs, config, lib, pkgs, ... }:
 
 let
   cfg = config.myConfig;
@@ -11,7 +11,7 @@ in
       type = lib.types.str;
     };
     home-manager = {
-      enable = lib.mkEnableOption "home-manager"  // { default = true; };
+      enable = lib.mkEnableOption "home-manager" // { default = true; };
       home = lib.mkOption {
         default = ../../../home;
         type = lib.types.path;
@@ -23,7 +23,7 @@ in
     home-manager = lib.mkIf cfg.home-manager.enable {
       useGlobalPkgs = lib.mkDefault true;
       useUserPackages = lib.mkDefault true;
-      extraSpecialArgs = { inherit inputs hostname; username = cfg.user; };
+      extraSpecialArgs = { inherit inputs; username = cfg.user; };
       backupFileExtension = ".backup-pre-hm";
       # sharedModules = builtins.attrValues outputs.homeManagerModules; # TODO: not sure what this does
       users."${cfg.user}" = import cfg.home-manager.home;

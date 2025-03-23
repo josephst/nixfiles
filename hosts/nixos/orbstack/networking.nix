@@ -1,6 +1,5 @@
-{ hostname, ... }: {
+_: {
   networking = {
-    hostName = hostname;
     domain = "josephstahl.com";
     firewall.enable = false;
     # networkmanager.enable = true; # Easiest to use and most distros use this by default.

@@ -2,7 +2,7 @@
 
 let
   cfg = config.myConfig;
-  substituters = {};
+  substituters = { };
 in
 {
   imports = [
