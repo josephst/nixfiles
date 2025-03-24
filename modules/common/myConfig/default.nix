@@ -80,6 +80,7 @@ config = {
         VISUAL = "micro";
       };
       systemPackages = [
+        pkgs.deploy-rs
         pkgs.agenix
         pkgs.git
         pkgs.micro
