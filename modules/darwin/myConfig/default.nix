@@ -24,8 +24,8 @@ in
       default = "aarch64-darwin";
     };
     stateVersion = mkOption {
-      type = types.str;
-      default = "4";
+      type = types.int;
+      default = 4;
     };
     tailnet = mkOption {
       type = types.nullOr types.str;
@@ -37,9 +37,19 @@ in
       default = null;
       description = "SSH keys for users on this system";
     };
+    ghToken = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+    };
   };
 
   config = {
+    age = {
+      secrets.ghToken = {
+        file = cfg.ghToken;
+        mode = "0440";
+      };
+    };
     environment = {
       systemPackages = [
         pkgs.agenix
@@ -77,6 +87,9 @@ in
         experimental-features = [ "nix-command" "flakes" ];
         trusted-users = [ "@admin" ];
       };
+      extraOptions = lib.optionalString (config.age.secrets ? "ghToken") ''
+        !include ${config.age.secrets.ghToken.path}
+      '';
     };
 
     nixpkgs = {

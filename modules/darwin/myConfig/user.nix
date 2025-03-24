@@ -2,7 +2,7 @@
 
 let
   cfg = config.myConfig.user;
-  inherit (config.myConfig) keys;
+  keys = config.myConfig.keys;
 in
 {
   options.myConfig.user = {
@@ -21,8 +21,6 @@ in
   };
 
   config = {
-    age.secrets.password.file = cfg.passwordFile;
-
     home-manager = lib.mkIf cfg.home-manager.enable {
       useGlobalPkgs = lib.mkDefault true;
       useUserPackages = lib.mkDefault true;
@@ -41,7 +39,7 @@ in
 
     users = {
       users.${cfg.username} = {
-        isNormalUser = true;
+        home = "/Users/${cfg.username}";
         openssh.authorizedKeys.keys = builtins.attrValues keys.users.${cfg.username};
         packages = [ pkgs.home-manager ];
       };

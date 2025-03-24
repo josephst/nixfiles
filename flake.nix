@@ -85,6 +85,7 @@
       inherit (self) outputs;
       overlays = import ./overlays { inherit inputs; };
       nixosModules = import ./modules/nixos;
+      darwinModules = import ./modules/darwin;
       homeManagerModules = import ./modules/home-manager;
       helper = import ./lib { inherit inputs outputs; };
 
@@ -95,8 +96,10 @@
         keys = import ./keys;
         user = {
           username = "joseph";
-          passwordFile = ./secrets/users/joseph.age;
         };
+      };
+      nixosConfig = {
+        user.passwordFile = ./secrets/users/joseph.age;
       };
 
       treefmtEval = helper.forAllSystems (
@@ -104,7 +107,7 @@
       );
     in
     {
-      inherit overlays nixosModules homeManagerModules;
+      inherit overlays nixosModules darwinModules homeManagerModules;
       packages = nixpkgs.lib.attrsets.recursiveUpdate
         (helper.forAllSystems (
           system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }
@@ -117,23 +120,24 @@
         terminus = helper.mkNixos {
           hostname = "terminus";
           platform = "x86_64-linux";
-          inherit commonConfig;
+          config = commonConfig // nixosConfig;
         };
         orbstack = helper.mkNixos {
           hostname = "orbstack";
           platform = "aarch64-linux";
-          inherit commonConfig;
+          config = commonConfig // nixosConfig;
         };
         vmware = helper.mkNixos {
           hostname = "vmware";
           platform = "aarch64-linux";
-          inherit commonConfig;
+          config = commonConfig // nixosConfig;
         };
       };
 
       darwinConfigurations = {
         Josephs-MacBook-Air = helper.mkDarwin {
           hostname = "Josephs-MacBook-Air";
+          config = commonConfig;
         };
       };
 

@@ -8,12 +8,12 @@
   mkNixos =
     { hostname
     , platform ? "x86_64-linux"
-    , commonConfig ? { }
+    , config ? { }
     ,
     }:
     let
       isISO = builtins.substring 0 4 hostname == "iso-";
-      myConfig = commonConfig // {
+      myConfig = config // {
         inherit platform;
         networking.hostname = hostname;
       };
@@ -36,11 +36,11 @@
   mkDarwin =
     { hostname
     , platform ? "aarch64-darwin"
-    , commonConfig ? { }
+    , config ? { }
     ,
     }:
     let
-      myConfig = commonConfig // {
+      myConfig = config // {
         inherit platform;
         networking.hostname = hostname;
       };
@@ -49,7 +49,7 @@
       specialArgs = {
         inherit inputs outputs;
       };
-      modules = [
+      modules = (builtins.attrValues outputs.darwinModules) ++ [
         { inherit myConfig; }
         ../hosts/darwin/${hostname}
       ];
