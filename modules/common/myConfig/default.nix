@@ -44,10 +44,10 @@ config = {
       registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
       nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
       settings = {
+        warn-dirty = false;
         substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
         trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
         experimental-features = [ "nix-command" "flakes" ];
-        trusted-users = [ "@wheel" ];
         log-lines = lib.mkDefault 25;
         builders-use-substitutes = true;
         cores = 0;

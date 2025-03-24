@@ -37,6 +37,12 @@
       config.allowUnfree = true;
     };
 
+    nix = {
+      settings = {
+        trusted-users = [ "@wheel" ];
+      };
+    };
+
     services = {
       openssh = {
         enable = lib.mkDefault true;

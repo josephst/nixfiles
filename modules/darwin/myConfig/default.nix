@@ -42,7 +42,7 @@
         automatic = true;
       };
       settings = {
-        warn-dirty = false;
+        trusted-users = [ "@admin" ];
       };
     };
 
