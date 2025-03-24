@@ -1,11 +1,9 @@
+# modules/nixos/myConfig/default.nix
 { inputs, outputs, config, lib, pkgs, ... }:
 
-let
-  cfg = config.myConfig;
-  substituters = { };
-in
 {
   imports = [
+    ../../common/myConfig
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.default
@@ -13,38 +11,14 @@ in
 
     ./gaming.nix
     ./gnome.nix
-    ./keys.nix
     ./networking.nix
     ./user.nix
     ./tailscale.nix
   ];
 
-  # TODO: combine the shared portions of this module and the darwin module
-  options.myConfig = with lib; {
-    nix.substituters = mkOption {
-      type = types.listOf types.str;
-      # TODO: populate with well-known substituters
-      default = [ ];
-    };
-    platform = mkOption {
-      type = types.str;
-      default = "x86_64-linux";
-    };
-    stateVersion = mkOption {
-      type = types.str;
-      default = "24.11";
-    };
-    tailnet = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-    };
-    ghToken = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-    };
-  };
-
   config = {
+    myConfig.stateVersion = lib.mkDefault "24.11"; # NixOS stateVersion
+
     hardware.enableRedistributableFirmware = lib.mkDefault true;
     # Use systemd-boot to boot EFI machines
     boot.loader.systemd-boot.configurationLimit = lib.mkOverride 1337 10;
@@ -59,31 +33,8 @@ in
 
     nixpkgs = {
       overlays = builtins.attrValues outputs.overlays;
-      hostPlatform = cfg.platform; # set in flake.nix for each system
+      hostPlatform = config.myConfig.platform; # set in flake.nix for each system
       config.allowUnfree = true;
-    };
-    nix = {
-      package = pkgs.nix;
-      channel.enable = false;
-      extraOptions = lib.optionalString (config.age.secrets ? "ghToken") ''
-        !include ${config.age.secrets.ghToken.path}
-      '';
-      registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
-      nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
-      gc = {
-        options = lib.mkDefault "--delete-older-than 14d";
-      };
-      settings = {
-        auto-optimise-store = lib.mkDefault true;
-        substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
-        trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
-        experimental-features = [ "nix-command" "flakes" ]
-          ++ lib.optional (lib.versionOlder (lib.versions.majorMinor config.nix.package.version) "2.22") "repl-flake";
-        trusted-users = [ "@wheel" ];
-        log-lines = lib.mkDefault 25;
-        builders-use-substitutes = true;
-        cores = 0;
-      };
     };
 
     services = {
@@ -106,18 +57,12 @@ in
 
     environment = {
       systemPackages = [
-        pkgs.agenix
-        pkgs.deploy-rs.deploy-rs
+        # nixos-specific packages
+        inputs.isd.packages.${pkgs.system}.default # interactive systemd
         pkgs.dnsutils
         pkgs.ghostty.terminfo
-        pkgs.git
-        pkgs.micro
         pkgs.htop
-        pkgs.nix-output-monitor
         pkgs.wezterm.terminfo
-        inputs.isd.packages.${pkgs.system}.default # interactive systemd
-        pkgs.agenix
-        pkgs.nvd
         pkgs.rsync
 
         # hardware
@@ -128,30 +73,10 @@ in
         pkgs.smartmontools
       ];
       shells = [ pkgs.fish ];
-      variables = {
-        EDITOR = "micro";
-        SYSTEMD_EDITOR = "micro";
-        VISUAL = "micro";
-      };
-    };
-
-    age = {
-      secrets.ghToken = {
-        file = cfg.ghToken;
-        mode = "0440";
-      };
     };
 
     programs = {
       _1password.enable = true;
-      command-not-found.enable = false;
-      fish = {
-        enable = true;
-        useBabelfish = true;
-        shellAliases = {
-          nano = "micro";
-        };
-      };
       nh = {
         clean = {
           enable = true;
@@ -159,7 +84,6 @@ in
         };
         enable = true;
       };
-      nix-index-database.comma.enable = true;
       nix-ld.enable = true;
     };
 
@@ -168,7 +92,7 @@ in
     };
 
     system = {
-      inherit (cfg) stateVersion;
+      inherit (config.myConfig) stateVersion;
       rebuild.enableNg = true; # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md
     };
   };

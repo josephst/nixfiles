@@ -1,10 +1,9 @@
+# modules/darwin/myConfig/default.nix
 { inputs, outputs, config, lib, pkgs, ... }:
 
-let
-  cfg = config.myConfig;
-in
 {
   imports = [
+    ../../common/myConfig
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
     inputs.nix-index-database.darwinModules.nix-index
@@ -13,54 +12,14 @@ in
     ./user.nix
   ];
 
-  options.myConfig = with lib; {
-    nix.substituters = mkOption {
-      type = types.listOf types.str;
-      # TODO: populate with well-known substituters
-      default = [ ];
-    };
-    platform = mkOption {
-      type = types.str;
-      default = "aarch64-darwin";
-    };
-    stateVersion = mkOption {
-      type = types.int;
-      default = 4;
-    };
-    tailnet = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-    };
-    keys = lib.mkOption {
-      # TODO: eventually move this to a submodule that can check the attributes
-      type = lib.types.nullOr lib.types.attrs;
-      default = null;
-      description = "SSH keys for users on this system";
-    };
-    ghToken = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
-    };
-  };
-
   config = {
-    age = {
-      secrets.ghToken = {
-        file = cfg.ghToken;
-        mode = "0440";
-      };
-    };
+    myConfig.stateVersion = lib.mkDefault 4; # Darwin stateVersion
+
     environment = {
       systemPackages = [
-        pkgs.agenix
-        pkgs.git
-        pkgs.nix-output-monitor
-        pkgs.nvd
+        # darwin-specific packages
       ];
       variables = {
-        EDITOR = "micro";
-        SYSTEMD_EDITOR = "micro";
-        VISUAL = "micro";
         SSH_AUTH_SOCK = "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
       };
     };
@@ -84,16 +43,11 @@ in
       };
       settings = {
         warn-dirty = false;
-        experimental-features = [ "nix-command" "flakes" ];
-        trusted-users = [ "@admin" ];
       };
-      extraOptions = lib.optionalString (config.age.secrets ? "ghToken") ''
-        !include ${config.age.secrets.ghToken.path}
-      '';
     };
 
     nixpkgs = {
-      hostPlatform = cfg.platform;
+      hostPlatform = config.myConfig.platform;
       overlays = builtins.attrValues outputs.overlays;
       config = {
         allowUnfree = true;
@@ -101,16 +55,11 @@ in
     };
 
     programs = {
-      fish = {
-        enable = true;
-        # TODO: is this next line still necessary?
-        loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
-      };
-      nix-index-database.comma.enable = true;
+      fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
     };
 
     system = {
-      inherit (cfg) stateVersion;
+      inherit (config.myConfig) stateVersion;
       defaults = {
         # Don't show recent applications in the dock
         dock.show-recents = false;
@@ -141,16 +90,16 @@ in
           NSDisableAutomaticTermination = true;
 
           # KEYBOARD
-          # Disable automatic capitalization as it’s annoying when typing code
+          # Disable automatic capitalization as it's annoying when typing code
           NSAutomaticCapitalizationEnabled = false;
 
-          # Disable smart dashes as they’re annoying when typing code
+          # Disable smart dashes as they're annoying when typing code
           NSAutomaticDashSubstitutionEnabled = false;
 
-          # Disable automatic period substitution as it’s annoying when typing code
+          # Disable automatic period substitution as it's annoying when typing code
           NSAutomaticPeriodSubstitutionEnabled = false;
 
-          # Disable smart quotes as they’re annoying when typing code
+          # Disable smart quotes as they're annoying when typing code
           NSAutomaticQuoteSubstitutionEnabled = false;
 
           # Disable auto-correct
