@@ -19,6 +19,7 @@ in
     ./tailscale.nix
   ];
 
+  # TODO: combine the shared portions of this module and the darwin module
   options.myConfig = with lib; {
     nix.substituters = mkOption {
       type = types.listOf types.str;
@@ -167,7 +168,7 @@ in
     };
 
     system = {
-      stateVersion = cfg.stateVersion;
+      inherit (cfg) stateVersion;
       rebuild.enableNg = true; # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md
     };
   };

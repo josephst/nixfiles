@@ -3,27 +3,19 @@
 , outputs
 , ...
 }:
-let
-in
 {
   # Helper function for generating NixOS configs
   mkNixos =
     { hostname
     , platform ? "x86_64-linux"
-    , commonConfig ? {}
+    , commonConfig ? { }
     ,
     }:
     let
       isISO = builtins.substring 0 4 hostname == "iso-";
-      myConfig = {
+      myConfig = commonConfig // {
         inherit platform;
         networking.hostname = hostname;
-        keys = import ../keys;
-        user = {
-          username = "joseph";
-          passwordFile = ../secrets/users/joseph.age;
-        };
-        ghToken = commonConfig.ghToken;
       };
     in
     inputs.nixpkgs.lib.nixosSystem {
@@ -44,19 +36,13 @@ in
   mkDarwin =
     { hostname
     , platform ? "aarch64-darwin"
-    , commonConfig ? {}
+    , commonConfig ? { }
     ,
     }:
     let
-      myConfig = {
+      myConfig = commonConfig // {
         inherit platform;
         networking.hostname = hostname;
-        keys = import ../keys;
-        user = {
-          username = "joseph";
-          passwordFile = ../secrets/users/joseph.age;
-        };
-        ghToken = commonConfig.ghToken;
       };
     in
     inputs.nix-darwin.lib.darwinSystem {
@@ -64,7 +50,7 @@ in
         inherit inputs outputs;
       };
       modules = [
-        { inherit myConfig;}
+        { inherit myConfig; }
         ../hosts/darwin/${hostname}
       ];
     };

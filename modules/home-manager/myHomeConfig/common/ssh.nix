@@ -5,8 +5,8 @@
 , ...
 }:
 let
-  keys = config.myHomeConfig.keys;
-  username = config.myHomeConfig.username;
+  inherit (config.myHomeConfig) keys;
+  inherit (config.myHomeConfig) username;
   hostname = osConfig.networking.hostName;
 
   # identity = a user-specific and host-specific key (one identity per user per machine)

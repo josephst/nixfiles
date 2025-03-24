@@ -11,11 +11,6 @@ in
       type = lib.types.str;
       description = "The username of the user to create.";
     };
-    passwordFile = lib.mkOption {
-      default = null;
-      type = lib.types.path;
-      description = "password file for agenix";
-    };
     home-manager = {
       enable = lib.mkEnableOption "home-manager" // { default = true; };
       home = lib.mkOption {
@@ -45,17 +40,10 @@ in
     };
 
     users = {
-      defaultUserShell = pkgs.fish;
       users.${cfg.username} = {
         isNormalUser = true;
-        hashedPasswordFile = config.age.secrets.password.path;
-        extraGroups = [ "wheel" "networkmanager" ];
         openssh.authorizedKeys.keys = builtins.attrValues keys.users.${cfg.username};
         packages = [ pkgs.home-manager ];
-      };
-      users.root = {
-        hashedPassword = null;
-        openssh.authorizedKeys.keys = builtins.attrValues keys.users.joseph; # admin
       };
     };
   };

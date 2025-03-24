@@ -1,8 +1,5 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, ... }:
 
-let
-  cfg = config.myConfig.keys;
-in
 {
   options.myConfig.keys = lib.mkOption {
     type = lib.types.nullOr lib.types.attrs;
@@ -10,5 +7,5 @@ in
     description = "SSH keys for this system and its users";
   };
 
-  config = {};
+  config = { };
 }

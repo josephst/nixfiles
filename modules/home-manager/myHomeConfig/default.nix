@@ -47,8 +47,8 @@ in
 
   config = {
     home = {
-      username = cfg.username;
-      stateVersion = cfg.stateVersion;
+      inherit (cfg) username;
+      inherit (cfg) stateVersion;
       inherit homeDirectory;
 
       sessionVariables = {

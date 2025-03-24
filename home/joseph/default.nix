@@ -7,7 +7,7 @@ let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 in
 {
-  imports = [];
+  imports = [ ];
 
   programs = {
     gh = {

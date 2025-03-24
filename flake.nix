@@ -88,9 +88,15 @@
       homeManagerModules = import ./modules/home-manager;
       helper = import ./lib { inherit inputs outputs; };
 
+      # settings for all machines this flake manages
       commonConfig = {
         tailnet = "taildbd4c.ts.net";
         ghToken = ./secrets/ghToken.age;
+        keys = import ./keys;
+        user = {
+          username = "joseph";
+          passwordFile = ./secrets/users/joseph.age;
+        };
       };
 
       treefmtEval = helper.forAllSystems (
