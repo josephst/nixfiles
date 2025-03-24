@@ -41,6 +41,7 @@ in
       "ghostty"
       "git-credential-manager"
       "iterm2"
+      "notion"
       "obsidian"
       "orbstack"
       "utm"

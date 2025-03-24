@@ -1,46 +1,56 @@
-{ inputs, config, lib, pkgs, ... }:
+{ inputs, outputs, config, lib, pkgs, ... }:
 
 let
-  cfg = config.myConfig;
-  keys = import ../../../keys;
+  cfg = config.myConfig.user;
+  keys = config.myConfig.keys;
 in
 {
-  options.myConfig = {
-    user = lib.mkOption {
+  options.myConfig.user = {
+    username = lib.mkOption {
       default = "joseph";
       type = lib.types.str;
+      description = "The username of the user to create.";
+    };
+    passwordFile = lib.mkOption {
+      default = null;
+      type = lib.types.path;
+      description = "password file for agenix";
     };
     home-manager = {
       enable = lib.mkEnableOption "home-manager" // { default = true; };
       home = lib.mkOption {
-        default = ../../../home;
+        default = ../../../home/${cfg.username};
         type = lib.types.path;
       };
     };
   };
 
   config = {
-    age.secrets.password.file = ../../../secrets/users/joseph.age;
+    age.secrets.password.file = cfg.passwordFile;
 
     home-manager = lib.mkIf cfg.home-manager.enable {
       useGlobalPkgs = lib.mkDefault true;
       useUserPackages = lib.mkDefault true;
       extraSpecialArgs = {
         inherit inputs;
-        username = cfg.user;
-        hostname = cfg.hostname;
       };
       backupFileExtension = ".backup-pre-hm";
-      # sharedModules = builtins.attrValues outputs.homeManagerModules; # TODO: not sure what this does
-      users."${cfg.user}" = import cfg.home-manager.home;
+      sharedModules = (builtins.attrValues outputs.homeManagerModules) ++ [
+        {
+          myHomeConfig.keys = keys;
+          myHomeConfig.username = cfg.username;
+        }
+      ];
+      users."${cfg.username}" = import cfg.home-manager.home;
     };
+
     users = {
       defaultUserShell = pkgs.fish;
-      users.${cfg.user} = {
+      users.${cfg.username} = {
         isNormalUser = true;
         hashedPasswordFile = config.age.secrets.password.path;
         extraGroups = [ "wheel" "networkmanager" ];
-        openssh.authorizedKeys.keys = builtins.attrValues keys.users.joseph;
+        openssh.authorizedKeys.keys = builtins.attrValues keys.users.${cfg.username};
       };
       users.root = {
         hashedPassword = null;

@@ -85,16 +85,20 @@
       inherit (self) outputs;
       overlays = import ./overlays { inherit inputs; };
       nixosModules = import ./modules/nixos;
+      homeManagerModules = import ./modules/home-manager;
+      helper = import ./lib { inherit inputs outputs; };
 
-      stateVersion = "24.11";
-      helper = import ./lib { inherit inputs outputs stateVersion; };
+      commonConfig = {
+        tailnet = "taildbd4c.ts.net";
+        ghToken = ./secrets/ghToken.age;
+      };
 
       treefmtEval = helper.forAllSystems (
         system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix
       );
     in
     {
-      inherit overlays nixosModules;
+      inherit overlays nixosModules homeManagerModules;
       packages = nixpkgs.lib.attrsets.recursiveUpdate
         (helper.forAllSystems (
           system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }
@@ -107,14 +111,17 @@
         terminus = helper.mkNixos {
           hostname = "terminus";
           platform = "x86_64-linux";
+          inherit commonConfig;
         };
         orbstack = helper.mkNixos {
           hostname = "orbstack";
           platform = "aarch64-linux";
+          inherit commonConfig;
         };
         vmware = helper.mkNixos {
           hostname = "vmware";
           platform = "aarch64-linux";
+          inherit commonConfig;
         };
       };
 

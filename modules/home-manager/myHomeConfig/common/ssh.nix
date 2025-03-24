@@ -1,12 +1,13 @@
 { pkgs
 , config
+, osConfig
 , lib
-, username
-, hostname
 , ...
 }:
 let
-  keys = import ../../keys;
+  keys = config.myHomeConfig.keys;
+  username = config.myHomeConfig.username;
+  hostname = osConfig.networking.hostName;
 
   # identity = a user-specific and host-specific key (one identity per user per machine)
   # userAllKeys = all keys registered to a user (across all machines)

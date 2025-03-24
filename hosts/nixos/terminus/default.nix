@@ -94,6 +94,9 @@
 
   # List services that you want to enable:
   services = {
+    fwupd.enable = true;
+    hardware.bolt.enable = true;
+    smartd.enable = true;
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";

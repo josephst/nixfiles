@@ -13,10 +13,10 @@ let
 
   fallbackDns = [ "1.1.1.1#one.one.one.one" ];
 
-  cfg = config.myConfig;
+  cfg = config.myConfig.networking;
 in
 {
-  options.myConfig = {
+  options.myConfig.networking = {
     hostname = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -36,8 +36,7 @@ in
         inherit trustedInterfaces;
       };
       hostName = cfg.hostname;
-      domain = lib.mkDefault "homelab.josephstahl.com";
-      networkmanager = lib.mkIf cfg.gnome.enable {
+      networkmanager = lib.mkIf config.myConfig.gnome.enable {
         # Use resolved for DNS resolution; tailscale MagicDNS requires it
         dns = "systemd-resolved";
         enable = true;
@@ -61,7 +60,7 @@ in
 
     systemd.services.NetworkManager-wait-online.enable = false;
 
-    users.users.${config.myConfig.user}.extraGroups = lib.optionals config.networking.networkmanager.enable [
+    users.users.${config.myConfig.user.username}.extraGroups = lib.optionals config.networking.networkmanager.enable [
       "networkmanager"
     ];
   };

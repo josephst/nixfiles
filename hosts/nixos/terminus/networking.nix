@@ -1,4 +1,5 @@
 _: {
+  networking.domain = "homelab.josephstahl.com";
   systemd.network = {
     enable = true;
     wait-online.anyInterface = true;

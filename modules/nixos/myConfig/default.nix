@@ -1,4 +1,4 @@
-{ inputs, outputs, config, lib, pkgs, stateVersion, platform, ... }:
+{ inputs, outputs, config, lib, pkgs, ... }:
 
 let
   cfg = config.myConfig;
@@ -13,6 +13,7 @@ in
 
     ./gaming.nix
     ./gnome.nix
+    ./keys.nix
     ./networking.nix
     ./user.nix
     ./tailscale.nix
@@ -23,6 +24,22 @@ in
       type = types.listOf types.str;
       # TODO: populate with well-known substituters
       default = [ ];
+    };
+    platform = mkOption {
+      type = types.str;
+      default = "x86_64-linux";
+    };
+    stateVersion = mkOption {
+      type = types.str;
+      default = "24.11";
+    };
+    tailnet = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
+    ghToken = mkOption {
+      type = types.nullOr types.path;
+      default = null;
     };
   };
 
@@ -41,7 +58,7 @@ in
 
     nixpkgs = {
       overlays = builtins.attrValues outputs.overlays;
-      hostPlatform = platform; # set in flake.nix for each system
+      hostPlatform = cfg.platform; # set in flake.nix for each system
       config.allowUnfree = true;
     };
     nix = {
@@ -84,9 +101,6 @@ in
           ];
         };
       };
-      fwupd.enable = true;
-      hardware.bolt.enable = true;
-      smartd.enable = true;
     };
 
     environment = {
@@ -122,7 +136,7 @@ in
 
     age = {
       secrets.ghToken = {
-        file = ../../../secrets/ghToken.age;
+        file = cfg.ghToken;
         mode = "0440";
       };
     };
@@ -153,7 +167,7 @@ in
     };
 
     system = {
-      inherit stateVersion;
+      stateVersion = cfg.stateVersion;
       rebuild.enableNg = true; # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md
     };
   };

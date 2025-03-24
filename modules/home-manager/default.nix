@@ -1,0 +1,3 @@
+{
+  myHomeConfig = import ./myHomeConfig;
+}

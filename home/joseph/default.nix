@@ -5,9 +5,10 @@
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
-  keys = import ../../../../keys;
 in
 {
+  imports = [];
+
   programs = {
     gh = {
       enable = true;
@@ -30,7 +31,7 @@ in
           ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
         };
         # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
-        user.signingKey = "key::${keys.signing.joseph}";
+        user.signingKey = "key::${config.myHomeConfig.keys.signing.joseph}";
       };
     };
   };

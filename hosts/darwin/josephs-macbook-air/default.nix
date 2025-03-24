@@ -67,7 +67,6 @@ in
     config = {
       allowUnfree = true;
     };
-    hostPlatform = lib.mkDefault "${pkgs.system}";
   };
 
   programs = {
