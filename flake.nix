@@ -83,42 +83,61 @@
     }@inputs:
     let
       inherit (self) outputs;
+      overlays = import ./overlays { inherit inputs; };
+      nixosModules = import ./modules/nixos;
+      darwinModules = import ./modules/darwin;
+      homeManagerModules = import ./modules/home-manager;
+      helper = import ./lib { inherit inputs outputs; };
 
-      stateVersion = "24.11";
-      helper = import ./lib { inherit inputs outputs stateVersion; };
+      # settings for all machines this flake manages
+      commonConfig = {
+        tailnet = "taildbd4c.ts.net";
+        ghToken = ./secrets/ghToken.age;
+        keys = import ./keys;
+        user = {
+          username = "joseph";
+        };
+      };
+      nixosConfig = {
+        user.passwordFile = ./secrets/users/joseph.age;
+      };
 
       treefmtEval = helper.forAllSystems (
         system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix
       );
     in
     {
-      overlays = import ./overlays { inherit inputs; };
+      inherit overlays nixosModules darwinModules homeManagerModules;
       packages = nixpkgs.lib.attrsets.recursiveUpdate
         (helper.forAllSystems (
           system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }
         ))
         (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
       formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
-      nixosModules = import ./modules/nixos;
 
       # NixOS configuration entrypoint
       nixosConfigurations = {
         terminus = helper.mkNixos {
           hostname = "terminus";
-          # desktop = "gnome";
+          platform = "x86_64-linux";
+          config = commonConfig // nixosConfig;
         };
         orbstack = helper.mkNixos {
           hostname = "orbstack";
+          platform = "aarch64-linux";
+          config = commonConfig // nixosConfig;
         };
         vmware = helper.mkNixos {
           hostname = "vmware";
-          desktop = "gnome";
+          platform = "aarch64-linux";
+          config = commonConfig // nixosConfig;
         };
       };
 
       darwinConfigurations = {
         Josephs-MacBook-Air = helper.mkDarwin {
           hostname = "Josephs-MacBook-Air";
+          config = commonConfig;
         };
       };
 

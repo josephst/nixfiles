@@ -1,4 +1,4 @@
-_:
+{ ... }:
 {
   # machine-specific config
   imports = [

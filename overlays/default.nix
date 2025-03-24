@@ -3,7 +3,6 @@
   agenix = inputs.agenix.overlays.default;
   zig = inputs.zig.overlays.default;
   llama-cpp = inputs.llama-cpp.overlays.default;
-  deploy-rs = inputs.deploy-rs.overlays.default;
 
   channels = final: _prev: {
     # this adds nixpkgs-unstable as an overlays, available as nixpkgs.unstable.foobar
