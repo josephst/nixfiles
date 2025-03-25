@@ -43,6 +43,11 @@
       };
     };
 
+    security = {
+      # use ssh keys instead of password
+      pam.sshAgentAuth.enable = true;
+    };
+
     services = {
       openssh = {
         enable = lib.mkDefault true;
