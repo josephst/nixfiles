@@ -6,6 +6,7 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-staging.url = "github:nixos/nixpkgs/staging-next";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-joseph.url = "github:josephst/nixpkgs/nixpkgs-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -72,6 +73,7 @@
     isd.url = "github:isd-project/isd";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
+    _1password-shell-plugins.url = "github:1Password/shell-plugins";
   };
 
   outputs =

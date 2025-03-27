@@ -16,6 +16,7 @@ in
   imports = [
     inputs.agenix.homeManagerModules.default
     inputs.nix-index-database.hmModules.nix-index
+    inputs._1password-shell-plugins.hmModules.default
 
     ./common
     ./scripts

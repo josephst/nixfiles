@@ -17,6 +17,11 @@
     };
   };
 
+  joseph-nixpkgs = final: prev: {
+    inherit (inputs.nixpkgs-joseph.legacyPackages.${prev.system})
+      zwave-js-server;
+  };
+
   security = _final: _prev: {
     # for https://github.com/NixOS/nixpkgs/pull/300028, but causes HUGE rebuild
     # xz = prev.xz.overrideAttrs (old: {
