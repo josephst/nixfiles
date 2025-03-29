@@ -33,7 +33,7 @@ in
 
     casks = [
       # dev tools
-      # "1password-cli"
+      "1password-cli"
       "1password"
       "alacritty"
       # "amethyst"

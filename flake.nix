@@ -73,7 +73,6 @@
     isd.url = "github:isd-project/isd";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
-    _1password-shell-plugins.url = "github:1Password/shell-plugins";
   };
 
   outputs =
