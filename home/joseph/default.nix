@@ -1,10 +1,13 @@
 { config
+, osConfig
 , lib
 , pkgs
 , ...
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+  _1passEnabled = (osConfig ? homebrew && lib.elem "1password-cli" (builtins.map (item: item.name) osConfig.homebrew.casks))
+    || (osConfig.programs ? _1password && osConfig.programs._1password.enable);
 in
 {
   imports = [ ];
@@ -45,4 +48,19 @@ in
       };
     };
   };
+
+  # enable 1password cli plugins
+  xdg.configFile."op/plugins.sh" = {
+    enable = _1passEnabled;
+    text = ''
+      export OP_PLUGIN_ALIASES_SOURCED=1
+      alias gh="op plugin run -- gh"
+    '';
+  };
+  programs.fish.interactiveShellInit = ''
+    # source 1password-cli plugins
+    if test -e ~/.config/op/plugins.sh
+      source ~/.config/op/plugins.sh
+    end
+  '';
 }
