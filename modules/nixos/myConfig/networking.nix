@@ -34,8 +34,7 @@ in
         wifi.backend = "iwd";
       };
       nftables.enable = lib.mkDefault true;
-      useDHCP = lib.mkDefault true;
-      useNetworkd = true;
+      useNetworkd = lib.mkDefault true;
     };
 
     services = {

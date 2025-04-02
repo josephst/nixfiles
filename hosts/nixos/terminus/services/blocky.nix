@@ -1,6 +1,6 @@
-{
+{lib, config, ...}: {
   services.blocky = {
-    enable = true;
+    enable = false; # 4/2/2024: no longer in use
     settings = {
       ports = {
         dns = [
@@ -61,7 +61,7 @@
   networking.firewall.allowedTCPPorts = [ 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];
 
-  systemd.services.blocky = {
+  systemd.services.blocky = lib.mkIf (config.services.blocky.enable) {
     after = [ "network.target" ];
     startLimitBurst = 10;
     startLimitIntervalSec = 60;

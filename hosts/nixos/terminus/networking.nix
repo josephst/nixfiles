@@ -1,5 +1,9 @@
 _: {
   networking.domain = "homelab.josephstahl.com";
+  networking.firewall = {
+    allowPing = true;
+    trustedInterfaces = [ "enp5s0" ];
+  };
   systemd.network = {
     enable = true;
     wait-online.anyInterface = true;
@@ -9,13 +13,9 @@ _: {
         matchConfig.Name = "enp5s0";
         DHCP = "yes";
         networkConfig = {
-          # Address = "192.168.1.10/24";
-          # Gateway = "192.168.1.1";
           DNS = [
-            # "127.0.0.1" # blocky listening here
-            # "::1"
             "1.1.1.1"
-            "1.0.0.1"
+            "8.8.8.8"
           ];
           MulticastDNS = true;
           IPv6AcceptRA = true;
@@ -24,9 +24,6 @@ _: {
         linkConfig = {
           RequiredForOnline = "routable";
           Multicast = true;
-        };
-        ipv6AcceptRAConfig = {
-          UseDNS = false; # don't listen to the ipv6 DNS advertisements from DHCP server, use our own
         };
       };
     };

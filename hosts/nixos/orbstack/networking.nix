@@ -9,8 +9,9 @@ _: {
     # replicates the default behaviour.
     dhcpcd.enable = false;
     useHostResolvConf = false;
-    useDHCP = false;
-    interfaces.eth0.useDHCP = true;
+    # useNetworkd = true;
+    # useDHCP = false;
+    # interfaces.eth0.useDHCP = true;
   };
   # systemd.services.NetworkManager-wait-online.enable = false; # causes problems with tailscale
   # systemd.network.wait-online.anyInterface = true;

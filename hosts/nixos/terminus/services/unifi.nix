@@ -11,6 +11,8 @@ in
     mongodbPackage = pkgs.mongodb-ce; # pre-built binary
   };
 
+  networking.firewall.allowedTCPPorts = [ 8443 ];
+
   services.caddy.virtualHosts."unifi.${domain}" = {
     extraConfig = ''
       reverse_proxy https://localhost:8443 {
