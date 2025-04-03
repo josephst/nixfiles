@@ -21,9 +21,9 @@ in
       openFirewall = true;
       useRoutingFeatures = lib.mkDefault "both";
     };
-  };
 
-  systemd.services.tailscaled.environment = {
-    "TS_DEBUG_FIREWALL_MODE" = "auto";
+    systemd.services.tailscaled.environment = {
+      "TS_DEBUG_FIREWALL_MODE" = "auto";
+    };
   };
 }
