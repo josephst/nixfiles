@@ -7,7 +7,7 @@ in
     enable = true;
     openFirewall = true;
 
-    unifiPackage = pkgs.unifi8;
+    unifiPackage = pkgs.unifi;
     mongodbPackage = pkgs.mongodb-ce; # pre-built binary
   };
 

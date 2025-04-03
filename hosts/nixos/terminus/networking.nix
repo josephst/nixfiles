@@ -1,7 +1,7 @@
 _: {
   networking.domain = "homelab.josephstahl.com";
   networking.firewall = {
-    allowPing = true;
+    enable = true;
     trustedInterfaces = [ "enp5s0" ];
   };
   systemd.network = {
@@ -18,9 +18,8 @@ _: {
             "8.8.8.8"
           ];
           MulticastDNS = true;
-          IPv6AcceptRA = true;
         };
-        domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
+        # domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
         linkConfig = {
           RequiredForOnline = "routable";
           Multicast = true;
