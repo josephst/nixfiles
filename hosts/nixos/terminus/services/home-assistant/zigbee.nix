@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   inherit (config.networking) domain;
 in
@@ -15,6 +15,7 @@ in
   };
   services.zigbee2mqtt = {
     enable = true;
+    package = pkgs.zigbee2mqtt_2;
     settings = {
       permit_join = false;
       mqtt = {
