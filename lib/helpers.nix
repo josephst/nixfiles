@@ -25,12 +25,15 @@
       # If the hostname starts with "iso-", generate an ISO image
       modules =
         let
-          cd-dvd = inputs.nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares.nix";
+          cd-dvd = "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix";
         in
         (builtins.attrValues outputs.nixosModules) ++ [
           ../hosts/nixos/${hostname}
           { inherit myConfig; }
-        ] ++ inputs.nixpkgs.lib.optionals isISO [ cd-dvd ];
+        ] ++ inputs.nixpkgs.lib.optionals isISO [ cd-dvd ]
+        ++ [
+          "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/latest-kernel.nix"
+        ];
     };
 
   mkDarwin =

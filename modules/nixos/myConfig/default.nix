@@ -23,7 +23,9 @@
     # Use systemd-boot to boot EFI machines
     boot.loader.systemd-boot.configurationLimit = lib.mkOverride 1337 10;
     boot.loader.systemd-boot.enable = lib.mkDefault true;
-    boot.loader.timeout = 3;
+    boot.loader.timeout = lib.mkDefault 3;
+
+    boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
     boot.tmp.useTmpfs = lib.mkDefault true;
     zramSwap.enable = lib.mkDefault true;
@@ -53,7 +55,7 @@
         enable = lib.mkDefault true;
         settings = {
           PasswordAuthentication = lib.mkDefault false;
-          PermitRootLogin = lib.mkDefault "prohibit-password";
+          PermitRootLogin = "prohibit-password";
           # Use key exchange algorithms recommended by `nixpkgs#ssh-audit`
           KexAlgorithms = [
             "curve25519-sha256"

@@ -123,8 +123,11 @@
           platform = "aarch64-linux";
           config = commonConfig // nixosConfig;
         };
-        vmware = helper.mkNixos {
-          hostname = "vmware";
+
+        # .iso images
+        #  - nix build .#nixosConfigurations.iso-gnome.config.system.build.isoImage
+        iso-gnome = helper.mkNixos {
+          hostname = "iso-gnome";
           platform = "aarch64-linux";
           config = commonConfig // nixosConfig;
         };
