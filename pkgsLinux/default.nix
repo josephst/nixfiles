@@ -5,6 +5,5 @@
 }:
 {
   hass-smartrent =
-    pkgs.home-assistant.python.pkgs.callPackage ./homeassistant-customcomponents/smartrent.nix
-      { };
+    pkgs.home-assistant.python.pkgs.callPackage ./homeassistant-customcomponents/smartrent/package.nix { };
 }

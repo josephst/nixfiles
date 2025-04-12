@@ -20,7 +20,7 @@ buildHomeAssistantComponent rec {
 
   dependencies = [
     # python requirements, as specified in manifest.json
-    (home-assistant.python.pkgs.callPackage ../../pkgs/smartrent-py.nix { })
+    (home-assistant.python.pkgs.callPackage ../../../pkgs/smartrent-py/package.nix { })
   ];
 
   # manual updates: `cd` to pkgsLinux directory and run

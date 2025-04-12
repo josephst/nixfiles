@@ -4,6 +4,5 @@
 ,
 }:
 {
-  # recyclarr = pkgs.callPackage ./recyclarr { };
-  smartrent-py = pkgs.python3.pkgs.callPackage ./smartrent-py.nix { };
+  smartrent-py = pkgs.python3.pkgs.callPackage ./smartrent-py/package.nix { };
 }

@@ -12,8 +12,6 @@ let
     lib.optionals config.services.tailscale.enable [ "tailscale0" ];
 
   fallbackDns = [ "1.1.1.1#one.one.one.one" ];
-
-  cfg = config.myConfig.networking;
 in
 {
   imports = [

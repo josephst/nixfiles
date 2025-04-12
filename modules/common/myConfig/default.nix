@@ -7,7 +7,7 @@ in
   options.myConfig = with lib; {
     nix.substituters = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "Additional binary caches to use";
     };
     platform = mkOption {
@@ -35,7 +35,7 @@ in
     };
   };
 
-config = {
+  config = {
     nix = {
       package = pkgs.nix;
       extraOptions = lib.optionalString (config.age.secrets ? "ghToken") ''

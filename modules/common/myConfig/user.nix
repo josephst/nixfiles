@@ -2,7 +2,7 @@
 
 let
   cfg = config.myConfig.user;
-  keys = config.myConfig.keys;
+  inherit (config.myConfig) keys;
 in
 {
   options.myConfig.user = {

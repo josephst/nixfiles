@@ -1,5 +1,5 @@
 # modules/common/networking-options.nix
-{ lib, config, pkgs, ... }:
+{ lib, config, ... }:
 let
   cfg = config.myConfig.networking;
 in

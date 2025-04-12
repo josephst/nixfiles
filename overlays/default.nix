@@ -17,7 +17,7 @@
     };
   };
 
-  joseph-nixpkgs = final: prev: {
+  joseph-nixpkgs = _final: prev: {
     inherit (inputs.nixpkgs-joseph.legacyPackages.${prev.system})
       zwave-js-server;
   };
