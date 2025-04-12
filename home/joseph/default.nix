@@ -27,14 +27,14 @@ in
       signing = {
         signByDefault = true;
         format = "ssh";
+        signer = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+        # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
+        key = "key::${config.myHomeConfig.keys.signing.joseph}";
       };
       extraConfig = {
         gpg = {
-          ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
           ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
         };
-        # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
-        user.signingKey = "key::${config.myHomeConfig.keys.signing.joseph}";
       };
     };
   };
