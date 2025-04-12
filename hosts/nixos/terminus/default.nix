@@ -124,7 +124,7 @@
       # TODO: is there a way to run this on each switch? Will Tailscale reset it?
       # to modify CGNAT settings:
       # find the rule handle: `sudo nft -a list ruleset`
-      # run `sudo nft replace rule filter ts-input handle 10 ip saddr 100.80.0.0/20 iifname != "tailscale0" counter drop` (replacing the handle ID as needed)
+      # run `sudo nft replace rule filter ts-input handle 27 iifname != "tailscale0*" ip saddr 100.80.0.0/20 counter drop` (replacing the handle ID as needed)
       # to replace the rule with a more limited rule
       # separately, tailscale is configured to only assign IP addresses in 100.80.0.0/20 range
       extraSetFlags = [ "--advertise-exit-node" ];
