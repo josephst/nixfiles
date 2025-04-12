@@ -58,7 +58,7 @@ in
       # programs available on both nixOS and nix-darwin
       fish = {
         enable = true;
-        # useBabelfish = true;
+        useBabelfish = true;
         shellAliases = {
           nano = "micro";
         };
