@@ -12,21 +12,23 @@ in
   options.myConfig.user = {
     passwordFile = lib.mkOption {
       default = null;
-      type = lib.types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "password file for agenix";
     };
   };
 
   config = {
-    age.secrets.password.file = cfg.passwordFile;
+    age.secrets.password = lib.mkIf (cfg.passwordFile != null) {
+      file = cfg.passwordFile;
+    };
 
     users = {
       defaultUserShell = pkgs.fish;
       users.${cfg.username} = {
         isNormalUser = true;
-        hashedPasswordFile = config.age.secrets.password.path;
+        hashedPasswordFile = lib.mkIf (cfg.passwordFile != null) config.age.secrets.password.path;
         extraGroups = [ "wheel" "networkmanager" ];
-        openssh.authorizedKeys.keys = builtins.attrValues keys.users.${cfg.username};
+        openssh.authorizedKeys.keys = lib.optional (keys.users ? cfg.username) (builtins.attrValues keys.users.${cfg.username});
         packages = [ pkgs.home-manager ];
       };
       users.root = {

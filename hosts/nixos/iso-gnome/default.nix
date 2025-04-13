@@ -4,6 +4,9 @@
   # Enable SSH in the boot process.
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
 
+  # Add keys to nixos user
+  users.users.nixos.openssh.authorizedKeys.keys = builtins.attrValues (import ../../../keys).users.joseph;
+
   # autoSuspend makes the machine automatically suspend after inactivity.
   # It's possible someone could/try to ssh'd into the machine and obviously
   # have issues because it's inactive.

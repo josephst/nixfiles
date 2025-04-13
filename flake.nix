@@ -129,7 +129,13 @@
         iso-gnome = helper.mkNixos {
           hostname = "iso-gnome";
           platform = "aarch64-linux";
-          config = commonConfig // nixosConfig;
+          config = {
+            inherit (commonConfig) tailnet keys;
+            user = {
+              username = "nixos"; # nixos user on ISOs
+              home-manager.enable = false;
+            };
+          };
         };
       };
 
