@@ -21,8 +21,8 @@ in
     # Don't quarantine apps installed by homebrew with gatekeeper
     caskArgs.no_quarantine = lib.mkDefault true;
     onActivation = {
-      autoUpdate = true;
-      upgrade = true;
+      autoUpdate = false;
+      upgrade = false; # manually update with 'brew update' and 'brew upgrade'
 
       # Declarative package management by removing all homebrew packages,
       # not declared in darwin-nix configuration
@@ -31,19 +31,19 @@ in
 
     taps = [ ];
 
+    brews = [
+      "mas"
+    ];
+
     casks = [
       # dev tools
       "1password-cli"
       "1password"
-      "alacritty"
-      # "amethyst"
       "cyberduck"
       "ghostty"
       "git-credential-manager"
       "iterm2"
       "notion"
-      "obsidian"
-      "orbstack"
       "utm"
       "visual-studio-code"
       "wezterm"

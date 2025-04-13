@@ -32,7 +32,7 @@ in
         packages = [ pkgs.home-manager ];
       };
       users.root = {
-        hashedPassword = null;
+        hashedPassword = lib.mkDefault null;
         openssh.authorizedKeys.keys = builtins.attrValues keys.users.joseph; # admin
       };
     };

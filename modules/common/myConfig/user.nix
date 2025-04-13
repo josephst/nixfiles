@@ -31,7 +31,6 @@ in
       sharedModules = (builtins.attrValues outputs.homeManagerModules) ++ [
         {
           myHomeConfig.keys = keys;
-          myHomeConfig.username = cfg.username;
         }
       ];
       users."${cfg.username}" = import cfg.home-manager.home;
