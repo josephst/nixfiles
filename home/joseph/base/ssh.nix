@@ -30,6 +30,7 @@ in
       "terminus terminus.josephstahl.com" = {
         hostname = "terminus";
         forwardAgent = true;
+        identitiesOnly = true;
         identityFile = lib.mkIf config.home.file.${identityFile}.enable "${config.home.file.${identityFile}.source}";
       };
       "github.com" = {

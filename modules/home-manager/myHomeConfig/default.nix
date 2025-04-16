@@ -47,7 +47,7 @@ in
 
     # new Agenix configuration which is *user-specific* (DISTINCT from the system Agenix config)
     age = {
-      identityPaths = [ "~/.ssh/agenix" ] ++ options.age.identityPaths.default;
+      identityPaths = [ "${config.home.homeDirectory}/.ssh/agenix" ] ++ options.age.identityPaths.default;
     };
     xdg = {
       enable = true;

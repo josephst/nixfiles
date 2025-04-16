@@ -6,20 +6,20 @@
 {
   default = pkgs.mkShell {
     # Enable experimental features without having to specify the argument
-    NIX_CONFIG = "experimental-features = nix-command flakes repl-flake";
+    NIX_CONFIG = "experimental-features = nix-command flakes";
     nativeBuildInputs = with pkgs; [
       # agenix
       nixfmt-rfc-style
       bashInteractive
       curl
       git
+      helix
       home-manager
-      neovim
       nix
       starship
     ];
-    shellHook = ''
-      eval "$(${pkgs.starship}/bin/starship init bash)"
-    '';
+    # shellHook = ''
+    #   eval "$(${pkgs.starship}/bin/starship init bash)"
+    # '';
   };
 }
