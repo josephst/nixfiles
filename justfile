@@ -19,10 +19,10 @@ update:
 [linux]
 switch:
   git add --all
-  nixos-rebuild switch --flake . --use-remote-sudo
+  nixos-rebuild switch --flake . --sudo
 [linux]
 boot:
-  nixos-rebuild boot --flake . --use-remote-sudo
+  nixos-rebuild boot --flake . --sudo
 [linux]
 update:
   nix flake update --commit-lock-file

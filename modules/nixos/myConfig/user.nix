@@ -28,7 +28,7 @@ in
         isNormalUser = true;
         hashedPasswordFile = lib.mkIf (cfg.passwordFile != null) config.age.secrets.password.path;
         extraGroups = [ "wheel" "networkmanager" ];
-        openssh.authorizedKeys.keys = lib.optional (keys.users ? cfg.username) (builtins.attrValues keys.users.${cfg.username});
+        openssh.authorizedKeys.keys = lib.optionals (builtins.hasAttr cfg.username keys.users) (builtins.attrValues keys.users.${cfg.username});
         packages = [ pkgs.home-manager ];
       };
       users.root = {
