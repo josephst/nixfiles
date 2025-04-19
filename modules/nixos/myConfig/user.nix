@@ -15,6 +15,11 @@ in
       type = lib.types.nullOr lib.types.path;
       description = "password file for agenix";
     };
+    shell = lib.mkOption {
+      default = pkgs.fish;
+      type = lib.types.package;
+      description = "The shell to use for the user.";
+    };
   };
 
   config = {
@@ -26,6 +31,7 @@ in
       defaultUserShell = pkgs.fish;
       users.${cfg.username} = {
         isNormalUser = true;
+        shell = cfg.shell;
         hashedPasswordFile = lib.mkIf (cfg.passwordFile != null) config.age.secrets.password.path;
         extraGroups = [ "wheel" "networkmanager" ];
         openssh.authorizedKeys.keys = lib.optionals (builtins.hasAttr cfg.username keys.users) (builtins.attrValues keys.users.${cfg.username});

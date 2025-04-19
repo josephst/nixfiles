@@ -137,7 +137,7 @@ in
       '';
     };
     "ghostty/config".text = ''
-      command = "${pkgs.fish}/bin/fish -l"
+      command = "bash -l -c fish"
 
       theme = dark:catppuccin-frappe,light:catppuccin-latte
     '';

@@ -16,7 +16,6 @@
     description = "Guest user for accessing Samba shares";
     group = "users";
     extraGroups = [ "media" ];
-    shell = "/bin/nologin";
     uid = 3000; # keep same UID between reinstalls
   };
 

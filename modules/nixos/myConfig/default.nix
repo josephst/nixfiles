@@ -84,8 +84,19 @@
         pkgs.usbutils
         pkgs.pciutils
         pkgs.smartmontools
+
+        # shells
+        pkgs.bashInteractive
+        pkgs.fish
+        pkgs.nushell
+        pkgs.zsh
       ];
-      shells = [ pkgs.fish ];
+      shells = [
+        pkgs.bashInteractive
+        pkgs.fish
+        pkgs.nushell
+        pkgs.zsh
+      ];
     };
 
     programs = {

@@ -101,14 +101,15 @@
       treefmtEval = helper.forAllSystems (
         system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix
       );
-    in
-    {
-      inherit overlays nixosModules darwinModules homeManagerModules;
+
       packages = nixpkgs.lib.attrsets.recursiveUpdate
         (helper.forAllSystems (
           system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }
         ))
         (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
+    in
+    {
+      inherit overlays packages nixosModules darwinModules homeManagerModules;
       formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
 
       # NixOS configuration entrypoint
