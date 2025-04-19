@@ -2,6 +2,7 @@ _: {
   programs = {
     starship = {
       enable = true;
+      enableNushellIntegration = false;
       settings = {
         line_break = {
           disabled = true;
