@@ -10,6 +10,12 @@ let
     || (osConfig.programs ? _1password && osConfig.programs._1password.enable);
 
   gitSigningKey = if lib.hasAttr "joseph" config.myHomeConfig.keys.signing then lib.getAttr "joseph" config.myHomeConfig.keys.signing else null;
+
+  manpager = (pkgs.writeShellScriptBin "manpager" (if isDarwin then ''
+    sh -c 'col -bx | bat -l man -p'
+    '' else ''
+    cat "$1" | col -bx | bat --language man --style plain
+  ''));
 in
 {
   imports = [
@@ -18,13 +24,15 @@ in
 
   home = {
     sessionVariables = {
-      EDITOR = "micro";
-      MANPAGER = "sh -c 'col --no-backspaces --spaces | bat --language man'";
+      LANG = "en_US.UTF-8";
+      LC_CTYPE = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
+      EDITOR = "hx";
+      MANPAGER = "${manpager}/bin/manpager";
       MANROFFOPT = "-c";
-      PAGER = "bat";
       VISUAL = "micro";
-      SUDO_EDITOR = "micro";
-      SYSTEMD_EDITOR = "micro";
+      SUDO_EDITOR = "hx";
+      SYSTEMD_EDITOR = "hx";
     };
     shellAliases = {
       dig = "dog";
@@ -99,22 +107,6 @@ in
         prompt = "enabled";
       };
     };
-    git = {
-      userEmail = "1269177+josephst@users.noreply.github.com";
-      userName = "Joseph Stahl";
-      signing = {
-        signByDefault = true;
-        format = "ssh";
-        signer = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
-        # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
-        key = "key::${config.myHomeConfig.keys.signing.joseph}";
-      };
-      extraConfig = {
-        gpg = {
-          ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
-        };
-      };
-    };
   };
 
   # auth with github is managed by 1password on mac (instead of reading gh/hosts.yml)
@@ -137,7 +129,7 @@ in
       '';
     };
     "ghostty/config".text = ''
-      command = "bash -l -c fish"
+      command = "${pkgs.fish}/bin/fish"
 
       theme = dark:catppuccin-frappe,light:catppuccin-latte
     '';
@@ -149,5 +141,7 @@ in
     if test -e ~/.config/op/plugins.sh
       source ~/.config/op/plugins.sh
     end
+
+    set -g SHELL ${pkgs.fish}/bin/fish
   '';
 }

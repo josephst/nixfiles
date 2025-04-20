@@ -1,12 +1,21 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 in
 {
   programs.git = {
     enable = true;
+    userEmail = "1269177+josephst@users.noreply.github.com";
+    userName = "Joseph Stahl";
+    signing = {
+      signByDefault = true;
+      format = "ssh";
+      signer = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
+      key = "key::${config.myHomeConfig.keys.signing.joseph}";
+    };
     aliases = {
-      l = "log --pretty=oneline -n 50 --graph --abbrev-commit";
+      l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
       p = "pull --ff-only";
       ff = "merge --ff-only";
       graph = "log --decorate --oneline --graph";
@@ -15,6 +24,10 @@ in
       add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
     };
     extraConfig = {
+      gpg = {
+        ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
+      };
+      github.user = "josephst";
       credential.helper = lib.mkIf isDarwin "/usr/local/bin/git-credential-manager";
       init.defaultBranch = "main";
       # Automatically track remote branch
