@@ -43,6 +43,7 @@ in
       "ghostty"
       "git-credential-manager"
       "iterm2"
+      "lm-studio"
       "notion"
       "utm"
       "visual-studio-code"
