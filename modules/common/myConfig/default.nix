@@ -35,8 +35,9 @@ in
     ghToken = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = "Path to GitHub token secret for Agenix";
+      description = "Path to GitHub token secret (avoid rate-limiting by GitHub)";
     };
+    # TODO: make this into a submodule for type checking purposes
     keys = lib.mkOption {
       type = types.nullOr types.attrs;
       default = null;
@@ -77,6 +78,16 @@ in
         };
       };
       nix-index-database.comma.enable = true; # from https://github.com/nix-community/nix-index-database
+
+      # TODO: enable this on macOS when nix-darwin supports extraHostNames (https://github.com/nix-darwin/nix-darwin/pull/601)
+      ssh.knownHosts = lib.mkIf (!pkgs.stdenv.isDarwin && cfg.keys != null) (lib.mapAttrs (hostname: value: {
+        publicKey = cfg.keys.hosts.${hostname};
+        extraHostNames = lib.optionals (cfg.tailnet != null) [
+          "${hostname}.${cfg.tailnet}"
+        ] ++ lib.optionals (hostname == config.networking.hostName) [
+          "localhost"
+        ];
+      }) cfg.keys.hosts);
     };
 
     age = {
