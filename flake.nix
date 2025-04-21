@@ -102,14 +102,19 @@
         system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix
       );
 
-      packages = nixpkgs.lib.attrsets.recursiveUpdate
-        (helper.forAllSystems (
-          system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }
-        ))
-        (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
+      packages =
+        nixpkgs.lib.attrsets.recursiveUpdate
+          (helper.forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }))
+          (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
     in
     {
-      inherit overlays packages nixosModules darwinModules homeManagerModules;
+      inherit
+        overlays
+        packages
+        nixosModules
+        darwinModules
+        homeManagerModules
+        ;
       formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
 
       # NixOS configuration entrypoint
@@ -163,7 +168,9 @@
       };
 
       # `nix develop`
-      devShells = helper.forAllSystems (system: import ./shell.nix { pkgs = nixpkgs.legacyPackages.${system}; });
+      devShells = helper.forAllSystems (
+        system: import ./shell.nix { pkgs = nixpkgs.legacyPackages.${system}; }
+      );
     };
 
   # configure nix

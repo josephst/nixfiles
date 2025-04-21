@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   imports = [
     ./bash.nix
@@ -16,62 +16,6 @@
     ./starship.nix
     ./wezterm
     ./zellij
-  ];
-
-  home.packages = with pkgs; [
-    age # encryption
-    bc # calculator
-    croc # file sharing
-    delta # git and diff viewer
-    diffsitter # better diff
-    dogdns # better dig
-    httpie # better curl
-    hub # Git wrapper that has better Github support
-    hyperfine # command-line benchmarking
-    just # command runner
-    lazygit # git with TUI
-    ncdu # TUI disk usage
-    python3
-    rclone
-    restic
-    rsync
-    tldr # cheatsheets in terminal
-    typst # latex alternative for typesetting docs
-
-    # development
-    gh-dash
-    hugo
-    zola
-
-    # media
-    ffmpeg
-    recyclarr # sync settings to -arr apps
-    yt-dlp
-
-    # languages
-    cargo
-    nim
-    nimble # package manager for nim
-    nixpkgs-manual # always handy to have documentation available
-    nodejs
-    rustc
-    shellcheck
-    zigpkgs.master
-
-    cachix
-    comma # Install and run programs by sticking a , before them
-    hydra-check # check hydra for build status of a package
-    nil # also a Nix language server
-    nix-init # generate nix package from a URL
-    nix-inspect
-    nix-output-monitor
-    nix-update
-    nixd # Nix LSP
-    nixfmt-rfc-style # nix formatter
-    nixpkgs-hammering
-    nixpkgs-review
-    nurl # generate nix fetcher expression from a URL + revision
-    nvd # differ
   ];
 
   programs = {

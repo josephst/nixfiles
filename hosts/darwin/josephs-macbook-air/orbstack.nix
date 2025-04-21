@@ -1,4 +1,4 @@
-{...}: {
+_: {
   home-manager.users.root.programs.ssh = {
     enable = true;
     matchBlocks = {
@@ -21,12 +21,12 @@
       {
         hostName = "nixos@orb";
         system = "aarch64-linux";
-        supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
       }
       {
         hostName = "nixos@orb";
         system = "x86_64-linux";
-        supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
       }
     ];
     distributedBuilds = true;

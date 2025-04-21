@@ -8,7 +8,7 @@ let
     }
     {
       url = "https://cache.garnix.io";
-      key =  "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=";
+      key = "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=";
     }
     {
       url = "https://numtide.cachix.org";
@@ -81,14 +81,16 @@ in
       nix-index-database.comma.enable = true; # from https://github.com/nix-community/nix-index-database
 
       # TODO: enable this on macOS when nix-darwin supports extraHostNames (https://github.com/nix-darwin/nix-darwin/pull/601)
-      ssh.knownHosts = lib.mkIf (!pkgs.stdenv.isDarwin && cfg.keys != null) (lib.mapAttrs (hostname: value: {
-        publicKey = cfg.keys.hosts.${hostname};
-        extraHostNames = lib.optionals (cfg.tailnet != null) [
-          "${hostname}.${cfg.tailnet}"
-        ] ++ lib.optionals (hostname == config.networking.hostName) [
-          "localhost"
-        ];
-      }) cfg.keys.hosts);
+      ssh.knownHosts = lib.mkIf (!pkgs.stdenv.isDarwin && cfg.keys != null) (lib.mapAttrs
+        (hostname: _value: {
+          publicKey = cfg.keys.hosts.${hostname};
+          extraHostNames = lib.optionals (cfg.tailnet != null) [
+            "${hostname}.${cfg.tailnet}"
+          ] ++ lib.optionals (hostname == config.networking.hostName) [
+            "localhost"
+          ];
+        })
+        cfg.keys.hosts);
     };
 
     age = {

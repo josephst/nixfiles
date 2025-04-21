@@ -1,4 +1,4 @@
-{pkgs, lib, config, ...}: {
+{ pkgs, lib, config, ... }: {
   myConfig.gnome.enable = true;
 
   # Enable SSH in the boot process.

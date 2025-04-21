@@ -41,6 +41,7 @@ in
       "1password"
       "cyberduck"
       "ghostty"
+      "github"
       "git-credential-manager"
       "iterm2"
       "lm-studio"
