@@ -45,6 +45,7 @@
       };
       settings = {
         trusted-users = [ "@admin" ];
+        sandbox = "relaxed";
       };
     };
 
