@@ -1,5 +1,6 @@
-{ config
-, ...
+{
+  config,
+  ...
 }:
 # ROLE: to back up this machine to B2 storage using Restic
 # This way, services such as Paperless are also backed up

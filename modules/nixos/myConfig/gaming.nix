@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.myConfig.gaming;
@@ -10,7 +15,13 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      (pkgs.lutris.override { extraLibraries = p: with p; [ libadwaita gtk4 ]; })
+      (pkgs.lutris.override {
+        extraLibraries =
+          p: with p; [
+            libadwaita
+            gtk4
+          ];
+      })
       pkgs.protonup-ng
       pkgs.wine
     ];

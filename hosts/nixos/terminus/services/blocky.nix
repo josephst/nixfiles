@@ -1,4 +1,5 @@
-{ lib, config, ... }: {
+{ lib, config, ... }:
+{
   services.blocky = {
     enable = false; # 4/2/2024: no longer in use
     settings = {

@@ -1,7 +1,8 @@
 # from https://github.com/wimpysworld/nix-config (MIT License)
-{ inputs
-, outputs
-, ...
+{
+  inputs,
+  outputs,
+  ...
 }:
 let
   helpers = import ./helpers.nix { inherit inputs outputs; };

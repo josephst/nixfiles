@@ -1,19 +1,18 @@
 # report a service's success/failure to healthchecks.io
 # each template is instantiated with the name of the unit being reported on and the action (start, success, failure)
 # example: healthchecks-ping@restic-backups-system-backup:start, ...
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   cfg = lib.filterAttrs (_: v: v.urlFile != null || v.url != null) config.services.healthchecks-ping;
-  urlFiles = lib.mapAttrsToList
-    (n: v: {
-      name = if v.unitName != null then v.unitName else n;
-      path = if v.url != null then (pkgs.writeText "healthchecks-${n}" "HC_URL=${v.url}") else v.urlFile;
-    })
-    cfg;
+  urlFiles = lib.mapAttrsToList (n: v: {
+    name = if v.unitName != null then v.unitName else n;
+    path = if v.url != null then (pkgs.writeText "healthchecks-${n}" "HC_URL=${v.url}") else v.urlFile;
+  }) cfg;
 in
 {
   options.services.healthchecks-ping = lib.mkOption {
@@ -61,30 +60,24 @@ in
 
   config = lib.mkIf (cfg != { }) {
     assertions =
-      lib.mapAttrsToList
-        (n: v: {
-          assertion = (v.urlFile == null) != (v.url == null);
-          message = "services.healthchecks.${n}: exactly one of url or urlFile should be set";
-        })
-        cfg
-      ++ lib.mapAttrsToList
-        (n: v: {
-          assertion = config.systemd.services ? "${v.unitName}";
-          message = "services.healthchecks.${n}: unitName ${v.unitName} does not correspond to a configured systemd unit";
-        })
-        (lib.filterAttrs (_: v: v.unitName != null) cfg);
+      lib.mapAttrsToList (n: v: {
+        assertion = (v.urlFile == null) != (v.url == null);
+        message = "services.healthchecks.${n}: exactly one of url or urlFile should be set";
+      }) cfg
+      ++ lib.mapAttrsToList (n: v: {
+        assertion = config.systemd.services ? "${v.unitName}";
+        message = "services.healthchecks.${n}: unitName ${v.unitName} does not correspond to a configured systemd unit";
+      }) (lib.filterAttrs (_: v: v.unitName != null) cfg);
 
     systemd.services = lib.mkMerge [
-      (lib.mapAttrs'
-        (
-          _name: val:
-            lib.nameValuePair val.unitName {
-              wants = [ "healthchecks-ping@${val.unitName}:start.service" ];
-              onSuccess = [ "healthchecks-ping@${val.unitName}:success.service" ];
-              onFailure = [ "healthchecks-ping@${val.unitName}:fail.service" ];
-            }
-        )
-        (lib.filterAttrs (_: v: v.unitName != null) cfg))
+      (lib.mapAttrs' (
+        _name: val:
+        lib.nameValuePair val.unitName {
+          wants = [ "healthchecks-ping@${val.unitName}:start.service" ];
+          onSuccess = [ "healthchecks-ping@${val.unitName}:success.service" ];
+          onFailure = [ "healthchecks-ping@${val.unitName}:fail.service" ];
+        }
+      ) (lib.filterAttrs (_: v: v.unitName != null) cfg))
       {
         "healthchecks-ping@" = {
           description = "Pings healthchecks.io (%i)";

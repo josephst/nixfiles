@@ -1,15 +1,16 @@
 # modified from https://github.com/wimpysworld/nix-config (MIT)
-{ inputs
-, outputs
-, ...
+{
+  inputs,
+  outputs,
+  ...
 }:
 {
   # Helper function for generating NixOS configs
   mkNixos =
-    { hostname
-    , platform ? "x86_64-linux"
-    , config ? { }
-    ,
+    {
+      hostname,
+      platform ? "x86_64-linux",
+      config ? { },
     }:
     let
       isISO = builtins.substring 0 4 hostname == "iso-";
@@ -27,20 +28,22 @@
         let
           cd-dvd = "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix";
         in
-        (builtins.attrValues outputs.nixosModules) ++ [
+        (builtins.attrValues outputs.nixosModules)
+        ++ [
           ../hosts/nixos/${hostname}
           { inherit myConfig; }
-        ] ++ inputs.nixpkgs.lib.optionals isISO [ cd-dvd ]
+        ]
+        ++ inputs.nixpkgs.lib.optionals isISO [ cd-dvd ]
         ++ [
           "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/latest-kernel.nix"
         ];
     };
 
   mkDarwin =
-    { hostname
-    , platform ? "aarch64-darwin"
-    , config ? { }
-    ,
+    {
+      hostname,
+      platform ? "aarch64-darwin",
+      config ? { },
     }:
     let
       myConfig = config // {

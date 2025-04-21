@@ -1,4 +1,10 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.myConfig;
   substituters = [
@@ -44,7 +50,10 @@ in
       description = "SSH keys for this system and its users";
     };
     stateVersion = mkOption {
-      type = types.oneOf [ types.int types.str ];
+      type = types.oneOf [
+        types.int
+        types.str
+      ];
       description = "stateVersion (int for nix-darwin, string for nixOS)";
     };
   };
@@ -61,7 +70,10 @@ in
         warn-dirty = false;
         substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
         trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
-        experimental-features = [ "nix-command" "flakes" ];
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
         log-lines = lib.mkDefault 25;
         builders-use-substitutes = true;
         cores = 0;
@@ -81,16 +93,18 @@ in
       nix-index-database.comma.enable = true; # from https://github.com/nix-community/nix-index-database
 
       # TODO: enable this on macOS when nix-darwin supports extraHostNames (https://github.com/nix-darwin/nix-darwin/pull/601)
-      ssh.knownHosts = lib.mkIf (!pkgs.stdenv.isDarwin && cfg.keys != null) (lib.mapAttrs
-        (hostname: _value: {
+      ssh.knownHosts = lib.mkIf (!pkgs.stdenv.isDarwin && cfg.keys != null) (
+        lib.mapAttrs (hostname: _value: {
           publicKey = cfg.keys.hosts.${hostname};
-          extraHostNames = lib.optionals (cfg.tailnet != null) [
-            "${hostname}.${cfg.tailnet}"
-          ] ++ lib.optionals (hostname == config.networking.hostName) [
-            "localhost"
-          ];
-        })
-        cfg.keys.hosts);
+          extraHostNames =
+            lib.optionals (cfg.tailnet != null) [
+              "${hostname}.${cfg.tailnet}"
+            ]
+            ++ lib.optionals (hostname == config.networking.hostName) [
+              "localhost"
+            ];
+        }) cfg.keys.hosts
+      );
     };
 
     age = {

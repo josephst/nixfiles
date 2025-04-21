@@ -1,8 +1,9 @@
-{ config
-, osConfig
-, lib
-, pkgs
-, ...
+{
+  config,
+  osConfig,
+  lib,
+  pkgs,
+  ...
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
@@ -20,15 +21,15 @@ let
       null;
 
   manpager = pkgs.writeShellScriptBin "manpager" (
-      if isDarwin then
-        ''
-          sh -c 'col -bx | bat -l man -p'
-        ''
-      else
-        ''
-          cat "$1" | col -bx | bat --language man --style plain
-        ''
-    );
+    if isDarwin then
+      ''
+        sh -c 'col -bx | bat -l man -p'
+      ''
+    else
+      ''
+        cat "$1" | col -bx | bat --language man --style plain
+      ''
+  );
 in
 {
   imports = [

@@ -1,4 +1,10 @@
-{ inputs, outputs, config, lib, ... }:
+{
+  inputs,
+  outputs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.myConfig.user;
@@ -12,7 +18,9 @@ in
       description = "The username of the user to create.";
     };
     home-manager = {
-      enable = lib.mkEnableOption "home-manager" // { default = true; };
+      enable = lib.mkEnableOption "home-manager" // {
+        default = true;
+      };
       home = lib.mkOption {
         default = ../../../home/${cfg.username};
         type = lib.types.path;

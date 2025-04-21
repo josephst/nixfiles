@@ -1,4 +1,11 @@
-{ inputs, config, lib, pkgs, options, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   inherit (pkgs.stdenv) isLinux;

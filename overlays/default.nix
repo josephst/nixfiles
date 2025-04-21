@@ -19,7 +19,8 @@
 
   joseph-nixpkgs = _final: prev: {
     inherit (inputs.nixpkgs-joseph.legacyPackages.${prev.system})
-      zwave-js-server;
+      zwave-js-server
+      ;
   };
 
   security = _final: _prev: {

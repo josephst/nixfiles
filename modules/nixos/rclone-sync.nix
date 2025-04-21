@@ -1,8 +1,9 @@
-{ config
-, lib
-, pkgs
-, utils
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
 }:
 
 let
@@ -104,8 +105,8 @@ in
       in
       {
         description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
-        wants = [ "network.target" ];
-        after = [ "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         serviceConfig = {
           Type = "oneshot";
           LoadCredential = [ "rcloneConf:${cfg.rcloneConfFile}" ];

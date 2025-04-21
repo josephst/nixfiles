@@ -13,10 +13,12 @@ in
   };
 
   config = {
-    assertions = [{
-      assertion = cfg.hostname != null;
-      message = "You must set a hostname.";
-    }];
+    assertions = [
+      {
+        assertion = cfg.hostname != null;
+        message = "You must set a hostname.";
+      }
+    ];
 
     networking = {
       hostName = cfg.hostname;

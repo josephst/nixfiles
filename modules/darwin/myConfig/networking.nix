@@ -1,5 +1,6 @@
-{ config
-, ...
+{
+  config,
+  ...
 }:
 let
   cfg = config.myConfig.networking;

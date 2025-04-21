@@ -1,8 +1,9 @@
-{ pkgs
-, config
-, osConfig
-, lib
-, ...
+{
+  pkgs,
+  config,
+  osConfig,
+  lib,
+  ...
 }:
 let
   inherit (config.myHomeConfig) keys;
@@ -11,9 +12,9 @@ let
 
   # identity = a user-specific and host-specific key (one identity per user per machine)
   # userAllKeys = all keys registered to a user (across all machines)
-  userAllKeys =
-    if lib.hasAttr username keys.users then lib.getAttr username keys.users else null;
-  userHostSpecificKey = if lib.hasAttr hostname userAllKeys then lib.getAttr hostname userAllKeys else null;
+  userAllKeys = if lib.hasAttr username keys.users then lib.getAttr username keys.users else null;
+  userHostSpecificKey =
+    if lib.hasAttr hostname userAllKeys then lib.getAttr hostname userAllKeys else null;
   identityFile = ".ssh/identity.pub";
 in
 {
@@ -22,7 +23,9 @@ in
     includes = lib.optional pkgs.stdenv.isDarwin "${config.home.homeDirectory}/.orbstack/ssh/config";
     matchBlocks = {
       "*" = {
-        identityFile = lib.mkIf config.home.file.${identityFile}.enable "${config.home.file.${identityFile}.source}";
+        identityFile =
+          lib.mkIf config.home.file.${identityFile}.enable
+            "${config.home.file.${identityFile}.source}";
         extraOptions = lib.optionalAttrs pkgs.stdenv.isDarwin {
           IdentityAgent = ''"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"'';
         };
@@ -31,7 +34,9 @@ in
         hostname = "terminus";
         forwardAgent = true;
         identitiesOnly = true;
-        identityFile = lib.mkIf config.home.file.${identityFile}.enable "${config.home.file.${identityFile}.source}";
+        identityFile =
+          lib.mkIf config.home.file.${identityFile}.enable
+            "${config.home.file.${identityFile}.source}";
       };
       "github.com" = {
         user = "git";

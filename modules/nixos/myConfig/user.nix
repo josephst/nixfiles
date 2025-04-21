@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.myConfig.user;
@@ -33,8 +38,13 @@ in
         isNormalUser = true;
         inherit (cfg) shell;
         hashedPasswordFile = lib.mkIf (cfg.passwordFile != null) config.age.secrets.password.path;
-        extraGroups = [ "wheel" "networkmanager" ];
-        openssh.authorizedKeys.keys = lib.optionals (builtins.hasAttr cfg.username keys.users) (builtins.attrValues keys.users.${cfg.username});
+        extraGroups = [
+          "wheel"
+          "networkmanager"
+        ];
+        openssh.authorizedKeys.keys = lib.optionals (builtins.hasAttr cfg.username keys.users) (
+          builtins.attrValues keys.users.${cfg.username}
+        );
         packages = [ pkgs.home-manager ];
       };
       users.root = {

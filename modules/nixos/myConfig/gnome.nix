@@ -1,4 +1,10 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
   cfg = config.myConfig.gnome;
@@ -10,15 +16,17 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = [
-        pkgs.firefox
-        pkgs.wl-clipboard
-        pkgs.gnomeExtensions.appindicator
-        pkgs.gnomeExtensions.gsconnect
-        inputs.ghostty.packages.${pkgs.system}.default # ghostty terminal
-      ] ++ lib.optionals (builtins.elem config.nixpkgs.hostPlatform pkgs.spotify.meta.platforms) [
-        pkgs.spotify
-      ];
+      systemPackages =
+        [
+          pkgs.firefox
+          pkgs.wl-clipboard
+          pkgs.gnomeExtensions.appindicator
+          pkgs.gnomeExtensions.gsconnect
+          inputs.ghostty.packages.${pkgs.system}.default # ghostty terminal
+        ]
+        ++ lib.optionals (builtins.elem config.nixpkgs.hostPlatform pkgs.spotify.meta.platforms) [
+          pkgs.spotify
+        ];
       gnome.excludePackages = with pkgs; [
         cheese # webcam tool
         epiphany # web browser

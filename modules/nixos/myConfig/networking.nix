@@ -1,15 +1,14 @@
 # sane networking defaults
-{ config
-, lib
-, ...
+{
+  config,
+  lib,
+  ...
 }:
 let
-  unmanagedInterfaces =
-    lib.optionals config.services.tailscale.enable [ "tailscale0" ];
+  unmanagedInterfaces = lib.optionals config.services.tailscale.enable [ "tailscale0" ];
 
   # Trust the tailscale interface, if tailscale is enabled
-  trustedInterfaces =
-    lib.optionals config.services.tailscale.enable [ "tailscale0" ];
+  trustedInterfaces = lib.optionals config.services.tailscale.enable [ "tailscale0" ];
 
   fallbackDns = [ "1.1.1.1#one.one.one.one" ];
 in
@@ -47,8 +46,10 @@ in
 
     systemd.services.NetworkManager-wait-online.enable = false;
 
-    users.users.${config.myConfig.user.username}.extraGroups = lib.optionals config.networking.networkmanager.enable [
-      "networkmanager"
-    ];
+    users.users.${config.myConfig.user.username}.extraGroups =
+      lib.optionals config.networking.networkmanager.enable
+        [
+          "networkmanager"
+        ];
   };
 }
