@@ -74,7 +74,7 @@
         "min receivefile size" = "16384";
         "browseable" = "yes";
         "map to guest" = "bad user";
-        "guest account" = "nobody";
+        "guest account" = "samba-guest";
 
         "logging" = "systemd";
         "max log size" = "10000";
@@ -96,6 +96,7 @@
 
       media = {
         path = "/storage/media";
+        "public" = "yes";
         "force user" = "samba-guest";
       };
     };
