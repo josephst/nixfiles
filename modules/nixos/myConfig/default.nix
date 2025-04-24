@@ -81,6 +81,7 @@
     };
 
     environment = {
+      localBinInPath = true; # add ~/.local/bin to $PATH
       systemPackages = [
         # nixos-specific packages
         inputs.isd.packages.${pkgs.system}.default # interactive systemd

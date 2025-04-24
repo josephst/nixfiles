@@ -116,15 +116,15 @@ in
 
     environment = {
       variables = {
-        EDITOR = "micro";
-        SYSTEMD_EDITOR = "micro";
-        VISUAL = "micro";
+        EDITOR = "hx";
+        SYSTEMD_EDITOR = "hx";
+        VISUAL = "hx";
       };
       systemPackages = [
         pkgs.deploy-rs
         pkgs.agenix
+        pkgs.helix
         pkgs.git
-        pkgs.micro
         pkgs.nix-output-monitor
         pkgs.nvd
       ];
