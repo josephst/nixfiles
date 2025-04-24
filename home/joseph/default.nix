@@ -56,6 +56,7 @@ in
     packages =
       with pkgs;
       [
+        aider-chat # llm coding
         age # encryption
         agenix # age secrets
         bc # calculator
@@ -69,7 +70,6 @@ in
         dua # modern du
         duf # modern df
         fd # find
-        gh-dash # github dashboard
         httpie # better curl
         hub # Git wrapper that has better Github support
         hugo # static website builder
@@ -103,7 +103,7 @@ in
         usbutils # USB info
       ]
       ++ lib.optionals isDarwin [
-        nh
+        nh # nix client (on nixos, this is a module)
         coreutils # macOS coreutils
       ];
     file = {
