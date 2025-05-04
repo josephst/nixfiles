@@ -37,7 +37,6 @@
     zramSwap.enable = lib.mkDefault true;
 
     time.timeZone = lib.mkDefault "America/New_York";
-    i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
 
     nixpkgs = {
       overlays = builtins.attrValues outputs.overlays;
