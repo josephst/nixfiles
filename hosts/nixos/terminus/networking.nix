@@ -1,9 +1,5 @@
 _: {
   networking.domain = "homelab.josephstahl.com";
-  networking.firewall = {
-    enable = true;
-    trustedInterfaces = [ "enp5s0" ];
-  };
   systemd.network = {
     enable = true;
     wait-online.anyInterface = true;

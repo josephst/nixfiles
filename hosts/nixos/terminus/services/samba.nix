@@ -100,11 +100,9 @@
         "force user" = "samba-guest";
       };
     };
-    openFirewall = true;
   };
 
   services.samba-wsdd = {
     enable = true;
-    openFirewall = true;
   };
 }

@@ -22,7 +22,6 @@ in
 
   services.home-assistant = {
     enable = true;
-    openFirewall = true;
 
     extraComponents = [
       "androidtv_remote"
