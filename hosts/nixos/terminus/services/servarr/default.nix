@@ -1,13 +1,13 @@
 { ... }:
 {
   imports = [
-    ./plex.nix
+    ./jellyfin.nix
     ./prowlarr.nix
     ./radarr.nix
     ./sabnzbd.nix
     ./sonarr.nix
   ];
 
-  # Create the group for media stuff (plex, sabnzbd, etc)
+  # Create the group for media stuff (jellyfin, sabnzbd, etc)
   users.groups.media = { };
 }
