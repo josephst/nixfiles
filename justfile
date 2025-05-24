@@ -10,7 +10,7 @@ pkgs-update:
 [macos]
 switch:
   git add --all
-  darwin-rebuild switch --flake .
+  sudo darwin-rebuild switch --flake .
 [macos]
 update:
   brew update
@@ -19,10 +19,10 @@ update:
 [linux]
 switch:
   git add --all
-  nixos-rebuild switch --flake . --sudo
+  sudo nixos-rebuild switch --flake .
 [linux]
 boot:
-  nixos-rebuild boot --flake . --sudo
+  sudo nixos-rebuild boot --flake .
 [linux]
 update:
   nix flake update --commit-lock-file
