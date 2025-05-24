@@ -11,6 +11,7 @@ in
   ];
 
   config = {
+    system.primaryUser = cfg.username;
     users = {
       users.${cfg.username} = {
         home = "/Users/${cfg.username}";
