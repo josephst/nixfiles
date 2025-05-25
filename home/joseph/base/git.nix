@@ -2,10 +2,17 @@
   pkgs,
   lib,
   config,
+  osConfig,
   ...
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+  
+  gitSigningKey =
+    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then
+      lib.getAttr "joseph" osConfig.myConfig.keys.signing
+    else
+      null;
 in
 {
   programs.git = {
@@ -13,11 +20,11 @@ in
     userEmail = "1269177+josephst@users.noreply.github.com";
     userName = "Joseph Stahl";
     signing = {
-      signByDefault = true;
+      signByDefault = gitSigningKey != null;
       format = "ssh";
       signer = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
-      key = "key::${config.myHomeConfig.keys.signing.joseph}";
+      key = lib.mkIf (gitSigningKey != null) "key::${gitSigningKey}";
     };
     aliases = {
       l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";

@@ -2,92 +2,195 @@
 
 🔔 [Read a blog post about this repository](https://josephstahl.com/nix-for-macos-and-a-homelab-server/)
 
-> This is my own dotfiles repo and is customized to my own preferences -
-although I try to keep everything working properly, use any part of this repo
-on your own system may break things! I'd recommend using this more for inspiration
-than exact instructions.
+> This is my personal Nix configuration repository managing both macOS (via nix-darwin) and NixOS systems with home-manager. While I try to keep everything working properly, use any part of this repo on your own system at your own risk! I'd recommend using this more for inspiration than exact instructions.
 
-## Mac
-### Generate host keys
+## Repository Structure
 
-Run `sudo ssh-keygen -A` to generate default host keys (rsa, ecdsa, ed25519 according to documentation)
-if they do not already exist.
+This flake-based configuration uses a modular architecture:
 
-### Install Nix
+- **`modules/common/myConfig/`** - Shared configuration options and implementations
+- **`modules/darwin/myConfig/`** - macOS-specific extensions
+- **`modules/nixos/myConfig/`** - NixOS-specific extensions
+- **`modules/home-manager/myHomeConfig/`** - User environment configuration
+- **`hosts/`** - Host-specific configurations
+- **`home/joseph/`** - User dotfiles and program configurations
+- **`keys/`** - SSH public keys for system access and encryption
+- **`secrets/`** - Age-encrypted secrets using agenix
 
-[Follow the Zero to Nix](https://zero-to-nix.com/start/install) guide to install Nix on MacOS.
+## Quick Start
 
-### Install Homebrew
-
-```
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-## NixOS
-
-Installation of NixOS is done with [nixos-anywhere](https://github.com/nix-community/nixos-anywhere) to allow for unattended/ remote setups.
-
-If a system is already defined in `flake.nix` (such as `terminus` or `vmware`), make sure the NixOS installer is running on that system.
-Set a password for the `nixos` user on the installer (`passwd`), then get the IP address (`ip a`).
-The rest of the install process is handled remotely, using SSH.
-
-Ensure that disk setup is correctly configured with `disko`.
-For examples, see [`disko.nix`](./hosts/nixos/vmware/disko.nix).
-If re-installing to a system that already has a defined `hardware-configuration.nix`, run the following:
-
-```
-nix run github:nix-community/nixos-anywhere -- --flake .#vmware --target-host nixos@<IP ADDRESS> --build-on-remote
-```
-
-`--build-on-remote` is necessary in case of cross-architechture builds.
-If there's not a `hardware-configuration.nix` file yet created, then run with the `--generate-hardware-config` flag:
-
-```
-nix run github:nix-community/nixos-anywhere -- --generate-hardware-config nixos-generate-config ./hosts/nixos/vmware/hardware-configuration.nix --flake .#vmware --target-host nixos@<IP ADDRESS> --build-on-remote --ssh-option "IdentitiesOnly=yes"
-```
-
-If using Agenix, add `--copy-host-keys` to the arguments above.
-This copies the files at `/etc/ssh/ssh_host_*` to `/mnt/` so that they're available on the new system.
-This takes care of the host keys, but user-specific keys (`/home/$USER/.ssh/*`) are also necessary to decrypt secrets if using the Agenix home-manager module.
-As the new system is not yet installed, a new key must be generated on the system running `nixos-anywhere`
-and copied over.
-Use 1Password, or `ssh-keygen -t ed25519`, to generate the new key, then create a directory structure for it and copy the keys to this directory:
-
+### Building and Switching
 ```bash
-temp=$(mktemp -d) # or `set temp $(mktemp -d)` if using Fish shell
-install -d -m755 "$temp/home/<user>/.ssh"
+# Build and switch configuration (auto-detects platform)
+just switch  # or just s
 
-# get private key from 1password, or copy the generated key if using `ssh-keygen`
-op read "op://Private/<hash>/private key" > "$temp/home/<user>/.ssh/id_ed25519"
-op read "op://Private/<hash>/public key" > "$temp/home/<user>/.ssh/id_ed25519.pub"
+# Update flake inputs
+just update
 
-# set correct permissions on keys
-chmod 600 $temp/home/user/.ssh/id_ed25519*
+# Deploy to remote NixOS server
+just deploy
 ```
 
-Make sure to re-key secrets with the new key(s) prior to running `nixos-anywhere`.
-Then, run `nixos-anywhere` with `--extra-files "$temp"` in addition to the above flags.
+### Common Commands
+```bash
+# Format and lint code
+nix fmt
+nix run nixpkgs#statix check .
 
-> Note that this will set ownership on these files to `root` when copied by `nixos-anywhere`.
-> To work around this, include a `systemd.tmpfiles.rules` section in the user configuration to give ownership of the `~/.ssh` directory.
-```nix
-  systemd.tmpfiles.rules = [
-    "d /home/joseph/.ssh 0700 joseph joseph -"
-  ];
+# Garbage collect old generations
+just gc [age=7]  # defaults to 7 days
+
+# Check configuration builds correctly
+nix flake check
 ```
 
-## NixOS: after setup
+## macOS Setup
 
-### Tailscale
-`tailscale up --ssh` to log in to Tailscale.
+### Prerequisites
+1. **Generate host keys** (if they don't exist):
+   ```bash
+   sudo ssh-keygen -A
+   ```
 
-Update dynamic DNS records with the tailscale IP to ensure that other devices on the Tailnet
-can look up the Tailscale IP on public DNS servers
+2. **Install Nix**: Follow the [Zero to Nix](https://zero-to-nix.com/start/install) guide
 
-### Plex
-First time, access at [192.168.1.xxx:32400/web](192.168.1.24:32400/web) to get it set up,
-before trying to access via reverse proxy.
+3. **Install Homebrew**:
+   ```bash
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
 
-### Sabnabd
-Edit `/var/lib/sabnzbd/sabnzbd.ini` to allow `sabnzbd.nixos.josephstahl.com` (under `host_whitelist`).
-Also modify the listening port (try 8082, so that Unifi can listen on 8080)
+### First-time Setup
+1. Clone this repository
+2. Update `flake.nix` to match your hostname and preferences
+3. Configure SSH keys in `keys/default.nix`
+4. Run `just switch` to build and activate the configuration
+
+### Current System
+- **Josephs-MacBook-Air** - Primary development machine
+
+## NixOS Setup
+
+### Current Systems
+- **terminus** (x86_64-linux) - Homelab server
+- **orbstack** (aarch64-linux) - Development container
+- **iso-gnome** (aarch64-linux) - Live ISO image
+
+### Remote Installation with nixos-anywhere
+
+NixOS installation uses [nixos-anywhere](https://github.com/nix-community/nixos-anywhere) for unattended/remote setups.
+
+#### Basic Installation Process
+1. Boot the target system with NixOS installer
+2. Set password for `nixos` user: `passwd`
+3. Get IP address: `ip a`
+4. Install remotely from this repository
+
+#### For existing systems (with hardware-configuration.nix):
+```bash
+nix run github:nix-community/nixos-anywhere -- \
+  --flake .#terminus \
+  --target-host nixos@<IP_ADDRESS> \
+  --build-on-remote
+```
+
+#### For new systems (generate hardware config):
+```bash
+nix run github:nix-community/nixos-anywhere -- \
+  --generate-hardware-config nixos-generate-config ./hosts/nixos/terminus/hardware-configuration.nix \
+  --flake .#terminus \
+  --target-host nixos@<IP_ADDRESS> \
+  --build-on-remote \
+  --ssh-option "IdentitiesOnly=yes"
+```
+
+> **Note**: `--build-on-remote` is necessary for cross-architecture builds.
+> Ensure disk setup is configured with `disko` (see examples in `hosts/nixos/*/disko.nix`).
+
+### Secrets Management with Agenix
+
+This repository uses [agenix](https://github.com/ryantm/agenix) for secrets management.
+
+#### For systems with secrets, add these flags:
+- `--copy-host-keys` - Copies SSH host keys to the new system
+- `--extra-files "$temp"` - Copies user SSH keys for secret decryption
+
+#### Setting up user keys for new systems:
+```bash
+temp=$(mktemp -d)
+install -d -m755 "$temp/home/joseph/.ssh"
+
+# Get keys from 1Password or generate new ones
+op read "op://Private/<item>/private key" > "$temp/home/joseph/.ssh/id_ed25519"
+op read "op://Private/<item>/public key" > "$temp/home/joseph/.ssh/id_ed25519.pub"
+
+# Set correct permissions
+chmod 600 "$temp/home/joseph/.ssh/id_ed25519"*
+```
+
+#### Important notes:
+- Re-key all secrets with new keys before installation
+
+## Post-Installation Configuration
+
+### Essential Setup
+
+#### Tailscale
+```bash
+tailscale up --ssh
+```
+- Update dynamic DNS records with Tailscale IP for external access
+- Ensures devices on the Tailnet can resolve hostnames via public DNS
+
+### Service-Specific Configuration
+
+The terminus server runs various self-hosted services. Some require manual setup:
+
+#### Media Services (Servarr Stack)
+- **Jellyfin**: Access web interface for initial media library setup
+- **Sonarr/Radarr**: Configure indexers and download clients
+- **Prowlarr**: Set up indexer connections
+- **SABnzbd**:
+  - Edit `/var/lib/sabnzbd/sabnzbd.ini`
+  - Add `sabnzbd.terminus.josephstahl.com` to `host_whitelist`
+  - Configure port (default: 8082 to avoid conflicts with Unifi on 8080)
+
+#### Home Assistant
+- Configure devices and integrations via web interface
+- Zigbee and Z-Wave devices managed through dedicated containers
+
+#### Monitoring
+- **Netdata**: System monitoring with automatic configuration
+- **Homepage**: Dashboard aggregating all services
+
+### Development Tools
+- **VS Code Server**: Remote development access
+- **Ollama**: Local LLM inference server
+## Customization
+
+To adapt this configuration for your own use:
+
+1. **Update personal information**:
+   - Change user details in `flake.nix` commonConfig
+   - Update SSH keys in `keys/default.nix`
+   - Modify email and name in git configuration
+
+2. **Host configuration**:
+   - Add your systems to `nixosConfigurations` or `darwinConfigurations`
+   - Create host-specific configs in `hosts/`
+   - Update networking and hardware configurations
+
+3. **Services**:
+   - Enable/disable services in host configurations
+   - Modify service configurations in `hosts/*/services/`
+   - Update domain names and certificates
+
+4. **Secrets**:
+   - Re-key all secrets with your own SSH keys
+   - Update secret paths in configurations
+   - Configure agenix for your key management
+
+## Troubleshooting
+
+- Always run `git add --all` before nix operations
+- Use `nix flake check` to validate configurations
+- Review systemd logs for service problems: `journalctl -u <service>`

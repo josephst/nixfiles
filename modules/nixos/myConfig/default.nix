@@ -38,17 +38,9 @@
 
     time.timeZone = lib.mkDefault "America/New_York";
 
-    nixpkgs = {
-      overlays = builtins.attrValues outputs.overlays;
-      hostPlatform = config.myConfig.platform; # set in flake.nix for each system
-      config.allowUnfree = true;
-    };
+    # nixpkgs configuration is now handled by ../../common/myConfig/nixpkgs.nix
 
-    nix = {
-      settings = {
-        trusted-users = [ "@wheel" ];
-      };
-    };
+    # nix configuration is now handled by ../../common/myConfig/nix-settings.nix
 
     security = {
       # use ssh keys instead of password
@@ -114,28 +106,10 @@
     programs = {
       _1password.enable = true;
       nh = {
-        clean = {
-          enable = true;
-          extraArgs = "--keep-since 14d --keep 10";
-        };
         enable = true;
       };
       nix-ld.enable = true;
-      ssh = {
-        knownHosts = {
-          "github.com".hostNames = [ "github.com" ];
-          "github.com".publicKey =
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl";
-
-          "gitlab.com".hostNames = [ "gitlab.com" ];
-          "gitlab.com".publicKey =
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf";
-
-          "git.sr.ht".hostNames = [ "git.sr.ht" ];
-          "git.sr.ht".publicKey =
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZvRd4EtM7R+IHVMWmDkVU3VLQTSwQDSAvW0t2Tkj60";
-        };
-      };
+      # ssh configuration is now handled by ../../common/myConfig/ssh-infrastructure.nix
     };
 
     systemd = {

@@ -46,23 +46,9 @@
 
     security.pam.services.sudo_local.touchIdAuth = true;
 
-    nix = {
-      gc = {
-        automatic = true;
-      };
-      settings = {
-        trusted-users = [ "@admin" ];
-        sandbox = "relaxed";
-      };
-    };
+    # nix configuration is now handled by ../../common/myConfig/nix-settings.nix
 
-    nixpkgs = {
-      hostPlatform = config.myConfig.platform;
-      overlays = builtins.attrValues outputs.overlays;
-      config = {
-        allowUnfree = true;
-      };
-    };
+    # nixpkgs configuration is now handled by ../../common/myConfig/nixpkgs.nix
 
     programs = {
       fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";

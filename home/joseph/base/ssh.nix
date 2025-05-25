@@ -6,15 +6,15 @@
   ...
 }:
 let
-  inherit (config.myHomeConfig) keys;
+  keys = osConfig.myConfig.keys;
   username = "joseph";
   hostname = osConfig.networking.hostName;
 
   # identity = a user-specific and host-specific key (one identity per user per machine)
   # userAllKeys = all keys registered to a user (across all machines)
-  userAllKeys = if lib.hasAttr username keys.users then lib.getAttr username keys.users else null;
+  userAllKeys = if keys != null && lib.hasAttr username keys.users then lib.getAttr username keys.users else null;
   userHostSpecificKey =
-    if lib.hasAttr hostname userAllKeys then lib.getAttr hostname userAllKeys else null;
+    if userAllKeys != null && lib.hasAttr hostname userAllKeys then lib.getAttr hostname userAllKeys else null;
   identityFile = ".ssh/identity.pub";
 in
 {

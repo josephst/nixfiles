@@ -36,11 +36,7 @@ in
         inherit inputs;
       };
       backupFileExtension = ".backup-pre-hm";
-      sharedModules = (builtins.attrValues outputs.homeManagerModules) ++ [
-        {
-          myHomeConfig.keys = keys;
-        }
-      ];
+      sharedModules = (builtins.attrValues outputs.homeManagerModules);
       users."${cfg.username}" = import cfg.home-manager.home;
     };
   };

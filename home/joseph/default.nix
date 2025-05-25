@@ -15,8 +15,8 @@ let
     || (osConfig.programs ? _1password && osConfig.programs._1password.enable);
 
   gitSigningKey =
-    if lib.hasAttr "joseph" config.myHomeConfig.keys.signing then
-      lib.getAttr "joseph" config.myHomeConfig.keys.signing
+    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then
+      lib.getAttr "joseph" osConfig.myConfig.keys.signing
     else
       null;
 
