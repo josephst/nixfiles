@@ -22,9 +22,9 @@ in
   ];
 
   # TODO: find a way to limit this to only apply to "joseph" user, right now it's causing conflicts with root
-  options.myHomeConfig = {
-    stateVersion = lib.mkOption {
-      type = lib.types.str;
+  options.myHomeConfig = with lib; {
+    stateVersion = mkOption {
+      type = types.str;
       default = "24.11";
       description = ''
         home-manager stateVersion, should be kept the same or *very carefully* updated
@@ -32,11 +32,30 @@ in
       '';
     };
 
-    keys = lib.mkOption {
-      # TODO: eventually move this to a submodule that can check the attributes
-      type = lib.types.nullOr lib.types.attrs;
+    keys = mkOption {
+      type = types.nullOr (
+        types.submodule {
+          options = {
+            hosts = mkOption {
+              type = types.attrsOf types.str;
+              default = { };
+              description = "SSH host keys for machines";
+            };
+            users = mkOption {
+              type = types.attrsOf (types.attrsOf types.str);
+              default = { };
+              description = "SSH user keys per machine";
+            };
+            signing = mkOption {
+              type = types.attrsOf types.str;
+              default = { };
+              description = "Git commit signing keys per user";
+            };
+          };
+        }
+      );
       default = null;
-      description = "SSH keys for users on this system";
+      description = "SSH keys for this system and its users";
     };
   };
 

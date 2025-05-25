@@ -43,9 +43,28 @@ in
       default = null;
       description = "Path to GitHub token secret (avoid rate-limiting by GitHub)";
     };
-    # TODO: make this into a submodule for type checking purposes
-    keys = lib.mkOption {
-      type = types.nullOr types.attrs;
+    keys = mkOption {
+      type = types.nullOr (
+        types.submodule {
+          options = {
+            hosts = lib.mkOption {
+              type = types.attrsOf types.str;
+              default = { };
+              description = "SSH host keys for machines";
+            };
+            users = mkOption {
+              type = types.attrsOf (types.attrsOf types.str);
+              default = { };
+              description = "SSH user keys per machine";
+            };
+            signing = mkOption {
+              type = types.attrsOf types.str;
+              default = { };
+              description = "Git commit signing keys per user";
+            };
+          };
+        }
+      );
       default = null;
       description = "SSH keys for this system and its users";
     };
