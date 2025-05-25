@@ -1,7 +1,6 @@
 # modules/nixos/myConfig/default.nix
 {
   inputs,
-  outputs,
   config,
   lib,
   pkgs,

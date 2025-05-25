@@ -8,7 +8,6 @@
 
 let
   cfg = config.myConfig.user;
-  inherit (config.myConfig) keys;
 in
 {
   options.myConfig.user = {
@@ -36,7 +35,7 @@ in
         inherit inputs;
       };
       backupFileExtension = ".backup-pre-hm";
-      sharedModules = (builtins.attrValues outputs.homeManagerModules);
+      sharedModules = builtins.attrValues outputs.homeManagerModules;
       users."${cfg.username}" = import cfg.home-manager.home;
     };
   };

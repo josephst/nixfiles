@@ -103,6 +103,7 @@ User environments are managed through home-manager with configurations in `home/
 - Use `sudo` for system-level rebuilds on both platforms
 - Before running any nix commands, run `git add --all` so that Nix detects new and changed files.
 - Run `nix flake check` to make sure changes don't break builds
+- Run `nix fmt` to format files after edits
 - The repository supports cross-platform builds and remote deployment
 - Binary caches are configured to speed up builds
 - State versions are carefully managed and should not be changed lightly

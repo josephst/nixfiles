@@ -21,12 +21,9 @@ let
       key = "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE=";
     }
   ];
-  
+
   # Platform-specific trusted users
-  trustedUsers = 
-    if pkgs.stdenv.isDarwin 
-    then [ "@admin" ]
-    else [ "@wheel" ];
+  trustedUsers = if pkgs.stdenv.isDarwin then [ "@admin" ] else [ "@wheel" ];
 in
 {
   options.myConfig.nix = with lib; {
@@ -35,7 +32,7 @@ in
       default = [ ];
       description = "Additional binary caches to use";
     };
-    
+
     trustedUsers = mkOption {
       type = types.listOf types.str;
       default = trustedUsers;
@@ -51,22 +48,24 @@ in
       '';
       registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
       nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
-      settings = {
-        warn-dirty = false;
-        substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
-        trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
-        trusted-users = cfg.nix.trustedUsers;
-        experimental-features = [
-          "nix-command"
-          "flakes"
-        ];
-        log-lines = lib.mkDefault 25;
-        builders-use-substitutes = true;
-        cores = 0;
-      } // lib.optionalAttrs pkgs.stdenv.isDarwin {
-        sandbox = "relaxed";
-      };
-      
+      settings =
+        {
+          warn-dirty = false;
+          substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
+          trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
+          trusted-users = cfg.nix.trustedUsers;
+          experimental-features = [
+            "nix-command"
+            "flakes"
+          ];
+          log-lines = lib.mkDefault 25;
+          builders-use-substitutes = true;
+          cores = 0;
+        }
+        // lib.optionalAttrs pkgs.stdenv.isDarwin {
+          sandbox = "relaxed";
+        };
+
       gc = {
         automatic = true;
       };

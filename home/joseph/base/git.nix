@@ -7,7 +7,7 @@
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
-  
+
   gitSigningKey =
     if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then
       lib.getAttr "joseph" osConfig.myConfig.keys.signing

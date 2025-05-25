@@ -1,5 +1,4 @@
 {
-  inputs,
   outputs,
   config,
   lib,
@@ -12,7 +11,7 @@
       default = builtins.attrValues outputs.overlays;
       description = "Overlays to apply to nixpkgs";
     };
-    
+
     allowUnfree = mkOption {
       type = types.bool;
       default = true;
@@ -23,9 +22,9 @@
   config = {
     nixpkgs = {
       hostPlatform = config.myConfig.platform;
-      overlays = config.myConfig.nixpkgs.overlays;
+      inherit (config.myConfig.nixpkgs) overlays;
       config = {
-        allowUnfree = config.myConfig.nixpkgs.allowUnfree;
+        inherit (config.myConfig.nixpkgs) allowUnfree;
       };
     };
   };
