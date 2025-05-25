@@ -28,6 +28,7 @@ in
       age # encryption
       agenix # age secrets
       bc # calculator
+      claude-code # claude code
       comma # run commands by prefacing with comma
       cpufetch # CPU info
       croc # file sharing
