@@ -9,8 +9,7 @@ in
 
   security.acme = {
     acceptTerms = true;
-    # TODO: hide email?
-    defaults.email = "josephst18+acme@outlook.com";
+    defaults.email = "grilles_cachets7a@icloud.com";
     defaults.dnsResolver = "1.1.1.1:53"; # can't be local DNS since homelab.josephstahl.com resolves to local IP on LAN
     certs."${domain}" = {
       domain = "*.${domain}";
