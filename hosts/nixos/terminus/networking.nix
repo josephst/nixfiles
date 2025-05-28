@@ -1,4 +1,5 @@
-_: {
+{ config, lib, ... }:
+{
   networking.domain = "homelab.josephstahl.com";
   systemd.network = {
     enable = true;
@@ -23,4 +24,7 @@ _: {
       };
     };
   };
+  networking.firewall.allowedUDPPorts =
+    lib.optional (config.systemd.network.networks."10-lan".networkConfig.MulticastDNS)
+      5353;
 }
