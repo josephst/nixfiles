@@ -40,13 +40,6 @@ in
       inherit (cfg) stateVersion;
     };
 
-    nix = {
-      gc = {
-        automatic = true;
-        options = "--delete-older-than 30d";
-      };
-    };
-
     # new Agenix configuration which is *user-specific* (DISTINCT from the system Agenix config)
     age = {
       identityPaths = [ "${config.home.homeDirectory}/.ssh/agenix" ] ++ options.age.identityPaths.default;

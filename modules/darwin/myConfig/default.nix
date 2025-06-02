@@ -46,11 +46,14 @@
     security.pam.services.sudo_local.touchIdAuth = true;
 
     # nix configuration is now handled by ../../common/myConfig/nix-settings.nix
+    nix.enable = false; # using Determinate Nix on macOS
+    # write nix.custom.conf configuration
+    environment.etc."nix/nix.custom.conf".text = config.nix.extraOptions;
 
     # nixpkgs configuration is now handled by ../../common/myConfig/nixpkgs.nix
 
     programs = {
-      fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
+      # fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
     };
 
     system = {

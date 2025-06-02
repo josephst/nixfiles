@@ -67,7 +67,7 @@ in
         };
 
       gc = {
-        automatic = true;
+        automatic = lib.mkIf (config.nix.enable) true;
       };
     };
   };
