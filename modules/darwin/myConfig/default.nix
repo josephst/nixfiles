@@ -48,7 +48,11 @@
     # nix configuration is now handled by ../../common/myConfig/nix-settings.nix
     nix.enable = false; # using Determinate Nix on macOS
     # write nix.custom.conf configuration
-    environment.etc."nix/nix.custom.conf".text = config.nix.extraOptions;
+    environment.etc."nix/nix.custom.conf".text =
+      config.nix.extraOptions
+      + ''
+        lazy-trees = true
+      '';
 
     # nixpkgs configuration is now handled by ../../common/myConfig/nixpkgs.nix
 
