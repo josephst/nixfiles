@@ -21,12 +21,12 @@
   # See:
   # * https://github.com/NixOS/nixpkgs/pull/63790
   # * https://gitlab.gnome.org/GNOME/gnome-control-center/issues/22
-  services.xserver.displayManager.gdm.autoSuspend = false;
+  services.displayManager.gdm.autoSuspend = false;
 
   # override upstream
   environment.variables.QT_QPA_PLATFORM = lib.mkForce null;
 
-  services.xserver.desktopManager.gnome = {
+  services.desktopManager.gnome = {
     # Add Firefox and other tools useful for installation to the launcher
     favoriteAppsOverride = ''
       [org.gnome.shell]
