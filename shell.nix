@@ -7,7 +7,7 @@
   default = pkgs.mkShell {
     # Enable experimental features without having to specify the argument
     NIX_CONFIG = "experimental-features = nix-command flakes";
-    nativeBuildInputs = with pkgs; [
+    packages = with pkgs; [
       # agenix
       nixfmt-rfc-style
       bashInteractive
@@ -15,7 +15,6 @@
       git
       helix
       home-manager
-      nix
       starship
     ];
     # shellHook = ''
