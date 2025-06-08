@@ -281,10 +281,10 @@
         "zon2nix": "zon2nix"
       },
       "locked": {
-        "lastModified": 1749239963,
+        "lastModified": 1749412495,
         "owner": "ghostty-org",
         "repo": "ghostty",
-        "rev": "269d29624bb91066ee75558a81c0cac609d080e6",
+        "rev": "804d270ba1475c9ffbb312819dd581fa5992c7d8",
         "type": "github"
       },
       "original": {
@@ -343,10 +343,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1749243446,
+        "lastModified": 1749400020,
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "2d7d65f65b61fdfce23278e59ca266ddd0ef0a36",
+        "rev": "2835e8ba0ad99ba86d4a5e497a962ec9fa35e48f",
         "type": "github"
       },
       "original": {
@@ -411,10 +411,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1749208275,
+        "lastModified": 1749407996,
         "owner": "ggerganov",
         "repo": "llama.cpp",
-        "rev": "745aa5319b9930068aff5e87cf5e9eef7227339b",
+        "rev": "247e5c6e447707bb4539bdf1913d206088a8fc69",
         "type": "github"
       },
       "original": {
@@ -484,10 +484,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1748751003,
+        "lastModified": 1749355504,
         "owner": "nix-community",
         "repo": "nix-index-database",
-        "rev": "2860bee699248d828c2ed9097a1cd82c2f991b43",
+        "rev": "40a6e15e44b11fbf8f2b1df9d64dbfc117625e94",
         "type": "github"
       },
       "original": {
@@ -552,10 +552,10 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1749086602,
+        "lastModified": 1749237914,
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "4792576cb003c994bd7cc1edada3129def20b27d",
+        "rev": "70c74b02eac46f4e4aa071e45a6189ce0f6d9265",
         "type": "github"
       },
       "original": {
@@ -567,10 +567,10 @@
     },
     "nixpkgs-staging": {
       "locked": {
-        "lastModified": 1749276316,
+        "lastModified": 1749415376,
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "dc23b83b012732d4c54a76855cc71096704c239f",
+        "rev": "e59a2e909ec3b3056a640cec4bce67b91240c322",
         "type": "github"
       },
       "original": {
@@ -614,10 +614,10 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1749213349,
+        "lastModified": 1749369410,
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "a4ff0e3c64846abea89662bfbacf037ef4b34207",
+        "rev": "8207ad0d501dd3590e0e81a7c56b386a5c4342c9",
         "type": "github"
       },
       "original": {
@@ -955,10 +955,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1749256484,
+        "lastModified": 1749384710,
         "owner": "mitchellh",
         "repo": "zig-overlay",
-        "rev": "02226efe3fd9a2060d75b53b06b4b970bbefc5e8",
+        "rev": "ca94dc48351bc43b396e50ae839de0acfb8c48dd",
         "type": "github"
       },
       "original": {
