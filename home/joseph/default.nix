@@ -98,6 +98,7 @@ in
       command = "${pkgs.fish}/bin/fish"
 
       theme = dark:catppuccin-frappe,light:catppuccin-latte
+      keybind = shift+enter=text:\n
     '';
   };
 
