@@ -41,13 +41,9 @@ in
 
     xdg.configFile."npm/npmrc" = {
       text = cfg.npmrc;
-      # Ensure the directory exists
-      # Note: home-manager doesn't have a dedicated mkｄir option for xdg.configFile
-      # but it typically handles directory creation automatically.
-      # If not, a separate home.file entry might be needed for the directory,
-      # or a more direct approach using pkgs.runCommand.
-      # However, for npmrc, npm itself might create the directory if it doesn't exist.
-      # We'll rely on standard home-manager behavior first.
+      # xdg.configFile."npm/npmrc" ensures that the parent directory
+      # (e.g., "${config.xdg.configHome}/npm") is created if it doesn't exist
+      # before writing the npmrc file.
     };
 
     # Set NPM_CONFIG_USERCONFIG environment variable
