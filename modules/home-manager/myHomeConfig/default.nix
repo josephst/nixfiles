@@ -19,6 +19,7 @@ in
 
     ./scripts
     ./llm.nix
+    ./npm.nix
   ];
 
   # TODO: find a way to limit this to only apply to "joseph" user, right now it's causing conflicts with root
