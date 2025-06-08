@@ -28,7 +28,7 @@ in
       age # encryption
       agenix # age secrets
       bc # calculator
-      claude-code # claude code
+      # claude-code # claude code # install w/ NPM
       comma # run commands by prefacing with comma
       cpufetch # CPU info
       croc # file sharing
@@ -48,6 +48,7 @@ in
       lazygit # git with TUI
       marp-cli # markdown presentation
       ncdu # TUI disk usage
+      nodejs
       nixd # Nix LSP
       nixfmt-rfc-style # nix formatter
       nixpkgs-hammering # nixpkgs linter

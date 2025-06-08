@@ -25,6 +25,6 @@
     };
   };
   networking.firewall.allowedUDPPorts =
-    lib.optional (config.systemd.network.networks."10-lan".networkConfig.MulticastDNS)
+    lib.optional config.systemd.network.networks."10-lan".networkConfig.MulticastDNS
       5353;
 }
