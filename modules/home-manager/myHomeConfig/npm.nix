@@ -39,6 +39,11 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [ cfg.package ];
 
+    # use binaries from `prefix`
+    home.sessionPath = [
+      "$HOME/.npm/bin"
+    ];
+
     xdg.configFile."npm/npmrc" = {
       text = cfg.npmrc;
       # xdg.configFile."npm/npmrc" ensures that the parent directory
@@ -50,7 +55,7 @@ in
     # This ensures npm uses the specified config file.
     # See https://docs.npmjs.com/cli/v10/using-npm/config#npmrc-files
     home.sessionVariables = {
-      NPM_CONFIG_USERCONFIG = "\${config.xdg.configHome}/npm/npmrc";
+      NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
     };
   };
 }

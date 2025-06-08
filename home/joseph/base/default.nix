@@ -20,6 +20,8 @@ in
     ./starship.nix
     ./wezterm
     ./zellij
+
+    ./myHomeConfig.nix
   ];
 
   home.packages =
