@@ -50,11 +50,6 @@ in
       ${pkgs.restic}/bin/restic unlock || true
     '';
 
-    # timerConfig = {
-    #   OnCalendar = "12:00";
-    #   Persistent = true;
-    #   RandomizedDelaySec = "1h";
-    # };
     timerConfig = null; # no automatic run; instead, triggered after rclone-sync finishes
   };
 
@@ -62,7 +57,7 @@ in
 
   services.healthchecks-ping.b2-check = {
     urlFile = config.age.secrets.resticb2env.path;
-    unitName = "restic-backups-b2";
+    unitName = config.systemd.services.restic-backups-b2.name;
   };
 
   services.healthchecks-ping.rclone-sync = {

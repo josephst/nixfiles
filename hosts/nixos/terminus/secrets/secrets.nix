@@ -4,7 +4,6 @@ let
   # include all `joseph` keys to allow me to rekey secrets with my user key
   allKeys = builtins.attrValues keys.users.joseph ++ [
     keys.hosts.terminus
-    keys.hosts.installerKey
   ];
 in
 {
