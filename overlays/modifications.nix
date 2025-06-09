@@ -21,9 +21,6 @@ final: prev: {
   #   };
   # });
 
-  # remove once https://nixpk.gs/pr-tracker.html?pr=414065 is merged
-  libfaketime = prev.stable.libfaketime;
-
   home-assistant-custom-components =
     let
       inherit (final.home-assistant.python.pkgs) callPackage;
