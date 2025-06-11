@@ -57,7 +57,7 @@ in
 
   services.healthchecks-ping.b2-check = {
     urlFile = config.age.secrets.resticb2env.path;
-    unitName = "restic-backups-b2.service";
+    unitName = "restic-backups-b2";
   };
 
   services.healthchecks-ping.rclone-sync = {
