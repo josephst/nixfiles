@@ -1,8 +1,7 @@
 {
-  rclone-sync = import ./rclone-sync.nix;
+  myConfig = import ../common/myConfig;
+  hostSpec = import ../common/host-spec.nix;
 
-  # restic = import ./restic.nix;
+  rcloneSync = import ./rclone-sync.nix;
   healthchecks = import ./healthchecks.nix;
-
-  myConfig = import ./myConfig;
 }

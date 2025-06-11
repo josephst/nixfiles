@@ -13,17 +13,13 @@ let
   fallbackDns = [ "1.1.1.1#one.one.one.one" ];
 in
 {
-  imports = [
-    ../../common/myConfig/networking.nix
-  ];
-
   config = {
     networking = {
       firewall = {
         enable = lib.mkDefault true;
         inherit trustedInterfaces;
       };
-      networkmanager = lib.mkIf config.myConfig.gnome.enable {
+      networkmanager = lib.mkIf (config.hostSpec.desktop != null) {
         # Use resolved for DNS resolution; tailscale MagicDNS requires it
         dns = "systemd-resolved";
         enable = true;
@@ -46,7 +42,7 @@ in
 
     systemd.services.NetworkManager-wait-online.enable = false;
 
-    users.users.${config.myConfig.user.username}.extraGroups =
+    users.users.${config.hostSpec.username}.extraGroups =
       lib.optionals config.networking.networkmanager.enable
         [
           "networkmanager"

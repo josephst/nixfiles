@@ -9,6 +9,9 @@
 }:
 {
   imports = [
+    ../common # nixos common
+    ../../common # nixos AND nix-darwin common
+
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./disko.nix
@@ -39,10 +42,6 @@
 
     inputs.lanzaboote.nixosModules.lanzaboote
   ];
-
-  myConfig = {
-    tailscale.enable = true;
-  };
 
   systemd = {
     tmpfiles.rules = [ "d /storage - - - - -" ];

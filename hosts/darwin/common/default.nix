@@ -2,14 +2,12 @@
 {
   inputs,
   config,
-  lib,
   pkgs,
   ...
 }:
 
 {
   imports = [
-    ../../common/myConfig
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
     inputs.nix-index-database.darwinModules.nix-index
@@ -19,8 +17,6 @@
   ];
 
   config = {
-    myConfig.stateVersion = lib.mkDefault 4; # Darwin stateVersion
-
     environment = {
       systemPackages = [
         # darwin-specific packages
@@ -45,7 +41,6 @@
 
     security.pam.services.sudo_local.touchIdAuth = true;
 
-    # nix configuration is now handled by ../../common/myConfig/nix-settings.nix
     nix.enable = false; # using Determinate Nix on macOS
     # write nix.custom.conf configuration
     environment.etc."nix/nix.custom.conf".text =
@@ -56,14 +51,8 @@
         extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
       '';
 
-    # nixpkgs configuration is now handled by ../../common/myConfig/nixpkgs.nix
-
-    programs = {
-      # fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
-    };
-
     system = {
-      inherit (config.myConfig) stateVersion;
+      stateVersion = 4; # TODO: slowly bring up to current (6)
       defaults = {
         # Don't show recent applications in the dock
         dock.show-recents = false;
