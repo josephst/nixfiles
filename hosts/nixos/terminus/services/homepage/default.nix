@@ -1,18 +1,31 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
+  fs = lib.fileset;
   inherit (config.networking) domain;
-  webRoot = pkgs.buildEnv {
-    name = "webroot";
-    paths = [
-      (pkgs.writeTextDir "index.html" (builtins.readFile ./index.html))
-      (pkgs.writeTextDir "new.min.css" (builtins.readFile ./new.min.css))
-    ];
+  homepage-assets = pkgs.stdenv.mkDerivation {
+    name = "homepage-assets";
+    src = fs.toSource {
+      root = ./.;
+      fileset = fs.unions [
+        ./index.html
+        ./new.min.css
+      ];
+    };
+    installPhase = ''
+      mkdir -p $out
+      cp index.html new.min.css $out/
+    '';
   };
 in
 {
   services.caddy.virtualHosts."${domain}" = {
     extraConfig = ''
-      root * ${pkgs.compressDrvWeb webRoot { }}
+      root * ${pkgs.compressDrvWeb homepage-assets { }}
       file_server {
         precompressed br gzip
       }

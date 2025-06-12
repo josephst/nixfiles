@@ -13,20 +13,6 @@ let
     };
   };
 
-  # joseph-nixpkgs = _final: prev: {
-  #   inherit (inputs.nixpkgs-joseph.legacyPackages.${prev.system})
-  #     zwave-js-server
-  #     ;
-  # };
-
-  # security = _final: _prev: {
-  # for https://github.com/NixOS/nixpkgs/pull/300028, but causes HUGE rebuild
-  # xz = prev.xz.overrideAttrs (old: {
-  #   version = inputs.nixpkgs-staging.legacyPackages.${final.system}.xz.version;
-  #   src = inputs.nixpkgs-staging.legacyPackages.${final.system}.xz.src;
-  # });
-  # };
-
   # add user-defined packages
   additions = import ./additions.nix;
 
