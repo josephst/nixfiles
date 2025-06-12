@@ -3,7 +3,7 @@
   ...
 }:
 let
-  hostSpec = config.hostSpec;
+  inherit (config) hostSpec;
 in
 {
 

@@ -48,6 +48,7 @@ in
       ipfetch # IP info
       just # command runner
       lazygit # git with TUI
+      llamaPackages.llama-cpp # from llama-cpp overlay
       marp-cli # markdown presentation
       ncdu # TUI disk usage
       nodejs
@@ -61,6 +62,7 @@ in
       procs # modern ps
       speedtest-go # speedtest CLI
       python3 # python
+      python3Packages.huggingface-hub
       rclone # syncing
       restic # backup
       rsync # syncing

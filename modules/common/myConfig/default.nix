@@ -4,7 +4,7 @@
   ...
 }:
 let
-  username = config.hostSpec.username;
+  inherit (config.hostSpec) username;
   cfg = config.myConfig;
 in
 {

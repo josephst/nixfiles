@@ -5,7 +5,7 @@
   ...
 }:
 let
-  hostSpec = config.hostSpec;
+  inherit (config) hostSpec;
 in
 {
   environment.systemPackages = lib.optional (hostSpec.desktop != null) pkgs.trayscale;

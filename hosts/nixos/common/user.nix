@@ -2,14 +2,12 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
-  hostSpec = config.hostSpec;
-  keys = config.myConfig.keys;
-  username = hostSpec.username;
-  ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
+  inherit (config) hostSpec;
+  inherit (config.myConfig) keys;
+  inherit (hostSpec) username;
 in
 {
   age.secrets.password = lib.mkIf (hostSpec.passwordFile != null) {
@@ -18,16 +16,7 @@ in
 
   users = {
     users.${username} = {
-      home = hostSpec.home;
-      isNormalUser = true;
-      createHome = true;
-      inherit (hostSpec) shell;
-      hashedPasswordFile = lib.mkIf (hostSpec.passwordFile != null) config.age.secrets.password.path;
-      extraGroups = ifTheyExist [
-        "wheel"
-        "networkmanager"
-      ];
-      packages = [ pkgs.home-manager ];
+      inherit (hostSpec) home;
     };
     users.root = {
       hashedPassword = lib.mkDefault null;

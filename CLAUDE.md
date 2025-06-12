@@ -54,9 +54,6 @@ nix develop
 # Check syntax and make sure files can be parsed by Nix
 nix flake check
 
-# Build ISO images
-nix build .#nixosConfigurations.iso-gnome.config.system.build.isoImage
-
 # Update custom packages
 just pkgs-update
 ```
@@ -80,13 +77,7 @@ just pkgs-update
 Systems are defined in `flake.nix` using helper functions:
 - `mkNixos` for NixOS systems (terminus, orbstack, iso images)
 - `mkDarwin` for macOS systems (Josephs-MacBook-Air)
-
-### Configuration Pattern
-Each system imports the appropriate myConfig module which provides:
-- Common nix settings and binary caches
-- SSH configuration and known hosts
-- User management with SSH keys
-- Platform-specific defaults
+- a few options are definied in the `hostSpec` module which define system configurations and options
 
 ### Secrets Management
 Uses agenix for encrypted secrets. Key locations:

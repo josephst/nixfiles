@@ -2,13 +2,13 @@
 { config, ... }:
 
 let
-  hostSpec = config.hostSpec;
+  inherit (config) hostSpec;
 in
 {
   system.primaryUser = hostSpec.username;
   users = {
     users.${hostSpec.username} = {
-      home = hostSpec.home;
+      inherit (hostSpec) home;
     };
   };
 }

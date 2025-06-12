@@ -11,7 +11,8 @@
     ./networking.nix
     ./nix-settings.nix
     ./ssh-infrastructure.nix
-    ./user.nix
+    ./home-manager.nix
+    ./users.nix
   ];
 
   config = {

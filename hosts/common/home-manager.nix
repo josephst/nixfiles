@@ -7,8 +7,8 @@
 }:
 
 let
-  hostSpec = config.hostSpec;
-  username = hostSpec.username;
+  inherit (config) hostSpec;
+  inherit (hostSpec) username;
   home = ../../home/${username};
 in
 {
@@ -20,6 +20,8 @@ in
     };
     backupFileExtension = ".backup-pre-hm";
     sharedModules = builtins.attrValues outputs.homeManagerModules;
+
     users.${username} = import home;
+    users.root.home.stateVersion = "24.11"; # avoid error
   };
 }
