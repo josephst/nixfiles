@@ -12,6 +12,7 @@
     inputs.agenix.darwinModules.default
     inputs.nix-index-database.darwinModules.nix-index
 
+    ./brew.nix
     ./networking.nix
     ./user.nix
   ];

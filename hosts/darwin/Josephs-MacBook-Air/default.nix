@@ -2,13 +2,11 @@
 {
   imports = [
     # global config
-    ../common
-    ../../common
+    ../common # nix-darwin
+    ../../common # nix-darwin AND NixOS
 
     # machine-specific config
     ./brew.nix
     ./orbstack.nix
   ];
-
-  # TODO: lower hostSpec into this file
 }
