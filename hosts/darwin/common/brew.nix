@@ -8,7 +8,7 @@
       fi
     ''
   );
-  hombrew = {
+  homebrew = {
     enable = true;
     global = {
       # only update with `brew update` (or `just update`)
