@@ -18,7 +18,7 @@ in
 
   config = {
     home = {
-      stateVersion = "24.11"; # TODO: slowly bring up to current
+      stateVersion = "25.11";
     };
 
     # new Agenix configuration which is *user-specific* (DISTINCT from the system Agenix config)

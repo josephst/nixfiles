@@ -52,7 +52,7 @@
       '';
 
     system = {
-      stateVersion = 4; # TODO: slowly bring up to current (6)
+      stateVersion = 6;
       defaults = {
         # Don't show recent applications in the dock
         dock.show-recents = false;

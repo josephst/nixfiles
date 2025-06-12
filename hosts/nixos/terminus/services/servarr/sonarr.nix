@@ -6,13 +6,6 @@ in
   services.sonarr = {
     enable = true;
     group = "media";
-    # package = (pkgs.sonarr.override {
-    #   buildDotnetModule = attrs:
-    #     pkgs.buildDotnetModule (attrs // {
-    #       dotnet-sdk = pkgs.dotnetCorePackages.sdk_8_0;
-    #       dotnet-runtime = pkgs.dotnetCorePackages.aspnetcore_8_0;
-    #     });
-    # });
   };
 
   # TODO: remove when Sonarr updated to use dotnet 8
