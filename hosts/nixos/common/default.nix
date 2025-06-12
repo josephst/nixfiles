@@ -11,10 +11,8 @@
     inputs.agenix.nixosModules.default
     inputs.nix-index-database.nixosModules.nix-index
 
-    # ./mixins/gnome.nix
     ./networking.nix
     ./user.nix
-    ./mixins/tailscale.nix
   ];
 
   config = {

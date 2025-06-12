@@ -18,6 +18,9 @@
     ./disko-hdd-storage.nix # separate from other disko config to allow for adding drive w/o formatting existing drives
     ./networking.nix
 
+    # mixins
+    ../common/mixins/tailscale.nix
+
     # Services
     ./services/home-assistant
     ./services/acme.nix

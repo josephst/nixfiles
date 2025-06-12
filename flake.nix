@@ -4,7 +4,6 @@
   inputs = {
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
-    nixpkgs-staging.url = "github:nixos/nixpkgs/staging-next";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-joseph.url = "github:josephst/nixpkgs/nixpkgs-unstable";
 
@@ -131,6 +130,14 @@
           hostSpec = commonHostSpec // {
             hostName = "orbstack";
             platform = "aarch64-linux";
+          };
+          inherit myConfig;
+        };
+        iso-gnome = helper.mkNixos {
+          hostSpec = commonHostSpec // {
+            hostName = "iso-gnome";
+            platform = "x86_64-linux";
+            userFullName = "Joseph (Nix Installer)";
           };
           inherit myConfig;
         };
