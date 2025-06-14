@@ -54,11 +54,45 @@ nix develop
 # Check syntax and make sure files can be parsed by Nix
 nix flake check
 
-# Build ISO images
-nix build .#nixosConfigurations.iso-gnome.config.system.build.isoImage
-
 # Update custom packages
 just pkgs-update
+
+# Test configuration without switching
+nix build .#darwinConfigurations.Josephs-MacBook-Air.system
+nix build .#nixosConfigurations.terminus.config.system.build.toplevel
+```
+
+### Secrets Management (agenix)
+```bash
+# Edit secrets
+agenix -e secrets/example.age
+
+# Re-key all secrets (after adding new SSH keys)
+agenix -r
+
+# Re-key specific secret with specific identity
+agenix -r -i ~/.ssh/id_ed25519 secrets/example.age
+```
+
+### Debugging Build Failures
+```bash
+# Show build logs for failed derivation
+nix log /nix/store/<derivation-hash>
+
+# Get detailed derivation info
+nix show-derivation .#nixosConfigurations.terminus.config.system.build.toplevel
+
+# Debug build environment (enter shell with build inputs)
+nix develop .#nixosConfigurations.terminus.config.system.build.toplevel
+
+# Check what would be built/downloaded
+nix build --dry-run .#darwinConfigurations.Josephs-MacBook-Air.system
+
+# Force rebuild ignoring cache
+nix build --rebuild .#nixosConfigurations.terminus.config.system.build.toplevel
+
+# Compare current system with new configuration
+nvd diff /nix/var/nix/profiles/system result
 ```
 
 ## Architecture Overview
@@ -80,13 +114,7 @@ just pkgs-update
 Systems are defined in `flake.nix` using helper functions:
 - `mkNixos` for NixOS systems (terminus, orbstack, iso images)
 - `mkDarwin` for macOS systems (Josephs-MacBook-Air)
-
-### Configuration Pattern
-Each system imports the appropriate myConfig module which provides:
-- Common nix settings and binary caches
-- SSH configuration and known hosts
-- User management with SSH keys
-- Platform-specific defaults
+- a few options are definied in the `hostSpec` module which define system configurations and options
 
 ### Secrets Management
 Uses agenix for encrypted secrets. Key locations:

@@ -4,7 +4,6 @@
   inputs = {
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
-    nixpkgs-staging.url = "github:nixos/nixpkgs/staging-next";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-joseph.url = "github:josephst/nixpkgs/nixpkgs-unstable";
 
@@ -86,17 +85,15 @@
       homeManagerModules = import ./modules/home-manager;
       helper = import ./lib { inherit inputs outputs; };
 
-      # settings for all machines this flake manages
-      commonConfig = {
+      commonHostSpec = {
+        username = "joseph";
+        userFullName = "Joseph Stahl";
+        passwordFile = ./secrets/users/joseph.age;
         tailnet = "taildbd4c.ts.net";
+      };
+      myConfig = {
         ghToken = ./secrets/ghToken.age;
         keys = import ./keys;
-        user = {
-          username = "joseph";
-        };
-      };
-      nixosConfig = {
-        user.passwordFile = ./secrets/users/joseph.age;
       };
 
       treefmtEval = helper.forAllSystems (
@@ -116,40 +113,43 @@
         darwinModules
         homeManagerModules
         ;
+
       formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
 
       # NixOS configuration entrypoint
       nixosConfigurations = {
         terminus = helper.mkNixos {
-          hostname = "terminus";
-          platform = "x86_64-linux";
-          config = commonConfig // nixosConfig;
+          hostSpec = commonHostSpec // {
+            hostName = "terminus";
+            platform = "x86_64-linux";
+            isServer = true;
+          };
+          inherit myConfig;
         };
         orbstack = helper.mkNixos {
-          hostname = "orbstack";
-          platform = "aarch64-linux";
-          config = commonConfig // nixosConfig;
-        };
-
-        # .iso images
-        #  - nix build .#nixosConfigurations.iso-gnome.config.system.build.isoImage
-        iso-gnome = helper.mkNixos {
-          hostname = "iso-gnome";
-          platform = "aarch64-linux";
-          config = {
-            inherit (commonConfig) tailnet keys;
-            user = {
-              username = "nixos"; # nixos user on ISOs
-              home-manager.enable = false;
-            };
+          hostSpec = commonHostSpec // {
+            hostName = "orbstack";
+            platform = "aarch64-linux";
           };
+          inherit myConfig;
+        };
+        iso-gnome = helper.mkNixos {
+          hostSpec = commonHostSpec // {
+            hostName = "iso-gnome";
+            platform = "x86_64-linux";
+            userFullName = "Joseph (Nix Installer)";
+          };
+          inherit myConfig;
         };
       };
 
       darwinConfigurations = {
         Josephs-MacBook-Air = helper.mkDarwin {
-          hostname = "Josephs-MacBook-Air";
-          config = commonConfig;
+          hostSpec = commonHostSpec // {
+            hostName = "Josephs-MacBook-Air";
+            platform = "aarch64-darwin";
+          };
+          inherit myConfig;
         };
       };
 

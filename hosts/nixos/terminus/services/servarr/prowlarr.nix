@@ -1,17 +1,8 @@
-{ config, inputs, ... }:
+{ config, ... }:
 let
   inherit (config.networking) domain;
 in
 {
-
-  # TODO: prowlarr config broken upstream, go back to unstable once fixed
-  disabledModules = [
-    "services/misc/servarr/prowlarr.nix"
-  ];
-  imports = [
-    "${inputs.nixpkgs-stable}/nixos/modules/services/misc/servarr/prowlarr.nix"
-  ];
-
   services.prowlarr = {
     enable = true;
   };

@@ -4,6 +4,9 @@
 { modulesPath, lib, ... }:
 {
   imports = [
+    ../common # nixos common
+    ../../common # nixos AND nix-darwin common
+
     ## Orbstack
     # default LXD configuration
     "${modulesPath}/virtualisation/lxc-container.nix"
@@ -11,8 +14,6 @@
     ./orbstack.nix
     ./networking.nix
   ];
-
-  nixpkgs.hostPlatform = "aarch64-linux";
 
   boot.initrd.systemd.enable = lib.mkForce false;
   boot.loader.systemd-boot.enable = lib.mkForce false;

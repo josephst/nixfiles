@@ -1,29 +1,21 @@
-# modules/nixos/myConfig/default.nix
 {
   inputs,
-  config,
   lib,
   pkgs,
   ...
 }:
 {
   imports = [
-    ../../common/myConfig
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.default
     inputs.nix-index-database.nixosModules.nix-index
 
-    ./gaming.nix
-    ./gnome.nix
     ./networking.nix
     ./user.nix
-    ./tailscale.nix
   ];
 
   config = {
-    myConfig.stateVersion = lib.mkDefault "24.11"; # NixOS stateVersion
-
     hardware.enableRedistributableFirmware = lib.mkDefault true;
     # Use systemd-boot to boot EFI machines
     boot.loader.systemd-boot.configurationLimit = lib.mkOverride 1337 10;
@@ -36,10 +28,6 @@
     zramSwap.enable = lib.mkDefault true;
 
     time.timeZone = lib.mkDefault "America/New_York";
-
-    # nixpkgs configuration is now handled by ../../common/myConfig/nixpkgs.nix
-
-    # nix configuration is now handled by ../../common/myConfig/nix-settings.nix
 
     security = {
       # use ssh keys instead of password
@@ -108,7 +96,6 @@
         enable = true;
       };
       nix-ld.enable = true;
-      # ssh configuration is now handled by ../../common/myConfig/ssh-infrastructure.nix
     };
 
     systemd = {
@@ -116,7 +103,7 @@
     };
 
     system = {
-      inherit (config.myConfig) stateVersion;
+      stateVersion = "24.11";
       rebuild.enableNg = true; # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md
     };
   };

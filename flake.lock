@@ -565,21 +565,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-staging": {
-      "locked": {
-        "lastModified": 1749415376,
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "e59a2e909ec3b3056a640cec4bce67b91240c322",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "staging-next",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1725103162,
@@ -719,7 +704,6 @@
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-joseph": "nixpkgs-joseph",
         "nixpkgs-stable": "nixpkgs-stable",
-        "nixpkgs-staging": "nixpkgs-staging",
         "treefmt-nix": "treefmt-nix",
         "zig": "zig_2"
       }
