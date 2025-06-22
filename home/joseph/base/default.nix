@@ -81,6 +81,10 @@ in
       coreutils # macOS coreutils
     ];
 
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
+
   programs = {
     atuin = {
       enable = true;
@@ -107,6 +111,13 @@ in
     };
     ripgrep.enable = true;
     nix-index.enable = true;
+    uv = {
+      enable = true;
+      settings = {
+        python-downloads = "never";
+        python-preference = "only-system"; # let Nix manage python install
+      };
+    };
     yazi = {
       enable = true;
       enableBashIntegration = true;
