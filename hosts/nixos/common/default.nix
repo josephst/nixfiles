@@ -103,8 +103,7 @@
     };
 
     system = {
-      stateVersion = "24.11";
-      rebuild.enableNg = true; # https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md
+      stateVersion = "25.11";
     };
   };
 }
