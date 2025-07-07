@@ -67,6 +67,9 @@
     isd.url = "github:isd-project/isd";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
+
+    recyclarr-templates.url = "github:recyclarr/config-templates";
+    recyclarr-templates.flake = false;
   };
 
   outputs =

@@ -18,6 +18,7 @@ in
   "restic/rclone-sync.env.age".publicKeys = allKeys;
   # "restic/systembackup.env.age".publicKeys = allKeys;
   "smbpasswd.age".publicKeys = allKeys; # smb password database
+  "recyclarrApiKeys.yaml.age".publicKeys = allKeys; # API keys for radarr and sonarr
 
   "hass/zwave-js-keys.json.age".publicKeys = allKeys;
   "hass/zigbee2mqtt.pass.age".publicKeys = allKeys;
