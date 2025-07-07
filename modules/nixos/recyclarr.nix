@@ -9,11 +9,6 @@
 let
   cfg = config.services.recyclarr;
   format = pkgs.formats.yaml { };
-  templates = pkgs.runCommand "recyclarr-merged-templates" { } ''
-    mkdir -p $out/includes
-    cp -r ${inputs.recyclarr-templates}/radarr/includes/. $out/includes/
-    cp -r ${inputs.recyclarr-templates}/sonarr/includes/. $out/includes/
-  '';
 in
 {
   disabledModules = [ "services/misc/recyclarr.nix" ]; # override the upstream module
@@ -98,11 +93,25 @@ in
         ];
 
         preStart = ''
-          if [ -f "$CREDENTIALS_DIRECTORY/secretsYaml" ]; then
-            ln -sf "$CREDENTIALS_DIRECTORY/secretsYaml" "$STATE_DIRECTORY/secrets.yaml"
-          fi
-          ln -sf "${templates}/includes" "$STATE_DIRECTORY/includes"
+          mkdir -m 700 -p $STATE_DIRECTORY/includes
+          rm -f $STATE_DIRECTORY/includes/radarr
+          rm -f $STATE_DIRECTORY/includes/sonarr
+          ln -sf ${inputs.recyclarr-templates}/radarr/includes $STATE_DIRECTORY/includes/radarr
+          ln -sf ${inputs.recyclarr-templates}/sonarr/includes $STATE_DIRECTORY/includes/sonarr
         '';
+
+        path = [
+          pkgs.git
+        ];
+
+        script = ''
+          if [ -f "$CREDENTIALS_DIRECTORY/secretsYaml" ]; then
+            ln -sf "$CREDENTIALS_DIRECTORY/secretsYaml" "$STATE_DIRECTORY/secrets.yml"
+          fi
+
+          ${lib.getExe cfg.package} ${cfg.command} -d --app-data $STATE_DIRECTORY --config ${configFile}
+        '';
+
 
         serviceConfig = {
           Type = "oneshot";
@@ -111,10 +120,10 @@ in
           LoadCredential = lib.optionalString (cfg.secretsFile != null) "secretsYaml:${cfg.secretsFile}";
           StateDirectory = "recyclarr";
           RuntimeDirectory = "recyclarr";
-          ExecStart = "${lib.getExe cfg.package} ${cfg.command} --app-data $STATE_DIRECTORY --config ${configFile}";
+          LogsDirectory = "recyclarr";
 
           # Hardening
-          ProtectSystem = "strict";
+          # ProtectSystem = "strict"; # implied by DynamicUser
           ProtectHome = true;
           PrivateTmp = true;
           PrivateDevices = true;
@@ -126,12 +135,12 @@ in
           ProtectControlGroups = true;
           RestrictNamespaces = true;
           LockPersonality = true;
-          MemoryDenyWriteExecute = true;
+          # MemoryDenyWriteExecute = true; # breaks dotnet
           RestrictRealtime = true;
           SystemCallArchitectures = "native";
-          NoNewPrivileges = true;
-          RestrictSUIDSGID = true;
-          RemoveIPC = true;
+          # NoNewPrivileges = true; # implied
+          # RestrictSUIDSGID = true; # implied
+          # RemoveIPC = true; # implied
           CapabilityBoundingSet = "";
 
           # Networking

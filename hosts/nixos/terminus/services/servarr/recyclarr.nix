@@ -13,7 +13,7 @@
 
     configuration = {
       sonarr = {
-        main = {
+        mySonarr = {
           base_url = "http://localhost:8989";
           api_key = "!secret sonarr_api_key";
 
@@ -36,7 +36,7 @@
         };
       };
       radarr = {
-        main = {
+        myRadarr = {
           base_url = "http://localhost:7878";
           api_key = "!secret radarr_api_key";
 
