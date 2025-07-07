@@ -1,7 +1,8 @@
-{ config, ... }:
 {
-  disabledModules = [ "services/misc/recyclarr.nix" ];
-
+  config,
+  ...
+}:
+{
   age.secrets.recyclarrApiKeys = {
     file = ../../secrets/recyclarrApiKeys.yaml.age;
   };
@@ -12,8 +13,7 @@
 
     configuration = {
       sonarr = {
-        mysonarr = {
-          instance_name = "main";
+        main = {
           base_url = "http://localhost:8989";
           api_key = "!secret sonarr_api_key";
 
@@ -36,8 +36,7 @@
         };
       };
       radarr = {
-        myradarr = {
-          instance_name = "main";
+        main = {
           base_url = "http://localhost:7878";
           api_key = "!secret radarr_api_key";
 

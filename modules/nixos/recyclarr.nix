@@ -10,12 +10,14 @@ let
   cfg = config.services.recyclarr;
   format = pkgs.formats.yaml { };
   templates = pkgs.runCommand "recyclarr-merged-templates" { } ''
-    mkdir $out
-    cp --no-preserve=mode -r "${inputs.recyclarr-templates}"/radarr/includes $out
-    cp --no-preserve=mode -r "${inputs.recyclarr-templates}"/sonarr/includes $out
+    mkdir -p $out/includes
+    cp -r ${inputs.recyclarr-templates}/radarr/includes/. $out/includes/
+    cp -r ${inputs.recyclarr-templates}/sonarr/includes/. $out/includes/
   '';
 in
 {
+  disabledModules = [ "services/misc/recyclarr.nix" ]; # override the upstream module
+
   options.services.recyclarr = {
     enable = lib.mkEnableOption "recyclarr service";
 
@@ -62,7 +64,7 @@ in
 
     secretsFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      description = "Path to secrets.yaml file.";
+      description = "Absolute path to a YAML file containing secrets for recyclarr. This is loaded as a systemd credential.";
       default = null;
     };
 
@@ -86,10 +88,20 @@ in
       in
       {
         description = "Recyclarr Service";
+        after = [
+          "sonarr.service"
+          "radarr.service"
+        ];
+        wants = [
+          "sonarr.service"
+          "radarr.service"
+        ];
 
-        PreStart = ''
-          ln -sf $CREDENTIALS_DIRECTORY/secretsYaml $STATE_DIRECTORY/secrets.yaml
-          ln -sf "${templates}"/includes "$STATE_DIRECTORY/includes"
+        preStart = ''
+          if [ -f "$CREDENTIALS_DIRECTORY/secretsYaml" ]; then
+            ln -sf "$CREDENTIALS_DIRECTORY/secretsYaml" "$STATE_DIRECTORY/secrets.yaml"
+          fi
+          ln -sf "${templates}/includes" "$STATE_DIRECTORY/includes"
         '';
 
         serviceConfig = {
@@ -101,6 +113,7 @@ in
           RuntimeDirectory = "recyclarr";
           ExecStart = "${lib.getExe cfg.package} ${cfg.command} --app-data $STATE_DIRECTORY --config ${configFile}";
 
+          # Hardening
           ProtectSystem = "strict";
           ProtectHome = true;
           PrivateTmp = true;
@@ -111,29 +124,28 @@ in
           ProtectKernelModules = true;
           ProtectKernelLogs = true;
           ProtectControlGroups = true;
+          RestrictNamespaces = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          NoNewPrivileges = true;
+          RestrictSUIDSGID = true;
+          RemoveIPC = true;
+          CapabilityBoundingSet = "";
 
+          # Networking
           PrivateNetwork = false;
           RestrictAddressFamilies = [
             "AF_INET"
             "AF_INET6"
           ];
-
-          NoNewPrivileges = true;
-          RestrictSUIDSGID = true;
-          RemoveIPC = true;
-
-          CapabilityBoundingSet = "";
-
-          LockPersonality = true;
-          RestrictRealtime = true;
         };
       };
 
     systemd.timers.recyclarr = {
       description = "Recyclarr Timer";
       wantedBy = [ "timers.target" ];
-      partOf = [ "recyclarr.service" ];
-
       timerConfig = {
         OnCalendar = cfg.schedule;
         Persistent = true;
