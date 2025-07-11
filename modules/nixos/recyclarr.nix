@@ -57,14 +57,6 @@ in
 
         For detailed configuration options and examples, see the
         [official configuration reference](https://recyclarr.dev/wiki/yaml/config-reference/).
-
-        To avoid permission issues, secrets should be provided via systemd's credential mechanism:
-
-        ```nix
-        systemd.services.recyclarr.serviceConfig.LoadCredential = [
-          "secretsYaml:''${config.sops.secrets.secretsYaml.path}"
-        ];
-        ```
       '';
     };
 
