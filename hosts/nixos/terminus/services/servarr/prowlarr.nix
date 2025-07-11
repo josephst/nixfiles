@@ -5,6 +5,15 @@ in
 {
   services.prowlarr = {
     enable = true;
+    openFirewall = true;
+    settings = {
+      server = {
+        port = 9696;
+      };
+      authentication = {
+        method = "External";
+      };
+    };
   };
 
   services.caddy.virtualHosts."prowlarr.${domain}" = {
@@ -13,14 +22,4 @@ in
     '';
     useACMEHost = domain;
   };
-
-  # system.activationScripts.prowlarr = {
-  #   # may need to restart prowlarr (systemctl restart [prowlarr]) after this
-  #   text = ''
-  #     if [[ -e /var/lib/private/prowlarr/config.xml ]]; then
-  #       # file exists, modify it
-  #       ${lib.getBin pkgs.gnused}/bin/sed -i 's/<AuthenticationMethod>None/<AuthenticationMethod>External/g' /var/lib/private/prowlarr/config.xml
-  #     fi
-  #     '';
-  # };
 }
