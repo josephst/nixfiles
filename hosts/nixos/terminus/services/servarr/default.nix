@@ -6,6 +6,7 @@
     ./radarr.nix
     ./sabnzbd.nix
     ./sonarr.nix
+    ./recyclarr.nix
   ];
 
   # Create the group for media stuff (jellyfin, sabnzbd, etc)
