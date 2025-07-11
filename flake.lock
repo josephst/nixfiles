@@ -702,21 +702,6 @@
         "type": "github"
       }
     },
-    "recyclarr-templates": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1748995181,
-        "owner": "recyclarr",
-        "repo": "config-templates",
-        "rev": "3a2c4796b3aee5ccd4e66642bcd777ad38e0d739",
-        "type": "github"
-      },
-      "original": {
-        "owner": "recyclarr",
-        "repo": "config-templates",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -733,7 +718,6 @@
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-joseph": "nixpkgs-joseph",
         "nixpkgs-stable": "nixpkgs-stable",
-        "recyclarr-templates": "recyclarr-templates",
         "treefmt-nix": "treefmt-nix",
         "zig": "zig_2"
       }

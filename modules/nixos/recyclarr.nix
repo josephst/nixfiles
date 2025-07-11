@@ -2,13 +2,24 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 
 let
   cfg = config.services.recyclarr;
   format = pkgs.formats.yaml { };
+
+  # taken from https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/home-automation/home-assistant.nix, by mweinelt
+  renderYAMLFile =
+    fn: yaml:
+    pkgs.runCommand fn
+      {
+        preferLocalBuilds = true;
+      }
+      ''
+        cp ${format.generate fn yaml} $out
+        sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
+      '';
 in
 {
   disabledModules = [ "services/misc/recyclarr.nix" ]; # override the upstream module
@@ -25,7 +36,7 @@ in
         sonarr = {
           main = {
             base_url = "http://localhost:8989";
-            api_key = "!secret sonarr_api_key";
+            api_key = ''!secret sonarr_api_key'';
 
             delete_old_custom_formats = true;
             replace_existing_custom_formats = true;
@@ -34,7 +45,7 @@ in
         radarr = {
           main = {
             base_url = "http://localhost:7878";
-            api_key = "!secret radarr_api_key";
+            api_key = ''!secret radarr_api_key'';
 
             delete_old_custom_formats = true;
             replace_existing_custom_formats = true;
@@ -79,7 +90,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.recyclarr =
       let
-        configFile = format.generate "recyclarr.yaml" cfg.configuration;
+        configFile = renderYAMLFile "recyclarr.yaml" cfg.configuration;
       in
       {
         description = "Recyclarr Service";
@@ -92,14 +103,6 @@ in
           "radarr.service"
         ];
 
-        preStart = ''
-          mkdir -m 700 -p $STATE_DIRECTORY/includes
-          rm -f $STATE_DIRECTORY/includes/radarr
-          rm -f $STATE_DIRECTORY/includes/sonarr
-          ln -sf ${inputs.recyclarr-templates}/radarr/includes $STATE_DIRECTORY/includes/radarr
-          ln -sf ${inputs.recyclarr-templates}/sonarr/includes $STATE_DIRECTORY/includes/sonarr
-        '';
-
         path = [
           pkgs.git
         ];
@@ -109,9 +112,8 @@ in
             ln -sf "$CREDENTIALS_DIRECTORY/secretsYaml" "$STATE_DIRECTORY/secrets.yml"
           fi
 
-          ${lib.getExe cfg.package} ${cfg.command} -d --app-data $STATE_DIRECTORY --config ${configFile}
+          ${lib.getExe cfg.package} ${cfg.command} --app-data $STATE_DIRECTORY --config ${configFile}
         '';
-
 
         serviceConfig = {
           Type = "oneshot";
@@ -148,6 +150,7 @@ in
           RestrictAddressFamilies = [
             "AF_INET"
             "AF_INET6"
+            "AF_UNIX"
           ];
         };
       };

@@ -68,8 +68,8 @@
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
-    recyclarr-templates.url = "github:recyclarr/config-templates";
-    recyclarr-templates.flake = false;
+    # recyclarr-templates.url = "github:recyclarr/config-templates";
+    # recyclarr-templates.flake = false;
   };
 
   outputs =
