@@ -22,6 +22,18 @@ in
     useACMEHost = domain;
   };
 
+  # hardening options copied from upstream
+  # https://github.com/sabnzbd/sabnzbd/blob/master/linux/sabnzbd%40.service
+  systemd.services.sabnzbd.serviceConfig = {
+    ProtectSystem = "full";
+    DeviceAllow = [
+      "/dev/null rw"
+      "/dev/urandom r"
+    ];
+    DevicePolicy = "strict";
+    NoNewPrivileges = true;
+  };
+
   system.activationScripts.sabnzbd = {
     # may need to restart sabnzbd (systemctl restart sabnzbd) after this
     text = ''
