@@ -92,12 +92,15 @@
         "only guest" = "yes";
         "writable" = "yes";
         "force user" = "samba-guest";
+        "force group" = "users";
       };
 
       media = {
         path = "/storage/media";
+        "guest ok" = "yes";
         "public" = "yes";
-        "force user" = "samba-guest";
+        "write list" = "joseph";
+        "force group" = "media";
       };
     };
   };
