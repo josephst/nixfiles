@@ -64,7 +64,10 @@
 
     ghostty.url = "github:ghostty-org/ghostty";
 
-    isd.url = "github:isd-project/isd";
+    isd = {
+      url = "github:isd-project/isd";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
