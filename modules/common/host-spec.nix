@@ -60,11 +60,10 @@
       type = lib.types.nullOr (
         lib.types.enum [
           "Gnome"
-          "Hyprland"
         ]
       );
       default = if (config.hostSpec.isServer || pkgs.stdenv.isDarwin) then null else "Gnome";
-      description = "Desktop environment (Gnome, Hyprland or null)";
+      description = "Desktop environment (Gnome or null)";
     };
 
     shell = lib.mkOption {

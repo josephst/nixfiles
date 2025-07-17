@@ -15,6 +15,7 @@
             "8.8.8.8"
           ];
           MulticastDNS = true;
+          IPv6AcceptRA = true;
         };
         # domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
         linkConfig = {

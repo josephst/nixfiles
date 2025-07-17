@@ -66,7 +66,7 @@ in
       rclone # syncing
       restic # backup
       rsync # syncing
-      tldr # cheatsheets in terminal
+      tealdeer # cheatsheets in terminal
       typst # latex alternative for typesetting docs
       yt-dlp # youtube-dl
     ]
