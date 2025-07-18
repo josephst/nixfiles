@@ -135,7 +135,7 @@ in
             sync "${cfg.dataDir}" "$REMOTE" ${lib.escapeShellArgs cfg.extraRcloneArgs}
         '';
       }
-    ) (lib.filterAttrs (n: v: v.enable) cfg);
+    ) (lib.filterAttrs (_n: v: v.enable) cfg);
 
     systemd.timers = lib.mapAttrs' (
       name: cfg:
@@ -143,6 +143,6 @@ in
         wantedBy = [ "timers.target" ];
         inherit (cfg) timerConfig;
       }
-    ) (lib.filterAttrs (n: v: v.enable && v.timerConfig != null) cfg);
+    ) (lib.filterAttrs (_n: v: v.enable && v.timerConfig != null) cfg);
   };
 }
