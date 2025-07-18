@@ -30,7 +30,7 @@ in
     package = lib.mkPackageOption pkgs "recyclarr" { };
 
     configuration = lib.mkOption {
-      type = format.type;
+      inherit (format) type;
       default = { };
       example = {
         sonarr = {

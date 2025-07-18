@@ -141,7 +141,7 @@ in
       name: cfg:
       lib.nameValuePair "rclone-sync-${name}" {
         wantedBy = [ "timers.target" ];
-        timerConfig = cfg.timerConfig;
+        inherit (cfg) timerConfig;
       }
     ) (lib.filterAttrs (n: v: v.enable && v.timerConfig != null) cfg);
   };
