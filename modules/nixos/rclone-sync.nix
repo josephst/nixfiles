@@ -112,7 +112,8 @@ in
           LoadCredential = [ "rcloneConf:${cfg.rcloneConfFile}" ];
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           # Security hardening
-          ReadWritePaths = [ cfg.dataDir ];
+          DynamicUser = true;
+          ReadOnlyPaths = [ cfg.dataDir ]; # need to be able to read the backup dir
           PrivateTmp = true;
           ProtectSystem = "strict";
           ProtectKernelTunables = true;

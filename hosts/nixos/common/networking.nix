@@ -14,7 +14,7 @@ let
 in
 {
   config = {
-    systemd.networkd.enable = lib.mkDefault (config.hostSpec.desktop == null); # use systemd-networkd on non-graphical systems
+    systemd.network.enable = lib.mkDefault (config.hostSpec.desktop == null); # use systemd-networkd on non-graphical systems
     networking = {
       firewall = {
         enable = lib.mkDefault true;
