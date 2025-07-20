@@ -35,7 +35,7 @@ in
               type = with types; nullOr str;
               description = ''
                 Path to a file containing HC_UUID set to provide UUID for healthchecks.io,
-                as well as REMOTE (set to the rclone remote name).
+                as well as REMOTE (set to the full rclone destination, e.g. `myremote:bucket/path`).
                 If using Rclone env_auth (ie environmental variables) to authenticate with remote,
                 they should also be configured here
               '';
@@ -89,31 +89,23 @@ in
   };
 
   config = {
-    assertions = lib.flatten (
-      lib.mapAttrsToList (name: value: [
-        {
-          assertion = value.dataDir != null;
-          message = "services.rclone-sync.${name}.dataDir must be a valid path";
-        }
-        {
-          assertion = value.rcloneConfFile != null;
-          message = "services.rclone-sync.${name}.rcloneConfFile must provide a Rclone conf file";
-        }
-      ]) cfg
-    );
+    assertions = lib.mapAttrsToList (name: value: {
+      assertion = value.dataDir != null;
+      message = "services.rclone-sync.${name}.dataDir must be a valid path";
+    }) cfg;
 
     systemd.services = lib.mapAttrs' (
-      name: cfg:
+      name: remoteConfig:
       lib.nameValuePair "rclone-sync-${name}" {
-        description = "Copy local dir (mainly a Restic repo) to remote, using Rclone";
+        description = "Rclone sync for '${name}' from ${remoteConfig.dataDir}";
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         serviceConfig = {
           Type = "oneshot";
-          LoadCredential = [ "rcloneConf:${cfg.rcloneConfFile}" ];
-          EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+          LoadCredential = [ "rcloneConf:${remoteConfig.rcloneConfFile}" ];
+          EnvironmentFile = lib.optional (remoteConfig.environmentFile != null) remoteConfig.environmentFile;
           # Security hardening
-          ReadOnlyPaths = [ cfg.dataDir ]; # need to be able to read the backup dir
+          ReadOnlyPaths = [ remoteConfig.dataDir ]; # need to be able to read the backup dir
           PrivateTmp = true;
           ProtectSystem = "strict";
           ProtectKernelTunables = true;
@@ -127,21 +119,21 @@ in
         };
 
         script = ''
-          ${cfg.package}/bin/rclone \
+          ${remoteConfig.package}/bin/rclone \
             --config "$CREDENTIALS_DIRECTORY/rcloneConf" \
-            --cache-dir /var/cache/rclone-sync \
+            --cache-dir $CACHE_DIRECTORY \
             --missing-on-dst - \
             --error - \
-            sync "${cfg.dataDir}" "$REMOTE" ${lib.escapeShellArgs cfg.extraRcloneArgs}
+            sync "${remoteConfig.dataDir}" "$REMOTE" ${lib.escapeShellArgs remoteConfig.extraRcloneArgs}
         '';
       }
     ) (lib.filterAttrs (_n: v: v.enable) cfg);
 
     systemd.timers = lib.mapAttrs' (
-      name: cfg:
+      name: remoteConfig:
       lib.nameValuePair "rclone-sync-${name}" {
         wantedBy = [ "timers.target" ];
-        inherit (cfg) timerConfig;
+        inherit (remoteConfig) timerConfig;
       }
     ) (lib.filterAttrs (_n: v: v.enable && v.timerConfig != null) cfg);
   };
