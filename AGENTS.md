@@ -18,12 +18,8 @@ just switch  # or just s
 # Update flake inputs
 just update
 
-# Format code
+# Format code (also runs statix and deadnix)
 nix fmt
-
-# Lint and check code quality
-nix run nixpkgs#statix check .
-nix run nixpkgs#deadnix .
 
 # Garbage collect old generations
 just gc [age=7]  # defaults to 7 days

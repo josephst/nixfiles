@@ -12,8 +12,8 @@ in
   options.myHomeConfig.npm = {
     enable = lib.mkEnableOption "npm global config";
 
-    package = lib.mkPackageOption pkgs [ "nodePackages" "npm" ] {
-      example = "nodePackages_13_x.npm";
+    package = lib.mkPackageOption pkgs [ "nodejs" ] {
+      example = "nodejs_24";
     };
 
     npmrc = lib.mkOption {
