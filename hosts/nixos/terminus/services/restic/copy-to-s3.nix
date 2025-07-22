@@ -23,7 +23,7 @@ in
   age.secrets.restic-systembackup-env.file = ../../secrets/restic/systembackup.env.age;
 
   # copy local Restic repo to S3-compatible repo
-  services.rclone-sync = {
+  services.rclone-sync.b2 = {
     enable = true;
     dataDir = localPath;
     environmentFile = config.age.secrets.rclone-sync.path;
@@ -53,15 +53,15 @@ in
     timerConfig = null; # no automatic run; instead, triggered after rclone-sync finishes
   };
 
-  systemd.services.rclone-sync.onSuccess = [ "restic-backups-b2.service" ];
+  systemd.services.rclone-sync-b2.onSuccess = [ "restic-backups-b2.service" ];
 
   services.healthchecks-ping.b2-check = {
     urlFile = config.age.secrets.resticb2env.path;
     unitName = "restic-backups-b2";
   };
 
-  services.healthchecks-ping.rclone-sync = {
+  services.healthchecks-ping.rclone-sync-b2 = {
     urlFile = config.age.secrets.rclone-sync.path;
-    unitName = "rclone-sync";
+    unitName = "rclone-sync-b2";
   };
 }
