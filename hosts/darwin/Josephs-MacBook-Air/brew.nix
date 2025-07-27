@@ -37,7 +37,7 @@ in
 
       # productivity
       "raycast"
-      "tailscale"
+      "tailscale-app"
     ];
 
     masApps = {
