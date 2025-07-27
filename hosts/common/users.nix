@@ -12,20 +12,19 @@ let
 in
 {
   users = {
-    users.${hostSpec.username} =
-      {
-        inherit (hostSpec) home;
-      }
-      // lib.optionalAttrs isLinux {
-        isNormalUser = true;
-        createHome = true;
-        inherit (hostSpec) shell;
-        hashedPasswordFile = lib.mkIf (hostSpec.passwordFile != null) config.age.secrets.password.path;
-        extraGroups = ifTheyExist [
-          "wheel"
-          "networkmanager"
-        ];
-        packages = [ pkgs.home-manager ];
-      };
+    users.${hostSpec.username} = {
+      inherit (hostSpec) home;
+    }
+    // lib.optionalAttrs isLinux {
+      isNormalUser = true;
+      createHome = true;
+      inherit (hostSpec) shell;
+      hashedPasswordFile = lib.mkIf (hostSpec.passwordFile != null) config.age.secrets.password.path;
+      extraGroups = ifTheyExist [
+        "wheel"
+        "networkmanager"
+      ];
+      packages = [ pkgs.home-manager ];
+    };
   };
 }

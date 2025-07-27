@@ -76,7 +76,8 @@ in
         autoupdate = true;
       };
       help.autocorrect = "prompt";
-    } // lib.optionalAttrs isLinux { credential.credentialStore = "cache"; };
+    }
+    // lib.optionalAttrs isLinux { credential.credentialStore = "cache"; };
     delta = {
       enable = true;
     };

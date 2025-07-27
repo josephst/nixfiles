@@ -44,13 +44,11 @@
 
     nix.enable = false; # using Determinate Nix on macOS
     # write nix.custom.conf configuration
-    environment.etc."nix/nix.custom.conf".text =
-      config.nix.extraOptions
-      + ''
-        lazy-trees = true
-        extra-substituters = https://nix-community.cachix.org
-        extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
-      '';
+    environment.etc."nix/nix.custom.conf".text = config.nix.extraOptions + ''
+      lazy-trees = true
+      extra-substituters = https://nix-community.cachix.org
+      extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+    '';
 
     system = {
       stateVersion = 6;

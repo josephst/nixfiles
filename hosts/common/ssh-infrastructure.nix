@@ -30,10 +30,11 @@ in
         commonKnownHosts
         // lib.optionals (cfg.keys != null) lib.mapAttrs (hostname: _value: {
           publicKey = cfg.keys.hosts.${hostname};
-          hostNames =
-            [ hostname ]
-            ++ lib.optional (config.hostSpec.tailnet != null) "${hostname}.${config.hostSpec.tailnet}"
-            ++ lib.optional (hostname == config.networking.hostName) "localhost";
+          hostNames = [
+            hostname
+          ]
+          ++ lib.optional (config.hostSpec.tailnet != null) "${hostname}.${config.hostSpec.tailnet}"
+          ++ lib.optional (hostname == config.networking.hostName) "localhost";
         }) cfg.keys.hosts;
     };
   };
