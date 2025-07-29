@@ -117,7 +117,7 @@ in
 
   services.caddy.virtualHosts."home.${domain}" = lib.mkIf config.services.home-assistant.enable {
     extraConfig = ''
-      reverse_proxy localhost:8123
+      reverse_proxy http://localhost:8123
     '';
     useACMEHost = domain;
   };

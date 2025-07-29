@@ -22,6 +22,7 @@
     ../common/mixins/tailscale.nix
 
     # Services
+    ./services/copyparty.nix
     ./services/home-assistant
     ./services/acme.nix
     # ./services/blocky.nix
@@ -44,6 +45,7 @@
     ./services/homepage
 
     inputs.lanzaboote.nixosModules.lanzaboote
+    inputs.copyparty.nixosModules.default
   ];
 
   systemd = {

@@ -63,6 +63,7 @@
     };
 
     ghostty.url = "github:ghostty-org/ghostty";
+    copyparty.url = "github:9001/copyparty";
 
     isd = {
       url = "github:isd-project/isd";
