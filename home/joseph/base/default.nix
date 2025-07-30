@@ -33,7 +33,6 @@ in
       # claude-code # claude code # install w/ NPM
       comma # run commands by prefacing with comma
       cpufetch # CPU info
-      croc # file sharing
       cyme # modern lsusb
       delta # git and diff viewer
       diffsitter # better diff
@@ -49,6 +48,7 @@ in
       just # command runner
       lazygit # git with TUI
       llamaPackages.llama-cpp # from llama-cpp overlay
+      magic-wormhole
       marp-cli # markdown presentation
       ncdu # TUI disk usage
       nodejs
