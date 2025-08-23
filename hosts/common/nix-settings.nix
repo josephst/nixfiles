@@ -30,10 +30,10 @@ in
 {
   config = {
     nix = {
-      enable = !pkgs.stdenv.isDarwin; # on darwin, nix is managed by Determinate Nix
+      enable = lib.mkDefault (!pkgs.stdenv.isDarwin); # on darwin, nix is managed by Determinate Nix
 
       # remaining options only applied on non-Darwin systems
-      package = pkgs.nix;
+      package = lib.mkDefault pkgs.nix;
       # registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
       # nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
       settings = {
