@@ -6,6 +6,7 @@
 }:
 {
   imports = [
+    inputs.determinate.nixosModules.default
     inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.default

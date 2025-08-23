@@ -8,6 +8,7 @@
 
 {
   imports = [
+    inputs.determinate.darwinModules.default
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
     inputs.nix-index-database.darwinModules.nix-index
@@ -44,8 +45,9 @@
 
     nix.enable = false; # using Determinate Nix on macOS
     # write nix.custom.conf configuration
+    # note: not using module configuration (https://determinate.systems/blog/changelog-determinate-nix-386/) because
+    # it does not support "!include file_path" syntax
     environment.etc."nix/nix.custom.conf".text = config.nix.extraOptions + ''
-      lazy-trees = true
       extra-substituters = https://nix-community.cachix.org
       extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
     '';
