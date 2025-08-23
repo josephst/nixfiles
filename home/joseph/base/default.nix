@@ -47,7 +47,7 @@ in
       ipfetch # IP info
       just # command runner
       lazygit # git with TUI
-      llamaPackages.llama-cpp # from llama-cpp overlay
+      llama-cpp # local LLM
       magic-wormhole
       marp-cli # markdown presentation
       ncdu # TUI disk usage

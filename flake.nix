@@ -40,12 +40,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # llama.cpp
-    llama-cpp = {
-      url = "github:ggerganov/llama.cpp";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # disko
     disko = {
       url = "github:nix-community/disko";

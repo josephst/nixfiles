@@ -22,7 +22,6 @@
         outputs.overlays.default
         inputs.agenix.overlays.default
         inputs.zig.overlays.default
-        inputs.llama-cpp.overlays.default
         inputs.copyparty.overlays.default
       ];
       config = {
