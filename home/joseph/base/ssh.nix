@@ -24,9 +24,22 @@ in
 {
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     includes = lib.optional pkgs.stdenv.isDarwin "${config.home.homeDirectory}/.orbstack/ssh/config";
     matchBlocks = {
       "*" = {
+        # defaults, from home-manager module
+        forwardAgent = false;
+        addKeysToAgent = "no";
+        compression = false;
+        serverAliveInterval = 0;
+        serverAliveCountMax = 3;
+        hashKnownHosts = false;
+        userKnownHostsFile = "~/.ssh/known_hosts";
+        controlMaster = "no";
+        controlPath = "~/.ssh/master-%r@%n:%p";
+        controlPersist = "no";
+        # additional options
         identityFile =
           lib.mkIf config.home.file.${identityFile}.enable
             "${config.home.file.${identityFile}.source}";
