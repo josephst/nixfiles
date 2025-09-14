@@ -35,6 +35,7 @@
     desktopManager = {
       gnome.enable = true;
     };
+    # gnome.gnome-remote-desktop.enable = true; # remote desktop support
     usbmuxd.enable = true;
     udev.packages = [ pkgs.gnome-settings-daemon ];
     pipewire = {

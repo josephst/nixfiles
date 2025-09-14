@@ -48,6 +48,16 @@
     inputs.copyparty.nixosModules.default
   ];
 
+  # specialisations (note the spelling!)
+  specialisation = {
+    graphical.configuration = {
+      imports = [
+        ../common/mixins/gnome.nix
+        ../common/mixins/xrdp.nix
+      ];
+    };
+  };
+
   systemd = {
     tmpfiles.rules = [ "d /storage - - - - -" ];
 

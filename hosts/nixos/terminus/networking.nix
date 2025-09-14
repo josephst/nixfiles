@@ -14,7 +14,6 @@
             "1.1.1.1"
             "8.8.8.8"
           ];
-          MulticastDNS = true;
           IPv6AcceptRA = true;
         };
         # domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
@@ -25,7 +24,9 @@
       };
     };
   };
-  networking.firewall.allowedUDPPorts =
-    lib.optional config.systemd.network.networks."10-lan".networkConfig.MulticastDNS
-      5353;
+  services.avahi = {
+    enable = true;
+    publish.enable = true;
+    publish.userServices = true;
+  };
 }

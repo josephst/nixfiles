@@ -18,6 +18,7 @@ in
     // lib.optionalAttrs isLinux {
       isNormalUser = true;
       createHome = true;
+      linger = true;
       inherit (hostSpec) shell;
       hashedPasswordFile = lib.mkIf (hostSpec.passwordFile != null) config.age.secrets.password.path;
       extraGroups = ifTheyExist [

@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+  inherit (pkgs.stdenv.hostPlatform) isLinux;
   _1passEnabled =
     (
       osConfig ? homebrew
@@ -19,17 +19,6 @@ let
       lib.getAttr "joseph" osConfig.myConfig.keys.signing
     else
       null;
-
-  manpager = pkgs.writeShellScriptBin "manpager" (
-    if isDarwin then
-      ''
-        sh -c 'col -bx | ${lib.getExe pkgs.bat} -l man -p'
-      ''
-    else
-      ''
-        cat "$1" | col -bx | ${lib.getExe pkgs.bat} --language man --style plain
-      ''
-  );
 in
 {
   imports = [
@@ -44,7 +33,7 @@ in
       LC_CTYPE = "en_US.UTF-8";
       LC_ALL = "en_US.UTF-8";
       EDITOR = "hx";
-      MANPAGER = "${manpager}/bin/manpager";
+      MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
       MANROFFOPT = "-c";
       VISUAL = "micro";
       SUDO_EDITOR = "hx";
