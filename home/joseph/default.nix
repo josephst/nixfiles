@@ -88,7 +88,7 @@ in
     "ghostty/config".text = ''
       command = "${pkgs.fish}/bin/fish"
 
-      theme = dark:catppuccin-frappe,light:catppuccin-latte
+      theme = dark:Catppuccin Frappe,light:Catppuccin Latte
       keybind = shift+enter=text:\n
     '';
   };
