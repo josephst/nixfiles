@@ -8,6 +8,7 @@ in
     ./bash.nix
     ./bat.nix
     ./bottom.nix # system viewer
+    ./bun.nix
     ./direnv.nix
     ./eza.nix # better ls
     ./fd.nix # better find
@@ -20,8 +21,6 @@ in
     ./starship.nix
     ./wezterm
     ./zellij
-
-    ./myHomeConfig.nix
   ];
 
   home.packages =
@@ -30,7 +29,7 @@ in
       age # encryption
       agenix # age secrets
       bc # calculator
-      # claude-code # claude code # install w/ NPM
+      # claude-code # claude code # install w/ NPM or bun
       comma # run commands by prefacing with comma
       cpufetch # CPU info
       cyme # modern lsusb
