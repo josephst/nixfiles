@@ -32,7 +32,7 @@ in
       "zoom"
 
       # AI
-      "ollama"
+      "ollama-app"
       "lm-studio"
 
       # productivity
