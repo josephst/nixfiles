@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+_:
 {
   networking.domain = "homelab.josephstahl.com";
   systemd.network = {
