@@ -20,7 +20,6 @@ in
   age.secrets.rcloneConf.file = ../../secrets/rclone.conf.age;
   age.secrets.rclone-sync.file = ../../secrets/restic/rclone-sync.env.age;
   age.secrets.restic-localstorage-pass.file = ../../secrets/restic/localstorage.pass.age;
-  age.secrets.restic-systembackup-env.file = ../../secrets/restic/systembackup.env.age;
 
   # copy local Restic repo to S3-compatible repo
   services.rclone-sync.b2 = {
@@ -28,6 +27,17 @@ in
     dataDir = localPath;
     environmentFile = config.age.secrets.rclone-sync.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
+
+    healthcheck = {
+      enable = true;
+      urlFile = config.age.secrets.rclone-sync.path;
+      actions = [
+        "start"
+        "success"
+        "fail"
+        "stop"
+      ];
+    };
 
     timerConfig = {
       OnCalendar = "06:00";
@@ -60,8 +70,4 @@ in
     unitName = "restic-backups-b2";
   };
 
-  services.healthchecks-ping.rclone-sync-b2 = {
-    urlFile = config.age.secrets.rclone-sync.path;
-    unitName = "rclone-sync-b2";
-  };
 }
