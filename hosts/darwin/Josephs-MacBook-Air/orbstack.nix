@@ -1,6 +1,7 @@
 _: {
   home-manager.users.root.programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     matchBlocks = {
       orb = {
         hostname = "127.0.0.1";
