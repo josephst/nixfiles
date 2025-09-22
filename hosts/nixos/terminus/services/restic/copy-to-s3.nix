@@ -16,7 +16,6 @@ let
 in
 {
   age.secrets.resticb2env.file = ../../secrets/restic/b2.env.age;
-  age.secrets.resticb2bucketname.file = ../../secrets/restic/b2bucketname.age;
   age.secrets.rcloneConf.file = ../../secrets/rclone.conf.age;
   age.secrets.rclone-sync.file = ../../secrets/restic/rclone-sync.env.age;
   age.secrets.restic-localstorage-pass.file = ../../secrets/restic/localstorage.pass.age;
@@ -30,13 +29,7 @@ in
 
     healthcheck = {
       enable = true;
-      urlFile = config.age.secrets.rclone-sync.path;
-      actions = [
-        "start"
-        "success"
-        "fail"
-        "stop"
-      ];
+      urlFile = config.age.secrets.rclone-sync.path; # REMOTE and HC_URL
     };
 
     timerConfig = {
@@ -50,7 +43,6 @@ in
   services.restic.backups.b2 = {
     initialize = false;
     environmentFile = config.age.secrets.resticb2env.path;
-    repositoryFile = config.age.secrets.resticb2bucketname.path; # using s3-compatible API on Backblaze B2
     passwordFile = config.age.secrets.restic-localstorage-pass.path; # remote has same password as local
     inherit pruneOpts;
     inherit checkOpts;
