@@ -49,6 +49,7 @@ in
   };
 
   services.healthchecks-ping.system-backup = {
+    enable = true;
     urlFile = config.age.secrets.restic-systembackup-env.path;
     unitName = "restic-backups-system-backup";
   };

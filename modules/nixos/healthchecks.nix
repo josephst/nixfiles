@@ -48,90 +48,87 @@ in
       Send pings to healthchecks.io when services start/stop/fail.
     '';
     type = lib.types.attrsOf (
-      lib.types.submodule (
-        _:
-        {
-          options = {
-            enable = lib.mkEnableOption "Send pings to healthchecks.io";
+      lib.types.submodule (_: {
+        options = {
+          enable = lib.mkEnableOption "Send pings to healthchecks.io";
 
-            urlFile = lib.mkOption {
-              type = lib.types.nullOr lib.types.path;
-              description = ''
-                Read the healthcheck URL from a file.
-                Must be in the EnvironmentFile format, with name HC_URL.
-                Additional variables can be set in the same file.
-                ```
-                HC_URL=https://hc-ping.com/12345678-1234-1234-1234-1234567890ab
-                ...
-                ```
-                Optional keys recognised by the helper include ``HC_TIMEOUT`` (seconds, defaults to 10),
-                ``HC_RETRY`` (curl retry count, defaults to 3), ``HC_SEND_LOGS`` (set to 0 to disable
-                attaching logs on success/fail) and ``HC_MAX_LOG_LINES`` (truncate journal output).
-              '';
-              default = null;
-              example = "/var/run/agenix/healthchecks";
-            };
-            url = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              description = ''
-                URL to send start/stop/fail messages to.
-              '';
-              default = null;
-              example = "https://hc-ping.com/12345678-1234-1234-1234-1234567890ab";
-            };
-            unitName = lib.mkOption {
-              description = ''
-                Name of the unit to add Wants/OnSuccess/OnFailure dependencies to.
-              '';
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-              example = "restic-backups-system-backup";
-            };
-            actions = lib.mkOption {
-              description = ''
-                Which lifecycle events should emit healthchecks.io pings when ``unitName`` is provided.
-                ``start`` sends a ping before the unit's main process runs, ``success`` runs on OnSuccess, ``fail`` on OnFailure, and ``stop`` during the unit's postStop hook.
-              '';
-              type = lib.types.listOf (lib.types.enum allowableActions);
-              default = [
-                "start"
-                "success"
-                "fail"
-              ];
-              example = [
-                "start"
-                "success"
-                "fail"
-                "stop"
-              ];
-            };
-            defaultSendLogs = lib.mkOption {
-              description = ''
-                When set, control whether success/fail actions include the triggering unit's journal logs by default.
-                Can be overridden in the credentials file via ``HC_SEND_LOGS``.
-              '';
-              type = lib.types.nullOr lib.types.bool;
-              default = null;
-            };
-            defaultMaxLogLines = lib.mkOption {
-              description = ''
-                Optional default cap on log lines collected for success/fail events.
-                Override via ``HC_MAX_LOG_LINES`` inside the credentials file.
-              '';
-              type = lib.types.nullOr lib.types.int;
-              default = null;
-              example = 200;
-            };
+          urlFile = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
+            description = ''
+              Read the healthcheck URL from a file.
+              Must be in the EnvironmentFile format, with name HC_URL.
+              Additional variables can be set in the same file.
+              ```
+              HC_URL=https://hc-ping.com/12345678-1234-1234-1234-1234567890ab
+              ...
+              ```
+              Optional keys recognised by the helper include ``HC_TIMEOUT`` (seconds, defaults to 10),
+              ``HC_RETRY`` (curl retry count, defaults to 3), ``HC_SEND_LOGS`` (set to 0 to disable
+              attaching logs on success/fail) and ``HC_MAX_LOG_LINES`` (truncate journal output).
+            '';
+            default = null;
+            example = "/var/run/agenix/healthchecks";
           };
-          config = {
-            actions = lib.mkDefault [
+          url = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            description = ''
+              URL to send start/stop/fail messages to.
+            '';
+            default = null;
+            example = "https://hc-ping.com/12345678-1234-1234-1234-1234567890ab";
+          };
+          unitName = lib.mkOption {
+            description = ''
+              Name of the unit to add Wants/OnSuccess/OnFailure dependencies to.
+            '';
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            example = "restic-backups-system-backup";
+          };
+          actions = lib.mkOption {
+            description = ''
+              Which lifecycle events should emit healthchecks.io pings when ``unitName`` is provided.
+              ``start`` sends a ping before the unit's main process runs, ``success`` runs on OnSuccess, ``fail`` on OnFailure, and ``stop`` during the unit's postStop hook.
+            '';
+            type = lib.types.listOf (lib.types.enum allowableActions);
+            default = [
               "start"
               "success"
               "fail"
             ];
+            example = [
+              "start"
+              "success"
+              "fail"
+              "stop"
+            ];
           };
-        }
-      )
+          defaultSendLogs = lib.mkOption {
+            description = ''
+              When set, control whether success/fail actions include the triggering unit's journal logs by default.
+              Can be overridden in the credentials file via ``HC_SEND_LOGS``.
+            '';
+            type = lib.types.nullOr lib.types.bool;
+            default = null;
+          };
+          defaultMaxLogLines = lib.mkOption {
+            description = ''
+              Optional default cap on log lines collected for success/fail events.
+              Override via ``HC_MAX_LOG_LINES`` inside the credentials file.
+            '';
+            type = lib.types.nullOr lib.types.int;
+            default = null;
+            example = 200;
+          };
+        };
+        config = {
+          actions = lib.mkDefault [
+            "start"
+            "success"
+            "fail"
+          ];
+        };
+      })
     );
     default = { };
   };

@@ -112,65 +112,23 @@ in
               type =
                 with types;
                 nullOr (
-                  submodule (
-                    _:
-                    {
-                      options = {
-                        enable = mkEnableOption "Emit status updates to healthchecks.io" // {
-                          default = false;
-                        };
+                  submodule (_: {
+                    options = {
+                      enable = mkEnableOption "Emit status updates to healthchecks.io";
 
-                        name = mkOption {
-                          type = with types; nullOr str;
-                          default = null;
-                          description = ''
-                            Optional name for the generated healthchecks entry. Defaults to the systemd unit name.
-                          '';
-                        };
-
-                        url = mkOption {
-                          type = with types; nullOr str;
-                          default = null;
-                          description = "Direct healthchecks.io URL to ping.";
-                        };
-
-                        urlFile = mkOption {
-                          type = with types; nullOr path;
-                          default = null;
-                          description = "Path to file exporting ``HC_URL`` and related settings.";
-                        };
-
-                        actions = mkOption {
-                          type =
-                            with types;
-                            listOf (enum [
-                              "start"
-                              "success"
-                              "fail"
-                              "stop"
-                            ]);
-                          default = [
-                            "start"
-                            "success"
-                            "fail"
-                          ];
-                          description = "Lifecycle events to report.";
-                        };
-
-                        defaultSendLogs = mkOption {
-                          type = with types; nullOr bool;
-                          default = null;
-                          description = "Optional default for ``HC_SEND_LOGS`` when ``url`` is provided.";
-                        };
-
-                        defaultMaxLogLines = mkOption {
-                          type = with types; nullOr int;
-                          default = null;
-                          description = "Optional default for ``HC_MAX_LOG_LINES`` when ``url`` is provided.";
-                        };
+                      url = mkOption {
+                        type = with types; nullOr str;
+                        default = null;
+                        description = "Direct healthchecks.io URL to ping.";
                       };
-                    }
-                  )
+
+                      urlFile = mkOption {
+                        type = with types; nullOr path;
+                        default = null;
+                        description = "Path to file exporting ``HC_URL`` and related settings.";
+                      };
+                    };
+                  })
                 );
               default = null;
               description = ''
@@ -190,18 +148,15 @@ in
         assertion = value.dataDir != null;
         message = "services.rclone-sync.${name}.dataDir must be a valid path";
       }) cfg
-      ++ lib.mapAttrsToList (name: value: {
-        assertion =
-          value.healthcheck == null
-          || !value.healthcheck.enable
-          || ((value.healthcheck.urlFile == null) != (value.healthcheck.url == null));
-        message = "services.rclone-sync.${name}.healthcheck: set url or urlFile (but not both) when enabled";
-      }) cfg
-      ++ lib.mapAttrsToList (name: value: {
-        assertion =
-          value.healthcheck == null || !value.healthcheck.enable || value.healthcheck.actions != [ ];
-        message = "services.rclone-sync.${name}.healthcheck.actions must not be empty when enabled";
-      }) cfg;
+      ++ lib.mapAttrsToList (
+        name: value: {
+          assertion =
+            value.healthcheck == null
+            || !value.healthcheck.enable
+            || ((value.healthcheck.urlFile == null) != (value.healthcheck.url == null));
+          message = "services.rclone-sync.${name}.healthcheck: set url or urlFile (but not both) when enabled";
+        }
+      );
 
     systemd.services = lib.mapAttrs' (
       name: remoteConfig:
@@ -284,15 +239,12 @@ in
           let
             hc = remoteConfig.healthcheck;
             unitName = "rclone-sync-${name}";
-            entryName = if hc.name != null then hc.name else unitName;
+            entryName = unitName;
           in
           lib.nameValuePair entryName {
             inherit (hc) url;
             inherit (hc) urlFile;
             inherit unitName;
-            inherit (hc) actions;
-            inherit (hc) defaultSendLogs;
-            inherit (hc) defaultMaxLogLines;
           }
         )
         (

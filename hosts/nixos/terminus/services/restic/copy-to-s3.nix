@@ -58,6 +58,7 @@ in
   systemd.services.rclone-sync-b2.onSuccess = [ "restic-backups-b2.service" ];
 
   services.healthchecks-ping.b2-check = {
+    enable = true;
     urlFile = config.age.secrets.resticb2env.path;
     unitName = "restic-backups-b2";
   };
