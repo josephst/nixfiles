@@ -1,5 +1,4 @@
-_:
-{
+_: {
   networking.domain = "homelab.josephstahl.com";
   systemd.network = {
     enable = true;
@@ -28,5 +27,6 @@ _:
     enable = true;
     publish.enable = true;
     publish.userServices = true;
+    openFirewall = true;
   };
 }
