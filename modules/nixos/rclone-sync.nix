@@ -34,12 +34,37 @@ in
               default = null;
               type = with types; nullOr str;
               description = ''
-                Path to a file containing HC_UUID set to provide UUID for healthchecks.io,
-                as well as REMOTE (set to the full rclone destination, e.g. `myremote:bucket/path`).
-                If using Rclone env_auth (ie environmental variables) to authenticate with remote,
-                they should also be configured here
+                Path to a file containing environment variables consumed by the sync job.
+                At a minimum this can export ``REMOTE`` (the full rclone destination, e.g. ``myremote:bucket/path``)
+                and optional healthchecks.io settings such as ``HC_URL``.
+                Populate any credential-specific variables (for example AWS keys) here as well.
               '';
               example = "/var/run/agenix/rcloneRemoteDir";
+            };
+
+            remote = mkOption {
+              type = with types; nullOr str;
+              default = null;
+              description = ''
+                Target rclone remote (``remote:path``) to sync into. When unset the service expects
+                ``REMOTE`` to be provided via ``environmentFile`` or another mechanism.
+              '';
+              example = "b2:my-bucket/restic";
+            };
+
+            user = mkOption {
+              type = with types; nullOr str;
+              default = null;
+              description = ''
+                Optional system user to run the sync under. Defaults to ``root``. Ensure this user has
+                read access to ``dataDir``.
+              '';
+            };
+
+            group = mkOption {
+              type = with types; nullOr str;
+              default = null;
+              description = "Optional group to run the sync under.";
             };
 
             extraRcloneArgs = mkOption {
@@ -82,6 +107,35 @@ in
             };
 
             package = mkPackageOption pkgs "rclone" { };
+
+            healthcheck = mkOption {
+              type =
+                with types;
+                nullOr (
+                  submodule (_: {
+                    options = {
+                      enable = mkEnableOption "Emit status updates to healthchecks.io";
+
+                      url = mkOption {
+                        type = with types; nullOr str;
+                        default = null;
+                        description = "Direct healthchecks.io URL to ping.";
+                      };
+
+                      urlFile = mkOption {
+                        type = with types; nullOr path;
+                        default = null;
+                        description = "Path to file exporting ``HC_URL`` and related settings.";
+                      };
+                    };
+                  })
+                );
+              default = null;
+              description = ''
+                Configure optional healthchecks.io integration. This automatically provisions a
+                ``services.healthchecks-ping`` entry targeting the sync unit when enabled.
+              '';
+            };
           };
         })
       );
@@ -89,21 +143,38 @@ in
   };
 
   config = {
-    assertions = lib.mapAttrsToList (name: value: {
-      assertion = value.dataDir != null;
-      message = "services.rclone-sync.${name}.dataDir must be a valid path";
-    }) cfg;
+    assertions =
+      lib.mapAttrsToList (name: value: {
+        assertion = value.dataDir != null;
+        message = "services.rclone-sync.${name}.dataDir must be a valid path";
+      }) cfg
+      ++ lib.mapAttrsToList (
+        name: value: {
+          assertion =
+            value.healthcheck == null
+            || !value.healthcheck.enable
+            || ((value.healthcheck.urlFile == null) != (value.healthcheck.url == null));
+          message = "services.rclone-sync.${name}.healthcheck: set url or urlFile (but not both) when enabled";
+        }
+      );
 
     systemd.services = lib.mapAttrs' (
       name: remoteConfig:
-      lib.nameValuePair "rclone-sync-${name}" {
+      let
+        unitName = "rclone-sync-${name}";
+        sanitizedName = lib.strings.sanitizeDerivationName name;
+      in
+      lib.nameValuePair unitName {
         description = "Rclone sync for '${name}' from ${remoteConfig.dataDir}";
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
+        environment = lib.optionalAttrs (remoteConfig.remote != null) { REMOTE = remoteConfig.remote; };
         serviceConfig = {
           Type = "oneshot";
           LoadCredential = [ "rcloneConf:${remoteConfig.rcloneConfFile}" ];
-          EnvironmentFile = lib.optional (remoteConfig.environmentFile != null) remoteConfig.environmentFile;
+          EnvironmentFile = lib.optionals (remoteConfig.environmentFile != null) [
+            remoteConfig.environmentFile
+          ];
           # Security hardening
           ReadOnlyPaths = [ remoteConfig.dataDir ]; # need to be able to read the backup dir
           PrivateTmp = true;
@@ -113,21 +184,77 @@ in
           ProtectControlGroups = true;
           ProtectHome = "read-only";
           PrivateDevices = true;
-          StateDirectory = "rclone-sync";
-          CacheDirectory = "rclone-sync";
+          PrivateUsers = true;
+          NoNewPrivileges = true;
+          CapabilityBoundingSet = [ ];
+          AmbientCapabilities = [ ];
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RemoveIPC = true;
+          KeyringMode = "private";
+          UMask = "0077";
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = "@system-service";
+          SystemCallErrorNumber = "EPERM";
+          StateDirectory = "rclone-sync/${sanitizedName}";
+          CacheDirectory = "rclone-sync/${sanitizedName}";
           CacheDirectoryMode = "0700";
-        };
+        }
+        // lib.optionalAttrs (remoteConfig.user != null) { User = remoteConfig.user; }
+        // lib.optionalAttrs (remoteConfig.group != null) { Group = remoteConfig.group; };
 
         script = ''
+          set -euo pipefail
+
+          if [ -z "''${REMOTE:-}" ]; then
+            echo "REMOTE destination not provided for ${unitName}" >&2
+            exit 1
+          fi
+
           ${remoteConfig.package}/bin/rclone \
             --config "$CREDENTIALS_DIRECTORY/rcloneConf" \
-            --cache-dir $CACHE_DIRECTORY \
+            --cache-dir "$CACHE_DIRECTORY" \
             --missing-on-dst - \
             --error - \
             sync "${remoteConfig.dataDir}" "$REMOTE" ${lib.escapeShellArgs remoteConfig.extraRcloneArgs}
         '';
       }
     ) (lib.filterAttrs (_n: v: v.enable) cfg);
+
+    services.healthchecks-ping = lib.mkMerge [
+      (lib.mapAttrs'
+        (
+          name: remoteConfig:
+          let
+            hc = remoteConfig.healthcheck;
+            unitName = "rclone-sync-${name}";
+            entryName = unitName;
+          in
+          lib.nameValuePair entryName {
+            inherit (hc) url;
+            inherit (hc) urlFile;
+            inherit unitName;
+          }
+        )
+        (
+          lib.filterAttrs (
+            _: remoteConfig:
+            remoteConfig.enable && remoteConfig.healthcheck != null && remoteConfig.healthcheck.enable
+          ) cfg
+        )
+      )
+    ];
 
     systemd.timers = lib.mapAttrs' (
       name: remoteConfig:

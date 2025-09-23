@@ -16,11 +16,9 @@ let
 in
 {
   age.secrets.resticb2env.file = ../../secrets/restic/b2.env.age;
-  age.secrets.resticb2bucketname.file = ../../secrets/restic/b2bucketname.age;
   age.secrets.rcloneConf.file = ../../secrets/rclone.conf.age;
   age.secrets.rclone-sync.file = ../../secrets/restic/rclone-sync.env.age;
   age.secrets.restic-localstorage-pass.file = ../../secrets/restic/localstorage.pass.age;
-  age.secrets.restic-systembackup-env.file = ../../secrets/restic/systembackup.env.age;
 
   # copy local Restic repo to S3-compatible repo
   services.rclone-sync.b2 = {
@@ -28,6 +26,11 @@ in
     dataDir = localPath;
     environmentFile = config.age.secrets.rclone-sync.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
+
+    healthcheck = {
+      enable = true;
+      urlFile = config.age.secrets.rclone-sync.path; # REMOTE and HC_URL
+    };
 
     timerConfig = {
       OnCalendar = "06:00";
@@ -40,7 +43,6 @@ in
   services.restic.backups.b2 = {
     initialize = false;
     environmentFile = config.age.secrets.resticb2env.path;
-    repositoryFile = config.age.secrets.resticb2bucketname.path; # using s3-compatible API on Backblaze B2
     passwordFile = config.age.secrets.restic-localstorage-pass.path; # remote has same password as local
     inherit pruneOpts;
     inherit checkOpts;
@@ -56,12 +58,9 @@ in
   systemd.services.rclone-sync-b2.onSuccess = [ "restic-backups-b2.service" ];
 
   services.healthchecks-ping.b2-check = {
+    enable = true;
     urlFile = config.age.secrets.resticb2env.path;
     unitName = "restic-backups-b2";
   };
 
-  services.healthchecks-ping.rclone-sync-b2 = {
-    urlFile = config.age.secrets.rclone-sync.path;
-    unitName = "rclone-sync-b2";
-  };
 }

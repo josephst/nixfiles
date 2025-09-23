@@ -19,6 +19,7 @@ let
 in
 {
   age.secrets.restic-localstorage-pass.file = ../../secrets/restic/localstorage.pass.age;
+  age.secrets.restic-systembackup-env.file = ../../secrets/restic/systembackup.env.age;
 
   # backup to local repo (on HDD array), which is later copied to B2
   services.restic.backups.system-backup = {
@@ -48,6 +49,7 @@ in
   };
 
   services.healthchecks-ping.system-backup = {
+    enable = true;
     urlFile = config.age.secrets.restic-systembackup-env.path;
     unitName = "restic-backups-system-backup";
   };
