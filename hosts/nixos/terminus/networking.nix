@@ -18,7 +18,6 @@ _: {
         # domains = [ "josephstahl.com" ]; # look up ie nixos.josephstahl.com on the local DNS server
         linkConfig = {
           RequiredForOnline = "routable";
-          Multicast = true;
         };
       };
     };
