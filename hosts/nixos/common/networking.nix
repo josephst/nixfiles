@@ -10,7 +10,11 @@ let
   # Trust the tailscale interface, if tailscale is enabled
   trustedInterfaces = lib.optionals config.services.tailscale.enable [ "tailscale0" ];
 
-  fallbackDns = [ "1.1.1.1#one.one.one.one" ];
+  fallbackDns = [
+    "1.1.1.1"
+    "8.8.8.8"
+    "1.1.1.1#one.one.one.one"
+  ];
 in
 {
   config = {
@@ -35,7 +39,7 @@ in
       resolved = {
         enable = true;
         domains = [ "~." ];
-        dnsovertls = "opportunistic";
+        dnsovertls = "false";
         dnssec = "false";
         inherit fallbackDns;
       };
