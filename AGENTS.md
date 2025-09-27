@@ -1,129 +1,24 @@
-## Repository Overview
+# Repository Guidelines
 
-This is a Nix-based configuration repository using flakes that manages:
-- macOS systems via nix-darwin
-- NixOS systems (homelab and VMs)
-- Home-manager configurations for user environments
-- Custom packages and overlays
+## Project Structure & Module Organization
+This flake-driven repo centralizes host and user configs under `flake.nix`, aided by helpers in `lib/helpers.nix`. Shared modules live in `modules/common/`, with Darwin-only logic in `modules/darwin/` and NixOS specifics in `modules/nixos/`. Host definitions sit in `hosts/`, while `home/` contains home-manager profiles (e.g., `home/joseph`). Custom packages and overlays reside in `pkgs/`, `pkgsLinux/`, and `overlays/`; secrets are age-encrypted in `secrets/` and user-scoped secrets under `home/joseph/secrets/`. Keep new modules small and compose them via imports in the relevant host file.
 
-The architecture follows a modular pattern where common configuration is shared between platforms through the `modules/common/` directory, with platform-specific modules in `modules/darwin/` and `modules/nixos/`.
+## Build, Test, and Development Commands
+- `just switch`: stages changes with `git add --all`, then builds and activates the correct platform configuration.
+- `nix develop`: enter a dev shell with repo toolchain and linting utilities.
+- `nix flake check`: run evaluation, formatting, and lint checks; use before opening a PR.
+- `nix build .#darwinConfigurations.<host>.system` or `.#nixosConfigurations.<host>.config.system.build.toplevel`: dry-run specific systems without switching.
+- `nix fmt`: format Nix sources via `nixfmt`, `statix`, and `deadnix`. Run before committing.
+- `just update` refreshes inputs; rerun `nix flake check` afterwards.
 
-## Key Commands
+## Coding Style & Naming Conventions
+Use two-space indentation and keep attribute keys in lowerCamelCase to match upstream Nix modules. Group related options alphabetically where practical, and prefer `enable = true;` feature flags over ad-hoc lists. Let `nix fmt` rewrite files; do not hand-format around tool output. Module names should mirror their directory (e.g., `modules/common/networking/default.nix` exports `modules.common.networking`).
 
-### Development and Building
-```bash
-# Build and switch configuration (auto-detects platform)
-just switch  # or just s
+## Testing Guidelines
+Treat evaluation as the primary guardrail: run `nix flake check` plus targeted `nix build` commands for every touched host. When adjusting packages or overlays, build the derivation directly (e.g., `nix build .#pkgs.myPackage`). Use `nix build --dry-run` to confirm closure changes before deploying, and inspect failed builds with `nix log <drv>`.
 
-# Update flake inputs
-just update
+## Commit & Pull Request Guidelines
+Follow conventional commits (`feat(scope): …`, `fix(scope): …`, `chore: …`) as seen in history. Make each commit buildable and include configuration name in the scope when relevant (`feat(terminus): add tailscale`). PRs should describe motivation, list affected hosts, mention required secrets or migrations, and link issues when applicable. Before requesting review, ensure CI-quality checks (`nix fmt`, `nix flake check`, targeted builds`) are green and note any manual verification steps.
 
-# Format code (also runs statix and deadnix)
-nix fmt
-
-# Garbage collect old generations
-just gc [age=7]  # defaults to 7 days
-```
-
-### Platform-Specific Operations
-```bash
-# macOS (nix-darwin)
-sudo darwin-rebuild switch --flake .
-
-# NixOS
-sudo nixos-rebuild switch --flake .
-sudo nixos-rebuild boot --flake .  # for next reboot
-
-# Deploy to remote NixOS (terminus server)
-just deploy
-```
-
-### Testing and Development
-```bash
-# Enter development shell
-nix develop
-
-# Check syntax and make sure files can be parsed by Nix
-nix flake check
-
-# Update custom packages
-just pkgs-update
-
-# Test configuration without switching
-nix build .#darwinConfigurations.Josephs-MacBook-Air.system
-nix build .#nixosConfigurations.terminus.config.system.build.toplevel
-```
-
-### Secrets Management (agenix)
-```bash
-# Edit secrets
-agenix -e secrets/example.age
-
-# Re-key all secrets (after adding new SSH keys)
-agenix -r
-
-# Re-key specific secret with specific identity
-agenix -r -i ~/.ssh/id_ed25519 secrets/example.age
-```
-
-### Debugging Build Failures
-```bash
-# Show build logs for failed derivation
-nix log /nix/store/<derivation-hash>
-
-# Get detailed derivation info
-nix show-derivation .#nixosConfigurations.terminus.config.system.build.toplevel
-
-# Debug build environment (enter shell with build inputs)
-nix develop .#nixosConfigurations.terminus.config.system.build.toplevel
-
-# Check what would be built/downloaded
-nix build --dry-run .#darwinConfigurations.Josephs-MacBook-Air.system
-
-# Force rebuild ignoring cache
-nix build --rebuild .#nixosConfigurations.terminus.config.system.build.toplevel
-
-# Compare current system with new configuration
-nvd diff /nix/var/nix/profiles/system result
-```
-
-## Architecture Overview
-
-### Module System
-- `modules/common/myConfig/` - Shared configuration options and implementations
-- `modules/darwin/myConfig/` - macOS-specific extensions to common config
-- `modules/nixos/myConfig/` - NixOS-specific extensions to common config
-- `modules/home-manager/myHomeConfig/` - User environment configuration
-
-### Key Files
-- `flake.nix` - Main entry point defining all systems and their configurations
-- `justfile` - Command runner with platform-aware tasks
-- `lib/helpers.nix` - Helper functions for system creation
-- `overlays/` - Custom package modifications and additions
-- `secrets/` - Age-encrypted secrets using agenix
-
-### System Definitions
-Systems are defined in `flake.nix` using helper functions:
-- `mkNixos` for NixOS systems (terminus, orbstack, iso images)
-- `mkDarwin` for macOS systems (Josephs-MacBook-Air)
-- a few options are definied in the `hostSpec` module which define system configurations and options
-
-### Secrets Management
-Uses agenix for encrypted secrets. Key locations:
-- `secrets/` - System-level secrets
-- `home/joseph/secrets/` - User-level secrets
-- `keys/` - SSH public keys for encryption
-
-### Home Manager Integration
-User environments are managed through home-manager with configurations in `home/joseph/`. The base configuration includes development tools, shell setup, and dotfiles.
-
-## Important Notes
-
-- Always run `git add --all` before switching (automated in justfile)
-- Use `sudo` for system-level rebuilds on both platforms
-- Before running any nix commands, run `git add --all` so that Nix detects new and changed files.
-- Run `nix flake check` to make sure changes don't break builds
-- Run `nix fmt` to format files after edits
-- The repository supports cross-platform builds and remote deployment
-- Binary caches are configured to speed up builds
-- State versions are carefully managed and should not be changed lightly
+## Security & Secrets Management
+Encrypt secrets with agenix and keep plaintext out of the repo. Use `agenix -e` for edits and `agenix -r` after adding new SSH keys under `keys/`. Validate that secrets paths referenced in modules exist before deployment to avoid switch failures.
