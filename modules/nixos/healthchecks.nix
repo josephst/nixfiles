@@ -10,7 +10,7 @@
 let
   cfg = lib.filterAttrs (_: v: v.urlFile != null || v.url != null) config.services.healthchecks-ping;
   urlFiles = lib.mapAttrsToList (n: v: {
-    name = if v.unitName != null then v.unitName else n;
+    name = n;
     path = if v.url != null then (pkgs.writeText "healthchecks-${n}" "HC_URL=${v.url}") else v.urlFile;
   }) cfg;
 in
@@ -44,14 +44,6 @@ in
             default = null;
             example = "https://hc-ping.com/12345678-1234-1234-1234-1234567890ab";
           };
-          unitName = lib.mkOption {
-            description = ''
-              Name of the unit to add Wants/OnSuccess/OnFailure dependencies to.
-            '';
-            type = lib.types.nullOr lib.types.str;
-            default = null;
-            example = "restic-backups-system-backup";
-          };
         };
       })
     );
@@ -62,22 +54,22 @@ in
     assertions =
       lib.mapAttrsToList (n: v: {
         assertion = (v.urlFile == null) != (v.url == null);
-        message = "services.healthchecks.${n}: exactly one of url or urlFile should be set";
+        message = "services.healthchecks-ping.${n}: exactly one of url or urlFile should be set";
       }) cfg
-      ++ lib.mapAttrsToList (n: v: {
-        assertion = config.systemd.services ? "${v.unitName}";
-        message = "services.healthchecks.${n}: unitName ${v.unitName} does not correspond to a configured systemd unit";
-      }) (lib.filterAttrs (_: v: v.unitName != null) cfg);
+      ++ lib.mapAttrsToList (n: _: {
+        assertion = lib.hasAttr n config.systemd.services;
+        message = "services.healthchecks-ping.${n}: no matching systemd service found";
+      }) cfg;
 
     systemd.services = lib.mkMerge [
       (lib.mapAttrs' (
-        _name: val:
-        lib.nameValuePair val.unitName {
-          wants = [ "healthchecks-ping@${val.unitName}:start.service" ];
-          onSuccess = [ "healthchecks-ping@${val.unitName}:success.service" ];
-          onFailure = [ "healthchecks-ping@${val.unitName}:fail.service" ];
+        name: _val:
+        lib.nameValuePair name {
+          wants = [ "healthchecks-ping@${name}:start.service" ];
+          onSuccess = [ "healthchecks-ping@${name}:success.service" ];
+          onFailure = [ "healthchecks-ping@${name}:fail.service" ];
         }
-      ) (lib.filterAttrs (_: v: v.unitName != null) cfg))
+      ) cfg)
       {
         "healthchecks-ping@" = {
           description = "Pings healthchecks.io (%i)";

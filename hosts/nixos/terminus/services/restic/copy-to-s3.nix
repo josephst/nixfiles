@@ -54,14 +54,4 @@ in
   };
 
   systemd.services.rclone-sync-b2.onSuccess = [ "restic-backups-b2.service" ];
-
-  services.healthchecks-ping.b2-check = {
-    urlFile = config.age.secrets.resticb2env.path;
-    unitName = "restic-backups-b2";
-  };
-
-  services.healthchecks-ping.rclone-sync-b2 = {
-    urlFile = config.age.secrets.rclone-sync.path;
-    unitName = "rclone-sync-b2";
-  };
 }

@@ -46,9 +46,4 @@ in
       RandomizedDelaySec = "1h";
     };
   };
-
-  services.healthchecks-ping.system-backup = {
-    urlFile = config.age.secrets.restic-systembackup-env.path;
-    unitName = "restic-backups-system-backup";
-  };
 }
