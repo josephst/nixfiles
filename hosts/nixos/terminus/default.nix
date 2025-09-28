@@ -40,7 +40,7 @@
     ./services/restic-server.nix
 
     ## Backups
-    ./healthchecks.nix
+    ./services/healthchecks.nix
     ./services/restic
     ## Dashboard
     ./services/homepage

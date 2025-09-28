@@ -11,12 +11,6 @@ in
   "netdata_nixos_claim.age".publicKeys = allKeys;
   "paperless-admin.age".publicKeys = allKeys;
   "rclone.conf.age".publicKeys = allKeys;
-  "restic/b2.env.age".publicKeys = allKeys;
-  "restic/b2bucketname.age".publicKeys = allKeys; # bucket name for restic (B2, using S3-compatible API)
-  "restic/localstorage.pass.age".publicKeys = allKeys;
-  "restic/restic-server-maintenance.env.age".publicKeys = allKeys;
-  "restic/rclone-sync.env.age".publicKeys = allKeys;
-  # "restic/systembackup.env.age".publicKeys = allKeys;
   "smbpasswd.age".publicKeys = allKeys; # smb password database
   "recyclarrApiKeys.yaml.age".publicKeys = allKeys; # API keys for radarr and sonarr
 
@@ -25,6 +19,14 @@ in
   "hass/hass.pass.age".publicKeys = allKeys;
   "hass/zigbee2mqtt.secret.age".publicKeys = allKeys;
   "hass/secrets.yaml.age".publicKeys = allKeys;
+
+  "healthchecks/restic-systembackup.env.age".publicKeys = allKeys;
+  "healthchecks/restic-b2.env.age".publicKeys = allKeys;
+  "healthchecks/rclone-sync-b2.env.age".publicKeys = allKeys;
+
+  "restic/b2.env.age".publicKeys = allKeys;
+  "restic/rclone-sync.env.age".publicKeys = allKeys;
+  "restic/systembackup.env.age".publicKeys = allKeys;
 
   "copyparty/joseph_password.age".publicKeys = allKeys;
 }

@@ -34,10 +34,9 @@ in
               default = null;
               type = with types; nullOr str;
               description = ''
-                Path to a file containing HC_UUID set to provide UUID for healthchecks.io,
-                as well as REMOTE (set to the full rclone destination, e.g. `myremote:bucket/path`).
-                If using Rclone env_auth (ie environmental variables) to authenticate with remote,
-                they should also be configured here
+                Path to a file containing REMOTE (set to the full rclone destination,
+                e.g. `myremote:bucket/path`). If using Rclone env_auth (ie environmental variables)
+                to authenticate with remote, they should also be configured here
               '';
               example = "/var/run/agenix/rcloneRemoteDir";
             };
