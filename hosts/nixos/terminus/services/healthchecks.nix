@@ -2,13 +2,13 @@
 {
   age.secrets = {
     healthchecks-restic-systembackup = {
-      file = ../secrets/restic/systembackup.env.age;
+      file = ../secrets/healthchecks/restic-systembackup.env.age;
     };
     healthchecks-restic-b2 = {
-      file = ../secrets/restic/b2.env.age;
+      file = ../secrets/healthchecks/restic-b2.env.age;
     };
     healthchecks-rclone-sync-b2 = {
-      file = ../secrets/restic/rclone-sync.env.age;
+      file = ../secrets/healthchecks/rclone-sync-b2.env.age;
     };
   };
 
