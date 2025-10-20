@@ -87,6 +87,9 @@ in
   programs = {
     atuin = {
       enable = true;
+      # Don't enable fish integration, but do it manually in fish.interactiveShellInit
+      # because the default binding for up causes https://github.com/atuinsh/atuin/issues/2803
+      enableFishIntegration = false;
       settings = {
         store_failed = true;
         sync = {

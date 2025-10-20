@@ -100,5 +100,8 @@ in
     end
 
     set -g SHELL ${pkgs.fish}/bin/fish
+
+    # TODO: remove when https://github.com/atuinsh/atuin/issues/2803 is fixed
+    # ${pkgs.atuin}/bin/atuin init fish | sed 's/-k up/up/' | source
   '';
 }
