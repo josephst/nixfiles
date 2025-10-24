@@ -49,9 +49,11 @@ in
       # link nixpkgs-manual for quick reference
       "Documents/nixpkgs-manual.html".source = "${pkgs.nixpkgs-manual}/share/doc/nixpkgs/manual.html";
 
-      ".ssh/allowed_signers" = lib.mkIf (gitSigningKey != null && config.programs.git.userEmail != null) {
-        text = "${config.programs.git.userEmail} ${gitSigningKey}";
-      };
+      ".ssh/allowed_signers" =
+        lib.mkIf (gitSigningKey != null && config.programs.git.settings.user.email != null)
+          {
+            text = "${config.programs.git.settings.user.email} ${gitSigningKey}";
+          };
     };
   };
 

@@ -17,25 +17,20 @@ in
 {
   programs.git = {
     enable = true;
-    userEmail = "1269177+josephst@users.noreply.github.com";
-    userName = "Joseph Stahl";
-    signing = {
-      signByDefault = gitSigningKey != null;
-      format = "ssh";
-      signer = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
-      # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
-      key = lib.mkIf (gitSigningKey != null) "key::${gitSigningKey}";
-    };
-    aliases = {
-      l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-      p = "pull --ff-only";
-      ff = "merge --ff-only";
-      graph = "log --decorate --oneline --graph";
-      pushall = "!git remote | xargs -L1 git push --all";
-      undo = "reset HEAD~1 --mixed";
-      add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
-    };
-    extraConfig = {
+    settings = {
+      user = {
+        email = "1269177+josephst@users.noreply.github.com";
+        name = "Joseph Stahl";
+      };
+      aliases = {
+        l = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
+        p = "pull --ff-only";
+        ff = "merge --ff-only";
+        graph = "log --decorate --oneline --graph";
+        pushall = "!git remote | xargs -L1 git push --all";
+        undo = "reset HEAD~1 --mixed";
+        add-nowhitespace = "!git diff -U0 -w --no-color | git apply --cached --ignore-whitespace --unidiff-zero -";
+      };
       gpg = {
         ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
       };
@@ -78,8 +73,12 @@ in
       help.autocorrect = "prompt";
     }
     // lib.optionalAttrs isLinux { credential.credentialStore = "cache"; };
-    delta = {
-      enable = true;
+    signing = {
+      signByDefault = gitSigningKey != null;
+      format = "ssh";
+      signer = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
+      key = lib.mkIf (gitSigningKey != null) "key::${gitSigningKey}";
     };
     ignores = [
       # Compiled Python files
@@ -100,5 +99,9 @@ in
       ".devenv"
       ".direnv"
     ];
+  };
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
   };
 }
