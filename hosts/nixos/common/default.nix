@@ -64,7 +64,7 @@
       localBinInPath = true; # add ~/.local/bin to $PATH
       systemPackages = [
         # nixos-specific packages
-        inputs.isd.packages.${pkgs.system}.default # interactive systemd
+        inputs.isd.packages.${pkgs.stdenv.hostPlatform.system}.default # interactive systemd
         pkgs.dnsutils
         pkgs.ghostty.terminfo
         pkgs.htop
