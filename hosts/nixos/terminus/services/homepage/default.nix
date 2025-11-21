@@ -24,6 +24,7 @@ let
 in
 {
   services.caddy.virtualHosts."${domain}" = {
+    serverAliases = [ "${config.networking.hostName}.${config.hostSpec.tailnet}" ];
     extraConfig = ''
       root * ${pkgs.compressDrvWeb homepage-assets { }}
       file_server {
