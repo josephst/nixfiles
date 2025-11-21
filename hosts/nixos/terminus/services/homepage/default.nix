@@ -24,9 +24,6 @@ let
 in
 {
   services.caddy.virtualHosts."${domain}" = {
-    serverAliases = [
-      "localhost"
-    ];
     extraConfig = ''
       root * ${pkgs.compressDrvWeb homepage-assets { }}
       file_server {

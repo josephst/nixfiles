@@ -4,6 +4,6 @@ _: {
   };
 
   home.sessionPath = [
-    "$HOME/.cache/.bun/bin"
+    "$HOME/.cache/.bun/bin" # add bun executables to local path
   ];
 }
