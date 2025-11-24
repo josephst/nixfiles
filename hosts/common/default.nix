@@ -8,7 +8,6 @@
 }:
 {
   imports = [
-    ./networking.nix
     ./nix-settings.nix
     ./ssh-infrastructure.nix
     ./home-manager.nix

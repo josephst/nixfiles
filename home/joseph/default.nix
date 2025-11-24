@@ -24,7 +24,6 @@ in
   imports = [
     ../common
     ./base
-    ./myHomeConfig.nix
   ];
 
   home = {

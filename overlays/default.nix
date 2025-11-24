@@ -24,6 +24,5 @@ in
     final: prev:
     (additions final prev)
     // (channels final prev)
-    // (additions final prev)
     // (modifications final prev);
 }

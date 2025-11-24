@@ -5,7 +5,6 @@
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-joseph.url = "github:josephst/nixpkgs/nixpkgs-unstable";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
 
     home-manager = {

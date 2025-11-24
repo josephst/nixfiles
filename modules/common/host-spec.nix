@@ -89,4 +89,8 @@
     #   description = "stateVersion (int for nix-darwin, string for nixOS)";
     # };
   };
+
+  config = {
+    networking.hostName = lib.mkDefault config.hostSpec.hostName;
+  };
 }

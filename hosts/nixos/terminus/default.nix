@@ -25,7 +25,6 @@
     ./services/copyparty.nix
     ./services/home-assistant
     ./services/acme.nix
-    # ./services/blocky.nix
     ./services/caddy.nix
     ./services/netdata.nix
     ./services/paperless.nix

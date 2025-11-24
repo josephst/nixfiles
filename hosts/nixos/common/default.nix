@@ -13,7 +13,6 @@
     inputs.nix-index-database.nixosModules.nix-index
 
     ./networking.nix
-    ./user.nix
   ];
 
   config = {
