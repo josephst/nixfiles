@@ -9,6 +9,7 @@
       storage1 = {
         type = "disk";
         device = "/dev/disk/by-id/ata-ST4000VN008-2DR166_ZDHAG0Z7";
+        destroy = false; # don't wipe storage disks
         content = {
           type = "gpt";
           partitions = {

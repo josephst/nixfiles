@@ -90,7 +90,7 @@ NixOS installation uses [nixos-anywhere](https://github.com/nix-community/nixos-
 nix run github:nix-community/nixos-anywhere -- \
   --flake .#terminus \
   --target-host nixos@<IP_ADDRESS> \
-  --build-on-remote
+  --build-on remote \
 ```
 
 #### For new systems (generate hardware config):
@@ -99,8 +99,7 @@ nix run github:nix-community/nixos-anywhere -- \
   --generate-hardware-config nixos-generate-config ./hosts/nixos/terminus/hardware-configuration.nix \
   --flake .#terminus \
   --target-host nixos@<IP_ADDRESS> \
-  --build-on-remote \
-  --ssh-option "IdentitiesOnly=yes"
+  --build-on remote \
 ```
 
 > **Note**: `--build-on-remote` is necessary for cross-architecture builds.
