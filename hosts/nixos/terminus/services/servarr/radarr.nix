@@ -12,6 +12,7 @@ in
       };
       authentication = {
         method = "External";
+        type = "DisabledForLocalAddresses";
       };
     };
   };
