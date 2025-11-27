@@ -6,4 +6,5 @@ let
 in
 {
   "ghToken.age".publicKeys = all;
+  "users/joseph.age".publicKeys = keys.users.joseph;
 }
