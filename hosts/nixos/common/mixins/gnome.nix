@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 {
@@ -12,7 +11,7 @@
       pkgs.wl-clipboard
       pkgs.gnomeExtensions.appindicator
       pkgs.gnomeExtensions.gsconnect
-      inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default # ghostty terminal
+      pkgs.ghostty
     ]
     ++ lib.optionals (builtins.elem config.nixpkgs.hostPlatform pkgs.spotify.meta.platforms) [
       pkgs.spotify

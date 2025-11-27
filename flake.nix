@@ -56,7 +56,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    ghostty.url = "github:ghostty-org/ghostty";
     copyparty.url = "github:9001/copyparty";
 
     isd = {
