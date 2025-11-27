@@ -1,7 +1,7 @@
 {
   hosts = {
     Josephs-MacBook-Air = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK4LUu5VYk6fVSjJoBXjvQc3VNTor4krhhezFg60/+iG root@Josephs-MacBook-Air";
-    terminus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL4aSdJ+YpQlLBrXN+w3T5iheUIxmAHZb3O7QOQKff5T root@terminus";
+    terminus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBFVJX8U8YmJX/mhECofQHj/HDZhIKcV44KlVexhId3c root@nixos";
     nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBL3m6s7bwvuODKtaS8C+DKKGxNkMyKaYoBQobT7bq8g root@nixos-orbstack";
     vmware = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFbWFKhqRA+BmjoowgmjZHnwRibmKW/AZJBueW4F7cpi root@nixos";
   };
