@@ -114,6 +114,7 @@ in
   systemd.tmpfiles.rules = lib.mkIf config.services.home-assistant.enable [
     "f  ${config.services.home-assistant.configDir}/automations.yaml  - hass  hass"
     "f  ${config.services.home-assistant.configDir}/scenes.yaml       - hass  hass"
+    "f  ${config.services.home-assistant.configDir}/scripts.yaml      - hass  hass"
   ];
 
   services.caddy.virtualHosts."home.${domain}" = lib.mkIf config.services.home-assistant.enable {
