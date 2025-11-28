@@ -4,7 +4,6 @@ let
 in
 {
   imports = [
-    ./aider
     ./bash.nix
     ./bat.nix
     ./bottom.nix # system viewer
