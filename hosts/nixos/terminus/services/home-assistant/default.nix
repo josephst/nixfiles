@@ -122,6 +122,14 @@ in
     useACMEHost = domain;
   };
 
+  services.caddy.virtualHosts."home.${config.networking.domain}.${config.hostSpec.tailnet}" =
+    lib.mkIf config.services.home-assistant.enable
+      {
+        extraConfig = ''
+          reverse_proxy http://localhost:8123
+        '';
+      };
+
   services.restic.backups.system-backup.paths = [
     "/var/lib/hass"
   ];
