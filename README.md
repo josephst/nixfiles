@@ -158,7 +158,6 @@ The terminus server runs various self-hosted services. Some require manual setup
 - Zigbee and Z-Wave devices managed through dedicated containers
 
 #### Monitoring
-- **Netdata**: System monitoring with automatic configuration
 - **Homepage**: Dashboard aggregating all services
 
 ### Development Tools

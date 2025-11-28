@@ -8,7 +8,6 @@ let
 in
 {
   "dnsApiToken.age".publicKeys = allKeys;
-  "netdata_nixos_claim.age".publicKeys = allKeys;
   "paperless-admin.age".publicKeys = allKeys;
   "rclone.conf.age".publicKeys = allKeys;
   "smbpasswd.age".publicKeys = allKeys; # smb password database

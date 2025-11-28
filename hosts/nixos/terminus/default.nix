@@ -26,7 +26,6 @@
     ./services/home-assistant
     ./services/acme.nix
     ./services/caddy.nix
-    ./services/netdata.nix
     ./services/paperless.nix
     ./services/unifi.nix
     ./services/vscode-server.nix
