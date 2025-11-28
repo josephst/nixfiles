@@ -26,6 +26,7 @@ in
     extraComponents = [
       "androidtv_remote"
       "apple_tv"
+      "backup"
       "cast"
       "esphome"
       "google_translate"
