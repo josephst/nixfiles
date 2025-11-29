@@ -31,7 +31,7 @@
                   # keyFile = "/tmp/secret.key";
                 };
                 postCreateHook = ''
-                  systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+7 $device
+                  systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7+11 $device
                 '';
                 content = {
                   type = "btrfs";

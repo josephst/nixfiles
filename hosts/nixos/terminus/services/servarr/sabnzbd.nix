@@ -4,7 +4,6 @@
 }:
 let
   inherit (config.networking) domain;
-  # host_whitelist = "${config.networking.hostName},sabnzbd.${domain}"; # comma-separated
   starting_config = ''
     __version__ = 19
     __encoding__ = utf-8
@@ -17,6 +16,11 @@ in
   services.sabnzbd = {
     enable = true;
     group = "media";
+  };
+
+  systemd.services.sabnzbd = {
+    bindsTo = [ "storage.mount" ];
+    after = [ "storage.mount" ];
   };
 
   services.caddy.virtualHosts."sabnzbd.${domain}" = {
@@ -49,21 +53,13 @@ in
           argument = starting_config;
         };
       };
+      "/storage/media/usenet" = {
+        d = {
+          user = "sabnzbd";
+          group = "media";
+          mode = "0770";
+        };
+      };
     };
   };
-
-  # system.activationScripts.sabnzbd = {
-  #   # may need to restart sabnzbd (systemctl restart sabnzbd) after this
-  #   text = ''
-  #     if [[ -e ${config.services.sabnzbd.configFile} ]]; then
-  #       # file exists, modify it
-  #       ${lib.getBin pkgs.gnused}/bin/sed -i 's/host_whitelist = .*/host_whitelist = ${host_whitelist}/g' ${config.services.sabnzbd.configFile}
-  #     else
-  #       # create new file
-  #       mkdir -p $(dirname ${config.services.sabnzbd.configFile})
-  #       echo "host_whitelist = ${host_whitelist}" > ${config.services.sabnzbd.configFile}
-  #       chown ${config.services.sabnzbd.user}:${config.services.sabnzbd.group} ${config.services.sabnzbd.configFile}
-  #     fi
-  #   '';
-  # };
 }

@@ -8,6 +8,14 @@ in
     owner = "copyparty";
   };
 
+  systemd.services.copyparty = {
+    bindsTo = [ "storage.mount" ];
+    after = [
+      "storage.mount"
+      "storage-media.mount"
+    ];
+  };
+
   services.copyparty = {
     enable = true;
     settings = {
@@ -22,7 +30,7 @@ in
       joseph.passwordFile = config.age.secrets."copyparty/joseph_password".path;
     };
     volumes = {
-      # copyparty automatically sets up tmpfiles
+      # copyparty automatically sets up systmed-tmpfiles for these paths
       "/" = {
         path = "/storage/copyparty";
         access = {

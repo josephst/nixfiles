@@ -25,7 +25,7 @@
     passwordFile = lib.mkOption {
       default = null;
       type = lib.types.nullOr lib.types.path;
-      description = "Password file for agenix";
+      description = "Hashed password file for agenix";
     };
 
     home = lib.mkOption {

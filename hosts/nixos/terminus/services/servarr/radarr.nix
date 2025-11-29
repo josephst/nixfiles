@@ -17,6 +17,11 @@ in
     };
   };
 
+  systemd.services.radarr = {
+    bindsTo = [ "storage-media.mount" ];
+    after = [ "storage-media.mount" ];
+  };
+
   services.caddy.virtualHosts."radarr.${domain}" = {
     extraConfig = ''
       reverse_proxy http://localhost:7878

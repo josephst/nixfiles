@@ -110,7 +110,9 @@ nix run github:nix-community/nixos-anywhere -- \
 This repository uses [agenix](https://github.com/ryantm/agenix) for secrets management.
 
 #### For systems with secrets, add these flags:
-- `--copy-host-keys` - Copies SSH host keys to the new system
+- `--copy-host-keys` - Copies SSH host keys to the new system (the NixOS installer will generate keys,
+we'll copy those keys onto the installed system. This allows to re-key Agenix with the new keys
+prior to finishing the install)
 - `--extra-files "$temp"` - Copies user SSH keys for secret decryption
 
 #### Setting up user keys for new systems:
@@ -127,15 +129,21 @@ chmod 600 "$temp/home/joseph/.ssh/id_ed25519"*
 ```
 
 #### Important notes:
-- Re-key all secrets with new keys before installation
+- Re-key all secrets (`agenix -r -i /path/to/ed_25519`) with new keys (added to `/keys/default.nix`) before installation
 
 ## Post-Installation Configuration
 
 ### Essential Setup
 
+#### Secure Boot
+Lanzaboote should be disabled for the install.
+Once installed, [enable Lanzaboote and Secure Boot](https://nix-community.github.io/lanzaboote/getting-started/enable-secure-boot.html).
+Then enable disk unlocking using TPM2: `sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7+11 /dev/nvme0n1p2`,
+assuming that the LUKS partition is `/dev/nvme0n1p2`.
+
 #### Tailscale
 ```bash
-tailscale up --ssh
+tailscale up --ssh --advertise-exit-node
 ```
 - Update dynamic DNS records with Tailscale IP for external access
 - Ensures devices on the Tailnet can resolve hostnames via public DNS
