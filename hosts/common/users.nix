@@ -17,28 +17,27 @@ in
   };
 
   users = {
-    users.${hostSpec.username} =
-      {
-        inherit (hostSpec) home;
-      }
-      // lib.optionalAttrs isLinux {
-        isNormalUser = true;
-        createHome = true;
-        linger = true;
-        inherit (hostSpec) shell;
-        hashedPasswordFile = lib.mkIf (hostSpec.passwordFile != null) config.age.secrets.password.path;
-        extraGroups = ifTheyExist [
-          "wheel"
-          "networkmanager"
-        ];
-        packages = [ pkgs.home-manager ];
-      };
+    users.${hostSpec.username} = {
+      inherit (hostSpec) home;
+    }
+    // lib.optionalAttrs isLinux {
+      isNormalUser = true;
+      createHome = true;
+      linger = true;
+      inherit (hostSpec) shell;
+      hashedPasswordFile = lib.mkIf (hostSpec.passwordFile != null) config.age.secrets.password.path;
+      extraGroups = ifTheyExist [
+        "wheel"
+        "networkmanager"
+      ];
+      packages = [ pkgs.home-manager ];
+    };
 
     users.root = lib.mkIf isLinux {
-      hashedPassword = lib.mkDefault null;
-      openssh.authorizedKeys.keys =
-        lib.optionals (keys != null && lib.hasAttrByPath [ "users" "joseph" ] keys)
-          (builtins.attrValues keys.users.joseph);
+      hashedPassword = null; # only permit ssh keys for root
+      openssh.authorizedKeys.keys = lib.optionals (
+        keys != null && lib.hasAttrByPath [ "users" "joseph" ] keys
+      ) (builtins.attrValues keys.users.joseph);
     };
   };
 }
