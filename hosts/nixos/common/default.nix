@@ -27,11 +27,11 @@
       tmp.useTmpfs = lib.mkDefault true;
     };
     zramSwap.enable = lib.mkDefault true;
-
-    users.mutableUsers = lib.mkDefault false;
-
     time.timeZone = lib.mkDefault "America/New_York";
 
+    # user configuration
+    users.mutableUsers = lib.mkDefault false;
+    systemd.sysusers.enable = lib.mkDefault true;
     security = {
       # use ssh keys instead of password
       pam.sshAgentAuth.enable = true;
