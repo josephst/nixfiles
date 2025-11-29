@@ -29,6 +29,7 @@ in
       extraGroups = ifTheyExist [
         "wheel"
         "networkmanager"
+        "media"
       ];
       packages = [ pkgs.home-manager ];
     };
