@@ -31,7 +31,6 @@
 
     # user configuration
     users.mutableUsers = lib.mkDefault false;
-    systemd.sysusers.enable = lib.mkDefault true;
     security = {
       # use ssh keys instead of password
       pam.sshAgentAuth.enable = true;
