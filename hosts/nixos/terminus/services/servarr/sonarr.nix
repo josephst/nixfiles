@@ -10,7 +10,7 @@ in
       server = {
         port = 8989;
       };
-      authentication = {
+      auth = {
         method = "External";
         type = "DisabledForLocalAddresses";
       };

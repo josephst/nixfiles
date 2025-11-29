@@ -10,7 +10,7 @@ in
       server = {
         port = 9696;
       };
-      authentication = {
+      auth = {
         method = "External";
       };
     };
