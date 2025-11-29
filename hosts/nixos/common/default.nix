@@ -28,6 +28,8 @@
     };
     zramSwap.enable = lib.mkDefault true;
 
+    users.mutableUsers = lib.mkDefault false;
+
     time.timeZone = lib.mkDefault "America/New_York";
 
     security = {
