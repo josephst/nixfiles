@@ -1,6 +1,14 @@
-{ lib, config, ... }:
+{ ... }:
 {
-  networking.domain = "homelab.josephstahl.com";
+  networking = {
+    domain = "homelab.josephstahl.com";
+    interfaces = {
+      "enp5s0" = {
+        wakeOnLan.enable = true;
+      };
+    };
+  };
+
   systemd.network = {
     enable = true;
     wait-online.anyInterface = true;
