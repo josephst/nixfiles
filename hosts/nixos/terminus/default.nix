@@ -74,7 +74,6 @@
     };
 
     sleep.extraConfig = ''
-      AllowSuspend=no
       AllowHibernation=no
     '';
   };
