@@ -30,6 +30,7 @@ in
         "wheel"
         "networkmanager"
         "media"
+        "incus-admin"
       ];
       packages = [ pkgs.home-manager ];
     };
