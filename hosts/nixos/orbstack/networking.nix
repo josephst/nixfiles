@@ -1,6 +1,6 @@
 _: {
   networking = {
-    domain = "josephstahl.com";
+    domain = "homelab.josephstahl.com";
     firewall.enable = false;
     # networkmanager.enable = true; # Easiest to use and most distros use this by default.
 

@@ -28,7 +28,7 @@
     ./services/caddy.nix
     ./services/incus.nix
     ./services/paperless.nix
-    ./services/unifi.nix
+    # ./services/unifi.nix # disabled since 12/3/2025 (Dream Router 7 now runs Unifi)
     ./services/vscode-server.nix
     ## LLM
     ./services/ollama.nix
