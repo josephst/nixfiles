@@ -26,6 +26,6 @@ in
   };
 
   systemd.tmpfiles.rules = lib.mkIf config.services.restic.server.enable [
-    "d /storage/restic restic restic"
+    "d /storage/restic - restic restic"
   ];
 }
