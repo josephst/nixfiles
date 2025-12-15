@@ -25,6 +25,8 @@ in
       fk = 4; # "fk" enables filekeys (necessary for upget permission) (4 chars long)
       ansi = true; # color in log messages
       no-hash = "\.iso$"; # skips hashing file contents if path matches *.iso
+      no-reload = true;
+      hist = "/var/lib/copyparty"; # store .hist directories here
     };
     accounts = {
       joseph.passwordFile = config.age.secrets."copyparty/joseph_password".path;
