@@ -40,7 +40,7 @@ in
     inherit pruneOpts;
     inherit checkOpts;
     timerConfig = {
-      OnCalendar = "00:05";
+      OnCalendar = "13:00";
       Persistent = true;
       RandomizedDelaySec = "1h";
     };

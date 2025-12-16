@@ -30,6 +30,7 @@
     ./services/paperless.nix
     # ./services/unifi.nix # disabled since 12/3/2025 (Dream Router 7 now runs Unifi)
     ./services/vscode-server.nix
+    ./services/sleep-schedule.nix
     ## LLM
     ./services/ollama.nix
     ## Media & Sharing
