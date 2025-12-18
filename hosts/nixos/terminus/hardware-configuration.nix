@@ -35,4 +35,8 @@
   security.tpm2.enable = true;
 
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
 }
