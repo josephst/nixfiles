@@ -8,6 +8,8 @@ in
     group = "media";
   };
 
+  users.users.jellyfin.extraGroups = [ "render" ];
+
   systemd.services.jellyfin = {
     requires = [ "storage-media.mount" ]; # requires, instead of bindsTo - can keep jellyfin running even
     # if storage is lost
