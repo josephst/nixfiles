@@ -31,6 +31,7 @@ in
         "networkmanager"
         "media"
         "incus-admin"
+        "render"
       ];
       packages = [ pkgs.home-manager ];
     };

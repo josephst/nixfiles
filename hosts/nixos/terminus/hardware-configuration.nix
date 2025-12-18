@@ -5,6 +5,7 @@
   config,
   lib,
   inputs,
+  pkgs,
   ...
 }:
 
