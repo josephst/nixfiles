@@ -47,7 +47,7 @@
       variables = {
         EDITOR = "hx";
         SYSTEMD_EDITOR = "hx";
-        VISUAL = "micro";
+        VISUAL = "hx";
       };
       systemPackages = [
         pkgs.deploy-rs

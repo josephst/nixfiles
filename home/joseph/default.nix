@@ -34,7 +34,7 @@ in
       EDITOR = "hx";
       MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
       MANROFFOPT = "-c";
-      VISUAL = "micro";
+      VISUAL = "hx";
       SUDO_EDITOR = "hx";
       SYSTEMD_EDITOR = "hx";
     };
