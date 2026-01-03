@@ -34,7 +34,7 @@ in
       cyme # modern lsusb
       delta # git and diff viewer
       diffsitter # better diff
-      dogdns # better dig
+      doggo # better dig
       dua # modern du
       duf # modern df
       fd # find
