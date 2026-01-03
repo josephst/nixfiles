@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
   inherit (pkgs.stdenv) isLinux isDarwin;
 in
@@ -125,6 +125,9 @@ in
       enableFishIntegration = true;
     };
     zoxide.enable = true;
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+      dotDir = "${config.xdg.configHome}/zsh";
+    };
   };
 }
