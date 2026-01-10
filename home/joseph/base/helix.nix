@@ -7,7 +7,7 @@
       fish
       nimlangserver
       nixd
-      nixfmt-rfc-style
+      nixfmt
       shellcheck
       zls
     ];

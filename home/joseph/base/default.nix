@@ -51,7 +51,7 @@ in
       ncdu # TUI disk usage
       nodejs
       nixd # Nix LSP
-      nixfmt-rfc-style # nix formatter
+      nixfmt # nix formatter
       nixpkgs-hammering # nixpkgs linter
       nixpkgs-review # review PRs
       nix-prefetch-scripts # nix code fetcher

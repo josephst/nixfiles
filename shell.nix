@@ -9,7 +9,7 @@
     NIX_CONFIG = "experimental-features = nix-command flakes";
     packages = with pkgs; [
       # agenix
-      nixfmt-rfc-style
+      nixfmt
       bashInteractive
       curl
       git
