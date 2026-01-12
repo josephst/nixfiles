@@ -5,6 +5,7 @@ in
 {
   services.backrest = {
     enable = true;
+    bindAddress = "localhost";
     readWritePaths = [
       "/storage"
     ];
