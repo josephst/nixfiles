@@ -25,13 +25,6 @@ in
 
     package = lib.mkPackageOption pkgs "backrest" { };
 
-    resticCommand = lib.mkOption {
-      type = lib.types.str;
-      default = lib.getExe config.services.restic.server.package;
-      description = "Path to the restic binary used by Backrest.";
-      example = lib.literalExpression ''"${pkgs.restic}/bin/restic"'';
-    };
-
     bindAddress = lib.mkOption {
       type = lib.types.str;
       default = "127.0.0.1";
@@ -94,7 +87,6 @@ in
           "BACKREST_PORT=${bindSpec}"
           "BACKREST_CONFIG=%S/backrest/config.json"
           "BACKREST_DATA=%S/backrest"
-          "BACKREST_RESTIC_COMMAND=${cfg.resticCommand}"
           "XDG_CACHE_HOME=%C/backrest"
           "TMPDIR=%T/backrest"
         ];
