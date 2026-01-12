@@ -75,7 +75,7 @@
       nixpkgs,
       treefmt-nix,
       ...
-    # secrets
+      # secrets
     }@inputs:
     let
       inherit (self) outputs;

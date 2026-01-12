@@ -36,7 +36,7 @@ in
         sonarr = {
           main = {
             base_url = "http://localhost:8989";
-            api_key = ''!secret sonarr_api_key'';
+            api_key = "!secret sonarr_api_key";
 
             delete_old_custom_formats = true;
             replace_existing_custom_formats = true;
@@ -45,7 +45,7 @@ in
         radarr = {
           main = {
             base_url = "http://localhost:7878";
-            api_key = ''!secret radarr_api_key'';
+            api_key = "!secret radarr_api_key";
 
             delete_old_custom_formats = true;
             replace_existing_custom_formats = true;
