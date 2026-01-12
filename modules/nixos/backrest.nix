@@ -27,7 +27,7 @@ in
 
     resticCommand = lib.mkOption {
       type = lib.types.str;
-      default = lib.getExe config.services.restic.package;
+      default = lib.getExe config.services.restic.server.package;
       description = "Path to the restic binary used by Backrest.";
       example = lib.literalExpression ''"${pkgs.restic}/bin/restic"'';
     };
