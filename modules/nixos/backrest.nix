@@ -27,8 +27,8 @@ in
 
     bindAddress = lib.mkOption {
       type = lib.types.str;
-      default = "127.0.0.1";
-      description = "Address for Backrest to bind to.";
+      default = "localhost";
+      description = "Address for Backrest to bind to. 0.0.0.0 for all interfaces.";
     };
 
     port = lib.mkOption {
