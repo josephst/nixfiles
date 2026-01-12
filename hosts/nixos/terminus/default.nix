@@ -37,8 +37,6 @@
     ./services/samba.nix
     ## Backup
     ./services/restic-server.nix
-
-    ## Backups
     ./services/healthchecks.nix
     ./services/restic
     ## Dashboard
