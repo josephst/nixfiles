@@ -88,7 +88,7 @@ in
           "BACKREST_CONFIG=%S/backrest/config.json"
           "BACKREST_DATA=%S/backrest"
           "XDG_CACHE_HOME=%C/backrest"
-          "TMPDIR=%T/backrest"
+          "TMPDIR=%T"
         ];
 
         StateDirectory = "backrest";
