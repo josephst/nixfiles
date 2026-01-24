@@ -21,10 +21,10 @@ _: {
         user = "default";
         identitiesOnly = true;
         identityFile = "/Users/joseph/.orbstack/ssh/id_ed25519";
-        # proxyCommand = "'/Applications/OrbStack.app/Contents/Frameworks/OrbStack Helper.app/Contents/MacOS/OrbStack Helper' ssh-proxy-fdpass 501";
-        # extraOptions = {
-        #   "ProxyUseFdpass" = "yes";
-        # };
+        proxyCommand = "env HOME=/Users/joseph '/Applications/OrbStack.app/Contents/Frameworks/OrbStack Helper.app/Contents/MacOS/OrbStack Helper' ssh-proxy-fdpass";
+        extraOptions = {
+          "ProxyUseFdpass" = "yes";
+        };
       };
     };
   };
