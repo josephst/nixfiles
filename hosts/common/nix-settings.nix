@@ -23,6 +23,8 @@ let
       key = "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM=";
     }
   ];
+  substituterUrls = lib.concatStringsSep " " (map (a: a.url) substituters);
+  keys = lib.concatStringsSep " " (map (a: a.key) substituters);
 
   # Platform-specific trusted users
   trustedUsers = if pkgs.stdenv.isDarwin then [ "@admin" ] else [ "@wheel" ];
@@ -33,13 +35,11 @@ in
       enable = lib.mkDefault (!pkgs.stdenv.isDarwin); # on darwin, nix is managed by Determinate Nix
 
       # remaining options only applied on non-Darwin systems
-      package = lib.mkDefault pkgs.nix;
       # registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
       # nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
       settings = {
-        warn-dirty = false;
-        substituters = map (x: x.url) substituters;
-        trusted-public-keys = map (x: x.key) substituters;
+        extra-substituters = map (x: x.url) substituters;
+        extra-trusted-public-keys = map (x: x.key) substituters;
         trusted-users = trustedUsers;
         experimental-features = [
           "nix-command"
@@ -47,12 +47,24 @@ in
         ];
         log-lines = lib.mkDefault 25;
         builders-use-substitutes = true;
-        cores = 0;
       };
 
       gc = {
         automatic = lib.mkIf config.nix.enable true;
       };
     };
+
+    # write nix.custom.conf configuration, if using Determinate Nix
+    # note: not using module configuration (https://determinate.systems/blog/changelog-determinate-nix-386/) because
+    # it does not support "!include file_path" syntax
+    environment.etc."nix/nix.custom.conf".text = config.nix.extraOptions + ''
+      eval-cores = 0
+      trusted-users = ${lib.concatStringsSep " " trustedUsers}
+      log-lines = 25
+      builders-use-substitutes = true
+
+      extra-substituters = ${substituterUrls}
+      extra-trusted-public-keys = ${keys}
+    '';
   };
 }
