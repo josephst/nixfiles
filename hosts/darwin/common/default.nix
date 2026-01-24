@@ -44,6 +44,7 @@
     security.pam.services.sudo_local.touchIdAuth = true;
 
     nix.enable = false; # using Determinate Nix on macOS
+    determinateNix.enable = true;
 
     system = {
       stateVersion = 6;

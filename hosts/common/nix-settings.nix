@@ -46,6 +46,9 @@ in
           "flakes"
         ];
         log-lines = lib.mkDefault 25;
+
+        # instructs all remote builders to obtain dependencies from its own binary caches instead of from the local machine.
+        # This assumes that the remote builders’ internet connection is at least as fast as the local machine’s internet connection.
         builders-use-substitutes = true;
       };
 
