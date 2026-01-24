@@ -21,8 +21,5 @@ let
 in
 {
   default =
-    final: prev:
-    (additions final prev)
-    // (channels final prev)
-    // (modifications final prev);
+    final: prev: (additions final prev) // (channels final prev) // (modifications final prev);
 }

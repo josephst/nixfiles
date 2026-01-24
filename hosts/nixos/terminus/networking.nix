@@ -1,4 +1,4 @@
-{ ... }:
+_:
 {
   networking = {
     domain = "homelab.josephstahl.com";
