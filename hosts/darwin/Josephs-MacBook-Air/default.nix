@@ -5,6 +5,7 @@ let
       hostName = "terminus";
       sshUser = "joseph";
       system = "x86_64-linux";
+      speedFactor = 3;
       supportedFeatures = [
         "nixos-test"
         "benchmark"
