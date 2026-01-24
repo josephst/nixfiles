@@ -44,7 +44,7 @@ in
     };
 
     readWritePaths = lib.mkOption {
-      type = lib.types.listOf lib.types.path;
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = "Paths Backrest may read and write (for restic repositories or cache).";
       example = [
