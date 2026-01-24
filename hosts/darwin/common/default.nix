@@ -1,7 +1,6 @@
 # modules/darwin/myConfig/default.nix
 {
   inputs,
-  config,
   pkgs,
   ...
 }:

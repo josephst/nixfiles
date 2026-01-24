@@ -1,5 +1,4 @@
-_:
-{
+_: {
   networking = {
     domain = "homelab.josephstahl.com";
     interfaces = {

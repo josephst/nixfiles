@@ -30,7 +30,7 @@ in
     inherit buildMachines;
   };
   determinateNix = {
-    buildMachines = config.nix.buildMachines;
+    inherit (config.nix) buildMachines;
     distributedBuilds = true;
   };
 }
