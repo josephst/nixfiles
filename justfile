@@ -34,4 +34,5 @@ gc age='7':
 # deploy to proxmox nixos VM
 # (use the binary from nixpkgs to allow for using binary cache instead of rebuilding)
 deploy:
-  nix run nixpkgs#deploy-rs .#terminus
+  # nix run nixpkgs#deploy-rs .#terminus
+  nix run nixpkgs#nixos-rebuild -- --target-host joseph@terminus --sudo switch --flake .#terminus --build-host terminus --no-reexec --use-substitutes
