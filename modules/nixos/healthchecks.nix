@@ -75,7 +75,7 @@ in
           description = "Pings healthchecks.io (%i)";
           serviceConfig = {
             Type = "oneshot";
-            LoadCredential = builtins.map ({ name, path }: "${name}:${path}") urlFiles;
+            LoadCredential = map ({ name, path }: "${name}:${path}") urlFiles;
             # Hardening
             # DynamicUser = true; # disabled, because call to `systemctl show` requires root privileges
             ProtectSystem = "strict";
@@ -112,11 +112,12 @@ in
             url=$(grep -oP "^HC_URL=\K.+" "$CREDENTIALS_DIRECTORY/$name")
 
             if [ "$action" = "success" ]; then
-              logs=$(journalctl -I -u "$name.service" --no-pager)
-              ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-raw "$logs" "$url"
+              # last 1000 lines
+              logs=$(journalctl -I -u "$name.service" -n 1000 --no-pager --output=short-iso)
+              echo "$logs" | ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-binary @- "$url"
             elif [ "$action" = "fail" ]; then
-              logs=$(journalctl -I -u "$name.service" --no-pager)
-              ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-raw "$logs" "$url/fail"
+              logs=$(journalctl -I -u "$name.service" -n 1000 --no-pager --output=short-iso)
+              echo "$logs" | ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-binary @- "$url/fail"
             else
               ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url/$action"
             fi
