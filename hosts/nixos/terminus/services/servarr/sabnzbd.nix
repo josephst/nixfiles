@@ -23,6 +23,10 @@ in
     after = [ "storage.mount" ];
   };
 
+  services.restic.backups.system-backup.paths = [
+    "/var/lib/sabnzbd/"
+  ];
+
   services.caddy.virtualHosts."sabnzbd.${domain}" = {
     # remember to edit sabnzbd config to listen on 8082 (otherwise it won't start)
     extraConfig = ''
