@@ -113,10 +113,10 @@ in
 
             if [ "$action" = "success" ]; then
               # last 1000 lines
-              logs=$(journalctl -I -u "$name.service" -n 1000 --no-pager --output=short-iso)
+              logs=$(journalctl -I -u "$name.service" -n 100 --no-pager --output=short-iso)
               echo "$logs" | ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-binary @- "$url"
             elif [ "$action" = "fail" ]; then
-              logs=$(journalctl -I -u "$name.service" -n 1000 --no-pager --output=short-iso)
+              logs=$(journalctl -I -u "$name.service" -n 100 --no-pager --output=short-iso)
               echo "$logs" | ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-binary @- "$url/fail"
             else
               ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url/$action"
