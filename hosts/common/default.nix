@@ -50,12 +50,13 @@
         VISUAL = "hx";
       };
       systemPackages = [
-        pkgs.deploy-rs
         pkgs.agenix
+        pkgs.deploy-rs
+        pkgs.git
         pkgs.helix
         pkgs.micro
-        pkgs.git
         pkgs.nix-output-monitor
+        pkgs.nixos-rebuild-ng
         pkgs.nvd
       ];
     };
