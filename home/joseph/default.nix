@@ -76,6 +76,9 @@ in
         prompt = "enabled";
       };
     };
+    npm = {
+      enable = true;
+    };
   };
 
   # auth with github is managed by 1password on mac (instead of reading gh/hosts.yml)
