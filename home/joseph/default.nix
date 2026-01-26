@@ -57,6 +57,17 @@ in
   };
 
   programs = {
+    fish = {
+      enable = true;
+      interactiveShellInit = ''
+        # source 1password-cli plugins
+        if test -e ~/.config/op/plugins.sh
+          source ~/.config/op/plugins.sh
+        end
+
+        set -g SHELL ${pkgs.fish}/bin/fish
+      '';
+    };
     gh = {
       enable = true;
       extensions = [ ];
@@ -93,13 +104,4 @@ in
       keybind = shift+enter=text:\n
     '';
   };
-
-  programs.fish.interactiveShellInit = ''
-    # source 1password-cli plugins
-    if test -e ~/.config/op/plugins.sh
-      source ~/.config/op/plugins.sh
-    end
-
-    set -g SHELL ${pkgs.fish}/bin/fish
-  '';
 }
