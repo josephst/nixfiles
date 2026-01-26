@@ -1,4 +1,9 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   inherit (pkgs.stdenv) isLinux isDarwin;
 in
@@ -28,7 +33,6 @@ in
       age # encryption
       agenix # age secrets
       bc # calculator
-      # claude-code # claude code # install w/ NPM or bun
       comma # run commands by prefacing with comma
       cpufetch # CPU info
       cyme # modern lsusb
@@ -81,7 +85,8 @@ in
 
   home.sessionPath = [
     "$HOME/.local/bin"
-  ];
+  ]
+  ++ lib.optional (config.programs.npm.enable) "$HOME/.npm/bin";
 
   programs = {
     atuin = {
