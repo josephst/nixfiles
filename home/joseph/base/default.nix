@@ -86,7 +86,7 @@ in
   home.sessionPath = [
     "$HOME/.local/bin"
   ]
-  ++ lib.optional (config.programs.npm.enable) "$HOME/.npm/bin";
+  ++ lib.optional config.programs.npm.enable "$HOME/.npm/bin";
 
   programs = {
     atuin = {

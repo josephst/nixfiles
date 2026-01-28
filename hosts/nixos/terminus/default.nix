@@ -22,6 +22,7 @@
     ../common/mixins/tailscale.nix
 
     # Services
+    ./services/moltbot.nix # formerly Clawdbot
     ./services/copyparty.nix
     ./services/home-assistant
     ./services/acme.nix
