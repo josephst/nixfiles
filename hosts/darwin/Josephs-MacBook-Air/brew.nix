@@ -54,7 +54,7 @@ in
     };
   };
 
-  environment.loginShellInit = lib.mkIf config.homebrew.enable ''
+  environment.shellInit = lib.mkIf config.homebrew.enable ''
     eval $(${brewPrefix}/brew shellenv)
   '';
 }
