@@ -1,4 +1,7 @@
 { config, lib, ... }:
+let
+  inherit (config.homebrew) brewPrefix;
+in
 {
   # Install homebrew if it is not installed
   system.activationScripts.homebrew.text = lib.mkIf config.homebrew.enable (
@@ -30,5 +33,14 @@
     brews = [
       "mas"
     ];
+  };
+
+  environment.systemPath = lib.mkIf config.homebrew.enable (lib.mkAfter [
+    "${brewPrefix}/bin"
+    "${brewPrefix}/sbin"
+  ]);
+
+  launchd.user.envVariables = lib.mkIf config.homebrew.enable {
+    PATH = lib.concatStringsSep ":" config.environment.systemPath;
   };
 }
