@@ -4,6 +4,9 @@ let
 in
 {
   homebrew = {
+    brews = [
+      "steipete/tap/remindctl"
+    ];
     casks = [
       # dev tools
       "1password-cli"
