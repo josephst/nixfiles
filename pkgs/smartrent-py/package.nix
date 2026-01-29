@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "smartrent-py";
-  version = "0.5.0";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QnRkn7sq/ILNVAdb58OosbVQp0oviSGVkB/sPHATkhk=";
+    hash = "sha256-PRHRLAv6/7zwyq3HKJkgWofpVl1vdwrcBqqdp7PNEoc=";
   };
 
   dependencies = [

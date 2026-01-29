@@ -5,7 +5,8 @@ alias s := switch
 
 pkgs-update:
   nix run nixpkgs#nix-update -- smartrent-py --flake
-  nix run nixpkgs#nix-update -- hass-smartrent --flake --system aarch64-linux
+  # note: next command requires having a linux x86_64 builder availbale for Nix; will fail otherwise.
+  nix run nixpkgs#nix-update -- hass-smartrent --flake --system x86_64-linux
 
 [macos]
 switch:
