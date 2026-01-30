@@ -7,7 +7,7 @@ let
 in
 {
   services.caddy.virtualHosts = {
-    "moltbot.${domain}" = {
+    "openclaw.${domain}" = {
       extraConfig = ''
         reverse_proxy http://localhost:18789
       '';

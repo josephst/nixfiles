@@ -22,7 +22,6 @@
     ../common/mixins/tailscale.nix
 
     # Services
-    ./services/moltbot.nix # formerly Clawdbot
     ./services/copyparty.nix
     ./services/home-assistant
     ./services/acme.nix
@@ -32,6 +31,7 @@
     # ./services/unifi.nix # disabled since 12/3/2025 (Dream Router 7 now runs Unifi)
     ./services/vscode-server.nix
     ## LLM
+    ./services/openclaw.nix # formerly Clawdbot
     ./services/ollama.nix
     ## Media & Sharing
     ./services/servarr
