@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   ...
 }:
 let
@@ -14,6 +15,9 @@ in
       misc = {
         port = 8082;
         host_whitelist = "${config.networking.hostName},sabnzbd.${domain}";
+        download_dir = "/storage/media/usenet/incomplete";
+        complete_dir = "/storage/media/usenet/complete";
+        permissions = "775";
       };
     };
   };
@@ -27,13 +31,9 @@ in
     "/var/lib/sabnzbd/"
   ];
 
-  services.caddy.virtualHosts."sabnzbd.${domain}" = {
-    # remember to edit sabnzbd config to listen on 8082 (otherwise it won't start)
-    extraConfig = ''
-      reverse_proxy localhost:8082
-    '';
-    useACMEHost = domain;
-  };
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/482639 is merged
+  # right now, the preStart script erases sabnzbd.ini
+  systemd.services.sabnzbd.preStart = lib.mkForce "";
 
   # hardening options copied from upstream
   # https://github.com/sabnzbd/sabnzbd/blob/master/linux/sabnzbd%40.service
@@ -45,6 +45,14 @@ in
     ];
     DevicePolicy = "strict";
     NoNewPrivileges = true;
+  };
+
+  services.caddy.virtualHosts."sabnzbd.${domain}" = {
+    # remember to edit sabnzbd config to listen on 8082 (otherwise it won't start)
+    extraConfig = ''
+      reverse_proxy localhost:8082
+    '';
+    useACMEHost = domain;
   };
 
   systemd.tmpfiles.settings = {
