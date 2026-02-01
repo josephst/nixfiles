@@ -69,6 +69,7 @@
         pkgs.htop
         pkgs.wezterm.terminfo
         pkgs.rsync
+        pkgs.tmux
 
         # hardware
         pkgs.nvme-cli
