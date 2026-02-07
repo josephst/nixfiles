@@ -4,7 +4,7 @@ let
 in
 {
   services.unifi = {
-    enable = true;
+    enable = false; # Dream Router now runs Unifi OS
     openFirewall = true;
 
     unifiPackage = pkgs.unifi;

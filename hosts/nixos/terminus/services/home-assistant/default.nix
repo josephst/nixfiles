@@ -9,6 +9,7 @@ let
 in
 {
   imports = [
+    ./matter.nix
     ./zwave.nix
     ./zigbee.nix
   ];

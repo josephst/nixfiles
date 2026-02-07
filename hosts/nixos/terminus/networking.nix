@@ -6,6 +6,11 @@ _: {
         wakeOnLan.enable = true;
       };
     };
+    firewall = {
+      trustedInterfaces = [
+        "enp5s0" # trust LAN, allows other services to listen without having to `openFirewall = true` for each one
+      ];
+    };
   };
 
   systemd.network = {
@@ -35,6 +40,5 @@ _: {
     enable = true;
     publish.enable = true;
     publish.userServices = true;
-    openFirewall = true;
   };
 }
