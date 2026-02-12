@@ -46,6 +46,7 @@ in
 
     file = {
       ".agents/skills/.keep".text = "";
+      "dev/.keep".text = "";
 
       # link nixpkgs-manual for quick reference
       "Documents/nixpkgs-manual.html".source = "${pkgs.nixpkgs-manual}/share/doc/nixpkgs/manual.html";
