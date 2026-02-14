@@ -63,7 +63,11 @@ in
       nurl # nix url fetcher
       procs # modern ps
       speedtest-go # speedtest CLI
-      python3 # python
+      (python3.withPackages (
+        python-pkgs: with python-pkgs; [
+          pyyaml
+        ]
+      )) # python
       python3Packages.huggingface-hub
       rclone # syncing
       restic # backup
