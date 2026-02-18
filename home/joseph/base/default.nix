@@ -132,6 +132,7 @@ in
       enable = true;
       enableBashIntegration = true;
       enableFishIntegration = true;
+      shellWrapperName = "y";
     };
     zoxide.enable = true;
     zsh = {
