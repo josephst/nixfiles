@@ -27,6 +27,15 @@ in
     ./zellij
   ];
 
+  age.secrets."1password-serviceacct.env" = {
+    file = ../secrets/1pass.env.age;
+  };
+  age.secrets."1password-serviceacct-fish" = {
+    # same contents as above, but without the `OP_SERVICE_ACCOUNT_TOKEN` part
+    # fish doesn't want an ENV file, it just wants the string
+    file = ../secrets/1pass.age;
+  };
+
   home.packages =
     with pkgs;
     [

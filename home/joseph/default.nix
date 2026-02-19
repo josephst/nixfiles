@@ -7,12 +7,9 @@
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isLinux;
-  _1passEnabled =
-    (
-      osConfig ? homebrew
-      && lib.elem "1password-cli" (builtins.map (item: item.name) osConfig.homebrew.casks)
-    )
-    || (osConfig.programs ? _1password && osConfig.programs._1password.enable);
+  _1passEnabled = (
+    osConfig ? homebrew && lib.elem "1password-cli" (map (item: item.name) osConfig.homebrew.casks)
+  ); # 1pass CLI auth only works when app integration is installed
 
   gitSigningKey =
     if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then
@@ -68,7 +65,8 @@ in
           source ~/.config/op/plugins.sh
         end
 
-        set -g SHELL ${pkgs.fish}/bin/fish
+        set -x SHELL ${pkgs.fish}/bin/fish
+        set -x OP_SERVICE_ACCOUNT_TOKEN $(cat $XDG_RUNTIME_DIR/agenix/1password-serviceacct-fish)
       '';
     };
     gh = {
