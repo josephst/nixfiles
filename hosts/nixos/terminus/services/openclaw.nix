@@ -8,7 +8,10 @@ let
 in
 {
   environment.systemPackages = [
+    pkgs.google-chrome
     pkgs.himalaya
+    pkgs.khal
+    pkgs.vdirsyncer
   ];
   services.caddy.virtualHosts = {
     "openclaw.${domain}" = {
