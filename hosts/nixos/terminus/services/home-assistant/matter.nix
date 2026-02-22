@@ -1,5 +1,4 @@
-_:
-{
+_: {
   services.matter-server = {
     enable = true;
   };

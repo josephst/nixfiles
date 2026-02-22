@@ -7,9 +7,7 @@
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isLinux;
-  _1passEnabled = (
-    osConfig ? homebrew && lib.elem "1password-cli" (map (item: item.name) osConfig.homebrew.casks)
-  ); # 1pass CLI auth only works when app integration is installed
+  _1passEnabled = osConfig ? homebrew && lib.elem "1password-cli" (map (item: item.name) osConfig.homebrew.casks); # 1pass CLI auth only works when app integration is installed
 
   gitSigningKey =
     if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then
@@ -53,32 +51,6 @@ in
           {
             text = "${config.programs.git.settings.user.email} ${gitSigningKey}";
           };
-    };
-  };
-
-  programs = {
-    fish = {
-      enable = true;
-      interactiveShellInit = ''
-        # source 1password-cli plugins
-        if test -e ~/.config/op/plugins.sh
-          source ~/.config/op/plugins.sh
-        end
-
-        set -x SHELL ${pkgs.fish}/bin/fish
-        set -x OP_SERVICE_ACCOUNT_TOKEN $(cat $XDG_RUNTIME_DIR/agenix/1password-serviceacct-fish)
-      '';
-    };
-    gh = {
-      enable = true;
-      extensions = [ ];
-      settings = {
-        git_protocol = "ssh";
-        prompt = "enabled";
-      };
-    };
-    npm = {
-      enable = true;
     };
   };
 

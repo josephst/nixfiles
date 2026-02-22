@@ -3,7 +3,7 @@
   # Install homebrew if it is not installed
   system.activationScripts.homebrew.text = lib.mkIf config.homebrew.enable (
     lib.mkBefore ''
-      if [[ ! -f "${config.homebrew.brewPrefix}/brew" ]]; then
+      if [[ ! -f "${config.homebrew.prefix}/bin/brew" ]]; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       fi
     ''
@@ -32,9 +32,14 @@
     ];
   };
 
-  environment.systemPath = lib.mkIf config.homebrew.enable (
-    lib.mkAfter [
-      "${config.homebrew.brewPrefix}"
-    ]
-  );
+  environment = lib.mkIf config.homebrew.enable {
+    systemPath = (
+      lib.mkAfter [
+        "${config.homebrew.prefix}/bin"
+      ]
+    );
+    shellInit = ''
+      eval $(${config.homebrew.prefix}/bin/brew shellenv)
+    '';
+  };
 }

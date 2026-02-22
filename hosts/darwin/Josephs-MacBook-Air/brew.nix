@@ -1,7 +1,4 @@
-{ lib, config, ... }:
-let
-  inherit (config.homebrew) brewPrefix;
-in
+{ ... }:
 {
   homebrew = {
     brews = [
@@ -56,8 +53,4 @@ in
       "Xcode" = 497799835;
     };
   };
-
-  environment.shellInit = lib.mkIf config.homebrew.enable ''
-    eval $(${brewPrefix}/brew shellenv)
-  '';
 }

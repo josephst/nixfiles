@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  osConfig,
   ...
 }:
 let
@@ -114,9 +115,31 @@ in
         };
       };
     };
-    lazygit.enable = true;
+    fish = {
+      enable = true;
+      interactiveShellInit = ''
+        # source 1password-cli plugins
+        if test -e ~/.config/op/plugins.sh
+          source ~/.config/op/plugins.sh
+        end
+
+        set -x SHELL ${pkgs.fish}/bin/fish
+      ''
+      + lib.optionalString (osConfig.hostSpec.isServer) ''
+        set -x OP_SERVICE_ACCOUNT_TOKEN $(cat $XDG_RUNTIME_DIR/agenix/1password-serviceacct-fish)
+      '';
+    };
+    gh = {
+      enable = true;
+      extensions = [ ];
+      settings = {
+        git_protocol = "ssh";
+        prompt = "enabled";
+      };
+    };
     home-manager.enable = true;
     jq.enable = true;
+    lazygit.enable = true;
     micro = {
       enable = true;
       settings = {
@@ -128,8 +151,11 @@ in
         scrollbar = true;
       };
     };
-    ripgrep.enable = true;
     nix-index.enable = true;
+    npm = {
+      enable = true;
+    };
+    ripgrep.enable = true;
     uv = {
       enable = true;
       settings = {
@@ -147,6 +173,12 @@ in
     zsh = {
       enable = true;
       dotDir = "${config.xdg.configHome}/zsh";
+      initContent = ''
+        # source 1password-cli plugins
+        if test -e ~/.config/op/plugins.sh; then
+          source ~/.config/op/plugins.sh
+        fi
+      '';
     };
   };
 }
