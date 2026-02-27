@@ -10,6 +10,7 @@ in
   services.sabnzbd = {
     enable = true;
     group = "media";
+    configFile = null; # opt into settings-based config on stateVersion < 26.05
     allowConfigWrite = true; # allow writing sabnzbd.ini (for quota tracking)
     settings = {
       misc = {
