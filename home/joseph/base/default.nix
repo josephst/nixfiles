@@ -22,6 +22,7 @@ in
     ./git.nix
     ./helix.nix
     ./nushell
+    ./openclaw.nix
     ./ssh.nix
     ./starship.nix
     ./wezterm

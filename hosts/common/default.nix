@@ -22,6 +22,7 @@
         inputs.agenix.overlays.default
         inputs.zig.overlays.default
         inputs.copyparty.overlays.default
+        inputs.nix-openclaw.overlays.default
       ];
       config = {
         allowUnfree = true;
