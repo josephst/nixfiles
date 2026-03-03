@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   ...
 }:
 let
@@ -31,10 +30,6 @@ in
   services.restic.backups.system-backup.paths = [
     "/var/lib/sabnzbd/"
   ];
-
-  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/482639 is merged
-  # right now, the preStart script erases sabnzbd.ini
-  systemd.services.sabnzbd.preStart = lib.mkForce "";
 
   # hardening options copied from upstream
   # https://github.com/sabnzbd/sabnzbd/blob/master/linux/sabnzbd%40.service

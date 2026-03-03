@@ -22,14 +22,4 @@ final: prev: {
   #   }
   # );
 
-  # TODO: remove once https://github.com/NixOS/nixpkgs/pull/472705 is merged
-  tree-sitter = prev.tree-sitter.overrideAttrs (
-    _: old: {
-      passthru = old.passthru // {
-        allGrammars = prev.lib.filter (p: !(p.meta.broken or false)) (
-          prev.lib.attrValues old.passthru.builtGrammars
-        );
-      };
-    }
-  );
 }
