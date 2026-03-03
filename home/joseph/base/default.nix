@@ -43,6 +43,7 @@ in
       age # encryption
       agenix # age secrets
       bc # calculator
+      claude-code # not cutting edge, but probably updated often-enough
       comma # run commands by prefacing with comma
       cpufetch # CPU info
       cyme # modern lsusb
