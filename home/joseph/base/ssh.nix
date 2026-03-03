@@ -40,7 +40,7 @@ in
         controlPath = "~/.ssh/master-%r@%n:%p";
         controlPersist = "no";
         # additional options
-        identityFile = lib.mkIf config.home.file.${identityFile}.enable identityFile;
+        identityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
         extraOptions = lib.optionalAttrs pkgs.stdenv.isDarwin {
           IdentityAgent = ''"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"'';
         };
@@ -49,14 +49,12 @@ in
         hostname = "terminus";
         forwardAgent = true;
         identitiesOnly = true;
-        identityFile =
-          lib.mkIf config.home.file.${identityFile}.enable
-            "${config.home.file.${identityFile}.source}";
+        identityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
       };
       "github.com" = {
         user = "git";
         identityFile = lib.mkIf config.home.file.${identityFile}.enable [
-          identityFile
+          "~/${identityFile}"
           "~/.ssh/identity" # only having pubkey here can cause issues
         ];
         identitiesOnly = lib.mkIf (userHostSpecificKey != null) true;
