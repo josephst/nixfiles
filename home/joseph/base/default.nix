@@ -85,7 +85,7 @@ in
       rsync # syncing
       tealdeer # cheatsheets in terminal
       typst # latex alternative for typesetting docs
-      yt-dlp # youtube-dl
+      stable.yt-dlp # youtube-dl; unstable currently fails on darwin via jeepney installCheck
     ]
     ++ lib.optionals isLinux [
       iw # terminal wifi info
