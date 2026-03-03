@@ -53,6 +53,7 @@
         pkgs.agenix
         pkgs.deploy-rs
         pkgs.git
+        pkgs.gnupg
         pkgs.helix
         pkgs.micro
         pkgs.nix-output-monitor
