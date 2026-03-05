@@ -64,6 +64,11 @@
     };
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
+    nix-openclaw = {
+      url = "github:openclaw/nix-openclaw";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
 
     # recyclarr-templates.url = "github:recyclarr/config-templates";
     # recyclarr-templates.flake = false;

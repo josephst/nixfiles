@@ -73,9 +73,9 @@
       RuntimeWatchdogSec = "15s";
     };
 
-    sleep.extraConfig = ''
-      AllowHibernation=no
-    '';
+    sleep.settings.Sleep = {
+      AllowHibernation = "no";
+    };
   };
 
   boot = {
