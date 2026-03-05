@@ -9,3 +9,7 @@ and don't need to be accessible to entire system.
 ## RClone
 RClone config is very sensitive (contains onedrive login info) and thus is not in this repository.
 It should be manually copied/ created. 
+
+## OpenClaw
+Create `openclaw.env.age` from `openclaw.env.example` with `agenix -e home/joseph/secrets/openclaw.env.age`.
+The decrypted file should be in `EnvironmentFile` format.
