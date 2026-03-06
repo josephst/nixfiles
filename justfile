@@ -11,7 +11,8 @@ pkgs-update:
 [macos]
 switch:
   git add --all
-  sudo darwin-rebuild switch --flake .
+  # sudo darwin-rebuild switch --flake .
+  nh darwin switch .
 [macos]
 update:
   brew update
@@ -20,7 +21,8 @@ update:
 [linux]
 switch:
   git add --all
-  sudo nixos-rebuild switch --flake .
+  # sudo nixos-rebuild switch --flake .
+  nh os switch .
 [linux]
 boot:
   sudo nixos-rebuild boot --flake .

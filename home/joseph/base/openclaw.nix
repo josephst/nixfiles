@@ -145,7 +145,7 @@ in
         };
 
         systemd.user.services.openclaw-gateway.Service.EnvironmentFile = [
-          config.age.secrets."openclaw.env".path
+          "%t/agenix/openclaw.env"
         ];
       })
 
