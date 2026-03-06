@@ -20,7 +20,10 @@ in
       {
         programs.openclaw = {
           enable = true;
-          package = inputs.nix-openclaw.packages.${pkgs.system}.openclaw;
+          # `openclaw` is a batteries-included buildEnv that re-exports a large
+          # toolchain under /bin. That collides with the tools this profile
+          # already installs through home.packages and programs.*.enable.
+          package = inputs.nix-openclaw.packages.${pkgs.system}.openclaw-gateway;
 
           config = {
             agents.defaults = {
