@@ -7,12 +7,7 @@ let
   inherit (config.networking) domain;
 in
 {
-  environment.systemPackages = [
-    pkgs.google-chrome
-    pkgs.himalaya
-    pkgs.khal
-    pkgs.vdirsyncer
-  ];
+  virtualisation.podman.enable = true;
   services.caddy.virtualHosts = {
     "openclaw.${domain}" = {
       extraConfig = ''

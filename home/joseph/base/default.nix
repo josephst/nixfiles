@@ -22,7 +22,7 @@ in
     ./git.nix
     ./helix.nix
     ./nushell
-    ./openclaw.nix
+    # ./openclaw.nix # disabled 3/6/2026
     ./ssh.nix
     ./starship.nix
     ./wezterm
