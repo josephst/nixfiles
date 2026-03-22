@@ -35,7 +35,7 @@ in
         ssh.allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
       };
       github.user = "josephst";
-      credential.helper = lib.mkIf isDarwin "/usr/local/bin/git-credential-manager";
+      credential.helper = lib.mkIf isDarwin "manager";
       init.defaultBranch = "main";
       # Automatically track remote branch
       push = {

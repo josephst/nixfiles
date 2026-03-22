@@ -54,6 +54,8 @@ in
       dua # modern du
       duf # modern df
       fd # find
+      git-credential-manager
+      glow # markdown on terminal
       httpie # better curl
       hub # Git wrapper that has better Github support
       hugo # static website builder

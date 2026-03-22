@@ -10,7 +10,6 @@
       "1password"
       "cyberduck"
       "ghostty"
-      "git-credential-manager"
       "notion"
       "utm"
       "visual-studio-code"
