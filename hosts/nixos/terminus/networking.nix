@@ -36,9 +36,16 @@ _: {
     };
   };
 
-  services.avahi = {
-    enable = true;
-    publish.enable = true;
-    publish.userServices = true;
+  services = {
+    avahi = {
+      enable = true;
+      publish.enable = true;
+      publish.userServices = true;
+    };
+    tailscale = {
+      extraUpFlags = [
+        "--advertise-exit-node"
+      ];
+    };
   };
 }

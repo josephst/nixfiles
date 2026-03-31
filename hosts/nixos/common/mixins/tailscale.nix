@@ -17,7 +17,9 @@ in
     permitCertUid = lib.mkIf config.services.caddy.enable config.services.caddy.user;
     openFirewall = true;
     useRoutingFeatures = lib.mkDefault "both";
-    extraUpFlags = [ "--ssh" ];
+    extraUpFlags = [
+      "--ssh"
+    ];
   };
 
   systemd.services.tailscaled.environment = {
