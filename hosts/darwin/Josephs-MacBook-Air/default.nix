@@ -6,6 +6,7 @@ let
       sshUser = "joseph";
       system = "x86_64-linux";
       speedFactor = 3;
+      maxJobs = 6;
       supportedFeatures = [
         "nixos-test"
         "benchmark"
