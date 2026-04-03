@@ -7,7 +7,8 @@
 }:
 let
   inherit (pkgs.stdenv.hostPlatform) isLinux;
-  _1passEnabled = osConfig ? homebrew && lib.elem "1password-cli" (map (item: item.name) osConfig.homebrew.casks); # 1pass CLI auth only works when app integration is installed
+  _1passEnabled =
+    osConfig ? homebrew && lib.elem "1password-cli" (map (item: item.name) osConfig.homebrew.casks); # 1pass CLI auth only works when app integration is installed
 
   gitSigningKey =
     if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then

@@ -44,7 +44,7 @@ in
       age # encryption
       agenix # age secrets
       bc # calculator
-      claude-code # not cutting edge, but probably updated often-enough
+      # claude-code # not cutting edge, but probably updated often-enough
       comma # run commands by prefacing with comma
       cpufetch # CPU info
       cyme # modern lsusb
@@ -129,7 +129,7 @@ in
 
         set -x SHELL ${pkgs.fish}/bin/fish
       ''
-      + lib.optionalString (osConfig.hostSpec.isServer) ''
+      + lib.optionalString osConfig.hostSpec.isServer ''
         set -x OP_SERVICE_ACCOUNT_TOKEN $(cat $XDG_RUNTIME_DIR/agenix/1password-serviceacct-fish)
       '';
     };

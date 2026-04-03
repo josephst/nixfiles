@@ -1,8 +1,12 @@
-{ ... }:
+_:
 {
   homebrew = {
     brews = [
-      "steipete/tap/remindctl"
+      {
+        name = "garethgeorge/homebrew-backrest-tap/backrest";
+        restart_service = "changed";
+        start_service = true;
+      }
     ];
     casks = [
       # dev tools
