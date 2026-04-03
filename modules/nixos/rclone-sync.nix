@@ -30,6 +30,20 @@ in
               example = "/srv/restic";
             };
 
+            rcloneCommand = mkOption {
+              type = types.enum [
+                "copy"
+                "sync"
+              ];
+              default = "sync";
+              description = ''
+                Rclone command to run. `sync` deletes files from the destination
+                when they are missing from the source; `copy` leaves existing
+                destination files in place.
+              '';
+              example = "copy";
+            };
+
             environmentFile = mkOption {
               default = null;
               type = with types; nullOr str;
@@ -96,7 +110,7 @@ in
     systemd.services = lib.mapAttrs' (
       name: remoteConfig:
       lib.nameValuePair "rclone-sync-${name}" {
-        description = "Rclone sync for '${name}' from ${remoteConfig.dataDir}";
+        description = "Rclone ${remoteConfig.rcloneCommand} for '${name}' from ${remoteConfig.dataDir}";
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         serviceConfig = {
@@ -123,7 +137,7 @@ in
             --cache-dir $CACHE_DIRECTORY \
             --missing-on-dst - \
             --error - \
-            sync "${remoteConfig.dataDir}" "$REMOTE" ${lib.escapeShellArgs remoteConfig.extraRcloneArgs}
+            ${remoteConfig.rcloneCommand} "${remoteConfig.dataDir}" "$REMOTE" ${lib.escapeShellArgs remoteConfig.extraRcloneArgs}
         '';
       }
     ) (lib.filterAttrs (_n: v: v.enable) cfg);

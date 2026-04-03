@@ -23,6 +23,7 @@ in
   services.rclone-sync.b2 = {
     enable = true;
     dataDir = localPath;
+    rcloneCommand = "copy";
     environmentFile = config.age.secrets.rclone-sync.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
 
