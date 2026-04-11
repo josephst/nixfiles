@@ -6,6 +6,7 @@
 }:
 {
   disabledModules = [
+    # re-enable this module once an Agenix key is provided in ~/.ssh/agenix for decrypting user secrets
     ../../common/home-manager.nix
   ];
 
@@ -20,6 +21,9 @@
 
     inputs.copyparty.nixosModules.default
   ];
+
+  # TODO: figure out why determinate nix keeps being built from source, instead of using binary cache
+  options.determinate.enable = false;
 
   age.identityPaths = map (builtins.getAttr "path") config.services.openssh.hostKeys;
 
