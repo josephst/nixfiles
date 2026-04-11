@@ -1,5 +1,7 @@
 {
   inputs,
+  config,
+  lib,
   ...
 }:
 {
@@ -18,6 +20,14 @@
 
     inputs.copyparty.nixosModules.default
   ];
+
+  age.identityPaths = map (builtins.getAttr "path") config.services.openssh.hostKeys;
+
+  boot.loader = {
+    efi.canTouchEfiVariables = lib.mkForce false;
+    grub.enable = true;
+    systemd-boot.enable = lib.mkForce false;
+  };
 
   services = {
     openssh.openFirewall = false;

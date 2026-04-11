@@ -13,7 +13,6 @@ in
     ./bash.nix
     ./bat.nix
     ./bottom.nix # system viewer
-    ./bun.nix
     ./direnv.nix
     ./eza.nix # better ls
     ./fd.nix # better find
@@ -21,10 +20,13 @@ in
     ./fzf.nix
     ./git.nix
     ./helix.nix
-    ./nushell
     ./ssh.nix
     ./starship.nix
     ./zellij
+  ]
+  ++ lib.optionals (!osConfig.hostSpec.isMinimal) [
+    ./bun
+    ./nushell
   ];
 
   age.secrets."1password-serviceacct.env" = {
@@ -42,27 +44,17 @@ in
       age # encryption
       agenix # age secrets
       bc # calculator
-      bun # nodejs alternative
       comma # run commands by prefacing with comma
       cpufetch # CPU info
       cyme # modern lsusb
-      delta # git and diff viewer
-      diffsitter # better diff
+
       doggo # better dig
       dua # modern du
       duf # modern df
       fd # find
       git-credential-manager
-      glow # markdown on terminal
-      httpie # better curl
-      hugo # static website builder
-      hyperfine # command-line benchmarking
       ipfetch # IP info
       just # command runner
-      lazygit # git with TUI
-      llama-cpp # local LLM
-      magic-wormhole
-      marp-cli # markdown presentation
       ncdu # TUI disk usage
       nixd # Nix LSP
       nixfmt # nix formatter
@@ -72,16 +64,28 @@ in
       nix-update # update nixpkgs
       nurl # nix url fetcher
       procs # modern ps
+      rclone # syncing
+      restic # backup
+      rsync # syncing
+    ]
+    ++ lib.optionals (!osConfig.hostSpec.isMinimal) [
+      bun # nodejs alternative
+      delta # git and diff viewer
+      diffsitter # better diff
+      glow # markdown on terminal
+      httpie # better curl
+      hugo # static website builder
+      hyperfine # command-line benchmarking
+      lazygit # git with TUI
+      magic-wormhole
       speedtest-go # speedtest CLI
       (python3.withPackages (
         python-pkgs: with python-pkgs; [
           pyyaml
         ]
       )) # python
-      rclone # syncing
-      restic # backup
-      rsync # syncing
       tealdeer # cheatsheets in terminal
+      stable.yt-dlp # youtube-dl
     ]
     ++ lib.optionals isLinux [
       iw # terminal wifi info
@@ -92,9 +96,6 @@ in
     ++ lib.optionals isDarwin [
       nh # nix client (on nixos, this is a module)
       coreutils # macOS coreutils
-    ]
-    ++ lib.optionals (!osConfig.hostSpec.isMinimal) [
-      stable.yt-dlp # youtube-dl
     ];
 
   home.sessionPath = [
@@ -152,18 +153,16 @@ in
       };
     };
     nix-index.enable = true;
-    npm = {
-      enable = true;
-    };
+    npm.enable = !osConfig.hostSpec.isMinimal;
     ripgrep.enable = true;
-    uv = {
+    uv = lib.mkIf (!osConfig.hostSpec.isMinimal) {
       enable = true;
       settings = {
         python-downloads = "never";
         python-preference = "only-system"; # let Nix manage python install
       };
     };
-    yazi = {
+    yazi = lib.mkIf (!osConfig.hostSpec.isMinimal) {
       enable = true;
       enableBashIntegration = true;
       enableFishIntegration = true;

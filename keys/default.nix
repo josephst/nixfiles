@@ -3,7 +3,7 @@
     Josephs-MacBook-Air = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK4LUu5VYk6fVSjJoBXjvQc3VNTor4krhhezFg60/+iG root@Josephs-MacBook-Air";
     terminus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBFVJX8U8YmJX/mhECofQHj/HDZhIKcV44KlVexhId3c root@nixos";
     nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBL3m6s7bwvuODKtaS8C+DKKGxNkMyKaYoBQobT7bq8g root@nixos-orbstack";
-    vmware = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFbWFKhqRA+BmjoowgmjZHnwRibmKW/AZJBueW4F7cpi root@nixos";
+    anacreon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMPdIED+U7U4CumEQjFR3cd8jsapayxHOaTefpyQDWa9 root@vps-1ab28197"; # OVH Cloud
   };
 
   users = {
@@ -15,7 +15,9 @@
       Josephs-MacBook-Air = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDuLA4wwwupvYW3UJTgOtcOUHwpmRR9gy/N+F6n11d5v joseph@macbook-air";
       nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHQzdJLGBCLoOXdvJj6ab+9FovwCq+Y9tXalMzO+CC4x joseph@nixos-orbstack";
       terminus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK5+7effMEZgBAWJeEqP9VD8m3ao1DuLNQk83HZ/TzrN joseph@terminus"; # terminus = home server
-      vmware = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFCYQoSo3TdxLk4Augirkcbqefx2QQHh/543GDYfMODx joseph@vmware";
+
+      # used for re-keying secrets w/o having to export a key from 1Password each time
+      agenix-rekeying = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2IChbPCqQBNdpguhGX+2kWqQlp8jkkTjhRrA3utx3v";
     };
   };
 
