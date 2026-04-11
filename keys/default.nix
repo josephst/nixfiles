@@ -3,7 +3,7 @@
     Josephs-MacBook-Air = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK4LUu5VYk6fVSjJoBXjvQc3VNTor4krhhezFg60/+iG root@Josephs-MacBook-Air";
     terminus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBFVJX8U8YmJX/mhECofQHj/HDZhIKcV44KlVexhId3c root@nixos";
     nixos-orbstack = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBL3m6s7bwvuODKtaS8C+DKKGxNkMyKaYoBQobT7bq8g root@nixos-orbstack";
-    anacreon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMPdIED+U7U4CumEQjFR3cd8jsapayxHOaTefpyQDWa9 root@vps-1ab28197"; # OVH Cloud
+    anacreon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHzDY0AWcUfh8wgYNj8zxQoC0+hC9REZxQBsTInw+BD6 root@vps-1ab28197"; # OVH Cloud
   };
 
   users = {
