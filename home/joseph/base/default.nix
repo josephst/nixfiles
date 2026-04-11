@@ -22,10 +22,8 @@ in
     ./git.nix
     ./helix.nix
     ./nushell
-    # ./openclaw.nix # disabled 3/6/2026
     ./ssh.nix
     ./starship.nix
-    ./wezterm
     ./zellij
   ];
 
@@ -44,7 +42,7 @@ in
       age # encryption
       agenix # age secrets
       bc # calculator
-      # claude-code # not cutting edge, but probably updated often-enough
+      bun # nodejs alternative
       comma # run commands by prefacing with comma
       cpufetch # CPU info
       cyme # modern lsusb
@@ -57,7 +55,6 @@ in
       git-credential-manager
       glow # markdown on terminal
       httpie # better curl
-      hub # Git wrapper that has better Github support
       hugo # static website builder
       hyperfine # command-line benchmarking
       ipfetch # IP info
@@ -67,7 +64,6 @@ in
       magic-wormhole
       marp-cli # markdown presentation
       ncdu # TUI disk usage
-      nodejs
       nixd # Nix LSP
       nixfmt # nix formatter
       nixpkgs-hammering # nixpkgs linter
@@ -82,13 +78,10 @@ in
           pyyaml
         ]
       )) # python
-      python3Packages.huggingface-hub
       rclone # syncing
       restic # backup
       rsync # syncing
       tealdeer # cheatsheets in terminal
-      typst # latex alternative for typesetting docs
-      stable.yt-dlp # youtube-dl; unstable currently fails on darwin via jeepney installCheck
     ]
     ++ lib.optionals isLinux [
       iw # terminal wifi info
@@ -99,6 +92,9 @@ in
     ++ lib.optionals isDarwin [
       nh # nix client (on nixos, this is a module)
       coreutils # macOS coreutils
+    ]
+    ++ lib.optionals (!osConfig.hostSpec.isMinimal) [
+      stable.yt-dlp # youtube-dl
     ];
 
   home.sessionPath = [
