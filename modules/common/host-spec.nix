@@ -17,6 +17,12 @@
       description = "The username for the host's user";
     };
 
+    uid = lib.mkOption {
+      type = lib.types.int;
+      default = 1000;
+      description = "The UID for the host's primary user";
+    };
+
     userFullName = lib.mkOption {
       type = lib.types.str;
       description = "The full name of the user";

@@ -18,7 +18,10 @@ in
 
   users = {
     users.${hostSpec.username} = {
-      inherit (hostSpec) home;
+      inherit (hostSpec)
+        home
+        uid
+        ;
     }
     // lib.optionalAttrs isLinux {
       isNormalUser = true;

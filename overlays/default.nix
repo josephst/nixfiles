@@ -4,11 +4,11 @@ let
     # this adds nixpkgs-unstable as an overlays, available as nixpkgs.unstable.foobar
     # doesn't do much now, since we're already following unstable
     unstable = import inputs.nixpkgs {
-      inherit (final) system;
+      inherit (final.stdenv.hostPlatform) system;
       config.allowUnfree = true;
     };
     stable = import inputs.nixpkgs-stable {
-      inherit (final) system;
+      inherit (final.stdenv.hostPlatform) system;
       config.allowUnfree = true;
     };
   };

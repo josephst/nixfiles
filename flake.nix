@@ -118,6 +118,15 @@
 
       # NixOS configuration entrypoint
       nixosConfigurations = {
+        anacreon = helper.mkNixos {
+          hostSpec = commonHostSpec // {
+            hostName = "anacreon";
+            platform = "x86_64-linux";
+            isMinimal = true;
+            isServer = true;
+          };
+          inherit myConfig;
+        };
         terminus = helper.mkNixos {
           hostSpec = commonHostSpec // {
             hostName = "terminus";
