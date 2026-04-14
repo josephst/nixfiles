@@ -23,7 +23,8 @@
   ];
 
   # TODO: figure out why determinate nix keeps being built from source, instead of using binary cache
-  determinate.enable = false;
+  # determinate.enable = false;
+  determinate.enable = true;
 
   age.identityPaths = map (builtins.getAttr "path") config.services.openssh.hostKeys;
 
@@ -37,6 +38,7 @@
     openssh.openFirewall = false;
     qemuGuest.enable = true;
     tailscale = {
+      extraUpFlags = [ "--advertise-tags=tag:server" ];
       extraSetFlags = [ "--advertise-exit-node" ];
       useRoutingFeatures = "both";
     };

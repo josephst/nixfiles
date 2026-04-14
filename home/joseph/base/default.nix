@@ -25,7 +25,7 @@ in
     ./zellij
   ]
   ++ lib.optionals (!osConfig.hostSpec.isMinimal) [
-    ./bun
+    ./bun.nix
     ./nushell
   ];
 
