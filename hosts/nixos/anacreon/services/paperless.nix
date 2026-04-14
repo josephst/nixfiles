@@ -1,6 +1,6 @@
 { config, ... }:
 {
-  age.secrets.paperless-admin.file = ../../terminus/secrets/paperless-admin.age;
+  age.secrets.paperless-admin.file = ../secrets/paperless-admin.age;
 
   services = {
     paperless = {

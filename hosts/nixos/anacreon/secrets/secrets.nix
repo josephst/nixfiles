@@ -6,4 +6,5 @@ let
 in
 {
   "tailscale-authkey.age".publicKeys = publicKeys;
+  "paperless-admin.age".publicKeys = publicKeys;
 }
