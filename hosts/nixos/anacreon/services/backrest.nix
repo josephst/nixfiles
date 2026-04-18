@@ -4,7 +4,7 @@
   ...
 }:
 let
-  siteHost = "backrest.anacreon.${config.hostSpec.tailnet}";
+  siteHost = "backrest.${config.hostSpec.tailnet}";
   tailscaleServe = lib.getExe config.services.tailscale.package;
 in
 {

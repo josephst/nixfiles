@@ -4,7 +4,7 @@
   ...
 }:
 let
-  siteHost = "copyparty.anacreon.${config.hostSpec.tailnet}";
+  siteHost = "copyparty.${config.hostSpec.tailnet}";
   tailscaleServe = lib.getExe config.services.tailscale.package;
 in
 {

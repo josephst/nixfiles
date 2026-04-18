@@ -4,7 +4,7 @@
   ...
 }:
 let
-  siteHost = "paperless.anacreon.${config.hostSpec.tailnet}";
+  siteHost = "paperless.${config.hostSpec.tailnet}";
   tailscaleServe = lib.getExe config.services.tailscale.package;
 in
 {

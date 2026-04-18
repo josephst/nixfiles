@@ -6,7 +6,7 @@
 }:
 let
   fs = lib.fileset;
-  siteHost = "anacreon.${config.hostSpec.tailnet}";
+  siteHost = "home.${config.hostSpec.tailnet}";
   tailscaleServe = lib.getExe config.services.tailscale.package;
   homepage-assets = pkgs.stdenv.mkDerivation {
     name = "anacreon-homepage-assets";
