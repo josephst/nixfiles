@@ -37,11 +37,11 @@ in
       ExecStart = lib.concatStringsSep " " [
         tailscaleServe
         "serve"
-        "--service=srv:backrest"
+        "--service=svc:backrest"
         "--https=443"
         "http://127.0.0.1:9898"
       ];
-      ExecStop = "${tailscaleServe} serve clear srv:backrest";
+      ExecStop = "${tailscaleServe} serve clear svc:backrest";
     };
   };
 }

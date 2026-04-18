@@ -63,11 +63,11 @@ in
       ExecStart = lib.concatStringsSep " " [
         tailscaleServe
         "serve"
-        "--service=srv:home"
+        "--service=svc:home"
         "--https=443"
         "http://127.0.0.1:8080"
       ];
-      ExecStop = "${tailscaleServe} serve clear srv:home";
+      ExecStop = "${tailscaleServe} serve clear svc:home";
     };
   };
 }

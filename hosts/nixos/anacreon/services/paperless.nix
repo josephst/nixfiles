@@ -44,11 +44,11 @@ in
       ExecStart = lib.concatStringsSep " " [
         tailscaleServe
         "serve"
-        "--service=srv:paperless"
+        "--service=svc:paperless"
         "--https=443"
         "http://127.0.0.1:${toString config.services.paperless.port}"
       ];
-      ExecStop = "${tailscaleServe} serve clear srv:paperless";
+      ExecStop = "${tailscaleServe} serve clear svc:paperless";
     };
   };
 }

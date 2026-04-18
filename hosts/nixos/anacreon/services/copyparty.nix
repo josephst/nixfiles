@@ -49,11 +49,11 @@ in
       ExecStart = lib.concatStringsSep " " [
         tailscaleServe
         "serve"
-        "--service=srv:copyparty"
+        "--service=svc:copyparty"
         "--https=443"
         "http://127.0.0.1:3923"
       ];
-      ExecStop = "${tailscaleServe} serve clear srv:copyparty";
+      ExecStop = "${tailscaleServe} serve clear svc:copyparty";
     };
   };
 }
