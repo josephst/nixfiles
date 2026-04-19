@@ -5,6 +5,9 @@ name = "nixfiles"
 [setup]
 script = ""
 
+[cleanup]
+script = "rm -rf .direnv"
+
 [[actions]]
 name = "Run"
 icon = "run"
