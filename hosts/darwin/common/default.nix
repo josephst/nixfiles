@@ -34,6 +34,7 @@
         source-code-pro
         font-awesome
         nerd-fonts.fira-code
+        nerd-fonts.jetbrains-mono
         nerd-fonts.hack
         nerd-fonts.zed-mono
         iosevka-bin
