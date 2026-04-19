@@ -1,202 +1,126 @@
-# Dotfiles w/ Nix and Home Manager
+# Nixfiles
 
-🔔 [Read a blog post about this repository](https://josephstahl.com/nix-for-macos-and-a-homelab-server/)
+[Read the companion blog post](https://josephstahl.com/nix-for-macos-and-a-homelab-server/)
 
-> This is my personal Nix configuration repository managing both macOS (via nix-darwin) and NixOS systems with home-manager. While I try to keep everything working properly, use any part of this repo on your own system at your own risk! I'd recommend using this more for inspiration than exact instructions.
+Personal Nix configuration for macOS and NixOS, built around a single flake with shared host metadata, shared modules, and Home Manager integration. This repository manages one nix-darwin workstation, several NixOS systems, and the supporting packages, overlays, keys, and encrypted secrets they use.
 
-## Repository Structure
+## Repository Layout
 
-This flake-based configuration uses a modular architecture:
+- `flake.nix`: entrypoint for all `darwinConfigurations`, `nixosConfigurations`, overlays, packages, formatter, and dev shells
+- `lib/`: helper functions used to assemble Darwin and NixOS systems
+- `modules/common/`: shared options, including `hostSpec` and `myConfig`
+- `modules/darwin/`: Darwin module exports
+- `modules/nixos/`: reusable NixOS modules such as `backrest`, `healthchecks`, `rcloneSync`, and `recyclarr`
+- `modules/home-manager/`: Home Manager module exports
+- `hosts/common/`: cross-platform host configuration shared by nix-darwin and NixOS
+- `hosts/darwin/`: Darwin host definitions
+- `hosts/nixos/`: NixOS host definitions, hardware config, disk layout, networking, services, and host-local secrets
+- `home/`: Home Manager configuration for `joseph` plus shared scripts
+- `pkgs/`, `pkgsLinux/`, `overlays/`: custom packages and overlay wiring
+- `keys/`: SSH public keys used for access and agenix recipients
+- `secrets/`: shared agenix-encrypted secrets
 
-- **`modules/common/myConfig/`** - Shared configuration options and implementations
-- **`modules/darwin/myConfig/`** - macOS-specific extensions
-- **`modules/nixos/myConfig/`** - NixOS-specific extensions
-- **`modules/home-manager/myHomeConfig/`** - User environment configuration
-- **`hosts/`** - Host-specific configurations
-- **`home/joseph/`** - User dotfiles and program configurations
-- **`keys/`** - SSH public keys for system access and encryption
-- **`secrets/`** - Age-encrypted secrets using agenix
+## Hosts
 
-## Quick Start
+### Darwin
 
-### Building and Switching
+- `Josephs-MacBook-Air` (`aarch64-darwin`): primary macOS machine, configured with nix-darwin and Home Manager
+
+### NixOS
+
+- `terminus` (`x86_64-linux`): primary homelab server with Home Assistant, media services, backups, Caddy, Copyparty, Ollama, and related services
+- `anacreon` (`x86_64-linux`): minimal server with Tailscale-first access and self-hosted services including Homepage, Backrest, Copyparty, and Paperless
+- `orbstack` (`aarch64-linux`): local Linux environment
+- `iso-gnome` (`x86_64-linux`): installer/live ISO configuration
+
+## Common Workflows
+
+### Switch the current machine
+
 ```bash
-# Build and switch configuration (auto-detects platform)
-just switch  # or just s
+just switch
+```
 
-# Update flake inputs
+This stages tracked changes with `git add --all` and then uses `nh` to switch the active configuration:
+
+- macOS: `nh darwin switch .`
+- Linux: `nh os switch .`
+
+### Update inputs
+
+```bash
 just update
+```
 
-# Deploy to remote NixOS server
+On macOS this also runs `brew update` before `nix flake update --commit-lock-file`.
+
+### Deploy the remote server
+
+```bash
 just deploy
 ```
 
-### Common Commands
+The current deploy recipe targets `anacreon` with `nixos-rebuild` over SSH:
+
 ```bash
-# Format and lint code
+nix run nixpkgs#nixos-rebuild -- \
+  --target-host joseph@anacreon \
+  --sudo switch \
+  --flake .#anacreon \
+  --build-host anacreon \
+  --no-reexec \
+  --use-substitutes
+```
+
+If remote activation needs a password prompt, rerun with `--ask-sudo-password` so the remote `sudo` step can complete interactively.
+
+### Check and format
+
+```bash
 nix fmt
-nix run nixpkgs#statix check .
-
-# Garbage collect old generations
-just gc [age=7]  # defaults to 7 days
-
-# Check configuration builds correctly
 nix flake check
 ```
 
-## macOS Setup
+For targeted builds:
 
-### Prerequisites
-1. **Generate host keys** (if they don't exist):
-   ```bash
-   sudo ssh-keygen -A
-   ```
+```bash
+nix build .#darwinConfigurations.Josephs-MacBook-Air.system
+nix build .#nixosConfigurations.terminus.config.system.build.toplevel
+nix build .#nixosConfigurations.anacreon.config.system.build.toplevel
+```
 
-2. **Install Nix**: Follow the [Zero to Nix](https://zero-to-nix.com/start/install) guide
+## NixOS Installation Notes
 
-3. **Install Homebrew**:
-   ```bash
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
+New NixOS systems are intended to be installed with `nixos-anywhere`, with disk layout defined in the host's `disko.nix`.
 
-### First-time Setup
-1. Clone this repository
-2. Update `flake.nix` to match your hostname and preferences
-3. Configure SSH keys in `keys/default.nix`
-4. Run `just switch` to build and activate the configuration
+Example:
 
-### Current System
-- **Josephs-MacBook-Air** - Primary development machine
-
-## NixOS Setup
-
-### Current Systems
-- **terminus** (x86_64-linux) - Homelab server
-- **orbstack** (aarch64-linux) - Development container
-- **iso-gnome** (aarch64-linux) - Live ISO image
-
-### Remote Installation with nixos-anywhere
-
-NixOS installation uses [nixos-anywhere](https://github.com/nix-community/nixos-anywhere) for unattended/remote setups.
-
-#### Basic Installation Process
-1. Boot the target system with NixOS installer
-2. Set password for `nixos` user: `passwd`
-3. Get IP address: `ip a`
-4. Install remotely from this repository
-
-#### For existing systems (with hardware-configuration.nix):
 ```bash
 nix run github:nix-community/nixos-anywhere -- \
-  --flake .#terminus \
-  --target-host nixos@<IP_ADDRESS> \
-  --build-on remote \
+  --flake .#<host> \
+  --target-host nixos@<ip-or-hostname> \
+  --build-on remote
 ```
 
-#### For new systems (generate hardware config):
-```bash
-nix run github:nix-community/nixos-anywhere -- \
-  --generate-hardware-config nixos-generate-config ./hosts/nixos/terminus/hardware-configuration.nix \
-  --flake .#terminus \
-  --target-host nixos@<IP_ADDRESS> \
-  --build-on remote \
-```
+When the target host needs agenix-encrypted secrets during bootstrap:
 
-> **Note**: `--build-on-remote` is necessary for cross-architecture builds.
-> Ensure disk setup is configured with `disko` (see examples in `hosts/nixos/*/disko.nix`).
+- add the host SSH key to `keys/`
+- update the relevant `secrets.nix` recipients
+- **rekey with `agenix -r`**
+- use `--copy-host-keys` when the install flow depends on preserving the generated host identity for secret decryption
 
-### Secrets Management with Agenix
+## Secrets
 
-This repository uses [agenix](https://github.com/ryantm/agenix) for secrets management.
+Secrets are managed with [agenix](https://github.com/ryantm/agenix).
 
-#### For systems with secrets, add these flags:
-- `--copy-host-keys` - Copies SSH host keys to the new system (the NixOS installer will generate keys,
-we'll copy those keys onto the installed system. This allows to re-key Agenix with the new keys
-prior to finishing the install)
-- `--extra-files "$temp"` - Copies user SSH keys for secret decryption
+- shared secrets live under `secrets/`
+- host-specific secrets live under `hosts/nixos/<host>/secrets/`
+- user secrets live under `home/joseph/secrets/`
 
-#### Setting up user keys for new systems:
-```bash
-temp=$(mktemp -d)
-install -d -m755 "$temp/home/joseph/.ssh"
+Never commit plaintext secrets. Edit encrypted values with `agenix -e` and rekey with `agenix -r` after adding or rotating recipients.
 
-# Get keys from 1Password or generate new ones
-op read "op://Private/<item>/private key" > "$temp/home/joseph/.ssh/id_ed25519"
-op read "op://Private/<item>/public key" > "$temp/home/joseph/.ssh/id_ed25519.pub"
+## Notes
 
-# Set correct permissions
-chmod 600 "$temp/home/joseph/.ssh/id_ed25519"*
-```
-
-#### Important notes:
-- Re-key all secrets (`agenix -r -i /path/to/ed_25519`) with new keys (added to `/keys/default.nix`) before installation
-
-## Post-Installation Configuration
-
-### Essential Setup
-
-#### Secure Boot
-Lanzaboote should be disabled for the install.
-Once installed, [enable Lanzaboote and Secure Boot](https://nix-community.github.io/lanzaboote/getting-started/enable-secure-boot.html).
-Then enable disk unlocking using TPM2: `sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7+11 /dev/nvme0n1p2`,
-assuming that the LUKS partition is `/dev/nvme0n1p2`.
-
-#### Tailscale
-```bash
-tailscale up --ssh --advertise-exit-node
-```
-- Update dynamic DNS records with Tailscale IP for external access
-- Ensures devices on the Tailnet can resolve hostnames via public DNS
-
-### Service-Specific Configuration
-
-The terminus server runs various self-hosted services. Some require manual setup:
-
-#### Media Services (Servarr Stack)
-- **Jellyfin**: Access web interface for initial media library setup
-- **Sonarr/Radarr**: Configure indexers and download clients
-- **Prowlarr**: Set up indexer connections
-- **SABnzbd**:
-  - Edit `/var/lib/sabnzbd/sabnzbd.ini`
-  - Add `sabnzbd.terminus.josephstahl.com` to `host_whitelist`
-  - Configure port (default: 8082 to avoid conflicts with Unifi on 8080)
-
-#### Home Assistant
-- Configure devices and integrations via web interface
-- Zigbee and Z-Wave devices managed through dedicated containers
-
-#### Monitoring
-- **Homepage**: Dashboard aggregating all services
-
-### Development Tools
-- **VS Code Server**: Remote development access
-- **Ollama**: Local LLM inference server
-## Customization
-
-To adapt this configuration for your own use:
-
-1. **Update personal information**:
-   - Change user details in `flake.nix` commonConfig
-   - Update SSH keys in `keys/default.nix`
-   - Modify email and name in git configuration
-
-2. **Host configuration**:
-   - Add your systems to `nixosConfigurations` or `darwinConfigurations`
-   - Create host-specific configs in `hosts/`
-   - Update networking and hardware configurations
-
-3. **Services**:
-   - Enable/disable services in host configurations
-   - Modify service configurations in `hosts/*/services/`
-   - Update domain names and certificates
-
-4. **Secrets**:
-   - Re-key all secrets with your own SSH keys
-   - Update secret paths in configurations
-   - Configure agenix for your key management
-
-## Troubleshooting
-
-- Always run `git add --all` before nix operations
-- Use `nix flake check` to validate configurations
-- Review systemd logs for service problems: `journalctl -u <service>`
+- `nix` evaluation in this repo only sees Git-tracked files, so `git add --all` new files before relying on `nix eval`, `nix build`, or `nix flake check`
+- `hosts/common/` is an important shared layer for users, SSH infrastructure, Home Manager wiring, and global Nix settings
+- `hostSpec` is the shared source of per-host identity and platform metadata across Darwin and NixOS systems
