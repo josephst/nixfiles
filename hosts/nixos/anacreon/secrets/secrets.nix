@@ -5,6 +5,7 @@ let
   publicKeys = builtins.attrValues keys.users.joseph ++ hostKeys;
 in
 {
+  "cloudflare-dns.age".publicKeys = publicKeys;
   "tailscale-authkey.age".publicKeys = publicKeys;
   "paperless-admin.age".publicKeys = publicKeys;
 }
