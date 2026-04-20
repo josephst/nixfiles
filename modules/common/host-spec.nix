@@ -23,6 +23,12 @@
       description = "The UID for the host's primary user";
     };
 
+    gid = lib.mkOption {
+      type = lib.types.int;
+      default = config.hostSpec.uid;
+      description = "The GID for the host's primary user group";
+    };
+
     userFullName = lib.mkOption {
       type = lib.types.str;
       description = "The full name of the user";
