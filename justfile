@@ -35,6 +35,5 @@ gc age='7':
     nix-collect-garbage --delete-older-than {{ age }}d
 
 deploy:
-  # nix run nixpkgs#deploy-rs .#terminus
-  # nix run nixpkgs#nixos-rebuild -- --target-host joseph@terminus --sudo switch --flake .#terminus --build-host terminus --no-reexec --use-substitutes
-  nix run nixpkgs#nixos-rebuild -- --target-host joseph@anacreon --sudo switch --flake .#anacreon --build-host anacreon --no-reexec --use-substitutes
+  git add --all
+  nix run nixpkgs#nh -- os switch .#anacreon --target-host joseph@anacreon --build-host joseph@anacreon --use-substitutes

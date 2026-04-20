@@ -13,6 +13,7 @@ in
     ./bash.nix
     ./bat.nix
     ./bottom.nix # system viewer
+    ./bun.nix
     ./direnv.nix
     ./eza.nix # better ls
     ./fd.nix # better find
@@ -22,11 +23,10 @@ in
     ./helix.nix
     ./ssh.nix
     ./starship.nix
-    ./zellij
   ]
   ++ lib.optionals (!osConfig.hostSpec.isMinimal) [
-    ./bun.nix
     ./nushell
+    ./zellij
   ];
 
   age.secrets."1password-serviceacct.env" = {
@@ -69,7 +69,6 @@ in
       rsync # syncing
     ]
     ++ lib.optionals (!osConfig.hostSpec.isMinimal) [
-      bun # nodejs alternative
       delta # git and diff viewer
       diffsitter # better diff
       glow # markdown on terminal
@@ -106,9 +105,6 @@ in
   programs = {
     atuin = {
       enable = true;
-      # Don't enable fish integration, but do it manually in fish.interactiveShellInit
-      # because the default binding for up causes https://github.com/atuinsh/atuin/issues/2803
-      enableFishIntegration = false;
       settings = {
         store_failed = true;
         sync = {
