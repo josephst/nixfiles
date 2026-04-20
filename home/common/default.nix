@@ -1,13 +1,14 @@
 {
   inputs,
   config,
+  lib,
   pkgs,
   options,
   ...
 }:
 
 let
-  inherit (pkgs.stdenv) isLinux;
+  inherit (pkgs.stdenv) isDarwin isLinux;
 in
 {
   imports = [
@@ -25,6 +26,9 @@ in
     age = {
       identityPaths = [ "${config.home.homeDirectory}/.ssh/agenix" ] ++ options.age.identityPaths.default;
     };
+    # Home Manager 26.05 defaults `programs.man.package = null` on Darwin, so
+    # fish's cache-generation default only creates a warning there.
+    programs.man.generateCaches = lib.mkIf (isDarwin && config.programs.man.package == null) false;
     xdg = {
       enable = true;
       userDirs = {
