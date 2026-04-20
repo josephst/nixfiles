@@ -24,6 +24,7 @@ in
         ;
     }
     // lib.optionalAttrs isLinux {
+      group = "users";
       isNormalUser = true;
       createHome = true;
       linger = true;

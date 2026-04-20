@@ -102,12 +102,32 @@ nix run github:nix-community/nixos-anywhere -- \
   --build-on remote
 ```
 
-When the target host needs agenix-encrypted secrets during bootstrap:
+This repo expects the Home Manager agenix identity at `~/.ssh/agenix` on first boot. `nixos-anywhere --extra-files` copies a local directory tree into the installed system root, so provide the key under `home/joseph/.ssh/agenix` in a temporary directory and set the final ownership numerically:
+
+```bash
+temp="$(mktemp -d)"
+trap 'rm -rf "$temp"' EXIT
+
+install -d -m 700 "$temp/home/joseph/.ssh"
+install -m 600 ~/.ssh/agenix "$temp/home/joseph/.ssh/agenix"
+
+nix run github:nix-community/nixos-anywhere -- \
+  --flake .#<host> \
+  --target-host nixos@<ip-or-hostname> \
+  --build-on remote \
+  --extra-files "$temp" \
+  --chown /home/joseph/.ssh 1000:100
+```
+
+The numeric `1000:100` matches the hard-coded `joseph` UID and primary `users` group GID in this flake, so the ownership is correct even before the user account exists on the target system.
+
+When the target host also needs system agenix secrets during bootstrap:
 
 - add the host SSH key to `keys/`
 - update the relevant `secrets.nix` recipients
 - **rekey with `agenix -r`**
-- use `--copy-host-keys` when the install flow depends on preserving the generated host identity for secret decryption
+- use `--copy-host-keys` when the install flow depends on preserving an existing `/etc/ssh/ssh_host_*` identity for secret decryption
+- use `--extra-files` to seed `/etc/ssh/ssh_host_*` on brand-new machines when there is no existing host key to preserve
 
 ## Secrets
 
