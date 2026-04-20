@@ -5,11 +5,6 @@
   ...
 }:
 {
-  disabledModules = [
-    # re-enable this module once an Agenix key is provided in ~/.ssh/agenix for decrypting user secrets
-    ../../common/home-manager.nix
-  ];
-
   imports = [
     ../common
     ../../common
