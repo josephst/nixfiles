@@ -17,6 +17,8 @@
       terminus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK5+7effMEZgBAWJeEqP9VD8m3ao1DuLNQk83HZ/TzrN joseph@terminus"; # terminus = home server
 
       # used for re-keying secrets w/o having to export a key from 1Password each time
+      # unlike the `agenix` key, this key is not used to decrypt $HOME - it is used for re-keying secrets
+      # it only lives on my macbook
       agenix-rekeying = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2IChbPCqQBNdpguhGX+2kWqQlp8jkkTjhRrA3utx3v";
     };
   };

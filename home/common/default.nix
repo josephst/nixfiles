@@ -31,6 +31,7 @@ in
     programs.man.generateCaches = lib.mkIf (isDarwin && config.programs.man.package == null) false;
     xdg = {
       enable = true;
+      localBinInPath = true;
       userDirs = {
         enable = isLinux;
         createDirectories = true;
