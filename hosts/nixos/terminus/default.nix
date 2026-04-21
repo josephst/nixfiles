@@ -31,7 +31,6 @@
     # ./services/unifi.nix # disabled since 12/3/2025 (Dream Router 7 now runs Unifi)
     ./services/vscode-server.nix
     ## LLM
-    # ./services/openclaw.nix # formerly Clawdbot
     ./services/ollama.nix
     ## Media & Sharing
     ./services/servarr
