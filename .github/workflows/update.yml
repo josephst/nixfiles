@@ -1,63 +1,56 @@
 name: Update Flake
 
 on:
-  workflow_dispatch: # allows manual triggering
-  schedule:
-    - cron: '00 5 * * 6' # runs weekly on Saturday at 05:00
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - flake.lock
 
 permissions:
   contents: write
   pull-requests: write
-  checks: write
+
+concurrency:
+  group: update-flake-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
-  lockfile:
-    name: Update flake.lock
-    runs-on: ubuntu-latest
-    outputs:
-      pr-sha: ${{ steps.cpr.outputs.pull-request-head-sha }}
-      pr-url: ${{ steps.cpr.outputs.pull-request-url }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-      # done with setup, now start updating
-      - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - run: nix flake update --commit-lock-file
-      - uses: peter-evans/create-pull-request@v7
-        id: cpr
-        with:
-          branch: update_flake_lock_action
-          delete-branch: true
-          sign-commits: true
-          title: Update flake.lock
   checks:
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.draft == false &&
+      startsWith(github.head_ref, 'dependabot/nix/')
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-15]
-    name: Flake checks
+    name: Flake checks (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    needs: lockfile
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.lockfile.outputs.pr-sha }}
       - uses: DeterminateSystems/nix-installer-action@main
       - name: Check Nixpkgs Inputs
         uses: DeterminateSystems/flake-checker-action@v10
       - name: Run flake checks
-        run: |
-          nix flake check -L
+        run: nix flake check -L
+
   merge:
-    runs-on: "ubuntu-latest"
-    name: "Auto-merge after checks pass"
-    needs: [checks, lockfile]
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.draft == false &&
+      startsWith(github.head_ref, 'dependabot/nix/')
+    runs-on: ubuntu-latest
+    name: Auto-merge after checks pass
+    needs: checks
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - name: Checkout main branch again
-        uses: actions/checkout@v4
-      - run: gh pr merge ${{ needs.lockfile.outputs.pr-url }} --auto --delete-branch --squash
+      - name: Enable auto-merge
+        run: gh pr merge "$PR_URL" --auto --delete-branch --squash --match-head-commit "$PR_HEAD_SHA"
         env:
           GH_TOKEN: ${{ github.token }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
