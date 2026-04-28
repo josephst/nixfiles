@@ -88,7 +88,6 @@
       commonHostSpec = {
         username = "joseph";
         uid = 1000;
-        gid = 100;
         userFullName = "Joseph Stahl";
         passwordFile = ./secrets/users/joseph.age;
         tailnet = "taildbd4c.ts.net";

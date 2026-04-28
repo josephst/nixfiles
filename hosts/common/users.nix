@@ -20,7 +20,6 @@ in
     users.${hostSpec.username} = {
       inherit (hostSpec)
         home
-        uid
         ;
     }
     // lib.optionalAttrs isLinux {
@@ -28,7 +27,10 @@ in
       isNormalUser = true;
       createHome = true;
       linger = true;
-      inherit (hostSpec) shell;
+      inherit (hostSpec)
+        shell
+        uid
+        ;
       hashedPasswordFile = lib.mkIf (hostSpec.passwordFile != null) config.age.secrets.password.path;
       extraGroups = ifTheyExist [
         "wheel"
