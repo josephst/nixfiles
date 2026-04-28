@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - name: Check Nixpkgs Inputs
-        uses: DeterminateSystems/flake-checker-action@v10
+        uses: DeterminateSystems/flake-checker-action@v12
       - name: Run flake checks
         run: nix flake check -L --accept-flake-config
 
