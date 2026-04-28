@@ -168,15 +168,34 @@ in
     zsh = {
       enable = true;
       dotDir = "${config.xdg.configHome}/zsh";
-      initContent = ''
-        # source 1password-cli plugins
-        if test -e ~/.config/op/plugins.sh; then
-          source ~/.config/op/plugins.sh
-        fi
+      initContent =
+        let
+          zshConfigEarlyInit = lib.mkBefore ''
+            if [[ -n "$ZSH_PROFILE_STARTUP" ]]; then
+              zmodload zsh/zprof
+            fi
+          '';
+          zshConfigLate = lib.mkAfter ''
+            if [[ -n "$ZSH_PROFILE_STARTUP" ]]; then
+              zprof
+            fi
+          '';
 
-        # Added by OrbStack: command-line tools and integration
-        source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-      '';
+          zshConfig = ''
+            # source 1password-cli plugins
+            if test -e ~/.config/op/plugins.sh; then
+              source ~/.config/op/plugins.sh
+            fi
+
+            # Added by OrbStack: command-line tools and integration
+            source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+          '';
+        in
+        lib.mkMerge [
+          zshConfigEarlyInit
+          zshConfig
+          zshConfigLate
+        ];
     };
   };
 }
