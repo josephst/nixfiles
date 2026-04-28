@@ -10,7 +10,6 @@
     inputs.determinate.darwinModules.default
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
-    inputs.nix-index-database.darwinModules.nix-index
 
     ./brew.nix
     ./networking.nix
@@ -42,6 +41,11 @@
     };
 
     security.pam.services.sudo_local.touchIdAuth = true;
+
+    programs.zsh = {
+      enable = true; # let home-manager manage zsh
+      enableGlobalCompInit = false; # let home-manager create the compinit file
+    };
 
     nix.enable = false; # using Determinate Nix on macOS
     determinateNix.enable = true;

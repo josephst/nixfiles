@@ -26,9 +26,15 @@ in
     age = {
       identityPaths = [ "${config.home.homeDirectory}/.ssh/agenix" ] ++ options.age.identityPaths.default;
     };
-    # Home Manager 26.05 defaults `programs.man.package = null` on Darwin, so
-    # fish's cache-generation default only creates a warning there.
-    programs.man.generateCaches = lib.mkIf (isDarwin && config.programs.man.package == null) false;
+
+    programs = {
+      # Home Manager 26.05 defaults `programs.man.package = null` on Darwin, so
+      # fish's cache-generation default only creates a warning there.
+      man.generateCaches = lib.mkIf (isDarwin && config.programs.man.package == null) false;
+
+      # from inputs.nix-index-database
+      nix-index.enable = true;
+    };
     xdg = {
       enable = true;
       localBinInPath = true;

@@ -38,7 +38,6 @@
           fnix = "nix-shell --run fish"; # use as `fnix -p go` to have a fish shell with go in it
         };
       };
-      nix-index-database.comma.enable = true; # from https://github.com/nix-community/nix-index-database
 
       # SSH configuration is now handled by ./ssh-infrastructure.nix
     };

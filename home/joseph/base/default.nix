@@ -148,7 +148,6 @@ in
         scrollbar = true;
       };
     };
-    nix-index.enable = true;
     npm.enable = !osConfig.hostSpec.isMinimal;
     ripgrep.enable = true;
     uv = lib.mkIf (!osConfig.hostSpec.isMinimal) {
