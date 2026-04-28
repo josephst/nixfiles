@@ -34,7 +34,7 @@ jobs:
       - name: Check Nixpkgs Inputs
         uses: DeterminateSystems/flake-checker-action@v10
       - name: Run flake checks
-        run: nix flake check -L
+        run: nix flake check -L --accept-flake-config
 
   merge:
     if: >-
