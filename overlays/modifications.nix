@@ -36,6 +36,39 @@ final: prev: {
       smartrent = callPackage ../pkgsLinux/homeassistant-customcomponents/smartrent/package.nix { };
     };
 
+  zsh = prev.zsh.overrideAttrs (
+    old:
+    let
+      patches = old.patches or [ ];
+      hasSigsuspendProbePatch = final.lib.any (
+        patch: builtins.baseNameOf (toString patch) == "fix-sigsuspend-probe-c23.patch"
+      ) patches;
+      sigsuspendProbePatch = final.writeText "fix-sigsuspend-probe-c23.patch" ''
+        Prototype the K&R handler so the probe still compiles under -std=gnu23
+        (selected by autoconf 2.73). Upstream removed the probe in 8dd271fdec52,
+        which does not apply against 5.9 with the PCRE backports.
+
+        https://github.com/NixOS/nixpkgs/issues/513543
+        --- a/configure.ac
+        +++ b/configure.ac
+        @@ -2334,8 +2334,7 @@ if test x$signals_style = xPOSIX_SIGNALS; then
+         #include <signal.h>
+         #include <unistd.h>
+         int child=0;
+        -void handler(sig)
+        -    int sig;
+        +void handler(int sig)
+         {if(sig==SIGCHLD) child=1;}
+         int main() {
+             struct sigaction act;
+      '';
+    in
+    final.lib.optionalAttrs (!hasSigsuspendProbePatch) {
+      # TODO: Remove this override once NixOS/nixpkgs#513971 reaches nixpkgs-unstable.
+      patches = patches ++ [ sigsuspendProbePatch ];
+    }
+  );
+
   # zwave-js-server = prev.zwave-js-server.overrideAttrs (
   #   _: old: rec {
   #     version = "3.2.1";

@@ -59,6 +59,12 @@
         pkgs.nixos-rebuild-ng
         pkgs.nvd
       ];
+      shells = [
+        pkgs.bashInteractive
+        pkgs.fish
+        pkgs.nushell
+        pkgs.zsh
+      ];
     };
   };
 }

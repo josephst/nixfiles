@@ -84,12 +84,6 @@
         pkgs.nushell
         pkgs.zsh
       ];
-      shells = [
-        pkgs.bashInteractive
-        pkgs.fish
-        pkgs.nushell
-        pkgs.zsh
-      ];
     };
 
     programs = {
