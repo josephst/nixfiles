@@ -42,14 +42,14 @@ jobs:
       github.event.pull_request.draft == false &&
       startsWith(github.head_ref, 'dependabot/nix/')
     runs-on: ubuntu-latest
-    name: Auto-merge after checks pass
+    name: Merge after checks pass
     needs: checks
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - name: Enable auto-merge
-        run: gh pr merge "$PR_URL" --auto --delete-branch --squash --match-head-commit "$PR_HEAD_SHA"
+      - name: Merge
+        run: gh pr merge "$PR_URL" --delete-branch --squash --match-head-commit "$PR_HEAD_SHA"
         env:
           GH_TOKEN: ${{ github.token }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
