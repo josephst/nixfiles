@@ -97,10 +97,7 @@ in
       coreutils # macOS coreutils
     ];
 
-  home.sessionPath = [
-    "$HOME/.local/bin"
-  ]
-  ++ lib.optional config.programs.npm.enable "$HOME/.npm/bin";
+  home.sessionPath = lib.optional config.programs.npm.enable "$HOME/.npm/bin";
 
   programs = {
     atuin = {
@@ -148,7 +145,7 @@ in
         scrollbar = true;
       };
     };
-    npm.enable = !osConfig.hostSpec.isMinimal;
+    npm.enable = true; # installs NPM and Node.js
     ripgrep.enable = true;
     uv = lib.mkIf (!osConfig.hostSpec.isMinimal) {
       enable = true;
