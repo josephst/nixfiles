@@ -1,5 +1,4 @@
-_:
-{
+_: {
   homebrew = {
     brews = [
       {

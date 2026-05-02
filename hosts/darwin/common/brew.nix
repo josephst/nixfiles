@@ -34,8 +34,8 @@
 
   environment = lib.mkIf config.homebrew.enable {
     systemPath = lib.mkAfter [
-        "${config.homebrew.prefix}/bin"
-      ];
+      "${config.homebrew.prefix}/bin"
+    ];
     shellInit = ''
       eval $(${config.homebrew.prefix}/bin/brew shellenv)
     '';
