@@ -6,8 +6,11 @@
 let
   repositorySecretFile = ../secrets/restic/paperless-repository.age;
   passwordSecretFile = ../secrets/restic/paperless-password.age;
+  environmentSecretFile = ../secrets/restic/paperless.env.age;
   secretsAvailable =
-    builtins.pathExists repositorySecretFile && builtins.pathExists passwordSecretFile;
+    builtins.pathExists repositorySecretFile
+    && builtins.pathExists passwordSecretFile
+    && builtins.pathExists environmentSecretFile;
 
   credentialDir = "/run/credentials/restic-backups-paperless.service";
 in
@@ -15,12 +18,14 @@ in
   age.secrets = lib.mkIf secretsAvailable {
     "restic/paperless-repository".file = repositorySecretFile;
     "restic/paperless-password".file = passwordSecretFile;
+    "restic/paperless.env".file = environmentSecretFile;
   };
 
   services.restic.backups.paperless = lib.mkIf secretsAvailable {
     initialize = true;
     repositoryFile = "${credentialDir}/repository";
     passwordFile = "${credentialDir}/password";
+    environmentFile = config.age.secrets."restic/paperless.env".path;
 
     paths = [
       "/var/lib/paperless/export"
@@ -32,15 +37,17 @@ in
       "--tag export"
     ];
 
+    # TODO: remove this when `terminus` is back online;
+    # only one machine running prune & forget commands is necessary
     pruneOpts = [
       "--keep-daily 30"
-      "--keep-weekly 12"
-      "--keep-monthly 12"
-      "--keep-yearly 5"
+      "--keep-weekly 52"
+      "--keep-monthly 24"
+      "--keep-yearly 10"
+      "--keep-tag forever"
     ];
-
     checkOpts = [
-      "--read-data-subset 1G"
+      "--read-data-subset 500M"
       "--with-cache"
     ];
 
@@ -62,6 +69,7 @@ in
   warnings = lib.optional (!secretsAvailable) ''
     anacreon Paperless Restic backup is not enabled yet: add
     hosts/nixos/anacreon/secrets/restic/paperless-repository.age and
-    hosts/nixos/anacreon/secrets/restic/paperless-password.age.
+    hosts/nixos/anacreon/secrets/restic/paperless-password.age and
+    hosts/nixos/anacreon/secrets/restic/paperless.env.age.
   '';
 }

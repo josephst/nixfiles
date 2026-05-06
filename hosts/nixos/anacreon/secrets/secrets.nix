@@ -10,4 +10,5 @@ in
   "paperless-admin.age".publicKeys = publicKeys;
   "restic/paperless-repository.age".publicKeys = publicKeys;
   "restic/paperless-password.age".publicKeys = publicKeys;
+  "restic/paperless.env.age".publicKeys = publicKeys;
 }
