@@ -2,7 +2,6 @@ _: {
   virtualisation = {
     incus = {
       enable = true;
-      bucketSupport = false;
       ui.enable = true;
       preseed = {
         networks = [
