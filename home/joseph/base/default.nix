@@ -120,7 +120,9 @@ in
         set -x SHELL ${pkgs.fish}/bin/fish
       ''
       + lib.optionalString osConfig.hostSpec.isServer ''
-        set -x OP_SERVICE_ACCOUNT_TOKEN $(cat $XDG_RUNTIME_DIR/agenix/1password-serviceacct-fish)
+        if test -r "$XDG_RUNTIME_DIR/agenix/1password-serviceacct-fish"
+          set -x OP_SERVICE_ACCOUNT_TOKEN (${pkgs.coreutils}/bin/cat "$XDG_RUNTIME_DIR/agenix/1password-serviceacct-fish")
+        end
       '';
     };
     gh = {
