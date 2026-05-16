@@ -19,6 +19,8 @@
 
   # resolv.conf: NixOS doesn't use systemd-resolved
   services.resolved.enable = lib.mkForce false;
+  # Set networking.resolvconf.enable = false if another service manages /etc/resolv.conf.
+  networking.resolvconf.enable = false;
   environment.etc."resolv.conf".source = "/opt/orbstack-guest/etc/resolv.conf";
 
   # faster DHCP - OrbStack uses SLAAC exclusively
