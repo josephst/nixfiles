@@ -26,44 +26,42 @@ in
     enable = true;
     enableDefaultConfig = false;
     includes = lib.optional pkgs.stdenv.isDarwin "${config.home.homeDirectory}/.orbstack/ssh/config";
-    matchBlocks = {
+    settings = {
       "*" = {
         # defaults, from home-manager module
-        forwardAgent = false;
-        addKeysToAgent = "no";
-        compression = false;
-        serverAliveInterval = 0;
-        serverAliveCountMax = 3;
-        hashKnownHosts = false;
-        userKnownHostsFile = "~/.ssh/known_hosts";
-        controlMaster = "no";
-        controlPath = "~/.ssh/master-%r@%n:%p";
-        controlPersist = "no";
+        ForwardAgent = false;
+        AddKeysToAgent = "no";
+        Compression = false;
+        ServerAliveInterval = 0;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+        ControlMaster = "no";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ControlPersist = "no";
         # additional options
-        identityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
-        extraOptions = lib.optionalAttrs pkgs.stdenv.isDarwin {
-          IdentityAgent = ''"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"'';
-        };
+        IdentityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
+        IdentityAgent = lib.mkIf pkgs.stdenv.isDarwin ''"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"'';
       };
       "terminus terminus.josephstahl.com" = {
-        hostname = "terminus";
-        forwardAgent = true;
-        identitiesOnly = true;
-        identityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
+        HostName = "terminus";
+        ForwardAgent = true;
+        IdentitiesOnly = true;
+        IdentityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
       };
       "anacreon anacreon.josephstahl.com" = {
-        hostname = "anacreon";
-        forwardAgent = true;
-        identitiesOnly = true;
-        identityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
+        HostName = "anacreon";
+        ForwardAgent = true;
+        IdentitiesOnly = true;
+        IdentityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
       };
       "github.com" = {
-        user = "git";
-        identityFile = lib.mkIf config.home.file.${identityFile}.enable [
+        User = "git";
+        IdentityFile = lib.mkIf config.home.file.${identityFile}.enable [
           "~/${identityFile}"
           "~/.ssh/identity" # only having pubkey here can cause issues
         ];
-        identitiesOnly = lib.mkIf (userHostSpecificKey != null) true;
+        IdentitiesOnly = lib.mkIf (userHostSpecificKey != null) true;
       };
     };
   };
