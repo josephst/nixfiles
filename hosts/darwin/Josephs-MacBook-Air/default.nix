@@ -2,6 +2,20 @@
 let
   buildMachines = [
     {
+      hostName = "anacreon";
+      sshUser = "joseph";
+      system = "x86_64-linux";
+      speedFactor = 2;
+      maxJobs = 2;
+      supportedFeatures = [
+        "nixos-test"
+        "benchmark"
+        "big-parallel"
+        "kvm"
+      ];
+      protocol = "ssh-ng";
+    }
+    {
       hostName = "terminus";
       sshUser = "joseph";
       system = "x86_64-linux";
