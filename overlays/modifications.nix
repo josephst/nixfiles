@@ -1,7 +1,4 @@
 final: prev: {
-  # TODO: Remove this overlay once nixpkgs backrest reaches 1.13.0.
-  backrest = final.callPackage ../pkgsLinux/backrest/package.nix { };
-
   home-assistant-custom-components =
     let
       inherit (final.home-assistant.python3Packages) callPackage;
