@@ -1,6 +1,6 @@
 _: {
   networking = {
-    domain = "homelab.josephstahl.com";
+    domain = "anacreon.josephstahl.com";
     dhcpcd.enable = false;
     useHostResolvConf = false;
   };
