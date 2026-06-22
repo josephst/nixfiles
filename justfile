@@ -12,7 +12,7 @@ pkgs-update:
 switch:
   git add --all
   # sudo darwin-rebuild switch --flake .
-  DETSYS_IDS_TELEMETRY=disabled nh darwin switch .
+  nh darwin switch .
 [macos]
 update:
   brew update

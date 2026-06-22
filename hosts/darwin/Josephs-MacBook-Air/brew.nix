@@ -44,8 +44,9 @@ _: {
 
     masApps = {
       "Amphetamine" = 937984704;
+      "Crouton" = 1461650987;
       "Fantastical" = 975937182;
-      "1Password for Safari" = 1569813296;
+      "Keynote" = 361285480;
       "Microsoft Word" = 462054704;
       "Microsoft Excel" = 462058435;
       "Microsoft Outlook" = 985367838;
@@ -53,6 +54,11 @@ _: {
       "Microsoft OneNote" = 784801555;
       "OneDrive" = 823766827;
       "Xcode" = 497799835;
+
+      # safari
+      "Raindrop.io" = 1549370672;
+      "1Password for Safari" = 1569813296;
+      "Wipr 2" = 662217862;
     };
   };
 }
