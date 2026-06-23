@@ -58,7 +58,7 @@ _: {
       # safari
       "Raindrop.io" = 1549370672;
       "1Password for Safari" = 1569813296;
-      "Wipr 2" = 662217862;
+      "Wipr 2" = 1662217862;
     };
   };
 }
