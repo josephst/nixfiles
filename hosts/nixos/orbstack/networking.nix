@@ -2,7 +2,7 @@ _: {
   networking = {
     domain = "homelab.josephstahl.com";
     firewall.enable = false;
-    # networkmanager.enable = true; # Easiest to use and most distros use this by default.
+    networkmanager.enable = false; # networks are manually configured on orbstack
 
     # The global useDHCP flag is deprecated, therefore explicitly set to false here.
     # Per-interface useDHCP will be mandatory in the future, so this generated config
