@@ -3,19 +3,19 @@
   ...
 }:
 {
-  age.secrets.recyclarrApiKeys = {
-    file = ../../secrets/recyclarrApiKeys.yaml.age;
+  age.secrets = {
+    "recyclarr/sonarr-api-key".file = ../../secrets/recyclarr/sonarr-api-key.age;
+    "recyclarr/radarr-api-key".file = ../../secrets/recyclarr/radarr-api-key.age;
   };
-
   services.recyclarr = {
     enable = true;
-    secretsFile = config.age.secrets.recyclarrApiKeys.path;
-
     configuration = {
       sonarr = {
         mySonarr = {
           base_url = "http://localhost:8989";
-          api_key = "!secret sonarr_api_key";
+          api_key = {
+            _secret = config.age.secrets."recyclarr/sonarr-api-key".path;
+          };
 
           delete_old_custom_formats = true;
           replace_existing_custom_formats = true;
@@ -38,7 +38,9 @@
       radarr = {
         myRadarr = {
           base_url = "http://localhost:7878";
-          api_key = "!secret radarr_api_key";
+          api_key = {
+            _secret = config.age.secrets."recyclarr/radarr-api-key".path;
+          };
 
           delete_old_custom_formats = true;
           replace_existing_custom_formats = true;

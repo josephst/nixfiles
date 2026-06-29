@@ -11,7 +11,9 @@ in
   "paperless-admin.age".publicKeys = allKeys;
   "rclone.conf.age".publicKeys = allKeys;
   "smbpasswd.age".publicKeys = allKeys; # smb password database
-  "recyclarrApiKeys.yaml.age".publicKeys = allKeys; # API keys for radarr and sonarr
+
+  "recyclarr/sonarr-api-key.age".publicKeys = allKeys;
+  "recyclarr/radarr-api-key.age".publicKeys = allKeys;
 
   "hass/zwave-js-keys.json.age".publicKeys = allKeys;
   "hass/zigbee2mqtt.pass.age".publicKeys = allKeys;
