@@ -20,7 +20,7 @@ _: {
 
       # utility
       "appcleaner"
-      "logi-options+"
+      "linearmouse"
 
       # media
       "iina"
@@ -45,7 +45,6 @@ _: {
     masApps = {
       "Amphetamine" = 937984704;
       "Crouton" = 1461650987;
-      "Fantastical" = 975937182;
       "Keynote" = 361285480;
       "Microsoft Word" = 462054704;
       "Microsoft Excel" = 462058435;
