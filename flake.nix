@@ -180,7 +180,13 @@
 
       # `nix develop`
       devShells = helper.forAllSystems (
-        system: import ./shell.nix { pkgs = nixpkgs.legacyPackages.${system}; }
+        system:
+        import ./shell.nix {
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ overlays.default ];
+          };
+        }
       );
     };
 
