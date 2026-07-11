@@ -1,6 +1,7 @@
 _: {
   programs.fzf = {
     enable = true;
+    historyWidget.command = ""; # prevent conflict with Atuin
     colors = {
       fg = "-1";
       bg = "-1";
