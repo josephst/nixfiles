@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (pkgs.stdenv.hostPlatform) isLinux;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
   _1passEnabled =
     osConfig ? homebrew && lib.elem "1password-cli" (map (item: item.name) osConfig.homebrew.casks); # 1pass CLI auth only works when app integration is installed
 
@@ -65,6 +65,16 @@ in
     };
   };
 
+  programs.ghostty = lib.mkIf isDarwin {
+    enable = true;
+    package = null; # Installed with Homebrew; Home Manager owns only the configuration.
+    settings = {
+      command = lib.getExe pkgs.fish;
+      theme = "dark:Catppuccin Frappe,light:Catppuccin Latte";
+      keybind = "shift+enter=text:\\n";
+    };
+  };
+
   xdg.configFile = {
     # enable 1password cli plugins
     "op/plugins.sh" = {
@@ -74,11 +84,5 @@ in
         alias gh="op plugin run -- gh"
       '';
     };
-    "ghostty/config".text = ''
-      command = "${pkgs.fish}/bin/fish"
-
-      theme = dark:Catppuccin Frappe,light:Catppuccin Latte
-      keybind = shift+enter=text:\n
-    '';
   };
 }

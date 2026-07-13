@@ -15,7 +15,9 @@
       specialArgs = {
         inherit inputs outputs;
       };
-      modules = (builtins.attrValues outputs.nixosModules) ++ [
+      modules = [
+        ../modules/common/host-spec.nix
+        ../modules/common/myConfig
         ../hosts/nixos/${hostSpec.hostName}
         { inherit hostSpec myConfig; }
       ];
@@ -30,7 +32,9 @@
       specialArgs = {
         inherit inputs outputs;
       };
-      modules = (builtins.attrValues outputs.darwinModules) ++ [
+      modules = [
+        ../modules/common/host-spec.nix
+        ../modules/common/myConfig
         ../hosts/darwin/${hostSpec.hostName}
         { inherit myConfig hostSpec; }
       ];

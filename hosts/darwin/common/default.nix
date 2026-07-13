@@ -76,7 +76,7 @@
           PMPrintingExpandedStateForPrint2 = true;
 
           # Save to disk (not to iCloud) by default
-          NSDocumentSaveNewDocumentsToCloud = true;
+          NSDocumentSaveNewDocumentsToCloud = false;
 
           # Disable automatic termination of inactive apps
           NSDisableAutomaticTermination = true;

@@ -28,7 +28,7 @@ Personal Nix configuration for macOS and NixOS, built around a single flake with
 
 ### NixOS
 
-- `terminus` (`x86_64-linux`): primary homelab server with Home Assistant, media services, backups, Caddy, Copyparty, Ollama, and related services
+- `terminus` (`x86_64-linux`): currently dormant homelab configuration
 - `anacreon` (`x86_64-linux`): minimal server with Tailscale-first access and self-hosted services including Homepage, Backrest, Copyparty, and Paperless
 - `orbstack` (`aarch64-linux`): local Linux environment
 - `iso-gnome` (`x86_64-linux`): installer/live ISO configuration
@@ -41,10 +41,13 @@ Personal Nix configuration for macOS and NixOS, built around a single flake with
 just switch
 ```
 
-This stages tracked changes with `git add --all` and then uses `nh` to switch the active configuration:
+This uses `nh` to switch the active configuration:
 
 - macOS: `nh darwin switch .`
 - Linux: `nh os switch .`
+
+Nix flakes ignore untracked files. Explicitly stage newly created files that the
+configuration imports, but do not stage unrelated work merely to switch.
 
 ### Update inputs
 

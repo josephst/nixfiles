@@ -10,7 +10,6 @@ pkgs-update:
 
 [macos]
 switch:
-  git add --all
   # sudo darwin-rebuild switch --flake .
   nh darwin switch .
 [macos]
@@ -20,7 +19,6 @@ update:
 
 [linux]
 switch:
-  git add --all
   # sudo nixos-rebuild switch --flake .
   nh os switch .
 [linux]
@@ -35,5 +33,4 @@ gc age='7':
     nix-collect-garbage --delete-older-than {{ age }}d
 
 deploy:
-  git add --all
   nix run nixpkgs#nh -- os switch .#anacreon --target-host joseph@anacreon --build-host joseph@anacreon --use-substitutes

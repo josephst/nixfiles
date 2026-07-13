@@ -82,7 +82,6 @@
       overlays = import ./overlays { inherit inputs; };
       nixosModules = import ./modules/nixos;
       darwinModules = import ./modules/darwin;
-      homeManagerModules = import ./modules/home-manager;
       helper = import ./lib { inherit inputs outputs; };
 
       commonHostSpec = {
@@ -112,10 +111,12 @@
         packages
         nixosModules
         darwinModules
-        homeManagerModules
         ;
 
       formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
+      checks = helper.forAllSystems (system: {
+        formatting = treefmtEval.${system}.config.build.check self;
+      });
 
       # NixOS configuration entrypoint
       nixosConfigurations = {

@@ -14,6 +14,7 @@
     ./networking.nix
     ./services
 
+    ../../../modules/nixos/backrest.nix
     inputs.copyparty.nixosModules.default
   ];
 

@@ -42,6 +42,9 @@
     ## Dashboard
     ./services/homepage
 
+    ../../../modules/nixos/backrest.nix
+    ../../../modules/nixos/healthchecks.nix
+    ../../../modules/nixos/rclone-sync.nix
     inputs.lanzaboote.nixosModules.lanzaboote
     inputs.copyparty.nixosModules.default
   ];

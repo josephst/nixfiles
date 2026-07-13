@@ -1,4 +1,11 @@
 # Specifications For Differentiating Hosts
+let
+  supportedPlatforms = [
+    "aarch64-darwin"
+    "aarch64-linux"
+    "x86_64-linux"
+  ];
+in
 {
   config,
   pkgs,
@@ -45,7 +52,7 @@
     };
 
     platform = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.enum supportedPlatforms;
       description = "The platform of the host";
       default = "x86_64-linux";
     };
@@ -73,27 +80,16 @@
     };
 
     shell = lib.mkOption {
-      type = lib.types.enum [
-        pkgs.fish
-        pkgs.bash
-      ];
+      type = lib.types.package;
       default = pkgs.fish;
-      description = "Default shell (pkgs.fish or pkgs.bash)";
+      description = "Default login shell package";
     };
 
     tailnet = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      description = "Tailscale network identifier";
+      description = "Tailscale MagicDNS suffix used to construct host names";
     };
-
-    # stateVersion = lib.mkOption {
-    #   type = lib.types.oneOf [
-    #     lib.types.int
-    #     lib.types.str
-    #   ];
-    #   description = "stateVersion (int for nix-darwin, string for nixOS)";
-    # };
   };
 
   config = {
