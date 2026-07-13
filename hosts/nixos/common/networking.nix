@@ -27,7 +27,7 @@ in
       networkmanager = lib.mkIf (config.hostSpec.desktop != null) {
         # Use resolved for DNS resolution; tailscale MagicDNS requires it
         dns = "systemd-resolved";
-        enable = true;
+        enable = lib.mkDefault true;
         unmanaged = unmanagedInterfaces;
         wifi.backend = "iwd";
       };
