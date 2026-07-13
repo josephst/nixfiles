@@ -57,26 +57,23 @@ in
       default = "x86_64-linux";
     };
 
-    isMinimal = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Used to indicate a minimal configuration host";
+    role = lib.mkOption {
+      type = lib.types.enum [
+        "containerGuest"
+        "installer"
+        "server"
+        "workstation"
+      ];
+      description = "The host's primary operational role";
     };
 
-    isServer = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Used to indicate a server host";
-    };
-
-    desktop = lib.mkOption {
-      type = lib.types.nullOr (
-        lib.types.enum [
-          "Gnome"
-        ]
-      );
-      default = if (config.hostSpec.isServer || pkgs.stdenv.isDarwin) then null else "Gnome";
-      description = "Desktop environment (Gnome or null)";
+    cliProfile = lib.mkOption {
+      type = lib.types.enum [
+        "full"
+        "minimal"
+      ];
+      default = "full";
+      description = "Size of the interactive command-line tool profile";
     };
 
     shell = lib.mkOption {

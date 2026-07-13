@@ -94,8 +94,8 @@
         tailnet = "taildbd4c.ts.net";
       };
       myConfig = {
-        ghToken = ./secrets/ghToken.age;
         keys = import ./keys;
+        nixAccessTokensFile = ./secrets/ghToken.age;
       };
 
       treefmtEval = helper.forAllSystems (
@@ -126,8 +126,8 @@
           hostSpec = commonHostSpec // {
             hostName = "anacreon";
             platform = "x86_64-linux";
-            isMinimal = true;
-            isServer = true;
+            role = "server";
+            cliProfile = "minimal";
           };
           inherit myConfig;
         };
@@ -135,7 +135,7 @@
           hostSpec = commonHostSpec // {
             hostName = "terminus";
             platform = "x86_64-linux";
-            isServer = true;
+            role = "server";
           };
           inherit myConfig;
         };
@@ -143,6 +143,7 @@
           hostSpec = commonHostSpec // {
             hostName = "orbstack";
             platform = "aarch64-linux";
+            role = "containerGuest";
           };
           inherit myConfig;
         };
@@ -150,6 +151,7 @@
           hostSpec = commonHostSpec // {
             hostName = "iso-gnome";
             platform = "x86_64-linux";
+            role = "installer";
             userFullName = "Joseph (Nix Installer)";
           };
           inherit myConfig;
@@ -161,6 +163,7 @@
           hostSpec = commonHostSpec // {
             hostName = "Josephs-MacBook-Air";
             platform = "aarch64-darwin";
+            role = "workstation";
           };
           inherit myConfig;
         };

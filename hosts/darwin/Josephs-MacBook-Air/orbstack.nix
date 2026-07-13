@@ -1,4 +1,12 @@
-_: {
+_:
+let
+  supportedFeatures = [
+    "nixos-test"
+    "benchmark"
+    "big-parallel"
+  ];
+in
+{
   home-manager.users.root.programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
@@ -32,22 +40,12 @@ _: {
       {
         hostName = "nixos@orb";
         system = "aarch64-linux";
-        supportedFeatures = [
-          "nixos-test"
-          "benchmark"
-          "big-parallel"
-          "kvm"
-        ];
+        inherit supportedFeatures;
       }
       {
         hostName = "nixos@orb";
         system = "x86_64-linux";
-        supportedFeatures = [
-          "nixos-test"
-          "benchmark"
-          "big-parallel"
-          "kvm"
-        ];
+        inherit supportedFeatures;
       }
     ];
     distributedBuilds = true;

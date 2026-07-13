@@ -7,6 +7,7 @@
 {
   imports = [
     ../common
+    ../common/roles/server.nix
     ../../common
 
     ./hardware-configuration.nix
@@ -29,6 +30,9 @@
     grub.enable = true;
     systemd-boot.enable = lib.mkForce false;
   };
+
+  system.stateVersion = "25.11";
+  home-manager.users.${config.hostSpec.username}.home.stateVersion = "26.05";
 
   services = {
     openssh.openFirewall = false;

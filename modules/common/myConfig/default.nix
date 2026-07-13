@@ -1,6 +1,6 @@
 {
   imports = [
-    ./ghToken.nix
     ./keys.nix
+    ./nix-access-tokens.nix
   ];
 }

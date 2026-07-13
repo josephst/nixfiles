@@ -9,13 +9,13 @@
 buildHomeAssistantComponent rec {
   owner = "ZacheryThomas";
   domain = "smartrent";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "ZacheryThomas";
     repo = "homeassistant-smartrent";
     rev = "v${version}";
-    hash = "sha256-6+FJNbv4UCHifr4HxxwZi7UrddQzkCYkgWA1IPBVuBI=";
+    hash = "sha256-h2oC3Aak6+tO+YCD0UrEROuJtJWg7Zq6iniNg4Lxug8=";
   };
 
   dependencies = [

@@ -1,10 +1,10 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This flake-driven repo centralizes host and user configs under `flake.nix`, aided by helpers in `lib/helpers.nix`. Shared modules live in `modules/common/`, with Darwin-only logic in `modules/darwin/` and NixOS specifics in `modules/nixos/`. Host definitions sit in `hosts/`, while `home/` contains home-manager profiles (e.g., `home/joseph`). Custom packages and overlays reside in `pkgs/`, `pkgsLinux/`, and `overlays/`; secrets are age-encrypted in `secrets/` and user-scoped secrets under `home/joseph/secrets/`. Keep new modules small and compose them via imports in the relevant host file.
+This flake-driven repo centralizes host and user configs under `flake.nix`, aided by helpers in `lib/helpers.nix`. Shared modules live in `modules/common/`, with Darwin exports in `modules/darwin/` and NixOS specifics in `modules/nixos/`. Host definitions sit in `hosts/`, while `home/` contains Home Manager profiles such as `home/joseph`. Custom packages and overlays reside in `pkgs/`, `pkgsLinux/`, and `overlays/`; secrets are age-encrypted in `secrets/` and user-scoped secrets under `home/joseph/secrets/`. Keep new modules small and compose them via imports in the relevant host file.
 
 ## Build, Test, and Development Commands
-- `just switch`: stages changes with `git add --all`, then builds and activates the correct platform configuration.
+- `just switch`: builds and activates the current platform configuration with `nh`; stage newly imported files explicitly because Git flakes ignore untracked paths.
 - `nix develop`: enter a dev shell with repo toolchain and linting utilities.
 - `nix flake check`: run evaluation, formatting, and lint checks; use before opening a PR.
 - `nix build .#darwinConfigurations.<host>.system` or `.#nixosConfigurations.<host>.config.system.build.toplevel`: dry-run specific systems without switching.

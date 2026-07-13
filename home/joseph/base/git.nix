@@ -8,11 +8,7 @@
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 
-  gitSigningKey =
-    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signingKeys then
-      lib.getAttr "joseph" osConfig.myConfig.keys.signingKeys
-    else
-      null;
+  gitSigningKey = osConfig.myConfig.keys.signingKeys.${config.home.username} or null;
 in
 {
   programs.git = {

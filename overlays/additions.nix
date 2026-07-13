@@ -1,4 +1,3 @@
 final: _prev:
-# this adds custom pkgs in the same namespace as all other packages
-# (ie nixpkgs.recyclarr)
+# Add repository-local packages to the main package namespace.
 import ../pkgs { pkgs = final; }

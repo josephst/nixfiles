@@ -1,11 +1,9 @@
 {
   config,
-  lib,
   ...
 }:
 let
   inherit (config.networking) domain;
-  tailscaleServe = lib.getExe config.services.tailscale.package;
 in
 {
   services = {
@@ -40,31 +38,6 @@ in
             }
         }
       '';
-    };
-  };
-
-  systemd.services.anacreon-backrest-tailscale-serve = {
-    description = "Tailscale Serve proxy for Anacreon Backrest";
-    after = [
-      "backrest.service"
-      "tailscaled.service"
-      "tailscaled-autoconnect.service"
-      "tailscaled-set.service"
-    ];
-    wants = [ "tailscaled.service" ];
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = lib.concatStringsSep " " [
-        tailscaleServe
-        "serve"
-        "--service=svc:backrest"
-        "--https=443"
-        "http://127.0.0.1:9898"
-      ];
-      ExecStop = "${tailscaleServe} serve clear svc:backrest";
     };
   };
 }

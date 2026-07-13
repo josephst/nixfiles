@@ -1,8 +1,9 @@
 let
   keys = import ../../../../keys;
 
-  hostKeys = if keys.hostKeys ? anacreon then [ keys.hostKeys.anacreon ] else [ ];
-  publicKeys = builtins.attrValues keys.ageRecipients.joseph ++ hostKeys;
+  # Accessing the attribute directly makes a missing host recipient an
+  # evaluation error rather than silently producing user-only ciphertext.
+  publicKeys = builtins.attrValues keys.ageRecipients.joseph ++ [ keys.hostKeys.anacreon ];
 in
 {
   "cloudflare-dns.age".publicKeys = publicKeys;

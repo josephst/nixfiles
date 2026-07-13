@@ -8,7 +8,10 @@ let
   inherit (config) hostSpec;
 in
 {
-  environment.systemPackages = lib.optional (hostSpec.desktop != null) pkgs.trayscale;
+  environment.systemPackages = lib.optional (lib.elem hostSpec.role [
+    "installer"
+    "workstation"
+  ]) pkgs.trayscale;
 
   services.tailscale = {
     enable = true;

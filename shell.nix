@@ -8,17 +8,17 @@
     # Enable experimental features without having to specify the argument
     NIX_CONFIG = "experimental-features = nix-command flakes";
     packages = with pkgs; [
-      # agenix
-      nixfmt
+      actionlint
       bashInteractive
       curl
+      deadnix
       git
       helix
       home-manager
+      nixfmt
+      shellcheck
       starship
+      statix
     ];
-    # shellHook = ''
-    #   eval "$(${pkgs.starship}/bin/starship init bash)"
-    # '';
   };
 }

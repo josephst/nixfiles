@@ -1,28 +1,12 @@
+{ config, ... }:
 {
-  config,
-  ...
-}:
-let
-  repositorySecretFile = ../secrets/restic/paperless-repository.age;
-  passwordSecretFile = ../secrets/restic/paperless-password.age;
-  environmentSecretFile = ../secrets/restic/paperless.env.age;
-in
-{
-  age.secrets = {
-    "restic/paperless-repository".file = repositorySecretFile;
-    "restic/paperless-password".file = passwordSecretFile;
-    "restic/paperless.env".file = environmentSecretFile;
-  };
-
   services.restic.backups.paperless = {
     initialize = true;
     repositoryFile = config.age.secrets."restic/paperless-repository".path;
     passwordFile = config.age.secrets."restic/paperless-password".path;
     environmentFile = config.age.secrets."restic/paperless.env".path;
 
-    paths = [
-      "/var/lib/paperless/export"
-    ];
+    paths = [ "/var/lib/paperless/export" ];
 
     extraBackupArgs = [
       "--cleanup-cache"

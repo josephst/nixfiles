@@ -2,6 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
+  config,
   pkgs,
   lib,
   inputs,
@@ -10,6 +11,7 @@
 {
   imports = [
     ../common # nixos common
+    ../common/roles/server.nix
     ../../common # nixos AND nix-darwin common
 
     # Include the results of the hardware scan.
@@ -95,6 +97,14 @@
   };
 
   environment.systemPackages = [ pkgs.sbctl ];
+
+  system.stateVersion = "25.11";
+  home-manager.users.${config.hostSpec.username}.home.stateVersion = "26.05";
+  users.users.${config.hostSpec.username}.extraGroups = [
+    "media"
+    "incus-admin"
+    "render"
+  ];
 
   # List services that you want to enable:
   services = {

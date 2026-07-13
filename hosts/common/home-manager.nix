@@ -19,6 +19,5 @@ in
     };
     backupFileExtension = ".backup-pre-hm";
     users.${username} = import home;
-    users.root.home.stateVersion = "25.11"; # avoid error
   };
 }

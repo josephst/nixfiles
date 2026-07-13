@@ -7,6 +7,8 @@
 }:
 let
   inherit (pkgs.stdenv) isLinux isDarwin;
+  isMinimal = osConfig.hostSpec.cliProfile == "minimal";
+  isServer = osConfig.hostSpec.role == "server";
 in
 {
   imports = [
@@ -24,18 +26,16 @@ in
     ./ssh.nix
     ./starship.nix
   ]
-  ++ lib.optionals (!osConfig.hostSpec.isMinimal) [
+  ++ lib.optionals (!isMinimal) [
     ./nushell
     ./zellij
   ];
 
-  age.secrets."1password-serviceacct.env" = {
-    file = ../secrets/1pass.env.age;
-  };
-  age.secrets."1password-serviceacct-fish" = {
-    # same contents as above, but without the `OP_SERVICE_ACCOUNT_TOKEN` part
-    # fish doesn't want an ENV file, it just wants the string
-    file = ../secrets/1pass.age;
+  age.secrets = lib.mkIf isServer {
+    "1password-serviceacct.env".file = ../secrets/1pass.env.age;
+    # Same value as above without the OP_SERVICE_ACCOUNT_TOKEN assignment;
+    # Fish consumes the token rather than an environment file.
+    "1password-serviceacct-fish".file = ../secrets/1pass.age;
   };
 
   home.packages =
@@ -51,7 +51,6 @@ in
       doggo # better dig
       dua # modern du
       duf # modern df
-      fd # find
       git-credential-manager
       ipfetch # IP info
       just # command runner
@@ -68,14 +67,12 @@ in
       restic # backup
       rsync # syncing
     ]
-    ++ lib.optionals (!osConfig.hostSpec.isMinimal) [
-      delta # git and diff viewer
+    ++ lib.optionals (!isMinimal) [
       diffsitter # better diff
       glow # markdown on terminal
       httpie # better curl
       hugo # static website builder
       hyperfine # command-line benchmarking
-      lazygit # git with TUI
       magic-wormhole
       speedtest-go # speedtest CLI
       (python3.withPackages (
@@ -119,7 +116,7 @@ in
 
         set -x SHELL ${pkgs.fish}/bin/fish
       ''
-      + lib.optionalString osConfig.hostSpec.isServer ''
+      + lib.optionalString isServer ''
         if test -r "$XDG_RUNTIME_DIR/agenix/1password-serviceacct-fish"
           set -x OP_SERVICE_ACCOUNT_TOKEN (${pkgs.coreutils}/bin/cat "$XDG_RUNTIME_DIR/agenix/1password-serviceacct-fish")
         end
@@ -149,14 +146,14 @@ in
     };
     npm.enable = true; # installs NPM and Node.js
     ripgrep.enable = true;
-    uv = lib.mkIf (!osConfig.hostSpec.isMinimal) {
+    uv = lib.mkIf (!isMinimal) {
       enable = true;
       settings = {
         python-downloads = "never";
         python-preference = "only-system"; # let Nix manage python install
       };
     };
-    yazi = lib.mkIf (!osConfig.hostSpec.isMinimal) {
+    yazi = lib.mkIf (!isMinimal) {
       enable = true;
       enableBashIntegration = true;
       enableFishIntegration = true;

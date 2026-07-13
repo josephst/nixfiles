@@ -1,10 +1,11 @@
-_: {
+{ pkgs, ... }:
+{
   programs.fish = {
     enable = true;
     plugins = [ ];
 
     shellAbbrs = {
-      webshare = "python -m http.server 8080";
+      webshare = "${pkgs.python3}/bin/python -m http.server 8080";
     };
   };
 }

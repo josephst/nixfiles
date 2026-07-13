@@ -15,17 +15,6 @@
   ];
 
   config = {
-    hardware.enableRedistributableFirmware = lib.mkDefault true;
-    boot = {
-      loader.systemd-boot = {
-        enable = lib.mkDefault true;
-        configurationLimit = lib.mkOverride 1337 10;
-      };
-      loader.timeout = lib.mkDefault 3;
-      kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-      tmp.useTmpfs = lib.mkDefault true;
-    };
-    zramSwap.enable = lib.mkDefault true;
     time.timeZone = lib.mkDefault "America/New_York";
 
     # user configuration
@@ -48,14 +37,6 @@
           StreamLocalBindUnlink = "yes";
           # Allow forwarding ports to everywhere
           GatewayPorts = "clientspecified";
-          # Use key exchange algorithms recommended by `nixpkgs#ssh-audit`
-          KexAlgorithms = [
-            "curve25519-sha256"
-            "curve25519-sha256@libssh.org"
-            "diffie-hellman-group16-sha512"
-            "diffie-hellman-group18-sha512"
-            "sntrup761x25519-sha512@openssh.com"
-          ];
         };
       };
     };
@@ -71,13 +52,6 @@
         pkgs.wezterm.terminfo
         pkgs.rsync
         pkgs.tmux
-
-        # hardware
-        pkgs.nvme-cli
-        pkgs.lshw
-        pkgs.usbutils
-        pkgs.pciutils
-        pkgs.smartmontools
 
         # shells
         pkgs.bashInteractive
@@ -95,12 +69,5 @@
       nix-ld.enable = true;
     };
 
-    systemd.settings.Manager = {
-      DefaultTimeoutStopSec = "10s";
-    };
-
-    system = {
-      stateVersion = "25.11";
-    };
   };
 }

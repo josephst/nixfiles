@@ -5,26 +5,29 @@
   ...
 }:
 let
+  isGraphicalRole = lib.elem config.hostSpec.role [
+    "installer"
+    "workstation"
+  ];
   unmanagedInterfaces = lib.optionals config.services.tailscale.enable [ "tailscale0" ];
 
   # Trust the tailscale interface, if tailscale is enabled
   trustedInterfaces = lib.optionals config.services.tailscale.enable [ "tailscale0" ];
 
   FallbackDNS = [
-    "1.1.1.1"
-    "8.8.8.8"
     "1.1.1.1#one.one.one.one"
+    "8.8.8.8"
   ];
 in
 {
   config = {
-    systemd.network.enable = lib.mkDefault (config.hostSpec.desktop == null); # use systemd-networkd on non-graphical systems
+    systemd.network.enable = lib.mkDefault (!isGraphicalRole); # use systemd-networkd on non-graphical systems
     networking = {
       firewall = {
         enable = lib.mkDefault true;
         inherit trustedInterfaces;
       };
-      networkmanager = lib.mkIf (config.hostSpec.desktop != null) {
+      networkmanager = lib.mkIf isGraphicalRole {
         # Use resolved for DNS resolution; tailscale MagicDNS requires it
         dns = "systemd-resolved";
         enable = lib.mkDefault true;
@@ -41,6 +44,8 @@ in
         settings = {
           Resolve = {
             Domains = [ "~." ];
+            # Tailscale owns split DNS. Keep encrypted/validated fallback DNS
+            # disabled here rather than implying it applies to MagicDNS.
             DNSOverTLS = "false";
             DNSSEC = "false";
             inherit FallbackDNS;

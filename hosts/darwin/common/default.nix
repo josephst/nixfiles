@@ -1,6 +1,8 @@
 # modules/darwin/myConfig/default.nix
 {
+  config,
   inputs,
+  lib,
   pkgs,
   ...
 }:
@@ -49,10 +51,24 @@
     };
 
     nix.enable = false; # using Determinate Nix on macOS
-    determinateNix.enable = true;
+    determinateNix = {
+      enable = true;
+      customSettings = lib.getAttrs [
+        "builders-use-substitutes"
+        "experimental-features"
+        "extra-substituters"
+        "extra-trusted-public-keys"
+        "log-lines"
+        "trusted-users"
+        "use-xdg-base-directories"
+      ] config.nix.settings;
+    };
+
+    # Determinate renders ordinary settings above; the raw fragment is kept
+    # only because Nix's `!include` syntax is not a normal setting value.
+    environment.etc."nix/nix.custom.conf".text = config.nix.extraOptions;
 
     system = {
-      stateVersion = 6;
       defaults = {
         # Don't show recent applications in the dock
         dock.show-recents = false;

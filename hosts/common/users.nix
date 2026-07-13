@@ -8,7 +8,6 @@
 let
   inherit (config) hostSpec;
   inherit (pkgs.stdenv) isLinux;
-  ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
 {
   age.secrets.password = lib.mkIf (hostSpec.passwordFile != null) {
@@ -31,13 +30,7 @@ in
         uid
         ;
       hashedPasswordFile = lib.mkIf (hostSpec.passwordFile != null) config.age.secrets.password.path;
-      extraGroups = ifTheyExist [
-        "wheel"
-        "networkmanager"
-        "media"
-        "incus-admin"
-        "render"
-      ];
+      extraGroups = [ "wheel" ];
       packages = [ pkgs.home-manager ];
     };
   };

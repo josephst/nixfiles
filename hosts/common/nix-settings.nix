@@ -23,9 +23,6 @@ let
       key = "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM=";
     }
   ];
-  substituterUrls = lib.concatStringsSep " " (map (a: a.url) substituters);
-  keys = lib.concatStringsSep " " (map (a: a.key) substituters);
-
   # Platform-specific trusted users
   trustedUsers = if pkgs.stdenv.isDarwin then [ "@admin" ] else [ "@wheel" ];
 in
@@ -59,18 +56,5 @@ in
         automatic = lib.mkIf config.nix.enable true;
       };
     };
-
-    # write nix.custom.conf configuration, if using Determinate Nix
-    # note: not using module configuration (https://determinate.systems/blog/changelog-determinate-nix-386/) because
-    # it does not support "!include file_path" syntax
-    environment.etc."nix/nix.custom.conf".text = config.nix.extraOptions + ''
-      eval-cores = 0
-      trusted-users = ${lib.concatStringsSep " " trustedUsers}
-      log-lines = 25
-      builders-use-substitutes = true
-
-      extra-substituters = ${substituterUrls}
-      extra-trusted-public-keys = ${keys}
-    '';
   };
 }
