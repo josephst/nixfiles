@@ -9,8 +9,8 @@ let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 
   gitSigningKey =
-    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then
-      lib.getAttr "joseph" osConfig.myConfig.keys.signing
+    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signingKeys then
+      lib.getAttr "joseph" osConfig.myConfig.keys.signingKeys
     else
       null;
 in
@@ -56,8 +56,7 @@ in
       pull = {
         rebase = true;
       };
-      brach.sort = "-committerdate";
-      rebase.autosquash = true;
+      branch.sort = "-committerdate";
       # delta options
       delta.navigate = true;
       merge.conflictstyle = "zdiff3";

@@ -84,7 +84,7 @@ in
         ]
       )) # python
       tealdeer # cheatsheets in terminal
-      stable.yt-dlp # youtube-dl
+      yt-dlp # youtube-dl
     ]
     ++ lib.optionals isLinux [
       iw # terminal wifi info
@@ -165,7 +165,6 @@ in
     zoxide.enable = true;
     zsh = {
       enable = true;
-      dotDir = "${config.xdg.configHome}/zsh";
       initContent =
         let
           zshConfigEarlyInit = lib.mkBefore ''

@@ -2,14 +2,19 @@
 
 Based on [ambroisie nixconfig](https://github.com/ambroisie/nix-config/blob/9e89b4dd36b3b98430a8460e7c53f1e6185f116d/keys/default.nix)
 
-Divided into:
-- `users`: User SSH keys (such as those found at `~./ssh/id_ed25519.pub`).
-These should be unique, so that the same user on different systems has a unique key. 
-- `hosts`: Host SSH keys (found at `/etc/ssh/etc/ssh/ssh_host_ed25519_key.pub`)
+Keys are divided by purpose:
+
+- `loginKeys`: user SSH login keys. These should be unique per user and machine.
+- `ageRecipients`: keys allowed to decrypt Agenix secrets. This includes the
+  login keys plus dedicated decryption and rekeying keys, but only `loginKeys`
+  are installed in `authorized_keys`.
+- `hostKeys`: SSH host keys (found at `/etc/ssh/ssh_host_ed25519_key.pub`).
+- `signingKeys`: Git commit-signing public keys.
 
 If a host SSH key does not exist, it can be created with `sudo ssh-keygen -A`.
 
-As new systems are created, add them to `hosts` and rekey secrets if necessary. 
+As new systems are created, add them to `hostKeys` and `loginKeys`, include the
+login key in `ageRecipients`, and rekey secrets if necessary.
 
 ## Using
 

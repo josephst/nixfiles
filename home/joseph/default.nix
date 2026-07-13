@@ -11,8 +11,8 @@ let
     osConfig ? homebrew && lib.elem "1password-cli" (map (item: item.name) osConfig.homebrew.casks); # 1pass CLI auth only works when app integration is installed
 
   gitSigningKey =
-    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then
-      lib.getAttr "joseph" osConfig.myConfig.keys.signing
+    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signingKeys then
+      lib.getAttr "joseph" osConfig.myConfig.keys.signingKeys
     else
       null;
 in

@@ -29,13 +29,13 @@ in
       knownHosts =
         commonKnownHosts
         // lib.optionalAttrs (cfg.keys != null) lib.mapAttrs (hostname: _value: {
-          publicKey = cfg.keys.hosts.${hostname};
+          publicKey = cfg.keys.hostKeys.${hostname};
           hostNames = [
             hostname
           ]
           ++ lib.optional (config.hostSpec.tailnet != null) "${hostname}.${config.hostSpec.tailnet}"
           ++ lib.optional (hostname == config.networking.hostName) "localhost";
-        }) cfg.keys.hosts;
+        }) cfg.keys.hostKeys;
     };
   };
 }

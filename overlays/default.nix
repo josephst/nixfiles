@@ -7,6 +7,8 @@ let
       inherit (final.stdenv.hostPlatform) system;
       config.allowUnfree = true;
     };
+    # Keep a stable package set available as an escape hatch when an unstable
+    # package regresses, even when no package currently consumes it.
     stable = import inputs.nixpkgs-stable {
       inherit (final.stdenv.hostPlatform) system;
       config.allowUnfree = true;

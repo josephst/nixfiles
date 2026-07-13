@@ -1,8 +1,8 @@
 let
   keys = import ../../../../keys;
 
-  hostKeys = if keys.hosts ? anacreon then [ keys.hosts.anacreon ] else [ ];
-  publicKeys = builtins.attrValues keys.users.joseph ++ hostKeys;
+  hostKeys = if keys.hostKeys ? anacreon then [ keys.hostKeys.anacreon ] else [ ];
+  publicKeys = builtins.attrValues keys.ageRecipients.joseph ++ hostKeys;
 in
 {
   "cloudflare-dns.age".publicKeys = publicKeys;

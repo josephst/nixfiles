@@ -7,7 +7,6 @@
 
 let
   inherit (config) hostSpec;
-  inherit (config.myConfig) keys;
   inherit (pkgs.stdenv) isLinux;
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
@@ -40,13 +39,6 @@ in
         "render"
       ];
       packages = [ pkgs.home-manager ];
-    };
-
-    users.root = lib.mkIf isLinux {
-      hashedPassword = null; # only permit ssh keys for root
-      openssh.authorizedKeys.keys = lib.optionals (
-        keys != null && lib.hasAttrByPath [ "users" "joseph" ] keys
-      ) (builtins.attrValues keys.users.joseph);
     };
   };
 }

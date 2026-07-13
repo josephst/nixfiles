@@ -41,7 +41,8 @@
         openFirewall = lib.mkDefault true;
         settings = {
           PasswordAuthentication = lib.mkDefault false;
-          PermitRootLogin = "prohibit-password";
+          # Log in as the normal user and elevate with sudo instead.
+          PermitRootLogin = "no";
 
           # Automatically remove stale sockets
           StreamLocalBindUnlink = "yes";
