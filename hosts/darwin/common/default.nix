@@ -10,6 +10,7 @@
     inputs.determinate.darwinModules.default
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
+    inputs.nix-homebrew.darwinModules.nix-homebrew
 
     ./brew.nix
     ./networking.nix
