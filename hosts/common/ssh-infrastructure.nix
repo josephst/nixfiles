@@ -28,7 +28,7 @@ in
     programs.ssh = {
       knownHosts =
         commonKnownHosts
-        // lib.optionals (cfg.keys != null) lib.mapAttrs (hostname: _value: {
+        // lib.optionalAttrs (cfg.keys != null) lib.mapAttrs (hostname: _value: {
           publicKey = cfg.keys.hosts.${hostname};
           hostNames = [
             hostname

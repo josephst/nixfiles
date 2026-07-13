@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   modulesPath,
   ...
 }:
@@ -26,9 +25,6 @@
   # * https://gitlab.gnome.org/GNOME/gnome-control-center/issues/22
   services.displayManager.gdm.autoSuspend = false;
 
-  # override upstream
-  environment.variables.QT_QPA_PLATFORM = lib.mkForce null;
-
   services.desktopManager.gnome = {
     # Add Firefox and other tools useful for installation to the launcher
     favoriteAppsOverride = ''
@@ -42,9 +38,6 @@
       welcome-dialog-last-shown-version='9999999999'
       [org.gnome.desktop.session]
       idle-delay=0
-      [org.gnome.settings-daemon.plugins.power]
-      sleep-inactive-ac-type='nothing'
-      sleep-inactive-battery-type='nothing'
     '';
 
     extraGSettingsOverridePackages = [ pkgs.gnome-settings-daemon ];
