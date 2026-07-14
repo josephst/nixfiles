@@ -30,6 +30,11 @@ in
                 default = { };
                 description = "SSH login keys per user and machine";
               };
+              recipientGroups = mkOption {
+                type = types.attrsOf (types.listOf types.str);
+                default = { };
+                description = "Named Agenix recipient groups by purpose or host";
+              };
               signingKeys = mkOption {
                 type = types.attrsOf types.str;
                 default = { };

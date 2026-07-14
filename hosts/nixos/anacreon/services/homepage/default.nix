@@ -13,12 +13,12 @@ let
       root = ./.;
       fileset = fs.unions [
         ./index.html
-        ./new.min.css
+        ./style.css
       ];
     };
     installPhase = ''
       mkdir -p $out
-      cp index.html new.min.css $out/
+      cp index.html style.css $out/
     '';
   };
 in

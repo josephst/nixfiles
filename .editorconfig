@@ -10,16 +10,20 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-# Match json/lockfiles/markdown/nix/perl/python/ruby/shell/docbook files, set indent to spaces
-[*.{json,lock,md,nix,pl,pm,py,rb,sh,xml}]
+# Use spaces for the hand-authored text formats in this repository.
+[*.{json,lock,md,nix,pl,pm,py,rb,sh,toml,xml,yaml,yml}]
 indent_style = space
+
+[justfile]
+indent_style = space
+indent_size = 2
 
 # Match docbook files, set indent width of one
 [*.xml]
 indent_size = 1
 
-# Match json/lockfiles/markdown/nix/ruby files, set indent width of two
-[*.{json,lock,md,nix,rb}]
+# Match two-space configuration and documentation formats.
+[*.{json,lock,md,nix,rb,toml,yaml,yml}]
 indent_size = 2
 
 # Match perl/python/shell scripts, set indent width of four

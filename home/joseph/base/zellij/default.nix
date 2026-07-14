@@ -1,7 +1,7 @@
 _: {
   programs.zellij = {
     enable = true;
-    attachExistingSession = true;
+    attachExistingSession = false;
     layouts.default_layout = ./default_layout.kdl;
     settings = {
       default_shell = "fish";
@@ -10,7 +10,7 @@ _: {
     };
 
     enableBashIntegration = false;
-    enableFishIntegration = true;
+    enableFishIntegration = false;
     enableZshIntegration = false;
   };
 }

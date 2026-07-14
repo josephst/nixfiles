@@ -16,6 +16,11 @@ If a host SSH key does not exist, it can be created with `sudo ssh-keygen -A`.
 As new systems are created, add them to `hostKeys` and `loginKeys`, include the
 login key in `ageRecipients`, and rekey secrets if necessary.
 
+Rekey secrets in place with `agenix -r` while the dedicated rekeying identity is
+available. Do not copy private identities into `~/Downloads` or another
+world-readable/stale export location; if a temporary copy is unavoidable, use a
+mode-`0700` temporary directory and remove it immediately afterwards.
+
 ## Using
 
 When secrets are needed, create a `secrets/` folder.

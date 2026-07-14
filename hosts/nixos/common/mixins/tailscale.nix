@@ -24,6 +24,8 @@ in
   };
 
   systemd.services.tailscaled.environment = {
+    # Unset currently selects iptables; "auto" lets Tailscale detect and use
+    # the nftables backend enabled by the shared NixOS networking module.
     "TS_DEBUG_FIREWALL_MODE" = "auto";
   };
 }

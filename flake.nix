@@ -149,12 +149,18 @@
         };
         iso-gnome = helper.mkNixos {
           hostSpec = commonHostSpec // {
+            cliProfile = "minimal";
             hostName = "iso-gnome";
+            # A freshly booted installer cannot possess any persistent host's
+            # Agenix identity. Use the upstream live-user authentication.
+            passwordFile = null;
             platform = "x86_64-linux";
             role = "installer";
             userFullName = "Joseph (Nix Installer)";
           };
-          inherit myConfig;
+          myConfig = myConfig // {
+            nixAccessTokensFile = null;
+          };
         };
       };
 
@@ -164,6 +170,7 @@
             hostName = "Josephs-MacBook-Air";
             platform = "aarch64-darwin";
             role = "workstation";
+            uid = 501;
           };
           inherit myConfig;
         };

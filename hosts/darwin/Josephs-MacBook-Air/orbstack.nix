@@ -1,4 +1,4 @@
-_:
+{ config, ... }:
 let
   supportedFeatures = [
     "nixos-test"
@@ -29,7 +29,9 @@ in
         User = "default";
         IdentitiesOnly = true;
         IdentityFile = "/Users/joseph/.orbstack/ssh/id_ed25519";
-        ProxyCommand = "env HOME=/Users/joseph '/Applications/OrbStack.app/Contents/Frameworks/OrbStack Helper.app/Contents/MacOS/OrbStack Helper' ssh-proxy-fdpass";
+        # OrbStack's current helper protocol requires the macOS UID and home
+        # after the subcommand, even when root/Nix invokes the proxy.
+        ProxyCommand = "env HOME=${config.hostSpec.home} '/Applications/OrbStack.app/Contents/Frameworks/OrbStack Helper.app/Contents/MacOS/OrbStack Helper' ssh-proxy-fdpass ${toString config.hostSpec.uid} ${config.hostSpec.home}";
         ProxyUseFdpass = "yes";
       };
     };

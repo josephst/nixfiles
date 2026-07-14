@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
 
   gitSigningKey = osConfig.myConfig.keys.signingKeys.${config.home.username} or null;
 in
@@ -66,8 +66,7 @@ in
         autoupdate = true;
       };
       help.autocorrect = "prompt";
-    }
-    // lib.optionalAttrs isLinux { credential.credentialStore = "cache"; };
+    };
     signing = {
       signByDefault = gitSigningKey != null;
       format = "ssh";

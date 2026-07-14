@@ -62,19 +62,14 @@ On macOS this also runs `brew update` before `nix flake update --commit-lock-fil
 just deploy
 ```
 
-The current deploy recipe targets `anacreon` with `nixos-rebuild` over SSH:
+The current deploy recipe targets `anacreon` with `nh` over SSH:
 
 ```bash
-nix run nixpkgs#nixos-rebuild -- \
+nix run nixpkgs#nh -- os switch .#anacreon \
   --target-host joseph@anacreon \
-  --sudo switch \
-  --flake .#anacreon \
-  --build-host anacreon \
-  --no-reexec \
+  --build-host joseph@anacreon \
   --use-substitutes
 ```
-
-If remote activation needs a password prompt, rerun with `--ask-sudo-password` so the remote `sudo` step can complete interactively.
 
 ### Check and format
 
@@ -149,6 +144,11 @@ own unprivileged user and owns repository retention, checks, browsing, and
 staged restores. It does not receive read or write access to Paperless's live
 data. Restore into a directory under `/var/lib/backrest` first, then import or
 copy data deliberately as root.
+
+The step-by-step backup-chain and staged-restore procedure is documented in
+[`docs/anacreon-recovery.md`](docs/anacreon-recovery.md). A Paperless import
+must use a completely empty instance running the same Paperless version that
+created the export.
 
 ## Notes
 
