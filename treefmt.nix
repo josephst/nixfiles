@@ -2,7 +2,12 @@
 _: {
   # Used to find the project root
   projectRootFile = "flake.nix";
-  programs.nixfmt.enable = true;
-  programs.deadnix.enable = true;
-  programs.statix.enable = true;
+  programs = {
+    actionlint.enable = true;
+    deadnix.enable = true;
+    just.enable = true;
+    nixfmt.enable = true;
+    shellcheck.enable = true;
+    statix.enable = true;
+  };
 }

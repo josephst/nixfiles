@@ -75,8 +75,14 @@ nix run nixpkgs#nh -- os switch .#anacreon \
 
 ```bash
 nix fmt
-nix flake check --all-systems
+nix flake check --all-systems --no-build
+nix flake check
 ```
+
+The first command evaluates every exported system without requiring builders
+for every platform. The second builds the checks native to the current machine;
+use a full `--all-systems` check when the configured remote builders are
+available.
 
 For targeted builds:
 
@@ -149,6 +155,10 @@ The step-by-step backup-chain and staged-restore procedure is documented in
 [`docs/anacreon-recovery.md`](docs/anacreon-recovery.md). A Paperless import
 must use a completely empty instance running the same Paperless version that
 created the export.
+
+The repository-wide architecture and technical-debt audit, including retained
+workarounds and their removal conditions, is maintained in
+[`CODEBASE_REVIEW.md`](CODEBASE_REVIEW.md).
 
 ## Notes
 

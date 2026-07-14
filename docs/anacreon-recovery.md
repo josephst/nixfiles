@@ -80,4 +80,3 @@ Do not run `document_importer` against the existing production database or data
 directories. After import, recreate API tokens, verify document/tag/
 correspondent counts, open representative originals and archived documents,
 and test search and consumption before declaring the recovery successful.
-

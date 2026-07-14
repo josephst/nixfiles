@@ -24,15 +24,14 @@ in
         ControlPersist = "no";
       };
       orb = {
+        # Connect to OrbStack's local SSH listener directly. The GUI helper
+        # depends on the logged-in user's macOS session and fails when the Nix
+        # daemon invokes it as root.
         HostName = "127.0.0.1";
         Port = 32222;
         User = "default";
         IdentitiesOnly = true;
-        IdentityFile = "/Users/joseph/.orbstack/ssh/id_ed25519";
-        # OrbStack's current helper protocol requires the macOS UID and home
-        # after the subcommand, even when root/Nix invokes the proxy.
-        ProxyCommand = "env HOME=${config.hostSpec.home} '/Applications/OrbStack.app/Contents/Frameworks/OrbStack Helper.app/Contents/MacOS/OrbStack Helper' ssh-proxy-fdpass ${toString config.hostSpec.uid} ${config.hostSpec.home}";
-        ProxyUseFdpass = "yes";
+        IdentityFile = "/Users/${config.hostSpec.username}/.orbstack/ssh/id_ed25519";
       };
     };
   };
