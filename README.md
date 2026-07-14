@@ -156,10 +156,6 @@ The step-by-step backup-chain and staged-restore procedure is documented in
 must use a completely empty instance running the same Paperless version that
 created the export.
 
-The repository-wide architecture and technical-debt audit, including retained
-workarounds and their removal conditions, is maintained in
-[`CODEBASE_REVIEW.md`](CODEBASE_REVIEW.md).
-
 ## Notes
 
 - Git-flake evaluation only sees tracked or explicitly staged paths. Add newly imported files by exact path before switching; do not stage unrelated files.
