@@ -1,19 +1,10 @@
 { config, ... }:
 {
-  programs.bun = {
-    enable = true;
-    settings = {
-      # TODO: figure out why Bun keeps ignoring this and putting files in ~/.cache/.bun instead of ~/.cache/bun
-      #install = {
-      #  globalDir = "${config.xdg.cacheHome}/bun/install/global";
-      #  globalBinDir = "${config.xdg.binHome}";
-      #  cache = {
-      #    dir = "${config.xdg.cacheHome}/bun/cache";
-      #  };
-      #};
-    };
-  };
+  programs.bun.enable = true;
+
+  # Preserve Bun's existing global-install location. Moving this to XDG data/bin
+  # directories would require migrating or reinstalling globally installed tools.
   home.sessionPath = [
-    "${config.xdg.cacheHome}/.bun/bin" # add bun executables to local path
+    "${config.xdg.cacheHome}/.bun/bin"
   ];
 }

@@ -1,4 +1,5 @@
-_: {
+{ lib, ... }:
+{
   networking = {
     domain = "homelab.josephstahl.com";
     firewall.enable = false;
@@ -8,11 +9,15 @@ _: {
     # Per-interface useDHCP will be mandatory in the future, so this generated config
     # replicates the default behaviour.
     dhcpcd.enable = false;
+    resolvconf.enable = false;
     useHostResolvConf = false;
     # useNetworkd = true;
     # useDHCP = false;
     # interfaces.eth0.useDHCP = true;
   };
+  # OrbStack owns /etc/resolv.conf. These priorities intentionally override the
+  # shared NixOS resolver policy without modifying the generated module.
+  services.resolved.enable = lib.mkForce false;
   # systemd.services.NetworkManager-wait-online.enable = false; # causes problems with tailscale
   # systemd.network.wait-online.anyInterface = true;
 

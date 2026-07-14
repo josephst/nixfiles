@@ -4,8 +4,10 @@ let
   shellApplication = pkgs.writeShellApplication {
     inherit name;
     runtimeInputs = with pkgs; [
-      ripgrep
+      bat
       fzf
+      helix
+      ripgrep
     ];
     text = builtins.readFile ./${name}.sh;
   };

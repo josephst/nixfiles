@@ -2,8 +2,8 @@ let
   keys = import ../../../../keys;
 
   # include all `joseph` keys to allow me to rekey secrets with my user key
-  allKeys = builtins.attrValues keys.users.joseph ++ [
-    keys.hosts.terminus
+  allKeys = builtins.attrValues keys.ageRecipients.joseph ++ [
+    keys.hostKeys.terminus
   ];
 in
 {

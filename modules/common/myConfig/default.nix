@@ -1,6 +1,7 @@
 {
+  # Repository-specific policy kept separate from reusable host metadata.
   imports = [
-    ./ghToken.nix
     ./keys.nix
+    ./nix-access-tokens.nix
   ];
 }

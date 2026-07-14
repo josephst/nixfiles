@@ -4,11 +4,17 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
+      - .envrc
+      - ".github/workflows/*.yml"
       - flake.lock
+      - "**/*.nix"
+      - "**/*.sh"
+      - justfile
 
+# Dependabot updates flake.lock independently. This workflow only validates its
+# pull requests; the merge job receives narrowly scoped write permissions below.
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: update-flake-${{ github.event.pull_request.number }}
@@ -16,10 +22,7 @@ concurrency:
 
 jobs:
   checks:
-    if: >-
-      github.event.pull_request.user.login == 'dependabot[bot]' &&
-      github.event.pull_request.draft == false &&
-      startsWith(github.head_ref, 'dependabot/nix/')
+    if: github.event.pull_request.draft == false
     strategy:
       fail-fast: false
       matrix:
@@ -29,12 +32,23 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
-      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: DeterminateSystems/nix-installer-action@a7ad9c4f0c65208097f4d34f3cfa1913b80cce5c # main, pinned 2026-07-13
       - name: Check Nixpkgs Inputs
-        uses: DeterminateSystems/flake-checker-action@v12
+        uses: DeterminateSystems/flake-checker-action@3164002371bc90729c68af0e24d5aacf20d7c9f6 # v12
       - name: Run flake checks
         run: nix flake check -L --accept-flake-config
+      # Nix can evaluate derivations for other platforms without building them.
+      # Full native system builds remain targeted pre-merge/deployment checks.
+      - name: Evaluate active host derivations (no build)
+        if: runner.os == 'Linux'
+        run: |
+          nix eval --raw .#darwinConfigurations.Josephs-MacBook-Air.system.drvPath
+          nix eval --raw .#nixosConfigurations.anacreon.config.system.build.toplevel.drvPath
+          nix eval --raw .#nixosConfigurations.orbstack.config.system.build.toplevel.drvPath
+      - name: Evaluate installer artifact (no build)
+        if: runner.os == 'Linux'
+        run: nix eval --raw .#nixosConfigurations.iso-gnome.config.system.build.isoImage.drvPath
 
   merge:
     if: >-

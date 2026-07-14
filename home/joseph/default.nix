@@ -6,13 +6,9 @@
   ...
 }:
 let
-  inherit (pkgs.stdenv.hostPlatform) isLinux;
-  _1passEnabled =
-    osConfig ? homebrew && lib.elem "1password-cli" (map (item: item.name) osConfig.homebrew.casks); # 1pass CLI auth only works when app integration is installed
-
   gitSigningKey =
-    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then
-      lib.getAttr "joseph" osConfig.myConfig.keys.signing
+    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signingKeys then
+      lib.getAttr "joseph" osConfig.myConfig.keys.signingKeys
     else
       null;
 in
@@ -20,6 +16,8 @@ in
   imports = [
     ../common
     ./base
+    ./darwin.nix
+    ./linux.nix
   ];
 
   home = {
@@ -55,30 +53,4 @@ in
     };
   };
 
-  # auth with github is managed by 1password on mac (instead of reading gh/hosts.yml)
-  age = {
-    secrets = lib.mkIf isLinux {
-      "gh/hosts.yml" = {
-        file = ./secrets/gh_hosts.yml.age;
-        path = "${config.xdg.configHome}/gh/hosts.yml";
-      };
-    };
-  };
-
-  xdg.configFile = {
-    # enable 1password cli plugins
-    "op/plugins.sh" = {
-      enable = _1passEnabled;
-      text = ''
-        export OP_PLUGIN_ALIASES_SOURCED=1
-        alias gh="op plugin run -- gh"
-      '';
-    };
-    "ghostty/config".text = ''
-      command = "${pkgs.fish}/bin/fish"
-
-      theme = dark:Catppuccin Frappe,light:Catppuccin Latte
-      keybind = shift+enter=text:\n
-    '';
-  };
 }

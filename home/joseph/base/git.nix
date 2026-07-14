@@ -6,13 +6,9 @@
   ...
 }:
 let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
 
-  gitSigningKey =
-    if osConfig.myConfig.keys != null && lib.hasAttr "joseph" osConfig.myConfig.keys.signing then
-      lib.getAttr "joseph" osConfig.myConfig.keys.signing
-    else
-      null;
+  gitSigningKey = osConfig.myConfig.keys.signingKeys.${config.home.username} or null;
 in
 {
   programs.git = {
@@ -56,8 +52,7 @@ in
       pull = {
         rebase = true;
       };
-      brach.sort = "-committerdate";
-      rebase.autosquash = true;
+      branch.sort = "-committerdate";
       # delta options
       delta.navigate = true;
       merge.conflictstyle = "zdiff3";
@@ -71,8 +66,7 @@ in
         autoupdate = true;
       };
       help.autocorrect = "prompt";
-    }
-    // lib.optionalAttrs isLinux { credential.credentialStore = "cache"; };
+    };
     signing = {
       signByDefault = gitSigningKey != null;
       format = "ssh";

@@ -1,6 +1,8 @@
 _: {
   programs.zellij = {
     enable = true;
+    attachExistingSession = false;
+    layouts.default_layout = ./default_layout.kdl;
     settings = {
       default_shell = "fish";
       # theme = "catppuccin-frappe";
@@ -11,10 +13,4 @@ _: {
     enableFishIntegration = false;
     enableZshIntegration = false;
   };
-
-  home.sessionVariables = {
-    ZELLIJ_AUTO_ATTACH = "true";
-  };
-
-  xdg.configFile."zellij/layouts/default_layout.kdl".source = ./default_layout.kdl;
 }

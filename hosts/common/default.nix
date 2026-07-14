@@ -1,6 +1,7 @@
 # IMPORTANT: This is used by NixOS and nix-darwin so options must exist in both!
 {
   config,
+  lib,
   pkgs,
   inputs,
   outputs,
@@ -32,7 +33,7 @@
       # programs available on both nixOS and nix-darwin
       fish = {
         enable = true;
-        useBabelfish = true;
+        useBabelfish = lib.mkDefault true;
         shellAliases = {
           nano = "micro";
           fnix = "nix-shell --run fish"; # use as `fnix -p go` to have a fish shell with go in it

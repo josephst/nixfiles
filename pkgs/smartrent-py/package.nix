@@ -26,6 +26,8 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    # Upstream's Poetry ^15 constraint excludes nixpkgs' websockets 16 even
+    # though the imported client API remains compatible.
     "websockets"
   ];
 
@@ -40,8 +42,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  doCheck = true;
-
+  # The PyPI source archive contains no test suite; retain an import check so
+  # dependency/API breakage still fails the build at package time.
+  doCheck = false;
   pythonImportsCheck = [ "smartrent" ];
 
   meta = with lib; {

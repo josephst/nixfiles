@@ -7,23 +7,19 @@
 
 let
   cfg = config.services.backrest;
-  bindSpec = "${cfg.bindAddress}:${toString cfg.port}";
-  resticUsers = lib.unique (
-    lib.mapAttrsToList (_: v: v.user or "root") (config.services.restic.backups or { })
-  );
-  resticUserDefault =
-    if resticUsers == [ ] then
-      "root"
-    else if lib.length resticUsers == 1 then
-      builtins.head resticUsers
+  formattedBindAddress =
+    if lib.hasInfix ":" cfg.bindAddress && !lib.hasPrefix "[" cfg.bindAddress then
+      "[${cfg.bindAddress}]"
     else
-      "root";
+      cfg.bindAddress;
+  bindSpec = "${formattedBindAddress}:${toString cfg.port}";
 in
 {
   options.services.backrest = {
     enable = lib.mkEnableOption "Backrest web UI and restic orchestrator";
 
     package = lib.mkPackageOption pkgs "backrest" { };
+    resticPackage = lib.mkPackageOption pkgs "restic" { };
 
     bindAddress = lib.mkOption {
       type = lib.types.str;
@@ -46,29 +42,70 @@ in
     readWritePaths = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
-      description = "Paths Backrest may read and write (for restic repositories or cache).";
+      description = ''
+        Additional paths made writable inside the Backrest mount namespace.
+        This does not grant Unix ownership, group, mode, or ACL permissions.
+      '';
       example = [
         "/storage"
       ];
     };
 
-    user = lib.mkOption {
-      type = lib.types.str;
-      default = resticUserDefault;
-      description = "User account under which Backrest runs. Defaults to the restic backup user when configured.";
+    readOnlyPaths = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = ''
+        Additional paths explicitly exposed read-only to Backrest. This does
+        not grant Unix ownership, group, mode, or ACL permissions.
+      '';
+      example = [
+        "/srv/exports"
+      ];
     };
 
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "backrest";
+      description = "User account under which Backrest runs.";
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "backrest";
+      description = "Group under which Backrest runs.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.bindAddress != "";
+        message = "services.backrest.bindAddress must not be empty";
+      }
+    ];
+
+    users.groups = lib.mkIf (cfg.group == "backrest") {
+      backrest = { };
+    };
+
     users.users = lib.mkIf (cfg.user == "backrest") {
       backrest = {
         isSystemUser = true;
         description = "Backrest service user";
+        inherit (cfg) group;
       };
     };
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+
+    # StateDirectory= and friends ensure the top-level directories have the
+    # configured ownership. Recursively repair existing contents as well when
+    # migrating Backrest from another service user, while preserving modes.
+    systemd.tmpfiles.rules = [
+      "Z %S/backrest - ${cfg.user} ${cfg.group} - -"
+      "Z %C/backrest - ${cfg.user} ${cfg.group} - -"
+      "Z %t/backrest - ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.backrest = {
       description = "Backrest web UI";
@@ -80,6 +117,7 @@ in
         Type = "simple";
         ExecStart = lib.getExe cfg.package;
         User = cfg.user;
+        Group = cfg.group;
         Restart = "on-failure";
         RestartSec = 5;
 
@@ -87,6 +125,7 @@ in
           "BACKREST_PORT=${bindSpec}"
           "BACKREST_CONFIG=%S/backrest/config.json"
           "BACKREST_DATA=%S/backrest"
+          "BACKREST_RESTIC_COMMAND=${lib.getExe cfg.resticPackage}"
           "XDG_CACHE_HOME=%C/backrest"
           "TMPDIR=%T"
         ];
@@ -95,6 +134,10 @@ in
         CacheDirectory = "backrest";
         RuntimeDirectory = "backrest";
         WorkingDirectory = "%S/backrest";
+        StateDirectoryMode = "0700";
+        CacheDirectoryMode = "0700";
+        RuntimeDirectoryMode = "0700";
+        ReadOnlyPaths = cfg.readOnlyPaths;
         ReadWritePaths = cfg.readWritePaths;
 
         UMask = "0077";

@@ -1,7 +1,8 @@
 _: {
   programs.fzf = {
     enable = true;
-    historyWidget.command = ""; # prevent conflict with Atuin
+    # Home Manager's supported way to let Atuin own the Ctrl-R binding.
+    historyWidget.command = "";
     colors = {
       fg = "-1";
       bg = "-1";

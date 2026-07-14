@@ -15,17 +15,27 @@ in
         type = types.nullOr (
           types.submodule {
             options = {
-              hosts = mkOption {
+              ageRecipients = mkOption {
+                type = types.attrsOf (types.attrsOf types.str);
+                default = { };
+                description = "Agenix recipients per user; these do not grant SSH login";
+              };
+              hostKeys = mkOption {
                 type = types.attrsOf types.str;
                 default = { };
                 description = "SSH host keys for machines";
               };
-              users = mkOption {
+              loginKeys = mkOption {
                 type = types.attrsOf (types.attrsOf types.str);
                 default = { };
-                description = "SSH user keys per machine";
+                description = "SSH login keys per user and machine";
               };
-              signing = mkOption {
+              recipientGroups = mkOption {
+                type = types.attrsOf (types.listOf types.str);
+                default = { };
+                description = "Named Agenix recipient groups by purpose or host";
+              };
+              signingKeys = mkOption {
                 type = types.attrsOf types.str;
                 default = { };
                 description = "Git commit signing keys per user";
@@ -40,7 +50,7 @@ in
 
   config = lib.mkIf (cfg.keys != null) {
     users.users.${username}.openssh.authorizedKeys.keys =
-      lib.optionals (builtins.hasAttr username cfg.keys.users)
-        (builtins.attrValues cfg.keys.users.${username});
+      lib.optionals (builtins.hasAttr username cfg.keys.loginKeys)
+        (builtins.attrValues cfg.keys.loginKeys.${username});
   };
 }

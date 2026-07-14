@@ -2,11 +2,16 @@
 
 # 1. Search for text in files using Ripgrep
 # 2. Interactively narrow down the list using fzf
-# 3. Open the file in Micro
-rg --color=always --line-number --no-heading --smart-case "${*:-}" |
+# 3. Open the selected location in the configured editor
+if (( $# == 0 )); then
+  echo "Usage: find-in-file <search text>" >&2
+  exit 2
+fi
+
+rg --color=always --line-number --no-heading --smart-case -- "$*" |
   fzf --ansi \
       --color "hl:-1:underline,hl+:-1:underline:reverse" \
       --delimiter : \
       --preview 'bat --color=always {1} --highlight-line {2}' \
       --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-      --bind 'enter:become(micro {1} +{2})'
+      --bind "enter:become(${EDITOR:-hx} {1}:{2})"

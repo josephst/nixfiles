@@ -2,20 +2,11 @@ _: {
   programs.eza = {
     enable = true;
     enableNushellIntegration = false;
+    git = true;
     icons = "auto";
     extraOptions = [
-      "--git"
       "--group-directories-first"
       "--header"
     ];
-  };
-
-  programs.fish.shellAbbrs = {
-    cat = "bat"; # better cat
-    ls = "eza";
-    ll = "eza -l";
-    la = "eza -a";
-    lt = "eza --tree";
-    lla = "eza -la";
   };
 }

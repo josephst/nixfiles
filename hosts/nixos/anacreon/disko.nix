@@ -1,5 +1,7 @@
 { lib, ... }:
 {
+  # Destructive installation target: verify this device name before running
+  # disko or nixos-anywhere against Anacreon.
   disko.devices = {
     disk.main = {
       type = "disk";

@@ -13,7 +13,10 @@ let
   # identity = a user-specific and host-specific key (one identity per user per machine)
   # userAllKeys = all keys registered to a user (across all machines)
   userAllKeys =
-    if keys != null && lib.hasAttr username keys.users then lib.getAttr username keys.users else null;
+    if keys != null && lib.hasAttr username keys.loginKeys then
+      lib.getAttr username keys.loginKeys
+    else
+      null;
   userHostSpecificKey =
     if userAllKeys != null && lib.hasAttr hostname userAllKeys then
       lib.getAttr hostname userAllKeys

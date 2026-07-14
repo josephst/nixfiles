@@ -13,7 +13,7 @@
       pkgs.gnomeExtensions.gsconnect
       pkgs.ghostty
     ]
-    ++ lib.optionals (builtins.elem config.nixpkgs.hostPlatform pkgs.spotify.meta.platforms) [
+    ++ lib.optionals (lib.meta.availableOn { system = config.nixpkgs.hostPlatform; } pkgs.spotify) [
       pkgs.spotify
     ];
     gnome.excludePackages = with pkgs; [

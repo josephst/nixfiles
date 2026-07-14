@@ -5,7 +5,7 @@
     # package repos
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -16,6 +16,8 @@
       url = "github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
     # agenix
     agenix = {
@@ -82,7 +84,6 @@
       overlays = import ./overlays { inherit inputs; };
       nixosModules = import ./modules/nixos;
       darwinModules = import ./modules/darwin;
-      homeManagerModules = import ./modules/home-manager;
       helper = import ./lib { inherit inputs outputs; };
 
       commonHostSpec = {
@@ -93,8 +94,8 @@
         tailnet = "taildbd4c.ts.net";
       };
       myConfig = {
-        ghToken = ./secrets/ghToken.age;
         keys = import ./keys;
+        nixAccessTokensFile = ./secrets/ghToken.age;
       };
 
       treefmtEval = helper.forAllSystems (
@@ -112,10 +113,12 @@
         packages
         nixosModules
         darwinModules
-        homeManagerModules
         ;
 
       formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
+      checks = helper.forAllSystems (system: {
+        formatting = treefmtEval.${system}.config.build.check self;
+      });
 
       # NixOS configuration entrypoint
       nixosConfigurations = {
@@ -123,8 +126,8 @@
           hostSpec = commonHostSpec // {
             hostName = "anacreon";
             platform = "x86_64-linux";
-            isMinimal = true;
-            isServer = true;
+            role = "server";
+            cliProfile = "minimal";
           };
           inherit myConfig;
         };
@@ -132,7 +135,7 @@
           hostSpec = commonHostSpec // {
             hostName = "terminus";
             platform = "x86_64-linux";
-            isServer = true;
+            role = "server";
           };
           inherit myConfig;
         };
@@ -140,16 +143,24 @@
           hostSpec = commonHostSpec // {
             hostName = "orbstack";
             platform = "aarch64-linux";
+            role = "containerGuest";
           };
           inherit myConfig;
         };
         iso-gnome = helper.mkNixos {
           hostSpec = commonHostSpec // {
+            cliProfile = "minimal";
             hostName = "iso-gnome";
+            # A freshly booted installer cannot possess any persistent host's
+            # Agenix identity. Use the upstream live-user authentication.
+            passwordFile = null;
             platform = "x86_64-linux";
+            role = "installer";
             userFullName = "Joseph (Nix Installer)";
           };
-          inherit myConfig;
+          myConfig = myConfig // {
+            nixAccessTokensFile = null;
+          };
         };
       };
 
@@ -158,6 +169,8 @@
           hostSpec = commonHostSpec // {
             hostName = "Josephs-MacBook-Air";
             platform = "aarch64-darwin";
+            role = "workstation";
+            uid = 501;
           };
           inherit myConfig;
         };

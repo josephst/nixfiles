@@ -16,6 +16,6 @@ in
 
   warnings = lib.optional (!hasSecretFile) ''
     anacreon tailscale autoconnect is not enabled yet: add hosts/nixos/anacreon/secrets/tailscale-authkey.age
-    and populate keys.hosts.anacreon before rekeying.
+    and populate keys.hostKeys.anacreon before rekeying.
   '';
 }

@@ -1,6 +1,5 @@
 {
   inputs,
-  outputs,
   config,
   lib,
   ...
@@ -19,9 +18,6 @@ in
       inherit inputs;
     };
     backupFileExtension = ".backup-pre-hm";
-    sharedModules = builtins.attrValues outputs.homeManagerModules;
-
     users.${username} = import home;
-    users.root.home.stateVersion = "25.11"; # avoid error
   };
 }

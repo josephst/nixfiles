@@ -1,19 +1,15 @@
 { inputs, ... }:
 let
   channels = final: _prev: {
-    # this adds nixpkgs-unstable as an overlays, available as nixpkgs.unstable.foobar
-    # doesn't do much now, since we're already following unstable
-    unstable = import inputs.nixpkgs {
-      inherit (final.stdenv.hostPlatform) system;
-      config.allowUnfree = true;
-    };
+    # Keep a stable package set available as an escape hatch when an unstable
+    # package regresses, even when no package currently consumes it.
     stable = import inputs.nixpkgs-stable {
       inherit (final.stdenv.hostPlatform) system;
       config.allowUnfree = true;
     };
   };
 
-  # add user-defined packages
+  # Add repository-local packages to the main package namespace.
   additions = import ./additions.nix;
 
   # modify the default nixpkgs set

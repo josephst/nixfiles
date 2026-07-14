@@ -8,7 +8,10 @@ let
   inherit (config) hostSpec;
 in
 {
-  environment.systemPackages = lib.optional (hostSpec.desktop != null) pkgs.trayscale;
+  environment.systemPackages = lib.optional (lib.elem hostSpec.role [
+    "installer"
+    "workstation"
+  ]) pkgs.trayscale;
 
   services.tailscale = {
     enable = true;
@@ -21,6 +24,8 @@ in
   };
 
   systemd.services.tailscaled.environment = {
+    # Unset currently selects iptables; "auto" lets Tailscale detect and use
+    # the nftables backend enabled by the shared NixOS networking module.
     "TS_DEBUG_FIREWALL_MODE" = "auto";
   };
 }

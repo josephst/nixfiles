@@ -1,7 +1,12 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ modulesPath, lib, ... }:
+{
+  config,
+  modulesPath,
+  lib,
+  ...
+}:
 {
   imports = [
     ../common # nixos common
@@ -19,6 +24,22 @@
   boot.loader.systemd-boot.enable = lib.mkForce false;
 
   security.sudo.wheelNeedsPassword = false;
+
+  system.stateVersion = "25.11";
+  home-manager.users.${config.hostSpec.username} = {
+    home.stateVersion = "26.05";
+
+    # OrbStack provisions this persistent per-user SSH identity. Its public key
+    # is already an Agenix recipient, whereas the usual Mac-mounted id_ed25519
+    # is absent when the Mac uses the 1Password SSH agent.
+    age.identityPaths = lib.mkBefore [
+      "${config.hostSpec.home}/.ssh/identity"
+    ];
+  };
+
+  # Host-owned additions kept outside OrbStack's generated module.
+  age.identityPaths = map (builtins.getAttr "path") config.services.openssh.hostKeys;
+  documentation.nixos.enable = true;
 
   # Extra certificates from OrbStack.
   security.pki.certificates = [

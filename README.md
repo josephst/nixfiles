@@ -11,7 +11,6 @@ Personal Nix configuration for macOS and NixOS, built around a single flake with
 - `modules/common/`: shared options, including `hostSpec` and `myConfig`
 - `modules/darwin/`: Darwin module exports
 - `modules/nixos/`: reusable NixOS modules such as `backrest`, `healthchecks`, `rcloneSync`, and `recyclarr`
-- `modules/home-manager/`: Home Manager module exports
 - `hosts/common/`: cross-platform host configuration shared by nix-darwin and NixOS
 - `hosts/darwin/`: Darwin host definitions
 - `hosts/nixos/`: NixOS host definitions, hardware config, disk layout, networking, services, and host-local secrets
@@ -28,10 +27,10 @@ Personal Nix configuration for macOS and NixOS, built around a single flake with
 
 ### NixOS
 
-- `terminus` (`x86_64-linux`): primary homelab server with Home Assistant, media services, backups, Caddy, Copyparty, Ollama, and related services
-- `anacreon` (`x86_64-linux`): minimal server with Tailscale-first access and self-hosted services including Homepage, Backrest, Copyparty, and Paperless
-- `orbstack` (`aarch64-linux`): local Linux environment
-- `iso-gnome` (`x86_64-linux`): installer/live ISO configuration
+- `terminus` (`x86_64-linux`, `server`): currently dormant homelab configuration
+- `anacreon` (`x86_64-linux`, `server`): minimal server with Tailscale-first access and self-hosted services including Homepage, Backrest, Copyparty, and Paperless
+- `orbstack` (`aarch64-linux`, `containerGuest`): local Linux environment
+- `iso-gnome` (`x86_64-linux`, `installer`): installer/live ISO configuration
 
 ## Common Workflows
 
@@ -41,10 +40,13 @@ Personal Nix configuration for macOS and NixOS, built around a single flake with
 just switch
 ```
 
-This stages tracked changes with `git add --all` and then uses `nh` to switch the active configuration:
+This uses `nh` to switch the active configuration:
 
 - macOS: `nh darwin switch .`
 - Linux: `nh os switch .`
+
+Nix flakes ignore untracked files. Explicitly stage newly created files that the
+configuration imports, but do not stage unrelated work merely to switch.
 
 ### Update inputs
 
@@ -60,33 +62,34 @@ On macOS this also runs `brew update` before `nix flake update --commit-lock-fil
 just deploy
 ```
 
-The current deploy recipe targets `anacreon` with `nixos-rebuild` over SSH:
+The current deploy recipe targets `anacreon` with `nh` over SSH:
 
 ```bash
-nix run nixpkgs#nixos-rebuild -- \
+nix run nixpkgs#nh -- os switch .#anacreon \
   --target-host joseph@anacreon \
-  --sudo switch \
-  --flake .#anacreon \
-  --build-host anacreon \
-  --no-reexec \
+  --build-host joseph@anacreon \
   --use-substitutes
 ```
-
-If remote activation needs a password prompt, rerun with `--ask-sudo-password` so the remote `sudo` step can complete interactively.
 
 ### Check and format
 
 ```bash
 nix fmt
+nix flake check --all-systems --no-build
 nix flake check
 ```
+
+The first command evaluates every exported system without requiring builders
+for every platform. The second builds the checks native to the current machine;
+use a full `--all-systems` check when the configured remote builders are
+available.
 
 For targeted builds:
 
 ```bash
 nix build .#darwinConfigurations.Josephs-MacBook-Air.system
-nix build .#nixosConfigurations.terminus.config.system.build.toplevel
 nix build .#nixosConfigurations.anacreon.config.system.build.toplevel
+nix build .#nixosConfigurations.orbstack.config.system.build.toplevel
 ```
 
 ## NixOS Installation Notes
@@ -139,8 +142,22 @@ Secrets are managed with [agenix](https://github.com/ryantm/agenix).
 
 Never commit plaintext secrets. Edit encrypted values with `agenix -e` and rekey with `agenix -r` after adding or rotating recipients.
 
+## Backup recovery boundary
+
+The root-run Paperless and Backrest Restic units create separate, serialized
+snapshots of the Paperless export and `/var/lib/backrest`. Backrest runs as its
+own unprivileged user and owns repository retention, checks, browsing, and
+staged restores. It does not receive read or write access to Paperless's live
+data. Restore into a directory under `/var/lib/backrest` first, then import or
+copy data deliberately as root.
+
+The step-by-step backup-chain and staged-restore procedure is documented in
+[`docs/anacreon-recovery.md`](docs/anacreon-recovery.md). A Paperless import
+must use a completely empty instance running the same Paperless version that
+created the export.
+
 ## Notes
 
-- `nix` evaluation in this repo only sees Git-tracked files, so `git add --all` new files before relying on `nix eval`, `nix build`, or `nix flake check`
+- Git-flake evaluation only sees tracked or explicitly staged paths. Add newly imported files by exact path before switching; do not stage unrelated files.
 - `hosts/common/` is an important shared layer for users, SSH infrastructure, Home Manager wiring, and global Nix settings
-- `hostSpec` is the shared source of per-host identity and platform metadata across Darwin and NixOS systems
+- `hostSpec` is the shared source of identity, platform, operational role, and CLI-profile metadata. NixOS, nix-darwin, and Home Manager migration versions remain beside each concrete host.
