@@ -19,8 +19,6 @@
     inputs.copyparty.nixosModules.default
   ];
 
-  # TODO: figure out why determinate nix keeps being built from source, instead of using binary cache
-  # determinate.enable = false;
   determinate.enable = true;
 
   age.identityPaths = map (builtins.getAttr "path") config.services.openssh.hostKeys;

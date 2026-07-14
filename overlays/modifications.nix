@@ -1,5 +1,5 @@
 final: prev: {
-  # TODO: Remove once nixpkgs-unstable includes backrest 1.14.1.
+  # TODO: Remove once nixpkgs-unstable includes Backrest 1.14.1.
   backrest =
     let
       version = "1.14.1";
