@@ -98,6 +98,15 @@ in
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
+    # StateDirectory= and friends ensure the top-level directories have the
+    # configured ownership. Recursively repair existing contents as well when
+    # migrating Backrest from another service user, while preserving modes.
+    systemd.tmpfiles.rules = [
+      "Z %S/backrest - ${cfg.user} ${cfg.group} - -"
+      "Z %C/backrest - ${cfg.user} ${cfg.group} - -"
+      "Z %t/backrest - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.backrest = {
       description = "Backrest web UI";
       after = [ "network-online.target" ];
