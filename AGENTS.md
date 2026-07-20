@@ -8,6 +8,7 @@ This flake-driven repo centralizes host and user configs under `flake.nix`, aide
 - `nix develop`: enter a dev shell with repo toolchain and linting utilities.
 - `nix flake check`: run evaluation, formatting, and lint checks; use before opening a PR.
 - `nix build .#darwinConfigurations.<host>.system` or `.#nixosConfigurations.<host>.config.system.build.toplevel`: dry-run specific systems without switching.
+- For pass/fail testing on the Linux builder without copying the realized output closure back into the local store, target the remote store directly: `XDG_CACHE_HOME=/tmp/codex-nixfiles-build-cache nix build --eval-store auto --store ssh-ng://joseph@anacreon .#nixosConfigurations.<host>.config.system.build.toplevel --no-link`. A normal distributed build imports missing remote outputs into the local store; `--no-link` alone only suppresses the `./result` symlink. Direct remote-store outputs are unrooted after this command and may be removed by garbage collection.
 - `nix fmt`: format Nix sources via `nixfmt`, `statix`, and `deadnix`. Run before committing.
 - `just update` refreshes inputs; rerun `nix flake check` afterwards.
 
