@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: DeterminateSystems/nix-installer-action@33c9ab3ef95cd57c164d9d6eb1f9a46338538d41 # main, pinned 2026-07-13
       - name: Check Nixpkgs Inputs
-        uses: DeterminateSystems/flake-checker-action@3164002371bc90729c68af0e24d5aacf20d7c9f6 # v12
+        uses: DeterminateSystems/flake-checker-action@de924abd783455e8429c858962b9e43062d19da1 # v13
       - name: Run flake checks
         run: nix flake check -L --accept-flake-config
       # Nix can evaluate derivations for other platforms without building them.
