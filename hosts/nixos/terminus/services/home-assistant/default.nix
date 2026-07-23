@@ -125,8 +125,8 @@ in
     useACMEHost = domain;
   };
 
-  services.caddy.virtualHosts."home.${config.networking.domain}.${config.hostSpec.tailnet}" =
-    lib.mkIf config.services.home-assistant.enable
+  services.caddy.virtualHosts."home.${config.hostSpec.tailnet}" =
+    lib.mkIf (config.services.home-assistant.enable && config.hostSpec.tailnet != null)
       {
         extraConfig = ''
           reverse_proxy http://localhost:8123

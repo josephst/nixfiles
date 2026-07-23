@@ -19,6 +19,7 @@
     ./disko.nix
     ./disko-hdd-storage.nix # separate from other disko config to allow for adding drive w/o formatting existing drives
     ./networking.nix
+    ./storage.nix
 
     # mixins
     ../common/mixins/tailscale.nix

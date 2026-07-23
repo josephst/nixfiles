@@ -11,11 +11,6 @@ in
     extraFlags = [ "--no-auth" ]; # auth managed by tailscale
   };
 
-  systemd.services.restic-rest-server = {
-    bindsTo = [ "storage-restic.mount" ];
-    after = [ "storage-restic.mount" ];
-  };
-
   services.caddy.virtualHosts = lib.mkIf config.services.restic.server.enable {
     "restic.${domain}" = {
       extraConfig = ''

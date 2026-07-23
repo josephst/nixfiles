@@ -45,8 +45,10 @@ in
       };
     };
   };
-  systemd.services."zigbee2mqtt.service".requires = [ "mosquitto.service" ];
-  systemd.services."zigbee2mqtt.service".after = [ "mosquitto.service" ];
+  systemd.services.zigbee2mqtt = {
+    requires = [ "mosquitto.service" ];
+    after = [ "mosquitto.service" ];
+  };
 
   services.caddy.virtualHosts."zigbee.${domain}" = {
     extraConfig = ''

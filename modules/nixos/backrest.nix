@@ -109,8 +109,6 @@ in
 
     systemd.services.backrest = {
       description = "Backrest web UI";
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

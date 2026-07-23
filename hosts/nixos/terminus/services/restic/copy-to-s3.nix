@@ -26,6 +26,11 @@ in
     rcloneCommand = "copy";
     environmentFile = config.age.secrets.rclone-sync.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
+    extraRcloneArgs = [
+      "--transfers=32"
+      "--b2-hard-delete"
+      "--fast-list"
+    ];
 
     timerConfig = {
       OnCalendar = "06:00";
