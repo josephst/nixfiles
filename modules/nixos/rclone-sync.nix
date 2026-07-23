@@ -59,7 +59,6 @@ in
               type = with types; listOf str;
               default = [
                 "--transfers=32"
-                "--b2-hard-delete"
                 "--fast-list"
               ];
               description = ''
@@ -102,17 +101,13 @@ in
   };
 
   config = {
-    assertions = lib.mapAttrsToList (name: value: {
-      assertion = value.dataDir != null;
-      message = "services.rclone-sync.${name}.dataDir must be a valid path";
-    }) cfg;
-
     systemd.services = lib.mapAttrs' (
       name: remoteConfig:
       lib.nameValuePair "rclone-sync-${name}" {
         description = "Rclone ${remoteConfig.rcloneCommand} for '${name}' from ${remoteConfig.dataDir}";
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
+        unitConfig.RequiresMountsFor = [ remoteConfig.dataDir ];
         serviceConfig = {
           Type = "oneshot";
           LoadCredential = [ "rcloneConf:${remoteConfig.rcloneConfFile}" ];

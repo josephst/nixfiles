@@ -42,10 +42,5 @@ _: {
       publish.enable = true;
       publish.userServices = true;
     };
-    tailscale = {
-      extraUpFlags = [
-        "--advertise-exit-node"
-      ];
-    };
   };
 }

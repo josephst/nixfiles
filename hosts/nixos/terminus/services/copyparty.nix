@@ -8,14 +8,6 @@ in
     owner = "copyparty";
   };
 
-  systemd.services.copyparty = {
-    bindsTo = [ "storage.mount" ];
-    after = [
-      "storage.mount"
-      "storage-media.mount"
-    ];
-  };
-
   services.copyparty = {
     enable = true;
     settings = {

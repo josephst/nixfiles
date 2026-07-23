@@ -45,4 +45,9 @@ in
       RandomizedDelaySec = "1h";
     };
   };
+
+  systemd.services.restic-backups-system-backup = {
+    requires = [ "restic-rest-server.socket" ];
+    after = [ "restic-rest-server.socket" ];
+  };
 }

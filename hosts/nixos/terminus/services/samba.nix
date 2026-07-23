@@ -9,7 +9,6 @@
     file = ../secrets/smbpasswd.age;
   };
 
-  users.groups.media = { };
   # create "samba-guest:media" user for accessing shares
   users.users."samba-guest" = {
     isSystemUser = true; # not a normal user account
@@ -27,8 +26,7 @@
   # https://www.samba.org/samba/docs/current/man-html/pdbedit.8.html
   systemd.services.samba-setup = {
     description = "Import Samba passwords";
-    wantedBy = [ "smbd.service" ];
-    before = [ "smbd.service" ];
+    before = [ "samba-smbd.service" ];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
@@ -43,13 +41,6 @@
   # tmpfiles to create shares if not yet present
   systemd.tmpfiles.settings = {
     "10-samba-shares" = {
-      "/storage/media" = {
-        d = {
-          user = "samba-guest";
-          group = "media";
-          mode = "0775";
-        };
-      };
       "/storage/homes/public" = {
         d = {
           user = "samba-guest";
@@ -98,6 +89,7 @@
       media = {
         path = "/storage/media";
         "guest ok" = "yes";
+        "inherit permissions" = "yes";
         "public" = "yes";
         "write list" = "joseph";
         "force group" = "media";

@@ -92,4 +92,15 @@
       };
     };
   };
+
+  systemd.services.recyclarr = {
+    requires = [
+      "radarr.service"
+      "sonarr.service"
+    ];
+    after = [
+      "radarr.service"
+      "sonarr.service"
+    ];
+  };
 }

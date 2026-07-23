@@ -17,11 +17,6 @@ in
     };
   };
 
-  systemd.services.sonarr = {
-    bindsTo = [ "storage-media.mount" ];
-    after = [ "storage-media.mount" ];
-  };
-
   services.caddy.virtualHosts."sonarr.${domain}" = {
     extraConfig = ''
       reverse_proxy http://localhost:8989

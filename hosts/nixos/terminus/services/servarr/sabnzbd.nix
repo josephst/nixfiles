@@ -17,14 +17,9 @@ in
         host_whitelist = "${config.networking.hostName},sabnzbd.${domain}";
         download_dir = "/storage/media/usenet/incomplete";
         complete_dir = "/storage/media/usenet/complete";
-        permissions = "775";
+        permissions = "2775";
       };
     };
-  };
-
-  systemd.services.sabnzbd = {
-    bindsTo = [ "storage.mount" ];
-    after = [ "storage.mount" ];
   };
 
   services.restic.backups.system-backup.paths = [
@@ -51,15 +46,4 @@ in
     useACMEHost = domain;
   };
 
-  systemd.tmpfiles.settings = {
-    "10-sabnzbd" = {
-      "/storage/media/usenet" = {
-        d = {
-          user = "sabnzbd";
-          group = "media";
-          mode = "0770";
-        };
-      };
-    };
-  };
 }

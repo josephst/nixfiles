@@ -1,6 +1,5 @@
 # report a service's success/failure to healthchecks.io
-# each template is instantiated with the name of the unit being reported on and the action (start, success, failure)
-# example: healthchecks-ping@restic-backups-system-backup:start, ...
+# each monitored unit gets dedicated start, success, and failure ping services
 {
   config,
   lib,
@@ -8,11 +7,79 @@
   ...
 }:
 let
-  cfg = lib.filterAttrs (_: v: v.urlFile != null || v.url != null) config.services.healthchecks-ping;
-  urlFiles = lib.mapAttrsToList (n: v: {
-    name = n;
-    path = if v.url != null then (pkgs.writeText "healthchecks-${n}" "HC_URL=${v.url}") else v.urlFile;
-  }) cfg;
+  cfg = config.services.healthchecks-ping;
+  isValid = value: (value.urlFile == null) != (value.url == null);
+  validCfg = lib.filterAttrs (_: isValid) cfg;
+  actions = [
+    "start"
+    "success"
+    "fail"
+  ];
+  pingServiceName = name: action: "healthchecks-ping-${name}-${action}";
+  urlFile =
+    name: value:
+    if value.url != null then
+      pkgs.writeText "healthchecks-${name}" "HC_URL=${value.url}"
+    else
+      value.urlFile;
+  pingServices = lib.listToAttrs (
+    lib.concatLists (
+      lib.mapAttrsToList (
+        name: value:
+        map (
+          action:
+          lib.nameValuePair (pingServiceName name action) {
+            description = "Pings healthchecks.io for ${name} (${action})";
+            wants = [ "network-online.target" ];
+            after = [ "network-online.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              LoadCredential = [ "url:${urlFile name value}" ];
+              # Hardening
+              # DynamicUser = true; # disabled, because call to `systemctl show` requires root privileges
+              ProtectSystem = "strict";
+              ProtectHome = "read-only";
+              PrivateTmp = true;
+              RestrictSUIDSGID = true;
+              PrivateDevices = true; # Only allow access to pseudo-devices (eg: null, random, zero) in separate namespace
+              PrivateUsers = true;
+              SupplementaryGroups = "systemd-journal"; # Allow access to journal
+              ProtectClock = true;
+              ProtectControlGroups = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectProc = "invisible";
+              RestrictAddressFamilies = [
+                "AF_UNIX"
+                "AF_INET"
+                "AF_INET6"
+              ];
+              RestrictNamespaces = true;
+              RestrictRealtime = true;
+              SystemCallArchitectures = "native";
+              SystemCallFilter = "@system-service";
+              SystemCallErrorNumber = "EPERM";
+            };
+            # journalctl -I requires systemd v257.
+            script = ''
+              url=$(grep -oP "^HC_URL=\K.+" "$CREDENTIALS_DIRECTORY/url")
+
+              if [ ${lib.escapeShellArg action} = success ]; then
+                logs=$(journalctl -I -u ${lib.escapeShellArg "${name}.service"} -n 100 --no-pager --output=short-iso)
+                echo "$logs" | ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-binary @- "$url"
+              elif [ ${lib.escapeShellArg action} = fail ]; then
+                logs=$(journalctl -I -u ${lib.escapeShellArg "${name}.service"} -n 100 --no-pager --output=short-iso)
+                echo "$logs" | ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-binary @- "$url/fail"
+              else
+                ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url/${action}"
+              fi
+            '';
+          }
+        ) actions
+      ) validCfg
+    )
+  );
 in
 {
   options.services.healthchecks-ping = lib.mkOption {
@@ -51,79 +118,21 @@ in
   };
 
   config = lib.mkIf (cfg != { }) {
-    assertions =
-      lib.mapAttrsToList (n: v: {
-        assertion = (v.urlFile == null) != (v.url == null);
-        message = "services.healthchecks-ping.${n}: exactly one of url or urlFile should be set";
-      }) cfg
-      ++ lib.mapAttrsToList (n: _: {
-        assertion = lib.hasAttr n config.systemd.services;
-        message = "services.healthchecks-ping.${n}: no matching systemd service found";
-      }) cfg;
+    assertions = lib.mapAttrsToList (n: v: {
+      assertion = isValid v;
+      message = "services.healthchecks-ping.${n}: exactly one of url or urlFile should be set";
+    }) cfg;
 
     systemd.services = lib.mkMerge [
       (lib.mapAttrs' (
         name: _val:
         lib.nameValuePair name {
-          wants = [ "healthchecks-ping@${name}:start.service" ];
-          onSuccess = [ "healthchecks-ping@${name}:success.service" ];
-          onFailure = [ "healthchecks-ping@${name}:fail.service" ];
+          wants = [ "${pingServiceName name "start"}.service" ];
+          onSuccess = [ "${pingServiceName name "success"}.service" ];
+          onFailure = [ "${pingServiceName name "fail"}.service" ];
         }
-      ) cfg)
-      {
-        "healthchecks-ping@" = {
-          description = "Pings healthchecks.io (%i)";
-          serviceConfig = {
-            Type = "oneshot";
-            LoadCredential = map ({ name, path }: "${name}:${path}") urlFiles;
-            # Hardening
-            # DynamicUser = true; # disabled, because call to `systemctl show` requires root privileges
-            ProtectSystem = "strict";
-            ProtectHome = "read-only";
-            PrivateTmp = true;
-            RestrictSUIDSGID = true;
-            PrivateDevices = true; # Only allow access to pseudo-devices (eg: null, random, zero) in separate namespace
-            PrivateUsers = true;
-            SupplementaryGroups = "systemd-journal"; # Allow access to journal
-            ProtectClock = true;
-            ProtectControlGroups = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectProc = "invisible";
-            RestrictAddressFamilies = [
-              "AF_UNIX"
-              "AF_INET"
-              "AF_INET6"
-            ];
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            SystemCallArchitectures = "native";
-            SystemCallFilter = "@system-service";
-            SystemCallErrorNumber = "EPERM";
-          };
-          scriptArgs = "%i"; # name:action
-          # requires systemd v257 (journalctl has -I flag for latest invocation)
-          script = ''
-            # set -x # for debugging
-            IFS=':' read -r name action <<< "$1"
-
-            # read the value of HC_URL from the file (file may contain other variables too)
-            url=$(grep -oP "^HC_URL=\K.+" "$CREDENTIALS_DIRECTORY/$name")
-
-            if [ "$action" = "success" ]; then
-              # last 1000 lines
-              logs=$(journalctl -I -u "$name.service" -n 100 --no-pager --output=short-iso)
-              echo "$logs" | ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-binary @- "$url"
-            elif [ "$action" = "fail" ]; then
-              logs=$(journalctl -I -u "$name.service" -n 100 --no-pager --output=short-iso)
-              echo "$logs" | ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 --data-binary @- "$url/fail"
-            else
-              ${lib.getExe pkgs.curl} -fsS -m 10 --retry 5 "$url/$action"
-            fi
-          '';
-        };
-      }
+      ) validCfg)
+      pingServices
     ];
   };
 }

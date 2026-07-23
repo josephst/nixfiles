@@ -6,22 +6,10 @@
 let
   tailscale = lib.getExe config.services.tailscale.package;
   routes = {
-    backrest = {
-      backend = "http://127.0.0.1:9898";
-      after = [ "backrest.service" ];
-    };
-    copyparty = {
-      backend = "http://127.0.0.1:3923";
-      after = [ "copyparty.service" ];
-    };
-    home = {
-      backend = "http://127.0.0.1:8080";
-      after = [ "caddy.service" ];
-    };
-    paperless = {
-      backend = "http://127.0.0.1:${toString config.services.paperless.port}";
-      after = [ "paperless.service" ];
-    };
+    backrest = "http://127.0.0.1:9898";
+    copyparty = "http://127.0.0.1:3923";
+    home = "http://127.0.0.1:8080";
+    paperless = "http://127.0.0.1:${toString config.services.paperless.port}";
   };
   tailscaleUnits = [
     "tailscaled.service"
@@ -30,11 +18,11 @@ let
   ];
 
   mkServeUnit =
-    serviceName: route:
+    serviceName: backend:
     lib.nameValuePair "anacreon-${serviceName}-tailscale-serve" {
       description = "Tailscale Serve proxy for Anacreon ${serviceName}";
-      after = route.after ++ tailscaleUnits;
-      wants = [ "tailscaled.service" ];
+      after = tailscaleUnits;
+      wants = tailscaleUnits;
       wantedBy = [ "multi-user.target" ];
 
       # Retry indefinitely if the daemon is running but tailnet authentication
@@ -50,7 +38,7 @@ let
           "serve"
           "--service=svc:${serviceName}"
           "--https=443"
-          route.backend
+          backend
         ];
         ExecStop = lib.escapeShellArgs [
           tailscale
