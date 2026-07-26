@@ -43,11 +43,11 @@ in
         system = "aarch64-linux";
         inherit supportedFeatures;
       }
-      {
-        hostName = "nixos@orb";
-        system = "x86_64-linux";
-        inherit supportedFeatures;
-      }
+      # {
+      #   hostName = "nixos@orb";
+      #   system = "x86_64-linux";
+      #   inherit supportedFeatures;
+      # }
     ];
     distributedBuilds = true;
   };
