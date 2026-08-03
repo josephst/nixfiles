@@ -6,6 +6,9 @@ _: {
         restart_service = "changed";
         start_service = true;
       }
+      {
+        name = "steipete/tap/remindctl";
+      }
     ];
     casks = [
       # dev tools
