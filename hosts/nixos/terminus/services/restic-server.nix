@@ -14,7 +14,11 @@ in
   services.caddy.virtualHosts = lib.mkIf config.services.restic.server.enable {
     "restic.${domain}" = {
       extraConfig = ''
-        reverse_proxy http://localhost:${port}
+        @tailscale remote_ip 100.64.0.0/10 fd7a:115c:a1e0::/48
+        handle @tailscale {
+          reverse_proxy http://localhost:${port}
+        }
+        respond 403
       '';
       useACMEHost = domain;
     };
