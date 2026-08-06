@@ -14,6 +14,7 @@ in
       settings = {
         store_failed = true;
         sync.records = true;
+        logs.dir = "$XDG_STATE_HOME/atuin/logs";
       };
     };
     fish = {
