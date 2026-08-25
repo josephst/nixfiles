@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   utils,
   ...
@@ -22,6 +23,8 @@ in
       group = "media";
       mode = "2775";
     };
+  }
+  // lib.optionalAttrs config.services.sabnzbd.enable {
     "/storage/media/usenet".d = {
       user = "sabnzbd";
       group = "media";

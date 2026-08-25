@@ -8,6 +8,11 @@
   inputs,
   ...
 }:
+let
+  # Keep optional application services stopped while the host is being reviewed.
+  # Set this to true to restore the full service stack.
+  fullServiceStackEnabled = false;
+in
 {
   imports = [
     ../common # nixos common
@@ -21,35 +26,33 @@
     ./networking.nix
     ./storage.nix
 
-    # mixins
+    # Core services kept online during review.
     ../common/mixins/tailscale.nix
-
-    # Services
-    ./services/copyparty.nix
-    ./services/home-assistant
     ./services/acme.nix
     ./services/caddy.nix
-    ./services/incus.nix
-    ./services/paperless.nix
-    # ./services/unifi.nix # disabled since 12/3/2025 (Dream Router 7 now runs Unifi)
-    ./services/vscode-server.nix
-    ## LLM
-    ./services/ollama.nix
-    ## Media & Sharing
-    ./services/servarr
-    ./services/samba.nix
-    ## Backup
-    ./services/restic-server.nix
-    ./services/healthchecks.nix
-    ./services/restic
-    ## Dashboard
     ./services/homepage
+
+    ./services/vscode-server.nix
 
     ../../../modules/nixos/backrest.nix
     ../../../modules/nixos/healthchecks.nix
     ../../../modules/nixos/rclone-sync.nix
     inputs.lanzaboote.nixosModules.lanzaboote
     inputs.copyparty.nixosModules.default
+  ]
+  ++ lib.optionals fullServiceStackEnabled [
+    # Optional application services.
+    ./services/copyparty.nix
+    ./services/home-assistant
+    ./services/incus.nix
+    ./services/ollama.nix
+    ./services/paperless.nix
+    ./services/servarr
+    ./services/samba.nix
+    ./services/restic-server.nix
+    ./services/healthchecks.nix
+    ./services/restic
+    # ./services/unifi.nix # disabled since 12/3/2025 (Dream Router 7 now runs Unifi)
   ];
 
   # specialisations (note the spelling!)
@@ -103,9 +106,9 @@
   home-manager.users.${config.hostSpec.username}.home.stateVersion = "26.05";
   users.users.${config.hostSpec.username}.extraGroups = [
     "media"
-    "incus-admin"
     "render"
-  ];
+  ]
+  ++ lib.optional fullServiceStackEnabled "incus-admin";
 
   # List services that you want to enable:
   services = {
