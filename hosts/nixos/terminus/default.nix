@@ -102,6 +102,11 @@ in
 
   environment.systemPackages = [ pkgs.sbctl ];
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
   system.stateVersion = "25.11";
   home-manager.users.${config.hostSpec.username}.home.stateVersion = "26.05";
   users.users.${config.hostSpec.username}.extraGroups = [
