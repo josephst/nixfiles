@@ -62,6 +62,13 @@ in
         ../common/mixins/gnome.nix
         ../common/mixins/xrdp.nix
       ];
+
+      environment.sessionVariables.SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
+
+      programs._1password-gui = {
+        enable = true;
+        polkitPolicyOwners = [ config.hostSpec.username ];
+      };
     };
   };
 
