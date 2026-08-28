@@ -63,6 +63,8 @@ in
         ../common/mixins/xrdp.nix
       ];
 
+      services.printing.enable = true;
+
       environment.sessionVariables.SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
 
       programs._1password-gui = {
