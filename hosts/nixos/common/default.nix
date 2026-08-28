@@ -33,6 +33,11 @@
           # Log in as the normal user and elevate with sudo instead.
           PermitRootLogin = "no";
 
+          # Some SSH clients, including Echo on iOS, do not answer Fish's
+          # terminal capability queries. Disable those optional queries before
+          # Fish starts so login does not pause while waiting for a response.
+          SetEnv = "fish_features=no-query-term";
+
           # Automatically remove stale sockets
           StreamLocalBindUnlink = "yes";
           # Allow forwarding ports to everywhere
