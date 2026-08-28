@@ -63,8 +63,6 @@ in
         ../common/mixins/xrdp.nix
       ];
 
-      environment.systemPackages = [ pkgs.chatgpt ];
-
       environment.sessionVariables.SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
 
       home-manager.users.${config.hostSpec.username} = {
