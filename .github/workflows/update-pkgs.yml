@@ -1,0 +1,70 @@
+name: Update Custom Packages
+
+on:
+  schedule:
+    - cron: "0 5 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-custom-packages
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@33c9ab3ef95cd57c164d9d6eb1f9a46338538d41 # main, pinned 2026-07-13
+
+      - name: Update custom packages
+        run: nix run nixpkgs#just -- pkgs-update
+
+      - name: Detect package updates
+        id: changes
+        run: |
+          if git diff --quiet -- pkgs pkgsLinux; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check updated packages
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git diff --check
+          nix build .#smartrent-py .#hass-smartrent --no-link -L
+
+      - name: Create or update pull request
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPDATE_BRANCH: automation/update-custom-packages
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch --create "$UPDATE_BRANCH"
+          git add pkgs pkgsLinux
+          git commit --message "chore(pkgs): update custom packages"
+          git push --force origin "HEAD:$UPDATE_BRANCH"
+
+          pr_number="$(gh pr list --state open --head "$UPDATE_BRANCH" --json number --jq '.[0].number')"
+          pr_title="chore(pkgs): update custom packages"
+          pr_body="Automated weekly update of repository-local package sources."
+
+          if [ -n "$pr_number" ]; then
+            gh pr edit "$pr_number" --title "$pr_title" --body "$pr_body"
+          else
+            gh pr create --base main --head "$UPDATE_BRANCH" --title "$pr_title" --body "$pr_body"
+          fi
