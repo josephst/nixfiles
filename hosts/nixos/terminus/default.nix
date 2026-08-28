@@ -63,9 +63,34 @@ in
         ../common/mixins/xrdp.nix
       ];
 
-      services.printing.enable = true;
+      environment.systemPackages = [ pkgs.chatgpt ];
 
       environment.sessionVariables.SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
+
+      home-manager.users.${config.hostSpec.username} = {
+        dconf.settings = {
+          "org/gnome/desktop/input-sources".xkb-options = [
+            "ctrl:swap_lwin_lctl"
+            "ctrl:swap_rwin_rctl"
+          ];
+          "org/gnome/shell".enabled-extensions = map (extension: extension.extensionUuid) [
+            pkgs.gnomeExtensions.appindicator
+            pkgs.gnomeExtensions.gsconnect
+          ];
+        };
+
+        xdg.configFile."autostart/tailscale-systray.desktop".text = ''
+          [Desktop Entry]
+          Type=Application
+          Name=Tailscale
+          Comment=Tailscale system tray
+          Exec=${lib.getExe pkgs.tailscale} systray
+          TryExec=${lib.getExe pkgs.tailscale}
+          Icon=network-vpn-symbolic
+          Terminal=false
+          X-GNOME-Autostart-enabled=true
+        '';
+      };
 
       programs._1password-gui = {
         enable = true;
@@ -116,6 +141,18 @@ in
     powerOnBoot = true;
   };
 
+  hardware.printers = {
+    ensureDefaultPrinter = "Brother_DCP_L2647DW";
+    ensurePrinters = [
+      {
+        name = "Brother_DCP_L2647DW";
+        description = "Brother DCP-L2647DW";
+        deviceUri = "ipp://BRW44F79FE0D797.local/ipp/print";
+        model = "everywhere";
+      }
+    ];
+  };
+
   system.stateVersion = "25.11";
   home-manager.users.${config.hostSpec.username}.home.stateVersion = "26.05";
   users.users.${config.hostSpec.username}.extraGroups = [
@@ -128,6 +165,10 @@ in
   services = {
     fwupd.enable = true;
     hardware.bolt.enable = true;
+    printing = {
+      enable = true;
+      browsed.enable = false;
+    };
     smartd.enable = true;
     btrfs.autoScrub = {
       enable = true;

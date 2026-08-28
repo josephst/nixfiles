@@ -28,7 +28,7 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    includes = lib.optional pkgs.stdenv.isDarwin "${config.home.homeDirectory}/.orbstack/ssh/config";
+    includes = lib.optional pkgs.stdenv.hostPlatform.isDarwin "${config.home.homeDirectory}/.orbstack/ssh/config";
     settings = {
       "*" = {
         # defaults, from home-manager module
@@ -44,7 +44,7 @@ in
         ControlPersist = "no";
         # additional options
         IdentityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
-        IdentityAgent = lib.mkIf pkgs.stdenv.isDarwin ''"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"'';
+        IdentityAgent = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin ''"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"'';
       };
       "terminus terminus.josephstahl.com" = {
         HostName = "terminus";

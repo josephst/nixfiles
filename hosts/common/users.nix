@@ -7,7 +7,7 @@
 
 let
   inherit (config) hostSpec;
-  inherit (pkgs.stdenv) isLinux;
+  inherit (pkgs.stdenv.hostPlatform) isLinux;
 in
 {
   age.secrets.password = lib.mkIf (hostSpec.passwordFile != null) {

@@ -20,12 +20,12 @@ let
     }
   ];
   # Platform-specific trusted users
-  trustedUsers = if pkgs.stdenv.isDarwin then [ "@admin" ] else [ "@wheel" ];
+  trustedUsers = if pkgs.stdenv.hostPlatform.isDarwin then [ "@admin" ] else [ "@wheel" ];
 in
 {
   config = {
     nix = {
-      enable = lib.mkDefault (!pkgs.stdenv.isDarwin); # on darwin, nix is managed by Determinate Nix
+      enable = lib.mkDefault (!pkgs.stdenv.hostPlatform.isDarwin); # on darwin, nix is managed by Determinate Nix
 
       # remaining options only applied on non-Darwin systems
       # registry = lib.mapAttrs (_: value: { flake = value; }) inputs;

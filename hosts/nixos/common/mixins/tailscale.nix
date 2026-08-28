@@ -1,18 +1,9 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
-let
-  inherit (config) hostSpec;
-in
 {
-  environment.systemPackages = lib.optional (lib.elem hostSpec.role [
-    "installer"
-    "workstation"
-  ]) pkgs.trayscale;
-
   services.tailscale = {
     enable = true;
     # Enable caddy to acquire certificates from the tailscale daemon
