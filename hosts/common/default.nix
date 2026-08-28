@@ -54,6 +54,7 @@
         pkgs.deploy-rs
         pkgs.git
         pkgs.gnupg
+        inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
         pkgs.helix
         pkgs.micro
         pkgs.nix-output-monitor
