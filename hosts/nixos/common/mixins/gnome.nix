@@ -47,4 +47,9 @@
   };
 
   security.rtkit.enable = true;
+
+  xdg.terminal-exec = {
+    enable = true;
+    settings.GNOME = [ "com.mitchellh.ghostty.desktop" ];
+  };
 }
