@@ -6,7 +6,7 @@ alias s := switch
 pkgs-update:
     nix run nixpkgs#nix-update -- smartrent-py --flake
     # Note: the next command requires an x86_64-linux builder and fails without one.
-    nix run nixpkgs#nix-update -- hass-smartrent --flake --system x86_64-linux
+    nix run nixpkgs#nix-update -- hass-smartrent --flake --system x86_64-linux --override-filename ./pkgsLinux/homeassistant-customcomponents/smartrent/package.nix
 
 [macos]
 switch:
