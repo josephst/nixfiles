@@ -6,9 +6,81 @@
   ...
 }:
 let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 
   gitSigningKey = osConfig.myConfig.keys.signingKeys.${config.home.username} or null;
+  localSigningKey =
+    osConfig.myConfig.keys.loginKeys.${config.home.username}.${osConfig.networking.hostName} or null;
+  useLocalSigningFallback =
+    isLinux && osConfig.networking.hostName == "terminus" && localSigningKey != null;
+  localSigningKeyPath = "${config.home.homeDirectory}/.ssh/id_ed25519";
+  forwardedSigningKeyFile = pkgs.writeText "git-signing.pub" "${gitSigningKey}\n";
+
+  # Git uses the local key by default so it never performs its own agent lookup
+  # before invoking the signer. The signer substitutes the user signing key
+  # when it is present in a genuinely forwarded agent, while avoiding the
+  # desktop's 1Password agent for unattended local processes such as Codex.
+  gitSshSigner = pkgs.writeShellApplication {
+    name = "git-ssh-sign";
+    runtimeInputs = [ pkgs.openssh ];
+    text = ''
+      is_signing=false
+      for arg in "$@"; do
+        if [[ "$arg" == "sign" ]]; then
+          is_signing=true
+          break
+        fi
+      done
+
+      if [[ "$is_signing" != true ]]; then
+        exec ssh-keygen "$@"
+      fi
+
+      args=("$@")
+      signing_key_index=-1
+      for ((i = 0; i < ''${#args[@]} - 1; i++)); do
+        if [[ "''${args[$i]}" == "-f" ]]; then
+          signing_key_index=$((i + 1))
+          break
+        fi
+      done
+
+      if ((signing_key_index < 0)); then
+        echo "git-ssh-sign: ssh-keygen invocation did not include a signing key" >&2
+        exit 1
+      fi
+
+      agent_is_forwarded=false
+      if [[ -n "''${SSH_CONNECTION:-}" && -S "''${SSH_AUTH_SOCK:-}" ]]; then
+        case "$SSH_AUTH_SOCK" in
+          ${lib.escapeShellArg "${config.home.homeDirectory}/.1password/agent.sock"}|*/.codex/app-server-control/forwarded-ssh-agent.sock) ;;
+          *) agent_is_forwarded=true ;;
+        esac
+      fi
+
+      if [[ "$agent_is_forwarded" == true ]]; then
+        forwarded_key_available=false
+        while read -r key_type key_data _; do
+          if [[ "$key_type $key_data" == ${lib.escapeShellArg (lib.concatStringsSep " " (lib.take 2 (lib.splitString " " gitSigningKey)))} ]]; then
+            forwarded_key_available=true
+            break
+          fi
+        done < <(ssh-add -L 2>/dev/null)
+
+        if [[ "$forwarded_key_available" == true ]]; then
+          args[signing_key_index]=${lib.escapeShellArg forwardedSigningKeyFile}
+          exec ssh-keygen "''${args[@]}"
+        fi
+      fi
+
+      if [[ ! -r ${lib.escapeShellArg localSigningKeyPath} ]]; then
+        echo "git-ssh-sign: local signing key is not readable: ${localSigningKeyPath}" >&2
+        exit 1
+      fi
+
+      exec ssh-keygen "$@"
+    '';
+  };
 in
 {
   programs.git = {
@@ -70,9 +142,17 @@ in
     signing = {
       signByDefault = gitSigningKey != null;
       format = "ssh";
-      signer = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      signer =
+        if isDarwin then
+          "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+        else
+          lib.mkIf useLocalSigningFallback "${gitSshSigner}/bin/git-ssh-sign";
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-usersigningKey
-      key = lib.mkIf (gitSigningKey != null) "key::${gitSigningKey}";
+      key =
+        if useLocalSigningFallback then
+          localSigningKeyPath
+        else
+          lib.mkIf (gitSigningKey != null) "key::${gitSigningKey}";
     };
     ignores = [
       # Compiled Python files

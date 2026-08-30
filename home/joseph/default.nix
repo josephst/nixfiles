@@ -11,6 +11,13 @@ let
       lib.getAttr "joseph" osConfig.myConfig.keys.signingKeys
     else
       null;
+  localSigningKey =
+    osConfig.myConfig.keys.loginKeys.${config.home.username}.${osConfig.networking.hostName} or null;
+  allowedSigningKeys =
+    lib.optional (gitSigningKey != null) gitSigningKey
+    ++ lib.optional (
+      osConfig.networking.hostName == "terminus" && localSigningKey != null
+    ) localSigningKey;
 in
 {
   imports = [
@@ -46,9 +53,11 @@ in
       "Documents/nixpkgs-manual.html".source = "${pkgs.nixpkgs-manual}/share/doc/nixpkgs/manual.html";
 
       ".ssh/allowed_signers" =
-        lib.mkIf (gitSigningKey != null && config.programs.git.settings.user.email != null)
+        lib.mkIf (allowedSigningKeys != [ ] && config.programs.git.settings.user.email != null)
           {
-            text = "${config.programs.git.settings.user.email} ${gitSigningKey}";
+            text = lib.concatMapStringsSep "\n" (
+              key: "${config.programs.git.settings.user.email} ${key}"
+            ) allowedSigningKeys;
           };
     };
   };
