@@ -5,4 +5,5 @@
   rcloneSync = import ./rclone-sync.nix;
   healthchecks = import ./healthchecks.nix;
   backrest = import ./backrest.nix;
+  brscanSkey = import ./brscan-skey.nix;
 }
