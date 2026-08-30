@@ -107,10 +107,53 @@
         system: treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} ./treefmt.nix
       );
 
-      packages =
-        nixpkgs.lib.attrsets.recursiveUpdate
-          (helper.forAllSystems (system: import ./pkgs { pkgs = nixpkgs.legacyPackages.${system}; }))
-          (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = nixpkgs.legacyPackages.${system}; }));
+      pkgsFor = helper.forAllSystems (
+        system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfreePredicate = package: nixpkgs.lib.getName package == "chatgpt";
+        }
+      );
+
+      packages = nixpkgs.lib.attrsets.recursiveUpdate (helper.forAllSystems (
+        system: import ./pkgs { pkgs = pkgsFor.${system}; }
+      )) (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = pkgsFor.${system}; }));
+
+      updatePackagesApp =
+        system:
+        let
+          inherit (nixpkgs) lib;
+          pkgs = nixpkgs.legacyPackages.${system};
+          updateablePackages = lib.filterAttrs (_: package: package ? updateScript) packages.${system};
+          updateCommands = lib.mapAttrsToList (
+            attrPath: package:
+            let
+              updateScript = package.updateScript.command or package.updateScript;
+            in
+            ''
+              echo "Updating ${attrPath}"
+              export UPDATE_NIX_ATTR_PATH=${lib.escapeShellArg attrPath}
+              export UPDATE_NIX_NAME=${lib.escapeShellArg package.name}
+              export UPDATE_NIX_PNAME=${lib.escapeShellArg (package.pname or (lib.getName package))}
+              export UPDATE_NIX_OLD_VERSION=${lib.escapeShellArg (package.version or (lib.getVersion package))}
+              ${lib.escapeShellArgs (map toString (lib.toList updateScript))}
+            ''
+          ) updateablePackages;
+          updater = pkgs.writeShellApplication {
+            name = "update-packages";
+            runtimeInputs = [ pkgs.git ];
+            text = ''
+              repo_root="$(git rev-parse --show-toplevel)"
+              cd "$repo_root"
+
+              ${lib.concatStringsSep "\n" updateCommands}
+            '';
+          };
+        in
+        {
+          type = "app";
+          program = lib.getExe updater;
+        };
     in
     {
       inherit
@@ -121,6 +164,9 @@
         ;
 
       formatter = helper.forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
+      apps = helper.forAllSystems (system: {
+        update-packages = updatePackagesApp system;
+      });
       checks = helper.forAllSystems (system: {
         formatting = treefmtEval.${system}.config.build.check self;
       });

@@ -5,6 +5,7 @@
 set -euo pipefail
 
 url="https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb"
+package_path="${1:?package path is required}"
 deb="$(mktemp)"
 trap 'rm -f "$deb"' EXIT
 
@@ -12,8 +13,8 @@ curl --fail --location --silent --show-error --output "$deb" "$url"
 
 version="$(dpkg-deb --field "$deb" Version)"
 hash="$(nix hash file "$deb")"
-package_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-package_file="$package_dir/default.nix"
+repo_root="$(git rev-parse --show-toplevel)"
+package_file="$repo_root/$package_path"
 
 sed --in-place --regexp-extended \
   --expression="s|^([[:space:]]*version = )\"[^\"]+\";|\1\"$version\";|" \

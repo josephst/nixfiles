@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  nix-update-script,
   # runtime
   websockets,
   aiohttp,
@@ -46,6 +47,10 @@ buildPythonPackage rec {
   # dependency/API breakage still fails the build at package time.
   doCheck = false;
   pythonImportsCheck = [ "smartrent" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--flake" ];
+  };
 
   meta = with lib; {
     description = "Api for SmartRent locks, thermostats, moisture sensors, and switches";

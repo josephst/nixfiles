@@ -27,7 +27,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@33c9ab3ef95cd57c164d9d6eb1f9a46338538d41 # main, pinned 2026-07-13
 
       - name: Update custom packages
-        run: nix run nixpkgs#just -- pkgs-update
+        run: nix run .#update-packages
 
       - name: Detect package updates
         id: changes
@@ -42,7 +42,15 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: |
           git diff --check
-          nix build .#smartrent-py .#hass-smartrent --no-link -L
+          mapfile -t package_names < <(
+            nix eval --raw .#packages.x86_64-linux \
+              --apply 'packages: builtins.concatStringsSep "\n" (builtins.attrNames packages) + "\n"'
+          )
+          installables=()
+          for package_name in "${package_names[@]}"; do
+            installables+=(".#$package_name")
+          done
+          nix build "${installables[@]}" --no-link -L
 
       - name: Create or update pull request
         if: steps.changes.outputs.changed == 'true'
