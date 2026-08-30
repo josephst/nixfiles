@@ -88,6 +88,17 @@ in
           Terminal=false
           X-GNOME-Autostart-enabled=true
         '';
+        xdg.configFile."autostart/1password.desktop".text = ''
+          [Desktop Entry]
+          Type=Application
+          Name=1Password
+          Comment=Start 1Password in the background
+          Exec=${lib.getExe config.programs._1password-gui.package} --silent
+          Icon=1password
+          Terminal=false
+          StartupNotify=false
+          X-GNOME-Autostart-enabled=true
+        '';
       };
 
       programs._1password-gui = {
