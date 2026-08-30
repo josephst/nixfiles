@@ -23,9 +23,15 @@ buildHomeAssistantComponent rec {
     (home-assistant.python3Packages.callPackage ../../../pkgs/smartrent-py/package.nix { })
   ];
 
-  # manual updates: `cd` to pkgsLinux directory and run
-  # `nix-update hass-smartrent`
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--flake"
+      "--system"
+      "x86_64-linux"
+      "--override-filename"
+      "pkgsLinux/homeassistant-customcomponents/smartrent/package.nix"
+    ];
+  };
 
   meta = with lib; {
     # changelog, description, homepage, license, maintainers

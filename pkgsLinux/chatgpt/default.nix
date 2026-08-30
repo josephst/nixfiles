@@ -11,11 +11,15 @@
   at-spi2-core,
   atk,
   cairo,
+  coreutils,
   cups,
+  curl,
   dbus,
   expat,
   gdk-pixbuf,
+  git,
   glib,
+  gnused,
   gtk3,
   libdrm,
   libgbm,
@@ -29,18 +33,34 @@
   libxrandr,
   nspr,
   nss,
+  nix,
   pango,
   systemd,
   udev,
+  writeShellApplication,
   xdg-utils,
 }:
+let
+  updateScript = writeShellApplication {
+    name = "update-chatgpt";
+    runtimeInputs = [
+      coreutils
+      curl
+      dpkg
+      git
+      gnused
+      nix
+    ];
+    text = builtins.readFile ./update.sh;
+  };
+in
 stdenv.mkDerivation (_finalAttrs: {
   pname = "chatgpt";
-  version = "26.825.31414";
+  version = "26.825.51511";
 
   src = fetchurl {
     url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
-    hash = "sha256-wXMEi6gPevnNiQT5ofJyr/SUejFPb+l9obuDaEds3Pk=";
+    hash = "sha256-NVSwAixs+1EzJvQ/0R9xiDWncIasTXyi/z67ui1Mf0U=";
   };
 
   nativeBuildInputs = [
@@ -123,7 +143,10 @@ stdenv.mkDerivation (_finalAttrs: {
     mv $out/bin/.chatgpt-wrapped $out/bin/chatgpt
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = [
+    (lib.getExe updateScript)
+    "pkgsLinux/chatgpt/default.nix"
+  ];
 
   meta = {
     description = "ChatGPT desktop app with Codex integration";

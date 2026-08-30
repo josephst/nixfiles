@@ -3,11 +3,6 @@ default:
 
 alias s := switch
 
-pkgs-update:
-    nix run nixpkgs#nix-update -- smartrent-py --flake
-    # Note: the next command requires an x86_64-linux builder and fails without one.
-    nix run nixpkgs#nix-update -- hass-smartrent --flake --system x86_64-linux
-
 [macos]
 switch:
     # sudo darwin-rebuild switch --flake .
