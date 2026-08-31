@@ -8,11 +8,6 @@
   inputs,
   ...
 }:
-let
-  # Keep optional application services stopped while the host is being reviewed.
-  # Set this to true to restore the full service stack.
-  fullServiceStackEnabled = false;
-in
 {
   imports = [
     ../common # nixos common
@@ -26,25 +21,16 @@ in
     ./networking.nix
     ./storage.nix
 
-    # Core services kept online during review.
+    # Core services kept online
     ../common/mixins/tailscale.nix
     ./services/acme.nix
     ./services/caddy.nix
     ./services/homepage
 
-    ./services/vscode-server.nix
-
-    ../../../modules/nixos/backrest.nix
-    ../../../modules/nixos/healthchecks.nix
-    ../../../modules/nixos/rclone-sync.nix
-    inputs.lanzaboote.nixosModules.lanzaboote
-    inputs.copyparty.nixosModules.default
-  ]
-  ++ lib.optionals fullServiceStackEnabled [
     # Optional application services.
+    ./services/restic/backrest.nix
     ./services/copyparty.nix
-    ./services/home-assistant
-    ./services/incus.nix
+    # ./services/home-assistant
     ./services/ollama.nix
     ./services/paperless.nix
     ./services/servarr
@@ -53,6 +39,13 @@ in
     ./services/healthchecks.nix
     ./services/restic
     # ./services/unifi.nix # disabled since 12/3/2025 (Dream Router 7 now runs Unifi)
+    ./services/vscode-server.nix
+
+    ../../../modules/nixos/backrest.nix
+    ../../../modules/nixos/healthchecks.nix
+    ../../../modules/nixos/rclone-sync.nix
+    inputs.lanzaboote.nixosModules.lanzaboote
+    inputs.copyparty.nixosModules.default
   ];
 
   # specialisations (note the spelling!)
@@ -170,8 +163,7 @@ in
   users.users.${config.hostSpec.username}.extraGroups = [
     "media"
     "render"
-  ]
-  ++ lib.optional fullServiceStackEnabled "incus-admin";
+  ];
 
   # List services that you want to enable:
   services = {

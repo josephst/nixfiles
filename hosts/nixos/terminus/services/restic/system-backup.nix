@@ -39,6 +39,7 @@ in
 
     inherit pruneOpts;
     inherit checkOpts;
+
     timerConfig = {
       OnCalendar = "12:05";
       Persistent = true;
