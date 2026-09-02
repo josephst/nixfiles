@@ -30,7 +30,7 @@
     # Optional application services.
     ./services/restic/backrest.nix
     ./services/copyparty.nix
-    # ./services/home-assistant
+    ./services/home-assistant
     ./services/ollama.nix
     ./services/paperless.nix
     ./services/servarr

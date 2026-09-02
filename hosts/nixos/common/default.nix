@@ -21,6 +21,9 @@
     users.mutableUsers = lib.mkDefault false;
     security = {
       # use ssh keys instead of password
+      # TODO: this seems to cause some problems when 1password-gui is installed and running,
+      # but the machine is accessed remotely (appears to ask local 1password's ssh-agent for auth, rather than the forwarded key)
+      # temporary workaround: use run0 instead of sudo
       pam.sshAgentAuth.enable = true;
     };
 

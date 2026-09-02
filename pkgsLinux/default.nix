@@ -5,8 +5,4 @@
 }:
 {
   chatgpt = pkgs.callPackage ./chatgpt { };
-  hass-smartrent =
-    pkgs.home-assistant.python3Packages.callPackage
-      ./homeassistant-customcomponents/smartrent/package.nix
-      { };
 }

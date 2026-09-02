@@ -2,8 +2,8 @@
   config,
   ...
 }:
-# ROLE: to back up this machine to B2 storage using Restic
-# This way, services such as Paperless are also backed up
+# ROLE: to back up this machine, first to its local storage (/storage);
+# this is then copied (Rclone) to B2 for offsite backup
 let
   pruneOpts = [
     "--keep-daily 30"

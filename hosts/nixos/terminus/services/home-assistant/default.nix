@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -10,7 +9,7 @@ in
 {
   imports = [
     ./matter.nix
-    ./zwave.nix
+    # ./zwave.nix no longer in use as of Aug 2026
     ./zigbee.nix
   ];
 
@@ -36,11 +35,10 @@ in
       "isal"
       "met"
       "mqtt"
-      "plex"
+      "nest"
       "sonos"
-      "wemo"
       "zha" # not used, but causes error if missing
-      "zwave_js"
+      # "zwave_js"
     ];
     config = {
       default_config = { };
@@ -74,19 +72,6 @@ in
         latitude = "!secret latitude";
         longitude = "!secret longitude";
       };
-
-      http = {
-        use_x_forwarded_for = true;
-        trusted_proxies = [
-          "127.0.0.1"
-          "::1"
-        ];
-      };
-      # wemo = {
-      #   static = [
-      #     "192.168.1.132" # living room lamp (now added via homekit device)
-      #   ];
-      # };
       sonos = { };
       recorder = {
         purge_keep_days = 30;
@@ -99,15 +84,10 @@ in
         };
       };
     };
-
-    customComponents = [
-      pkgs.home-assistant-custom-components.smartrent
-    ];
   };
 
   networking.firewall.allowedTCPPorts = lib.mkIf config.services.home-assistant.enable [
     1400 # sonos
-    8989 # wemo
     21063 # homekit bridge
     21064 # homekit bridge
   ];

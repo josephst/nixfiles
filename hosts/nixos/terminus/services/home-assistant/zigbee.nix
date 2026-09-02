@@ -3,9 +3,6 @@ let
   inherit (config.networking) domain;
 in
 {
-  networking.firewall.allowedTCPPorts = [
-    1883 # MQTT
-  ];
   # ZIGBEE2MQTT
   age.secrets."hass/zigbee2mqtt.secret.yaml" = {
     # the file must end in .yaml
@@ -75,7 +72,7 @@ in
     listeners = [
       {
         # address = "0.0.0.0"; # 0.0.0.0 is the default
-        settings.allow_anonymous = true;
+        settings.allow_anonymous = false;
         omitPasswordAuth = false;
         acl = [ "topic readwrite #" ];
 

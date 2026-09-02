@@ -11,11 +11,7 @@ let
 
   # Add repository-local packages to the main package namespace.
   additions = import ./additions.nix;
-
-  # modify the default nixpkgs set
-  modifications = import ./modifications.nix;
 in
 {
-  default =
-    final: prev: (additions final prev) // (channels final prev) // (modifications final prev);
+  default = final: prev: (additions final prev) // (channels final prev);
 }
