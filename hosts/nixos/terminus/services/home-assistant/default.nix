@@ -37,6 +37,8 @@ in
       "mqtt"
       "nest"
       "sonos"
+      "roborock"
+      "unifi"
       "zha" # not used, but causes error if missing
       # "zwave_js"
     ];

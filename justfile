@@ -28,4 +28,4 @@ gc age='7':
     nix-collect-garbage --delete-older-than {{ age }}d
 
 deploy:
-    nix run nixpkgs#nh -- os switch .#anacreon --target-host joseph@anacreon --build-host joseph@anacreon --use-substitutes
+    nix run nixpkgs#nh -- os switch .#terminus --target-host joseph@terminus --build-host joseph@terminus --use-substitutes
