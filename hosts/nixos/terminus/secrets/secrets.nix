@@ -24,6 +24,7 @@ in
   "healthchecks/restic-systembackup.env.age".publicKeys = allKeys;
   "healthchecks/restic-b2.env.age".publicKeys = allKeys;
   "healthchecks/rclone-sync-b2.env.age".publicKeys = allKeys;
+  "healthchecks/restic-local-maintenance.env.age".publicKeys = allKeys;
 
   "restic/b2.env.age".publicKeys = allKeys;
   "restic/rclone-sync.env.age".publicKeys = allKeys;

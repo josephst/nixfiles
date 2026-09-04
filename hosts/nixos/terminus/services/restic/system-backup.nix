@@ -2,8 +2,8 @@
   config,
   ...
 }:
-# ROLE: to back up this machine, first to its local storage (/storage);
-# this is then copied (Rclone) to B2 for offsite backup
+# ROLE: back up this machine to local storage (/storage). Repository-wide
+# maintenance is kept separate so it also covers snapshots created by clients.
 let
   pruneOpts = [
     "--keep-daily 30"
@@ -12,7 +12,7 @@ let
     "--keep-yearly 10"
     "--keep-tag forever"
   ];
-  checkOpts = [
+  maintenanceCheckOpts = [
     "--read-data-subset 5G"
     "--with-cache"
   ];
@@ -37,9 +37,6 @@ in
 
     extraBackupArgs = [ "--cleanup-cache" ];
 
-    inherit pruneOpts;
-    inherit checkOpts;
-
     timerConfig = {
       OnCalendar = "12:05";
       Persistent = true;
@@ -47,8 +44,31 @@ in
     };
   };
 
-  systemd.services.restic-backups-system-backup = {
-    requires = [ "restic-rest-server.socket" ];
-    after = [ "restic-rest-server.socket" ];
+  # Apply retention and integrity checks to every snapshot group in the local
+  # repository, including snapshots written by client machines.
+  services.restic.backups.local-maintenance = {
+    initialize = false;
+    environmentFile = config.age.secrets.restic-systembackup-env.path;
+    repository = "rest:http://${config.services.restic.server.listenAddress}";
+
+    inherit pruneOpts;
+    checkOpts = maintenanceCheckOpts;
+
+    timerConfig = {
+      OnCalendar = "*-*-01 02:00";
+      Persistent = true;
+      RandomizedDelaySec = "1h";
+    };
+  };
+
+  systemd.services = {
+    restic-backups-system-backup = {
+      requires = [ "restic-rest-server.socket" ];
+      after = [ "restic-rest-server.socket" ];
+    };
+    restic-backups-local-maintenance = {
+      requires = [ "restic-rest-server.socket" ];
+      after = [ "restic-rest-server.socket" ];
+    };
   };
 }

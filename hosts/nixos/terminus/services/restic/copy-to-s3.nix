@@ -39,7 +39,8 @@ in
     };
   };
 
-  # checks the repo on B2, no actual backing up performed
+  # Apply retention and integrity checks to the B2 repository once a month;
+  # this does not create any snapshots.
   services.restic.backups.b2 = {
     initialize = false;
     environmentFile = config.age.secrets.resticb2env.path;
@@ -51,8 +52,16 @@ in
       ${pkgs.restic}/bin/restic unlock || true
     '';
 
-    timerConfig = null; # no automatic run; instead, triggered after rclone-sync finishes
+    timerConfig = {
+      # Run after the daily 06:00 Rclone copy window.
+      OnCalendar = "*-*-01 08:00";
+      RandomizedDelaySec = "1h";
+      Persistent = true;
+    };
   };
 
-  systemd.services.rclone-sync-b2.onSuccess = [ "restic-backups-b2.service" ];
+  # If first-of-month timers are caught up together after downtime, preserve
+  # local maintenance -> Rclone copy -> B2 maintenance ordering.
+  systemd.services.rclone-sync-b2.after = [ "restic-backups-local-maintenance.service" ];
+  systemd.services.restic-backups-b2.after = [ "rclone-sync-b2.service" ];
 }
