@@ -4,5 +4,6 @@
   pkgs ? (import ../nixpkgs.nix { }),
 }:
 {
+  brscan-skey = pkgs.callPackage ./brscan-skey { };
   chatgpt = pkgs.callPackage ./chatgpt { };
 }

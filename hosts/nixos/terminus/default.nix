@@ -32,6 +32,7 @@
     ./services/copyparty.nix
     ./services/home-assistant
     ./services/ollama.nix
+    ./services/brscan-skey.nix
     ./services/paperless.nix
     ./services/servarr
     ./services/samba.nix
@@ -42,6 +43,7 @@
     ./services/vscode-server.nix
 
     ../../../modules/nixos/backrest.nix
+    ../../../modules/nixos/brscan-skey.nix
     ../../../modules/nixos/healthchecks.nix
     ../../../modules/nixos/rclone-sync.nix
     inputs.lanzaboote.nixosModules.lanzaboote
