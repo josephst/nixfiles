@@ -7,6 +7,7 @@
   coreutils,
   curl,
   gnugrep,
+  libtiff,
   libredirect,
   makeWrapper,
   nix-update-script,
@@ -36,17 +37,78 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-        # The vendor's file action defaults to ~/brscan. Keep the standalone
-        # command compatible while allowing the system service to select a
-        # dedicated, shared directory through BRSCAN_SKEY_SCAN_DIR.
-        substituteInPlace opt/brother/scanner/brscan-skey/script/scantofile.sh \
-          --replace-fail 'mkdir -p ~/brscan' \
+            # The vendor's file action defaults to ~/brscan. Keep the standalone
+            # command compatible while allowing the system service to select a
+            # dedicated, shared directory through BRSCAN_SKEY_SCAN_DIR.
+            substituteInPlace opt/brother/scanner/brscan-skey/script/scantofile.sh \
+              --replace-fail 'mkdir -p ~/brscan' \
             'SCAN_DIR="''${BRSCAN_SKEY_SCAN_DIR:-$HOME/brscan}"
-    mkdir -p "$SCAN_DIR"' \
-          --replace-fail 'OUTPUT=~/brscan/brscan_"$(date +%Y-%m-%d-%H-%M-%S)".tif' \
-            'OUTPUT="$SCAN_DIR/brscan_$(date +%Y-%m-%d-%H-%M-%S).tif"'
+        STAGING_DIR="''${BRSCAN_SKEY_STAGING_DIR:-$HOME/.brscan-skey-staging}"
+        mkdir -p "$SCAN_DIR" "$STAGING_DIR"
+        TIFFCP="${libtiff}/bin/tiffcp"
+        TIFF2PDF="${libtiff}/bin/tiff2pdf"' \
+              --replace-fail 'OUTPUT=~/brscan/brscan_"$(date +%Y-%m-%d-%H-%M-%S)".tif' \
+                'OUTPUT="$SCAN_DIR/brscan_$(date +%Y-%m-%d-%H-%M-%S).pdf"
+        STAGING_BASENAME="$(basename "$OUTPUT" .pdf)"
+        STAGING_OUTPUT="$STAGING_DIR/$STAGING_BASENAME.tif"
+        COMPRESSED_OUTPUT="$STAGING_DIR/$STAGING_BASENAME.lzw.tif"
+        STAGING_PDF="$STAGING_DIR/$STAGING_BASENAME.pdf"' \
+              --replace-fail 'OPT_FILE="--outputfile  $OUTPUT"' \
+                'OPT_FILE="--outputfile  $STAGING_OUTPUT"' \
+              --replace-fail \
+                '$SCANIMAGE $OPT
 
-        patchShebangs opt/brother/scanner/brscan-skey
+    if [ ! -e "$OUTPUT" ];then
+       sleep 1
+       $SCANIMAGE $OPT
+    fi
+
+    echo "$OUTPUT" is created.' \
+                'run_scan() {
+      rm -f -- "$STAGING_OUTPUT"
+      $SCANIMAGE $OPT
+    }
+
+    run_scan
+
+    if [ ! -s "$STAGING_OUTPUT" ];then
+       sleep 1
+       run_scan
+    fi
+
+    if [ ! -s "$STAGING_OUTPUT" ];then
+       echo "Scan failed: $STAGING_OUTPUT is empty" >&2
+       rm -f -- "$STAGING_OUTPUT"
+       exit 1
+    fi
+
+    rm -f -- "$COMPRESSED_OUTPUT" "$STAGING_PDF"
+    if ! "$TIFFCP" -c lzw "$STAGING_OUTPUT" "$COMPRESSED_OUTPUT";then
+       echo "Scan failed: could not compress $STAGING_OUTPUT" >&2
+       rm -f -- "$STAGING_OUTPUT" "$COMPRESSED_OUTPUT"
+       exit 1
+    fi
+
+    if ! "$TIFF2PDF" "$COMPRESSED_OUTPUT" > "$STAGING_PDF" || [ ! -s "$STAGING_PDF" ];then
+       echo "Scan failed: could not convert $STAGING_OUTPUT to PDF" >&2
+       rm -f -- "$STAGING_OUTPUT" "$COMPRESSED_OUTPUT" "$STAGING_PDF"
+       exit 1
+    fi
+
+    PUBLISH_OUTPUT="$SCAN_DIR/.$(basename "$OUTPUT").part"
+    rm -f -- "$PUBLISH_OUTPUT"
+    if ! cp -- "$STAGING_PDF" "$PUBLISH_OUTPUT" || [ ! -s "$PUBLISH_OUTPUT" ];then
+       echo "Scan failed: could not publish $OUTPUT" >&2
+       rm -f -- "$STAGING_OUTPUT" "$COMPRESSED_OUTPUT" "$STAGING_PDF" "$PUBLISH_OUTPUT"
+       exit 1
+    fi
+
+    mv -- "$PUBLISH_OUTPUT" "$OUTPUT"
+    rm -f -- "$STAGING_OUTPUT" "$COMPRESSED_OUTPUT" "$STAGING_PDF"
+
+    echo "$OUTPUT" is created.'
+
+            patchShebangs opt/brother/scanner/brscan-skey
   '';
 
   installPhase = ''

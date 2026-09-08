@@ -9,6 +9,10 @@ let
   cfg = config.services.brscan-skey;
   brscan5Path = "${pkgs.brscan5}/opt/brother/scanner/brscan5";
   packagePath = "${cfg.package}/opt/brother/scanner/brscan-skey";
+  scanConfig = pkgs.writeText "brscan-skey-scantofile.config" ''
+    source ${packagePath}/scantofile.config
+    resolution=${toString cfg.scanResolution}
+  '';
 in
 {
   meta.maintainers = [ lib.maintainers.josephst ];
@@ -49,6 +53,16 @@ in
         Process umask applied to generated scans. The default keeps files
         private to the scanner user and group. Use 0022 when another service
         must read scans through a world-accessible directory.
+      '';
+    };
+
+    scanResolution = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = 300;
+      example = 600;
+      description = ''
+        Resolution in dots per inch for the Scan to File action.
+        Choose a resolution supported by the scanner.
       '';
     };
 
@@ -129,6 +143,8 @@ in
           "HOME=/var/lib/brscan-skey"
           "SANE_CONFIG_DIR=/etc/sane-config"
           "LD_LIBRARY_PATH=/etc/sane-libs"
+          # Vendor scripts invoke the bundled skey-scanimage by absolute
+          # path; PATH supplies their shell utilities, not SANE's scanimage.
           "PATH=${
             lib.makeBinPath [
               pkgs.bash
@@ -151,6 +167,9 @@ in
         BindReadOnlyPaths = [
           "${packagePath}:/opt/brother/scanner/brscan-skey"
           "${packagePath}:/etc/opt/brother/scanner/brscan-skey"
+          # The vendor script checks its per-user config first. Mount the
+          # generated settings there to override the packaged resolution.
+          "${scanConfig}:/var/lib/brscan-skey/.brscan-skey/scantofile.config"
         ]
         ++ lib.optional config.hardware.sane.brscan5.enable "${brscan5Path}:/opt/brother/scanner/brscan5";
 
@@ -178,6 +197,10 @@ in
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
+          # brscan5 initializes libusb even for network scanners. Its udev
+          # monitor needs Netlink; blocking it makes libusb_init fail and
+          # the vendor driver crash during scanner discovery.
+          "AF_NETLINK"
           "AF_UNIX"
         ];
       };
