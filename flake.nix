@@ -111,7 +111,12 @@
         system:
         import nixpkgs {
           inherit system;
-          config.allowUnfreePredicate = package: nixpkgs.lib.getName package == "chatgpt";
+          config.allowUnfreePredicate =
+            package:
+            builtins.elem (nixpkgs.lib.getName package) [
+              "brscan-skey"
+              "chatgpt"
+            ];
         }
       );
 
