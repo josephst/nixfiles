@@ -18,20 +18,36 @@
           };
 
           delete_old_custom_formats = true;
-          replace_existing_custom_formats = true;
-          include = [
-            # Series
-            { template = "sonarr-quality-definition-series"; }
-            # 4k
-            # { template = "sonarr-v4-quality-profile-web-2160p"; }
-            # { template = "sonarr-v4-custom-formats-web-2160p"; }
-            # 1080p
-            { template = "sonarr-v4-quality-profile-web-1080p"; }
-            { template = "sonarr-v4-custom-formats-web-1080p"; }
-            # Anime
-            { template = "sonarr-quality-definition-anime"; }
-            { template = "sonarr-v4-quality-profile-anime"; }
-            { template = "sonarr-v4-custom-formats-anime"; }
+          # Guide-backed profiles replace the retired include templates (Recyclarr v8).
+          # https://recyclarr.dev/guide/guide-configs/
+          # Series size limits apply instance-wide.
+          quality_definition.type = "series";
+          media_naming = {
+            series = "default";
+            season = "default";
+            episodes = {
+              rename = true;
+              standard = "default";
+              daily = "default";
+            };
+          };
+          quality_profiles = [
+            {
+              name = "WEB-1080p";
+              trash_id = "72dae194fc92bf828f32cde7744e51a1";
+              reset_unmatched_scores.enabled = true;
+            }
+          ];
+          # Default groups sync automatically; add the WEB profile codec/language groups.
+          custom_format_groups.add = [
+            {
+              trash_id = "158188097a58d7687dee647e04af0da3"; # Golden Rule HD
+              assign_scores_to = [ { name = "WEB-1080p"; } ];
+            }
+            {
+              trash_id = "74aff4168620ed49dcc67e92b2c2a5b4"; # Language Profiles
+              assign_scores_to = [ { name = "WEB-1080p"; } ];
+            }
           ];
         };
       };
@@ -43,24 +59,29 @@
           };
 
           delete_old_custom_formats = true;
-          replace_existing_custom_formats = true;
-          include = [
-            # Movies
-            { template = "radarr-quality-definition-movie"; }
-            # 4k
-            # { template = "radarr-quality-profile-remux-web-2160p"; }
-            # { template = "radarr-custom-formats-remux-web-2160p"; }
-            { template = "radarr-quality-profile-uhd-bluray-web"; }
-            { template = "radarr-custom-formats-uhd-bluray-web"; }
-            # 1080p
-            # { template = "radarr-quality-profile-remux-web-1080p"; }
-            # { template = "radarr-custom-formats-remux-web-1080p"; }
-            { template = "radarr-quality-profile-hd-bluray-web"; }
-            { template = "radarr-custom-formats-hd-bluray-web"; }
-            # Anime
-            { template = "radarr-quality-profile-anime"; }
-            { template = "radarr-custom-formats-anime"; }
+          # Movie size limits remain shared by both profiles.
+          quality_definition.type = "movie";
+          media_naming = {
+            folder = "default";
+            movie = {
+              rename = true;
+              standard = "standard";
+            };
+          };
+          quality_profiles = [
+            {
+              name = "UHD Bluray + WEB";
+              trash_id = "64fb5f9858489bdac2af690e27c8f42f";
+              reset_unmatched_scores.enabled = true;
+            }
+            {
+              name = "HD Bluray + WEB";
+              trash_id = "d1d67249d3890e49bc12e275d989a7e9";
+              reset_unmatched_scores.enabled = true;
+            }
           ];
+          # Guide-backed profiles supply their default CF groups and scores.
+          # Keep the existing optional preferences on both movie profiles.
           custom_formats = [
             # preferred formats
             {
