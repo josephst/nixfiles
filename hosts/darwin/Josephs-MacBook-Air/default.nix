@@ -2,11 +2,11 @@
 let
   buildMachines = [
     {
-      hostName = "anacreon";
+      hostName = "terminus";
       sshUser = "joseph";
       system = "x86_64-linux";
-      speedFactor = 2;
-      maxJobs = 2;
+      speedFactor = 3;
+      maxJobs = 6;
       supportedFeatures = [
         "nixos-test"
         "benchmark"
@@ -15,22 +15,6 @@ let
       ];
       protocol = "ssh-ng";
     }
-    # Terminus is currently in storage. Uncomment this builder when the machine
-    # returns to service.
-    # {
-    #   hostName = "terminus";
-    #   sshUser = "joseph";
-    #   system = "x86_64-linux";
-    #   speedFactor = 3;
-    #   maxJobs = 6;
-    #   supportedFeatures = [
-    #     "nixos-test"
-    #     "benchmark"
-    #     "big-parallel"
-    #     "kvm"
-    #   ];
-    #   protocol = "ssh-ng";
-    # }
   ];
 in
 {

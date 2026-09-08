@@ -44,7 +44,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           nix eval --raw .#darwinConfigurations.Josephs-MacBook-Air.system.drvPath
-          nix eval --raw .#nixosConfigurations.anacreon.config.system.build.toplevel.drvPath
+          nix eval --raw .#nixosConfigurations.terminus.config.system.build.toplevel.drvPath
           nix eval --raw .#nixosConfigurations.orbstack.config.system.build.toplevel.drvPath
       - name: Evaluate installer artifact (no build)
         if: runner.os == 'Linux'

@@ -2,7 +2,7 @@
 
 [Read the companion blog post](https://josephstahl.com/nix-for-macos-and-a-homelab-server/)
 
-Personal Nix configuration for macOS and NixOS, built around a single flake with shared host metadata, shared modules, and Home Manager integration. This repository manages one nix-darwin workstation, several NixOS systems, and the supporting packages, overlays, keys, and encrypted secrets they use.
+Personal Nix configuration for macOS and NixOS, built around a single flake with shared host metadata, shared modules, and Home Manager integration. This repository manages one nix-darwin workstation, multiple NixOS systems, and the supporting packages, overlays, keys, and encrypted secrets they use.
 
 ## Repository Layout
 
@@ -27,8 +27,7 @@ Personal Nix configuration for macOS and NixOS, built around a single flake with
 
 ### NixOS
 
-- `terminus` (`x86_64-linux`, `server`): currently dormant homelab configuration
-- `anacreon` (`x86_64-linux`, `server`): minimal server with Tailscale-first access and self-hosted services including Homepage, Backrest, Copyparty, and Paperless
+- `terminus` (`x86_64-linux`, `server`): homelab server and remote Linux builder
 - `orbstack` (`aarch64-linux`, `containerGuest`): local Linux environment
 - `iso-gnome` (`x86_64-linux`, `installer`): installer/live ISO configuration
 
@@ -62,12 +61,12 @@ On macOS this also runs `brew update` before `nix flake update --commit-lock-fil
 just deploy
 ```
 
-The current deploy recipe targets `anacreon` with `nh` over SSH:
+The current deploy recipe targets `terminus` with `nh` over SSH:
 
 ```bash
-nix run nixpkgs#nh -- os switch .#anacreon \
-  --target-host joseph@anacreon \
-  --build-host joseph@anacreon \
+nix run nixpkgs#nh -- os switch .#terminus \
+  --target-host joseph@terminus \
+  --build-host joseph@terminus \
   --use-substitutes
 ```
 
@@ -88,7 +87,7 @@ For targeted builds:
 
 ```bash
 nix build .#darwinConfigurations.Josephs-MacBook-Air.system
-nix build .#nixosConfigurations.anacreon.config.system.build.toplevel
+nix build .#nixosConfigurations.terminus.config.system.build.toplevel
 nix build .#nixosConfigurations.orbstack.config.system.build.toplevel
 ```
 
@@ -141,20 +140,6 @@ Secrets are managed with [agenix](https://github.com/ryantm/agenix).
 - user secrets live under `home/joseph/secrets/`
 
 Never commit plaintext secrets. Edit encrypted values with `agenix -e` and rekey with `agenix -r` after adding or rotating recipients.
-
-## Backup recovery boundary
-
-The root-run Paperless and Backrest Restic units create separate, serialized
-snapshots of the Paperless export and `/var/lib/backrest`. Backrest runs as its
-own unprivileged user and owns repository retention, checks, browsing, and
-staged restores. It does not receive read or write access to Paperless's live
-data. Restore into a directory under `/var/lib/backrest` first, then import or
-copy data deliberately as root.
-
-The step-by-step backup-chain and staged-restore procedure is documented in
-[`docs/anacreon-recovery.md`](docs/anacreon-recovery.md). A Paperless import
-must use a completely empty instance running the same Paperless version that
-created the export.
 
 ## Notes
 
