@@ -52,12 +52,6 @@ in
         IdentitiesOnly = true;
         IdentityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
       };
-      "anacreon anacreon.josephstahl.com" = {
-        HostName = "anacreon";
-        ForwardAgent = true;
-        IdentitiesOnly = true;
-        IdentityFile = lib.mkIf config.home.file.${identityFile}.enable "~/${identityFile}";
-      };
       "github.com" = {
         User = "git";
         IdentityFile = lib.mkIf config.home.file.${identityFile}.enable [
