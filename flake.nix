@@ -117,6 +117,7 @@
             builtins.elem (nixpkgs.lib.getName package) [
               "brscan-skey"
               "chatgpt"
+              "moshi-hook"
             ];
         }
       );
