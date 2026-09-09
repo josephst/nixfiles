@@ -1,7 +1,6 @@
 { config, ... }:
 let
   inherit (config.networking) domain;
-  consumptionDir = "/storage/homes/public/scans";
 in
 {
   age.secrets.paperless-admin.file = ../secrets/paperless-admin.age;
@@ -9,9 +8,8 @@ in
   services.paperless = {
     enable = true;
     passwordFile = config.age.secrets.paperless-admin.path;
-    inherit consumptionDir;
-    # This makes the directory mode 0777, allowing the isolated scanner
-    # service to write here without sharing a Unix group with Paperless.
+    # Keep the default /var/lib/paperless/consume inbox public so the
+    # isolated scanner service can atomically publish completed files.
     consumptionDirIsPublic = true;
     settings = {
       PAPERLESS_URL = "https://paperless.${domain}";

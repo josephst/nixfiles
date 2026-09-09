@@ -174,6 +174,7 @@
       });
       checks = helper.forAllSystems (system: {
         formatting = treefmtEval.${system}.config.build.check self;
+        brscan-skey = pkgsFor.${system}.callPackage ./pkgsLinux/brscan-skey/tests.nix { };
       });
 
       # NixOS configuration entrypoint
