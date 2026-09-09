@@ -79,11 +79,13 @@ sys.exit(status)
         return [args for name, args in map(json.loads, self.events.read_text().splitlines())
                 if name == tool]
 
-    def assert_failed(self, result, status, message):
+    def assert_failed(self, result, status, message, retain_pdf=False):
         self.assertEqual(result.returncode, status, result.stderr)
         self.assertNotIn("is created", result.stdout)
         self.assertEqual(list(self.inbox.iterdir()), [])
         self.assertTrue(any(message in " ".join(args) for args in self.calls("logger")))
+        if not retain_pdf:
+            self.assertEqual(list(self.staging.iterdir()), [])
 
     def test_success_publishes_only_pdf_and_cleans_private_files(self):
         result = self.run_scan()
@@ -138,12 +140,13 @@ sys.exit(status)
 
     def test_failed_move_keeps_completed_pdf_in_private_directory(self):
         result = self.run_scan(TEST_MV_STATUS="18")
-        self.assert_failed(result, 18, "publication failed with exit code 18")
+        self.assert_failed(result, 18, "publication failed with exit code 18", retain_pdf=True)
         pdfs = list(self.staging.glob("job.*/scan.pdf"))
         self.assertEqual(len(pdfs), 1)
         self.assertEqual(pdfs[0].read_bytes(), b"%PDF-complete")
         self.assertIn(str(pdfs[0]), result.stderr)
         self.assertEqual(stat.S_IMODE(pdfs[0].parent.stat().st_mode), 0o700)
+        self.assertEqual(list(pdfs[0].parent.iterdir()), pdfs)
 
 
 if __name__ == "__main__":

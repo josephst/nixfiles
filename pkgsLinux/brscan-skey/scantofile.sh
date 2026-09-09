@@ -41,6 +41,25 @@ OUTPUT="$SCAN_DIR/brscan_$(date +%Y-%m-%d-%H-%M-%S)_${JOB_DIR##*.}.pdf"
 STAGING_OUTPUT="$JOB_DIR/scan.tif"
 COMPRESSED_OUTPUT="$JOB_DIR/scan.lzw.tif"
 STAGING_PDF="$JOB_DIR/scan.pdf"
+pdf_complete=0
+
+# Invoked by the EXIT trap, including the explicit failure exits below.
+# shellcheck disable=SC2329
+cleanup() {
+  local status=$?
+  local temporary_files=("$STAGING_OUTPUT" "$COMPRESSED_OUTPUT")
+  if [ "$pdf_complete" -eq 0 ]; then
+    temporary_files+=("$STAGING_PDF")
+  fi
+  if ! rm -f -- "${temporary_files[@]}"; then
+    log_message "could not remove temporary files from $JOB_DIR"
+  fi
+  if [ ! -e "$STAGING_PDF" ] && ! rmdir "$JOB_DIR"; then
+    log_message "could not remove private job directory: $JOB_DIR"
+  fi
+  return "$status"
+}
+trap 'cleanup' EXIT
 
 resolution=${resolution:-100}
 size=${size:-Letter}
@@ -101,13 +120,11 @@ if [ ! -s "$STAGING_PDF" ]; then
   log_message "PDF conversion failed with exit code 0: output is empty; private output=$STAGING_PDF"
   exit 1
 fi
+pdf_complete=1
 
 # GNU mv --no-copy makes a cross-filesystem publication fail instead of
 # copying a completed document into the consumer directory.
 if mv --no-copy -T --update=none-fail -- "$STAGING_PDF" "$OUTPUT"; then
-  if ! rm -f -- "$STAGING_OUTPUT" "$COMPRESSED_OUTPUT" || ! rmdir "$JOB_DIR"; then
-    log_message "scan published but could not clean private job directory: $JOB_DIR"
-  fi
   printf '%s is created.\n' "$OUTPUT"
   exit 0
 else
