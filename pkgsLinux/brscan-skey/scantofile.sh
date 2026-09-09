@@ -42,12 +42,16 @@ STAGING_OUTPUT="$JOB_DIR/scan.tif"
 COMPRESSED_OUTPUT="$JOB_DIR/scan.lzw.tif"
 STAGING_PDF="$JOB_DIR/scan.pdf"
 pdf_complete=0
+PUBLICATION_TEMP=""
 
 # Invoked by the EXIT trap, including the explicit failure exits below.
 # shellcheck disable=SC2329
 cleanup() {
   local status=$?
   local temporary_files=("$STAGING_OUTPUT" "$COMPRESSED_OUTPUT")
+  if [ -n "$PUBLICATION_TEMP" ]; then
+    temporary_files+=("$PUBLICATION_TEMP")
+  fi
   if [ "$pdf_complete" -eq 0 ]; then
     temporary_files+=("$STAGING_PDF")
   fi
@@ -122,9 +126,18 @@ if [ ! -s "$STAGING_PDF" ]; then
 fi
 pdf_complete=1
 
-# GNU mv --no-copy makes a cross-filesystem publication fail instead of
-# copying a completed document into the consumer directory.
-if mv --no-copy -T --update=none-fail -- "$STAGING_PDF" "$OUTPUT"; then
+# Stage the completed PDF on the destination mount before the atomic rename.
+# Paperless ignores dotfiles; the .tmp suffix also avoids advertising a PDF
+# while copying. Keep the private original until publication succeeds.
+publish_pdf() {
+  PUBLICATION_TEMP=$(mktemp "$SCAN_DIR/.brscan.XXXXXX.tmp") || return $?
+  cp -- "$STAGING_PDF" "$PUBLICATION_TEMP" || return $?
+  chmod --reference="$STAGING_PDF" -- "$PUBLICATION_TEMP" || return $?
+  mv --no-copy -T --update=none-fail -- "$PUBLICATION_TEMP" "$OUTPUT"
+}
+
+if publish_pdf; then
+  pdf_complete=0
   printf '%s is created.\n' "$OUTPUT"
   exit 0
 else

@@ -45,15 +45,23 @@ elif tool == "tiffcp":
 elif tool == "tiff2pdf":
     if os.environ.get("TEST_EMPTY_PDF") != "1":
         sys.stdout.buffer.write(b"%PDF-complete")
+elif tool == "cp":
+    if status:
+        pathlib.Path(args[-1]).write_bytes(b"partial")
+    else:
+        sys.exit(subprocess.run([os.environ["TEST_REAL_CP"], *args]).returncode)
 elif tool == "mv":
     assert args[:4] == ["--no-copy", "-T", "--update=none-fail", "--"]
+    assert pathlib.Path(args[-2]).parent == pathlib.Path(args[-1]).parent
+    assert pathlib.Path(args[-2]).name.startswith(".")
+    assert pathlib.Path(args[-2]).read_bytes() == b"%PDF-complete"
     if not status:
         sys.exit(subprocess.run([os.environ["TEST_REAL_MV"], *args]).returncode)
 sys.exit(status)
 '''
         )
         mock.chmod(0o755)
-        for name in ["scanner", "tiffcp", "tiff2pdf", "logger", "mv", "sleep"]:
+        for name in ["scanner", "tiffcp", "tiff2pdf", "logger", "mv", "cp", "sleep"]:
             (self.bin / name).symlink_to(mock)
         self.script = Path(__file__).with_name("scantofile.sh")
         self.env = dict(os.environ)
@@ -65,6 +73,7 @@ sys.exit(status)
             BRSCAN_SKEY_SCANIMAGE=str(self.bin / "scanner"),
             TEST_EVENTS=str(self.events),
             TEST_REAL_MV=shutil.which("mv"),
+            TEST_REAL_CP=shutil.which("cp"),
         )
 
     def run_scan(self, **env):
@@ -137,6 +146,25 @@ sys.exit(status)
         result = self.run_scan(TEST_EMPTY_PDF="1")
         self.assert_failed(result, 1, "output is empty")
         self.assertEqual(self.calls("mv"), [])
+
+    def test_failed_copy_cleans_partial_destination_and_retains_pdf(self):
+        result = self.run_scan(TEST_CP_STATUS="28")
+        self.assert_failed(result, 28, "publication failed with exit code 28", retain_pdf=True)
+        self.assertEqual(self.calls("mv"), [])
+        pdfs = list(self.staging.glob("job.*/scan.pdf"))
+        self.assertEqual(len(pdfs), 1)
+        self.assertEqual(pdfs[0].read_bytes(), b"%PDF-complete")
+
+    def test_cross_device_publication(self):
+        if not os.path.isdir("/dev/shm") or not os.access("/dev/shm", os.W_OK):
+            self.skipTest("no writable second filesystem")
+        with tempfile.TemporaryDirectory(prefix="brscan-test-", dir="/dev/shm") as directory:
+            if os.stat(directory).st_dev == self.root.stat().st_dev:
+                self.skipTest("second filesystem has same device")
+            result = self.run_scan(BRSCAN_SKEY_STAGING_DIR=directory)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(list(Path(directory).iterdir()), [])
+            self.assertEqual([p.read_bytes() for p in self.inbox.iterdir()], [b"%PDF-complete"])
 
     def test_failed_move_keeps_completed_pdf_in_private_directory(self):
         result = self.run_scan(TEST_MV_STATUS="18")
