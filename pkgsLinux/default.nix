@@ -6,4 +6,5 @@
 {
   brscan-skey = pkgs.callPackage ./brscan-skey { };
   chatgpt = pkgs.callPackage ./chatgpt { };
+  moshi-hook = pkgs.callPackage ./moshi-hook { };
 }
