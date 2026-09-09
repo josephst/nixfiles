@@ -12,6 +12,7 @@ let
   scanConfig = pkgs.writeText "brscan-skey-scantofile.config" ''
     source ${packagePath}/scantofile.config
     resolution=${toString cfg.scanResolution}
+    size=${lib.escapeShellArg cfg.scanSize}
   '';
 in
 {
@@ -31,7 +32,7 @@ in
         the scanner service group as group. Keep this outside /home because
         the service protects home directories with ProtectHome.
       '';
-      example = "/storage/homes/public/scans";
+      example = "/var/lib/paperless/consume";
     };
 
     scanDirectoryMode = lib.mkOption {
@@ -63,6 +64,16 @@ in
       description = ''
         Resolution in dots per inch for the Scan to File action.
         Choose a resolution supported by the scanner.
+      '';
+    };
+
+    scanSize = lib.mkOption {
+      type = lib.types.strMatching "(MAX|A3|A4|A5|A6|Letter|Legal|[0-9]+(\\.[0-9]+)?x[0-9]+(\\.[0-9]+)?)";
+      default = "Letter";
+      example = "210x297";
+      description = ''
+        Paper size for the Scan to File action. Use a vendor paper-size name
+        or a widthxheight size in millimetres.
       '';
     };
 
@@ -109,9 +120,9 @@ in
       };
     };
 
-    # Paperless owns its consumption directory when the two options point at
-    # the same path. Otherwise, retain a self-contained default for users of
-    # this module without Paperless.
+    # The scan directory is the final file directory. When it is Paperless's
+    # consumption directory, Paperless owns its mode and ownership; the
+    # private staging directory remains inside StateDirectory.
     systemd.tmpfiles.settings."10-brscan-skey" =
       lib.mkIf
         (!config.services.paperless.enable || cfg.scanDirectory != config.services.paperless.consumptionDir)
@@ -140,6 +151,7 @@ in
 
         Environment = [
           "BRSCAN_SKEY_SCAN_DIR=${cfg.scanDirectory}"
+          "BRSCAN_SKEY_STAGING_DIR=/var/lib/brscan-skey/staging"
           "HOME=/var/lib/brscan-skey"
           "SANE_CONFIG_DIR=/etc/sane-config"
           "LD_LIBRARY_PATH=/etc/sane-libs"

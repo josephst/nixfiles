@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   # AirScan handles normal driverless scanning. The proprietary scan-key
   # daemon uses brscan5's network-device registry to subscribe to button
@@ -17,7 +17,7 @@
 
   services.brscan-skey = {
     enable = true;
-    scanDirectory = "/storage/homes/public/scans";
+    scanDirectory = config.services.paperless.consumptionDir;
     scanFileUmask = "0022";
   };
 }
