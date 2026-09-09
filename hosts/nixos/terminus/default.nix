@@ -143,6 +143,11 @@
 
   environment.systemPackages = [ pkgs.sbctl ];
 
+  programs.mosh = {
+    enable = true;
+    openFirewall = true;
+  };
+
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
