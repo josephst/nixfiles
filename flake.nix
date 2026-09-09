@@ -60,10 +60,11 @@
 
     copyparty.url = "github:9001/copyparty";
 
-    herdr = {
-      url = "github:herdrdev/herdr/v0.9.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # using Nixpkgs version as the rebuilds/ compilation is lengthy
+    # herdr = {
+    #   url = "github:herdrdev/herdr/v0.9.0";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     isd = {
       url = "github:isd-project/isd";
