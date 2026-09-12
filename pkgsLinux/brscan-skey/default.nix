@@ -102,7 +102,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests.scanAction = callPackage ./tests.nix { };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--flake" ];
+    };
   };
 
   meta = {
