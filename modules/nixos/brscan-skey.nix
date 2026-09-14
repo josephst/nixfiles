@@ -188,6 +188,13 @@ in
         Restart = "on-failure";
         RestartSec = 5;
 
+        # brscan-skey 0.3.5 leaks a socket on each roughly five-minute
+        # network-device rediscovery. The proprietary daemon also lowers its
+        # own soft descriptor limit to 1024, so raising LimitNOFILE here would
+        # only be undone by the daemon. Recycle it with ample headroom before
+        # the leak can disable config reloads and scanner-button handling.
+        RuntimeMaxSec = "1d";
+
         NoNewPrivileges = true;
         PrivateDevices = cfg.privateDevices;
         PrivateTmp = true;
