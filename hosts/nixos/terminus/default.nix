@@ -33,7 +33,6 @@
     ./services/home-assistant
     ./services/ollama.nix
     ./services/brscan-skey.nix
-    ./services/moshi-hook.nix
     ./services/paperless.nix
     ./services/servarr
     ./services/samba.nix
