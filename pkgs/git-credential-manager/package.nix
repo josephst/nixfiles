@@ -8,7 +8,6 @@
   git-credential-manager,
   gnupg,
   pass,
-  stdenv,
   testers,
   withLibsecretSupport ? true,
   withGpgSupport ? true,
@@ -27,16 +26,8 @@ buildDotnetModule rec {
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";
   nugetDeps = ./deps.json;
-  dotnet-sdk =
-    if stdenv.hostPlatform.isDarwin then
-      dotnetCorePackages.sdk_10_0-bin
-    else
-      dotnetCorePackages.sdk_10_0;
-  dotnet-runtime =
-    if stdenv.hostPlatform.isDarwin then
-      dotnetCorePackages.runtime_10_0-bin
-    else
-      dotnetCorePackages.runtime_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
   dotnetInstallFlags = [
     "--framework"
     "net10.0"
