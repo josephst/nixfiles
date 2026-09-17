@@ -50,6 +50,7 @@ in
       (python3.withPackages (
         python-pkgs: with python-pkgs; [
           pyyaml
+          scipy
         ]
       )) # python
       tealdeer # cheatsheets in terminal
