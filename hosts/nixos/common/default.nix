@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -15,10 +16,19 @@
   ];
 
   config = {
+    boot = {
+      kernel.sysctl = lib.mkIf config.boot.zswap.enable {
+        "vm.swappiness" = lib.mkDefault 100;
+      };
+      zswap.enable = lib.mkDefault (!config.boot.isContainer && config.swapDevices != [ ]);
+    };
+
     time.timeZone = lib.mkDefault "America/New_York";
 
     # Keep CLI flake references on the same nixpkgs revision as this system.
     nix.registry.nixpkgs.flake = inputs.nixpkgs;
+
+    zramSwap.enable = lib.mkDefault false;
 
     # user configuration
     users.mutableUsers = lib.mkDefault false;

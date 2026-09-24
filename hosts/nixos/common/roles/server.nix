@@ -24,8 +24,6 @@
     tmp.useTmpfs = lib.mkDefault true;
   };
 
-  zramSwap.enable = lib.mkDefault true;
-
   environment.systemPackages = with pkgs; [
     lshw
     nvme-cli
