@@ -53,15 +53,22 @@
     nix.enable = false; # using Determinate Nix on macOS
     determinateNix = {
       enable = true;
-      customSettings = lib.getAttrs [
-        "builders-use-substitutes"
-        "experimental-features"
-        "extra-substituters"
-        "extra-trusted-public-keys"
-        "log-lines"
-        "trusted-users"
-        "use-xdg-base-directories"
-      ] config.nix.settings;
+      # nix-darwin's nix.registry is not active with nix.enable = false.
+      registry.nixpkgs.flake = inputs.nixpkgs;
+      customSettings =
+        lib.getAttrs [
+          "builders-use-substitutes"
+          "experimental-features"
+          "extra-substituters"
+          "extra-trusted-public-keys"
+          "log-lines"
+          "trusted-users"
+          "use-xdg-base-directories"
+        ] config.nix.settings
+        // {
+          # Resolve legacy <nixpkgs> lookups through the pinned registry.
+          nix-path = "nixpkgs=flake:nixpkgs";
+        };
     };
 
     # Determinate renders ordinary settings above; the raw fragment is kept

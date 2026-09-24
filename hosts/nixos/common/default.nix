@@ -17,6 +17,9 @@
   config = {
     time.timeZone = lib.mkDefault "America/New_York";
 
+    # Keep CLI flake references on the same nixpkgs revision as this system.
+    nix.registry.nixpkgs.flake = inputs.nixpkgs;
+
     # user configuration
     users.mutableUsers = lib.mkDefault false;
     security = {
