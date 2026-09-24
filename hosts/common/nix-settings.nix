@@ -27,9 +27,6 @@ in
     nix = {
       enable = lib.mkDefault (!pkgs.stdenv.hostPlatform.isDarwin); # on darwin, nix is managed by Determinate Nix
 
-      # remaining options only applied on non-Darwin systems
-      # registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
-      # nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
       settings = {
         extra-substituters = map (x: x.url) substituters;
         extra-trusted-public-keys = map (x: x.key) substituters;
