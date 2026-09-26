@@ -11,7 +11,6 @@
   libtiff,
   libredirect,
   makeWrapper,
-  nix-update-script,
   rpmextract,
   sane-backends,
   util-linux,
@@ -102,9 +101,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests.scanAction = callPackage ./tests.nix { };
-    updateScript = nix-update-script {
-      extraArgs = [ "--flake" ];
-    };
+    # Brother's download URL does not support nix-update version discovery.
+    # Check vendor releases and update version/src.hash manually until a
+    # Brother-specific updater is available.
   };
 
   meta = {
