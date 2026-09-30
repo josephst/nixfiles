@@ -86,6 +86,10 @@
       _1password.enable = true;
       nh = {
         enable = true;
+        clean = {
+          enable = true;
+          extraArgs = "--keep-since 14d --keep 3 --keep-one";
+        };
       };
       nix-ld.enable = true;
     };

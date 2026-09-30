@@ -52,7 +52,7 @@ _: {
       "Keynote" = 361285480;
       "Microsoft Word" = 462054704;
       "Microsoft Excel" = 462058435;
-      "Microsoft Outlook" = 985367838;
+      # "Microsoft Outlook" = 985367838;
       "Microsoft PowerPoint" = 462062816;
       "Microsoft OneNote" = 784801555;
       "OneDrive" = 823766827;
