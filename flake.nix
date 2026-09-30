@@ -121,9 +121,21 @@
         }
       );
 
-      packages = nixpkgs.lib.attrsets.recursiveUpdate (helper.forAllSystems (
-        system: import ./pkgs { pkgs = pkgsFor.${system}; }
-      )) (helper.forLinuxSystems (system: import ./pkgsLinux { pkgs = pkgsFor.${system}; }));
+      packages =
+        nixpkgs.lib.attrsets.recursiveUpdate
+          (helper.forAllSystems (system: import ./pkgs { pkgs = pkgsFor.${system}; }))
+          (
+            helper.forLinuxSystems (
+              system:
+              let
+                linuxPackages = import ./pkgsLinux { pkgs = pkgsFor.${system}; };
+              in
+              if system == "x86_64-linux" then
+                linuxPackages
+              else
+                builtins.removeAttrs linuxPackages [ "brscan-skey" ]
+            )
+          );
 
       updatePackagesApp =
         system:
