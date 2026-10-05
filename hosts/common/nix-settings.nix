@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -45,9 +44,8 @@ in
         use-xdg-base-directories = true;
       };
 
-      gc = {
-        automatic = lib.mkIf config.nix.enable true;
-      };
+      # Use nh's scheduled cleaner and retention policy instead.
+      gc.automatic = false;
     };
   };
 }
