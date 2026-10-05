@@ -24,6 +24,12 @@ in
           options = {
             enable = mkEnableOption "Sync a local directory to a remote using Rclone";
 
+            inhibitsSleep = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Prevent the system from sleeping while Rclone runs.";
+            };
+
             dataDir = mkOption {
               type = types.str;
               description = "The local directory to be copied from.";
@@ -103,6 +109,15 @@ in
   config = {
     systemd.services = lib.mapAttrs' (
       name: remoteConfig:
+      let
+        inhibitCmd = lib.escapeShellArgs [
+          "${config.systemd.package}/bin/systemd-inhibit"
+          "--mode=block"
+          "--what=sleep"
+          "--who=rclone-sync-${name}"
+          "--why=Rclone ${remoteConfig.rcloneCommand} for ${name}"
+        ];
+      in
       lib.nameValuePair "rclone-sync-${name}" {
         description = "Rclone ${remoteConfig.rcloneCommand} for '${name}' from ${remoteConfig.dataDir}";
         wants = [ "network-online.target" ];
@@ -127,7 +142,7 @@ in
         };
 
         script = ''
-          ${remoteConfig.package}/bin/rclone \
+          exec ${lib.optionalString remoteConfig.inhibitsSleep "${inhibitCmd} "}${remoteConfig.package}/bin/rclone \
             --config "$CREDENTIALS_DIRECTORY/rcloneConf" \
             --cache-dir $CACHE_DIRECTORY \
             --missing-on-dst - \

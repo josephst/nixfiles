@@ -22,6 +22,7 @@ in
 
   # backup to local repo (on HDD array), which is later copied to B2
   services.restic.backups.system-backup = {
+    inhibitsSleep = true;
     initialize = false;
     environmentFile = config.age.secrets.restic-systembackup-env.path; # RESTIC_PASSWORD
     repository = "rest:http://${config.services.restic.server.listenAddress}";
@@ -37,16 +38,13 @@ in
 
     extraBackupArgs = [ "--cleanup-cache" ];
 
-    timerConfig = {
-      OnCalendar = "12:05";
-      Persistent = true;
-      RandomizedDelaySec = "1h";
-    };
+    timerConfig = null; # Started by restic-backup-window.
   };
 
   # Apply retention and integrity checks to every snapshot group in the local
   # repository, including snapshots written by client machines.
   services.restic.backups.local-maintenance = {
+    inhibitsSleep = true;
     initialize = false;
     environmentFile = config.age.secrets.restic-systembackup-env.path;
     repository = "rest:http://${config.services.restic.server.listenAddress}";
@@ -54,11 +52,7 @@ in
     inherit pruneOpts;
     checkOpts = maintenanceCheckOpts;
 
-    timerConfig = {
-      OnCalendar = "*-*-01 02:00";
-      Persistent = true;
-      RandomizedDelaySec = "1h";
-    };
+    timerConfig = null; # Monthly maintenance is tracked by restic-backup-window.
   };
 
   systemd.services = {

@@ -1,7 +1,5 @@
 { config, pkgs, ... }:
 let
-  localPath = "/storage/restic";
-
   pruneOpts = [
     "--keep-daily 30"
     "--keep-weekly 52"
@@ -22,7 +20,9 @@ in
   # copy local Restic repo to S3-compatible repo
   services.rclone-sync.b2 = {
     enable = true;
-    dataDir = localPath;
+    inhibitsSleep = true;
+    # The backup window creates this read-only Btrfs snapshot before uploading.
+    dataDir = "/storage/.restic-copy/repository";
     rcloneCommand = "copy";
     environmentFile = config.age.secrets.rclone-sync.path;
     rcloneConfFile = config.age.secrets.rcloneConf.path;
@@ -30,18 +30,17 @@ in
       "--transfers=32"
       "--b2-hard-delete"
       "--fast-list"
+      "--exclude=/locks/**" # Live clients' locks do not belong in the cloud repository.
+      "--exclude=*.rest-server-temp*" # Incomplete uploads captured by the snapshot.
     ];
 
-    timerConfig = {
-      OnCalendar = "06:00";
-      RandomizedDelaySec = "1h";
-      Persistent = true;
-    };
+    timerConfig = null; # Started by restic-backup-window.
   };
 
   # Apply retention and integrity checks to the B2 repository once a month;
   # this does not create any snapshots.
   services.restic.backups.b2 = {
+    inhibitsSleep = true;
     initialize = false;
     environmentFile = config.age.secrets.resticb2env.path;
     inherit pruneOpts;
@@ -49,19 +48,12 @@ in
 
     backupPrepareCommand = ''
       # remove old locks
-      ${pkgs.restic}/bin/restic unlock || true
+      ${config.systemd.package}/bin/systemd-inhibit \
+        --mode=block --what=sleep --who=restic \
+        --why="Prepare B2 repository maintenance" \
+        ${pkgs.restic}/bin/restic unlock || true
     '';
 
-    timerConfig = {
-      # Run after the daily 06:00 Rclone copy window.
-      OnCalendar = "*-*-01 08:00";
-      RandomizedDelaySec = "1h";
-      Persistent = true;
-    };
+    timerConfig = null; # Monthly maintenance is tracked by restic-backup-window.
   };
-
-  # If first-of-month timers are caught up together after downtime, preserve
-  # local maintenance -> Rclone copy -> B2 maintenance ordering.
-  systemd.services.rclone-sync-b2.after = [ "restic-backups-local-maintenance.service" ];
-  systemd.services.restic-backups-b2.after = [ "rclone-sync-b2.service" ];
 }
