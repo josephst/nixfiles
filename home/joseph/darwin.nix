@@ -12,6 +12,8 @@ let
 in
 {
   config = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+    home.shellAliases.ssh = "ghostty +ssh --";
+
     programs.ghostty = {
       enable = true;
       package = null; # Installed with Homebrew; Home Manager owns only the configuration.
