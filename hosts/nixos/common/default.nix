@@ -5,6 +5,9 @@
   pkgs,
   ...
 }:
+let
+  inherit (config.hostSpec) username;
+in
 {
   imports = [
     inputs.determinate.nixosModules.default
@@ -31,6 +34,21 @@
     zramSwap.enable = lib.mkDefault false;
 
     # user configuration
+    home-manager.users.${username} = {
+      imports = [ inputs.rex.homeManagerModules.default ];
+      config.services.rex.enable = true;
+
+      # Rex emits this reminder even when NixOS already enables lingering.
+      options.warnings = lib.mkOption {
+        apply =
+          if config.users.users.${username}.linger then
+            lib.filter (
+              warning: !lib.hasPrefix "services.rex: the Rex server runs as a systemd user service," warning
+            )
+          else
+            lib.id;
+      };
+    };
     users.mutableUsers = lib.mkDefault false;
     security = {
       # use ssh keys instead of password
