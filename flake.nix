@@ -60,6 +60,11 @@
 
     copyparty.url = "github:9001/copyparty";
 
+    rex = {
+      url = "https://pkgs.superlogical.com/rex/nix/snapshot.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # using Nixpkgs version as the rebuilds/ compilation is lengthy
     # herdr = {
     #   url = "github:herdrdev/herdr/v0.9.0";

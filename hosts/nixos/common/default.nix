@@ -31,6 +31,10 @@
     zramSwap.enable = lib.mkDefault false;
 
     # user configuration
+    home-manager.users.${config.hostSpec.username} = {
+      imports = [ inputs.rex.homeManagerModules.default ];
+      services.rex.enable = true;
+    };
     users.mutableUsers = lib.mkDefault false;
     security = {
       # use ssh keys instead of password
