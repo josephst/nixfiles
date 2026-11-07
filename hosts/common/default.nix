@@ -39,8 +39,6 @@
           fnix = "nix-shell --run fish"; # use as `fnix -p go` to have a fish shell with go in it
         };
       };
-
-      # SSH configuration is now handled by ./ssh-infrastructure.nix
     };
 
     environment = {
@@ -68,6 +66,11 @@
         pkgs.nushell
         pkgs.zsh
       ];
+      interactiveShellInit = ''
+        if [ -n "$REX_BIN_DIR" ]; then
+          export PATH="$REX_BIN_DIR:$PATH"
+        fi
+      '';
     };
   };
 }

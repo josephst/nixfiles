@@ -166,7 +166,10 @@
   };
 
   system.stateVersion = "25.11";
-  home-manager.users.${config.hostSpec.username}.home.stateVersion = "26.05";
+  home-manager.users.${config.hostSpec.username} = {
+    home.stateVersion = "26.05";
+    services.rex.extraListen = [ "tailnet://:7297" ];
+  };
   users.users.${config.hostSpec.username}.extraGroups = [
     "media"
     "render"

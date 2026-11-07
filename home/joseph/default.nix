@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   osConfig,
   lib,
   pkgs,
@@ -21,11 +22,14 @@ let
 in
 {
   imports = [
+    inputs.rex.homeManagerModules.default
     ../common
     ./base
     ./darwin.nix
     ./linux.nix
   ];
+
+  programs.rex.enable = true;
 
   home = {
     sessionVariables = {

@@ -35,7 +35,6 @@ in
 
     # user configuration
     home-manager.users.${username} = {
-      imports = [ inputs.rex.homeManagerModules.default ];
       config.services.rex.enable = true;
 
       # Rex emits this reminder even when NixOS already enables lingering.
