@@ -14,9 +14,7 @@ in
       domain = "*.${domain}";
       extraDomainNames = [ domain ];
       dnsProvider = "cloudflare";
-      credentialFiles = {
-        "CF_DNS_API_TOKEN_FILE" = config.age.secrets.dnsApiToken.path;
-      };
+      environmentFile = config.age.secrets.dnsApiToken.path;
       dnsPropagationCheck = true;
     };
   };
