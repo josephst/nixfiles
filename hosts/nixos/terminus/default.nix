@@ -104,7 +104,12 @@
   };
 
   systemd = {
-    tmpfiles.rules = [ "d /storage - - - - -" ];
+    tmpfiles.rules = [
+      "d /storage - - - - -"
+
+      # Codex Remote's OS probe can run with a PATH that omits NixOS's system bin directory.
+      "L /usr/bin/uname - - - - /run/current-system/sw/bin/uname"
+    ];
 
     # Given that our systems are headless, emergency mode is useless.
     # We prefer the system to attempt to continue booting so
