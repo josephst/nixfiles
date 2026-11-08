@@ -1,5 +1,7 @@
-_: {
+{ osConfig, ... }:
+{
   programs.nushell = {
-    enable = true;
+    enable = osConfig.hostSpec.cliProfile != "minimal";
+    loadSessionVariables = true;
   };
 }

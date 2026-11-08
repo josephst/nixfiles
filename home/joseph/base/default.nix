@@ -15,6 +15,7 @@ in
     ./fzf.nix
     ./git.nix
     ./helix.nix
+    ./nushell
     ./packages.nix
     ./programs.nix
     ./service-credentials.nix
@@ -22,7 +23,6 @@ in
     ./starship.nix
   ]
   ++ lib.optionals (!isMinimal) [
-    ./nushell
     ./zellij
   ];
 }

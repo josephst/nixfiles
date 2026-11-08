@@ -12,6 +12,7 @@
       pkgs.gnomeExtensions.appindicator
       pkgs.gnomeExtensions.gsconnect
       pkgs.ghostty
+      pkgs.pipewire.jack # pw-jack enables JACK compatibility per application
     ]
     ++ lib.optionals (lib.meta.availableOn { system = config.nixpkgs.hostPlatform; } pkgs.spotify) [
       pkgs.spotify
@@ -41,7 +42,6 @@
       enable = true;
       alsa.enable = true;
       pulse.enable = true;
-      jack.enable = true;
     };
     pulseaudio.enable = false;
   };
