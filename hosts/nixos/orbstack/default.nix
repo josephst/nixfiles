@@ -20,7 +20,6 @@
     ./networking.nix
   ];
 
-  boot.initrd.systemd.enable = lib.mkForce false;
   boot.loader.systemd-boot.enable = lib.mkForce false;
 
   security.sudo.wheelNeedsPassword = false;

@@ -26,7 +26,6 @@
       "sd_mod"
     ];
     initrd.kernelModules = [ ];
-    initrd.systemd.enable = lib.mkForce true;
     initrd.systemd.tpm2.enable = true;
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
