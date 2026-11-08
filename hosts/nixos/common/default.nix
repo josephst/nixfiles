@@ -84,6 +84,7 @@ in
         # nixos-specific packages
         inputs.isd.packages.${pkgs.stdenv.hostPlatform.system}.default # interactive systemd
         pkgs.bubblewrap # needed for codex-cli sandboxing
+        pkgs.codex
         pkgs.dnsutils
         pkgs.ghostty.terminfo
         pkgs.htop
