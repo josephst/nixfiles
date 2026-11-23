@@ -15,7 +15,8 @@ in
       extraDomainNames = [ domain ];
       dnsProvider = "cloudflare";
       environmentFile = config.age.secrets.dnsApiToken.path;
-      dnsPropagationCheck = true;
+      dnsAuthoritativePropagationCheck = true;
+      dnsRecursivePropagationCheck = true;
     };
   };
 }
