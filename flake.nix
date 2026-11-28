@@ -3,7 +3,7 @@
 
   inputs = {
     # package repos
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.11";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
 
